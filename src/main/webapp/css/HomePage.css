@@ -20,8 +20,7 @@ a {
 
 /* ---------------------------------------------------------------- */
 #section_slider {
-    width: 1400px;
-    margin-inline: auto;
+
 }
 
 #carouselExampleIndicators {
@@ -113,14 +112,31 @@ a {
 } */
 
 /* --------------------------------------------------- */
+.carousel-inner img {
+    width: 100vw; /* Chiều rộng 100% của viewport */
+    height: auto; /* Giữ tỉ lệ ảnh */
+    object-fit: cover; /* Đảm bảo ảnh bao phủ mà không bị méo */
+}
+
+.hover--black{
+    border: 2px solid transparent; /* Mặc định không có viền */
+    transition: border 0.3s ease-in-out; /* Hiệu ứng mượt khi hover */
+}
+
+.hover--black:hover {
+    border: 2px solid black !important; /* Khi hover vào sẽ có viền đen */
+    border-radius: 8px; /* Giữ bo góc đẹp */
+}
+
+
 .card-wrapper {
-
     display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    overflow: hidden;
 }
 
-.cardWrapper {
-    gap: 20px;
-}
 
 .right__content {
     align-items: center;
