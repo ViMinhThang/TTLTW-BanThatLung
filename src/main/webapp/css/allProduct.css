@@ -20,12 +20,15 @@ li {
   list-style-type: none;
 }
 /* ---------------------------------------------- */
+.belts-header {
+  font-size: 5rem; /* Điều chỉnh kích thước chữ */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Thêm bóng đổ cho chữ */
+}
 .breadcrumb {
   margin-bottom: 0;
-  background-color: #efefef;
   height: 2.3rem;
   align-items: center;
-  font-size: 17px;
+  font-size: 20px;
 }
 
 .breadcrumb-item a {
@@ -37,17 +40,14 @@ li {
   color: #1c1c1c;
 }
 
-/*.belts-header {*/
-/*  font-size: 4rem;*/
-/*  font-weight: 300;*/
-/*  text-align: center;*/
-/*  padding: 1rem 0 2rem 0;*/
-/*}*/
-
 /* ------------------------------------------------------ */
 .function__bar {
-  font-size: 18px;
+  font-family:"IBM Plex Sans Condensed"; /* Thay bằng font chữ giống hình của bạn */
+  font-size: 20px; /* Điều chỉnh kích thước font */
   margin-bottom: 2rem;
+  background-color: #ffffff;
+  padding: 10px 0;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .filter__column {
@@ -56,7 +56,9 @@ li {
   border-bottom: rgb(214, 214, 214) 1px solid;
   border-right: rgb(214, 214, 214) 1px solid;
   align-content: center;
+  flex: 0 0 10%; /* Độ rộng cố định cho cột Filter */
 }
+
 .filter__header__title {
   color: black;
   margin-left: 5rem;
@@ -69,15 +71,19 @@ li {
 .filter__container {
   display: flex;
   align-items: center;
-  justify-content: end;
-  /* margin-left: 6rem; */
+  justify-content: start;
+  padding: 4px 8px; /* Giảm padding để thu nhỏ ô */
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .filter__title {
   cursor: pointer;
   border: none;
-  background-color: white;
-  margin-left: 5px;
+  background-color: transparent;
+  margin-left: 4px; /* Giảm khoảng cách giữa icon và chữ */
+  font-weight: 500;
+  color: #333;
 }
 
 #filter__button {
@@ -89,11 +95,11 @@ li {
 
 .function__bar .quantity__column {
   display: flex;
-  justify-content: center;
   align-items: center;
   height: 4rem;
   border-top: rgb(214, 214, 214) 1px solid;
   border-bottom: rgb(214, 214, 214) 1px solid;
+  flex: 0 0 80%; /* Độ rộng cố định cho cột Breadcrumb */
 }
 
 .pix__text {
@@ -107,15 +113,20 @@ li {
   border-bottom: rgb(214, 214, 214) 1px solid;
   border-left: rgb(214, 214, 214) 1px solid;
   align-content: center;
+  flex: 0 0 10%; /* Độ rộng cố định cho cột Sort */
 }
+
 .sort__column img {
   margin-right: 5px;
 }
 
 .function__bar .sort__container {
   display: flex;
-  /* justify-content: center; */
   align-items: center;
+  justify-content: end;
+  padding: 4px 8px; /* Giảm padding để thu nhỏ ô */
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .filter-sort {
@@ -125,17 +136,20 @@ li {
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
 }
+
 .apply__container {
   display: flex;
   justify-content: center;
   margin-top: 2rem;
 }
+
 .apply__button {
   color: black;
   background: white;
   font-size: 18px;
   transition: all 0.5s;
 }
+
 .apply__button:hover {
   background-color: black;
   color: white;
@@ -161,16 +175,13 @@ li {
 #list__product__row {
   display: flex;
 }
+
 /* Tổng quan */
 .list__product {
   margin: 0 auto;
 }
 
 /* Đảm bảo các sản phẩm có kích thước đồng nhất */
-
-
-
-
 
 .product__col {
   width: 100%;
@@ -227,6 +238,7 @@ li {
   display: flex;
   flex-direction: column;
 }
+
 /* ---------------------------------------------------------- */
 
 /* --------------------------------------------------------- */
@@ -247,7 +259,6 @@ li {
   display: block;
   padding: 0.5rem 0.75rem;
   color: #000000;
-  /* Màu sắc */
   text-decoration: none;
   border: none;
   border-radius: 4px;
@@ -258,6 +269,3 @@ li {
   color: white;
   background-color: #565656;
 }
-
-
-/* ------------------------------------------------- */
