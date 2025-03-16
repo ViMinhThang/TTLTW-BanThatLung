@@ -44,11 +44,12 @@ public class UsersUsageDao {
         });
     }
 
-    public boolean insertUsersUsageNotLogin(String userEmail) {
+    public boolean insertUsersUsageNotLogin(String userEmail, String route) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "UPDATE usersUsage SET lastActivity = NOW() WHERE userEmail =:email";
+            String sql = "UPDATE usersUsage SET lastActivity = NOW(), lastActivateRoute=:route WHERE userEmail =:email";
             return h.createUpdate(sql)
                     .bind("email", userEmail)
+                    .bind("route", route)
                     .execute() > 0;
         });
     }

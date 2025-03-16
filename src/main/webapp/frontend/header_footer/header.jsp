@@ -220,7 +220,11 @@
 
     </div>
 </nav>
-<div class="dropdown-menu search-dropdown w-100" id="list__product__row"></div>
+<div class="dropdown-menu search-dropdown w-100">
+    <div id="list__product__row">
+
+    </div>
+</div>
 
 <style>
     .dropdown-toggle::after {

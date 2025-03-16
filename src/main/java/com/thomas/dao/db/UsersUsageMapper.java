@@ -15,6 +15,7 @@ public class UsersUsageMapper implements RowMapper<UsersUsage> {
         usersUsage.setLastLogin(rs.getTimestamp("lastLogin").toLocalDateTime());
         usersUsage.setLastActivity(rs.getTimestamp("lastActivity").toLocalDateTime());
         usersUsage.setIpAddress(rs.getString("ipAddress"));
+        usersUsage.setLastActivateRoute(rs.getString("lastActivateRoute"));
         return usersUsage;
     }
 }

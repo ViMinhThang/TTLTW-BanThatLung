@@ -25,19 +25,19 @@ CREATE TABLE belts
 );
 CREATE TABLE users
 (
-    id             INT AUTO_INCREMENT PRIMARY KEY,
-    name           VARCHAR(255) NOT NULL,
-    email          VARCHAR(255) NOT NULL,
-    dateOfBirth    DATETIME,
-    password       VARCHAR(255),
-    image          VARCHAR(255),
-    createAt       DATETIME DEFAULT CURRENT_TIMESTAMP,
-    isDeleted      INT      DEFAULT (0),
-    gender         VARCHAR(50),
-    phoneNumber    BIGINT,
-    role           INT,
-    token          VARCHAR(255),
-    isActive       INT,
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    name        VARCHAR(255) NOT NULL,
+    email       VARCHAR(255) NOT NULL,
+    dateOfBirth DATETIME,
+    password    VARCHAR(255),
+    image       VARCHAR(255),
+    createAt    DATETIME DEFAULT CURRENT_TIMESTAMP,
+    isDeleted   INT      DEFAULT (0),
+    gender      VARCHAR(50),
+    phoneNumber BIGINT,
+    role        INT,
+    token       VARCHAR(255),
+    isActive    INT,
 )
 CREATE TABLE categories
 (
@@ -210,10 +210,11 @@ CREATE TABLE tokens
 );
 CREATE TABLE usersUsage
 (
-    id           INT AUTO_INCREMENT PRIMARY KEY,
-    userId       INT NOT NULL,
-    lastLogin    DATETIME    DEFAULT NULL,
-    lastActivity DATETIME    DEFAULT NULL,
-    ipAddress    VARCHAR(45) DEFAULT NULL,
+    id              INT AUTO_INCREMENT PRIMARY KEY,
+    userId          INT NOT NULL,
+    lastLogin       DATETIME     DEFAULT NULL,
+    lastActivity    DATETIME     DEFAULT NULL,
+    ipAddress       VARCHAR(45)  DEFAULT NULL,
+    lastActiveRoute VARCHAR(255) DEFAULT NULL,
     FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
 );

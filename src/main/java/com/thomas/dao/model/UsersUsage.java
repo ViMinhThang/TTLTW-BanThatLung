@@ -9,17 +9,19 @@ public class UsersUsage implements java.io.Serializable {
     private LocalDateTime lastLogin;
     private LocalDateTime lastActivity;
     private String ipAddress;
+    private String lastActivateRoute;
 
     public UsersUsage() {
 
     }
 
-    public UsersUsage(int id, String userEmail, LocalDateTime lastLogin, LocalDateTime lastActivity, String ipAddress) {
+    public UsersUsage(int id, String userEmail, LocalDateTime lastLogin, LocalDateTime lastActivity, String ipAddress, String lastActivateRoute) {
         this.id = id;
         this.userEmail = userEmail;
         this.lastLogin = lastLogin;
         this.lastActivity = lastActivity;
         this.ipAddress = ipAddress;
+        this.lastActivateRoute = lastActivateRoute;
     }
 
     public int getId() {
@@ -60,6 +62,14 @@ public class UsersUsage implements java.io.Serializable {
 
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
+    }
+
+    public String getLastActivateRoute() {
+        return this.lastActivateRoute;
+    }
+
+    public void setLastActivateRoute(String lastActivateRoute) {
+        this.lastActivateRoute = lastActivateRoute;
     }
 
     private String formatTimeAgo(LocalDateTime dateTime) {

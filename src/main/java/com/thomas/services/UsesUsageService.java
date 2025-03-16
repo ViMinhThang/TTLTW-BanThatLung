@@ -21,7 +21,7 @@ public class UsesUsageService {
         usersUsageDao.insertUsersUsage(email, ipAddress);
     }
 
-    public void trackUserActivityNotLogin(String email) {
-        usersUsageDao.insertUsersUsageNotLogin(email);
+    public void trackUserActivityNotLogin(String email, String route) {
+        usersUsageDao.insertUsersUsageNotLogin(email, route);
     }
 }

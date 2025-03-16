@@ -29,7 +29,7 @@ public class ActivityTrackerFilter implements Filter {
         if (session != null && session.getAttribute("auth") != null) {
             User user = (User) session.getAttribute("auth");
             if (user.getId() != 0) {
-                usesUsageService.trackUserActivityNotLogin(user.getEmail());
+                usesUsageService.trackUserActivityNotLogin(user.getEmail(), ((HttpServletRequest) request).getRequestURI());
             }
         }
         chain.doFilter(request, response);

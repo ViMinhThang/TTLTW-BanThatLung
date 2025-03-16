@@ -167,14 +167,19 @@ header {
     text-decoration: none;
 }
 
+.hover--black:hover {
+    border: 2px solid black !important; /* Khi hover vào sẽ có viền đen */
+    border-radius: 8px; /* Giữ bo góc đẹp */
+}
+
 .favorite__count {
     position: absolute;
     top: -1px;
     right: -6px;
     font-size: 12px;
     display: inline-block;
-    color: white;
-    background: black;
+    color: black;
+    background: #ffeb00;
     border-radius: 50%;
     width: 18px;
     text-align: center;
