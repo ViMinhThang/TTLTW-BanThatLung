@@ -20,7 +20,7 @@ CREATE TABLE belts
     createdAt     DATETIME DEFAULT CURRENT_TIMESTAMP,
     updatedAt     DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     isDeleted     INT      DEFAULT 0,
-    discountPercent double DEFAULT 0.0,
+    discountRate double DEFAULT 0.0,
     materialBelt  VARCHAR(255)
 );
 CREATE TABLE users
@@ -184,4 +184,11 @@ CREATE TABLE collectionDetails
     id          INT AUTO_INCREMENT PRIMARY KEY,
     description TEXT NOT NULL,
     createdAt   DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE sessions
+(
+    sessionId        VARCHAR(255) PRIMARY KEY,
+    userId    INT NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
 );

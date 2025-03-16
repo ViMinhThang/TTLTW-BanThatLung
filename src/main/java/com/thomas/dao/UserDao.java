@@ -197,4 +197,37 @@ public class UserDao {
         return userList;
     }
 
+    public User getUserBySessionId(String sessionId) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "select * from users u JOIN sessions s on s.userId=u.id WHERE s.sessionId=:sessionId";
+            return h.createQuery(sql).bind("sessionId", sessionId).mapToBean(User.class).findFirst().orElse(null);
+        });
+    }
+
+    public boolean saveSession(int userId, String sessionId) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "INSERT INTO sessions (userId, sessionId) VALUES (:userId, :newSessionId) ON DUPLICATE KEY UPDATE sessionId = :newSessionId";
+            return h.createUpdate(sql).bind("userId", userId).bind("newSessionId", sessionId).execute() > 0;
+        });
+    }
+
+    public boolean updateSessionId(int userId, String newSessionId) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "INSERT INTO sessions (userId, sessionId) VALUES (:userId, :newSessionId) ON DUPLICATE KEY UPDATE sessionId = :newSessionId";
+            return h.createUpdate(sql)
+                    .bind("newSessionId", newSessionId)
+                    .bind("userId", userId)
+                    .execute() > 0;
+        });
+    }
+
+    public boolean deleteSession(int userId) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "DELETE FROM sessions WHERE userId = :userId";
+            return h.createUpdate(sql)
+                    .bind("userId", userId)
+                    .execute() > 0;
+        });
+    }
+
 }

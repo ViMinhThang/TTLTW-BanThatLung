@@ -61,71 +61,52 @@
 </div>
 <section id="section_slider">
     <div class="carouselExample p-0">
-        <div id="carouselExampleIndicators" class="carousel slide p-0">
+        <div id="carouselExampleIndicators" class="carousel slide container-fluid" data-bs-ride="carousel">
             <div class="carousel-indicators">
-                <button
-                        type="button"
-                        data-bs-target="#carouselExampleIndicators"
-                        data-bs-slide-to="0"
-                        class="active"
-                        aria-current="true"
-                        aria-label="Slide 1"
-                ></button>
-                <button
-                        type="button"
-                        data-bs-target="#carouselExampleIndicators"
-                        data-bs-slide-to="1"
-                        aria-label="Slide 2"
-                ></button>
-                <button
-                        type="button"
-                        data-bs-target="#carouselExampleIndicators"
-                        data-bs-slide-to="2"
-                        aria-label="Slide 3"
-                ></button>
-                <button
-                        type="button"
-                        data-bs-target="#carouselExampleIndicators"
-                        data-bs-slide-to="3"
-                        aria-label="Slide 4"
-                ></button>
-            </div>
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img
-                            src="assets/images/homepage/z6088271163993_ca5603db38e0ae9d411375a3aeb3ef65.jpg"
-                            class="d-block w-100"
-                            alt="..."
-                    />
-                </div>
-                <div class="carousel-item">
-                    <img
-                            src="assets/images/homepage/Beige Gray Aesthetic Photo Collage Shop New Collection Promotion Banner.png"
-                            class="d-block w-100"
-                            alt="..."
-                    />
-                </div>
-                <div class="carousel-item">
-                    <img
-                            src="assets/images/emo.jpg"
-                            class="d-block w-100"
-                            alt="..."
-                    />
-                </div>
-                <div class="carousel-item">
-                    <img
-                            src="assets/images/victor.jpg"
-                            class="d-block w-100"
-                            alt="..."
-                    />
-                </div>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+                        aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                        aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                        aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"
+                        aria-label="Slide 4"></button>
             </div>
 
-            <button
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="assets/images/homepage/z6088271163993_ca5603db38e0ae9d411375a3aeb3ef65.jpg"
+                         class="d-block w-100 img-fluid"
+
+                         alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="assets/images/homepage/Beige Gray Aesthetic Photo Collage Shop New Collection Promotion Banner.png"
+                         class="d-block w-100 img-fluid"
+                         alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="assets/images/emo.jpg"
+                         class="d-block w-100 img-fluid"
+
+                         alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="assets/images/victor.jpg"
+                         class="d-block w-100 img-fluid"
+
+                         alt="...">
+                </div>
+            </div>
+        </div>
+
+
+        <button
                     class="carousel-control-prev"
                     type="button"
                     data-bs-target="#carouselExampleIndicators"
                     data-bs-slide="prev"
+
             >
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
@@ -135,6 +116,7 @@
                     type="button"
                     data-bs-target="#carouselExampleIndicators"
                     data-bs-slide="next"
+
             >
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
@@ -143,75 +125,48 @@
     </div>
 </section>
 <div class="line"></div>
-<section id="section_newarrival" style="margin-top: 2em">
+<section id="" style="margin-top: 2em">
     <div class="container-fluid newarrival__container">
         <div class="row">
-            <div class="col-3">
-                <div class="left__content" style="margin-top: 30%">
-                    <div
-                            class="title__NewArrival"
-                            style="font-size: 34px; letter-spacing: 1px"
-                    >
-                        <span>Sản Phẩm Ưu Đãi</span>
-                    </div>
-                    <p>Chọn lựa những thiết kế hợp xu hướng nhất</p>
-                    <a class="button__More" href="${pageContext.request.contextPath}/navigate?type=onsale">
-                        <span>XEM THÊM</span>
-                    </a>
-                </div>
-            </div>
-            <div class="col-9">
+
+            <div class="col-12">
                 <div id="carouselExampleControls2" class="carousel slide">
                     <div class="carousel-inner carouselInner">
-
-
                         <div class="carousel-item active">
-                            <div class="card-wrapper cardWrapper">
+                            <div class="d-flex justify-content-center gap-3">
                                 <c:forEach var="a" items="${discountProductList}" begin="0" end="3">
-                                    <a href="productDetails?beltId=${a.id}">
-                                        <div class="card" style="width: 14rem; height: 23.5rem">
-                                            <img
-                                                    src="${pageContext.request.contextPath}${a.mainImage}"
-                                                    class="card-img-top"
-                                                    alt="..."
-                                                    style="height: 14rem"
-                                            />
-                                            <div class="card-body">
-                                                <h5 class="card-title">
-                                                        ${a.name}
-                                                </h5>
-                                                <p class="card-text">${a.price} VNĐ</p>
-                                                <span style="color: rgb(168, 0, 0); font-size: 16px"
-                                                > ${a.discountPercent}%</span
-                                                >
+                                    <a href="productDetails?beltId=${a.id}" class="text-decoration-none text-dark">
+                                        <div  class="text-center  hover--black">
+                                            <!-- Ảnh sản phẩm lớn hơn -->
+                                            <img src="${pageContext.request.contextPath}${a.mainImage}"
+                                                 class="img-fluid w-100 rounded shadow-sm"
+                                                 alt="${a.name}"
+                                                 style="height: 25rem;remobject-fit: cover;">
+                                            <!-- Thông tin sản phẩm -->
+                                            <div class="mt-2 text-start ps-3">
+                                                <p class="fw-bold fs-5 mb-1">${a.price} VNĐ</p>
+                                                <p class="text-muted mb-1">${a.name}</p>
+                                                <span class="badge bg-secondary">${a.discountPercent}%</span>
                                             </div>
                                         </div>
                                     </a>
                                 </c:forEach>
-
                             </div>
                         </div>
 
-
                         <div class="carousel-item">
-                            <div class="card-wrapper cardWrapper">
+                            <div class="d-flex justify-content-center gap-3">
                                 <c:forEach var="b" items="${discountProductList}" begin="4" end="7">
-                                    <a href="productDetails?beltId=${b.id}">
-                                        <div class="card" style="width: 14rem; height: 23.5rem">
-                                            <img
-                                                    src="${pageContext.request.contextPath}${b.mainImage}"
-                                                    class="card-img-top"
-                                                    alt="..."
-                                                    style="height: 14rem"
-                                            />
-                                            <div class="card-body">
-                                                <h5 class="card-title">
-                                                        ${b.name}
-                                                </h5>
-                                                <p class="card-text">${b.price} VNĐ</p>
-                                                <span style="color: rgb(168, 0, 0); font-size: 16px"
-                                                > ${b.discountPercent}%</span
-                                                >
+                                    <a href="productDetails?beltId=${b.id}" class="text-decoration-none text-dark">
+                                        <div  class="text-center hover--black">
+                                            <img src="${pageContext.request.contextPath}${b.mainImage}"
+                                                 class="img-fluid w-100 rounded shadow-sm"
+                                                 alt="${b.name}"
+                                                 style="height: 18rem; object-fit: cover;">
+                                            <div class="mt-2 text-start ps-3">
+                                                <p class="fw-bold fs-5 mb-1">${b.price} VNĐ</p>
+                                                <p class="text-muted mb-1">${b.name}</p>
+                                                <span class="badge bg-secondary">${b.discountPercent}%</span>
                                             </div>
                                         </div>
                                     </a>
@@ -220,39 +175,32 @@
                         </div>
 
                         <div class="carousel-item">
-                            <div class="card-wrapper cardWrapper">
+                            <div class="d-flex justify-content-center gap-3">
                                 <c:forEach var="c" items="${discountProductList}" begin="8" end="11">
-                                    <a href="productDetails?beltId=${c.id}">
-                                        <div class="card" style="width: 14rem; height: 23.5rem">
-                                            <img
-                                                    src="${pageContext.request.contextPath}${c.mainImage}"
-                                                    class="card-img-top"
-                                                    alt="..."
-                                                    style="height: 14rem"
-                                            />
-                                            <div class="card-body">
-                                                <h5 class="card-title">
-                                                        ${c.name}
-                                                </h5>
-                                                <p class="card-text">${c.price} VNĐ</p>
-                                                <span style="color: rgb(168, 0, 0); font-size: 16px"
-                                                > ${c.discountPercent}%</span
-                                                >
+                                    <a href="productDetails?beltId=${c.id}" class="text-decoration-none text-dark">
+                                        <div class="text-center hover--black">
+                                            <img src="${pageContext.request.contextPath}${c.mainImage}"
+                                                 class="img-fluid w-100 rounded shadow-sm"
+                                                 alt="${c.name}"
+                                                 style="height: 18rem; object-fit: cover;">
+                                            <div class="mt-2 text-start ps-3">
+                                                <p class="fw-bold fs-5 mb-1">${c.price} VNĐ</p>
+                                                <p class="text-muted mb-1">${c.name}</p>
+                                                <span class="badge bg-secondary">${c.discountPercent}%</span>
                                             </div>
                                         </div>
                                     </a>
                                 </c:forEach>
                             </div>
                         </div>
-
-
                     </div>
+
                     <button
                             class="carousel-control-prev"
                             type="button"
                             data-bs-target="#carouselExampleControls2"
                             data-bs-slide="prev"
-                            style="width: 5%"
+                            style="width: 5%;left:10rem"
                     >
                 <span
                         class="carousel-control-prev-icon"
@@ -265,7 +213,8 @@
                             type="button"
                             data-bs-target="#carouselExampleControls2"
                             data-bs-slide="next"
-                            style="width: 5%"
+                            style="width: 5%;right:10rem"
+
                     >
                 <span
                         class="carousel-control-next-icon"
@@ -278,59 +227,73 @@
         </div>
     </div>
 </section>
-<div class="event__banner align-items-center">
-    <a href="${pageContext.request.contextPath}/newArrival">
-        <img src="assets/images/Group 4.svg" alt=""/>
-    </a>
-</div>
-<section>
-    <div class="collection__component">
-        <div class="collection__container">
-            <p class="collection__title">Bộ Sưu Tập</p>
-            <div class="row collection__row">
-                <div class="col column__1">
-                    <div class="box emo">
-                        <a
-                                href="${pageContext.request.contextPath}/navigate?type=collectionSection&collectionName=EMO"
-                        >
-                            <div></div>
-                        </a>
-                        <span>EMO</span>
-                        <img
-                                src="assets/images/homepage/w747.webp"
-                                alt="height: 45rem;"
-                        />
-                    </div>
+
+<section id="section_slider">
+    <div class="carouselExample p-0">
+        <div id="carouselExampleIndicators" class="carousel slide container-fluid" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+                        aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                        aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                        aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"
+                        aria-label="Slide 4"></button>
+            </div>
+
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="assets/images/homepage/z6088271163993_ca5603db38e0ae9d411375a3aeb3ef65.jpg"
+                         class="d-block w-100 img-fluid"
+
+                         alt="...">
                 </div>
-                <div class="col column__2">
-                    <div class="box victor">
-                        <a
-                                href="${pageContext.request.contextPath}/navigate?type=collectionSection&collectionName=VICTOR"
-                        >
-                            <div></div>
-                        </a>
-                        <span>VICTOR</span>
-                        <img
-                                src="assets/images/homepage/203127468-1-black.avif"
-                                alt=""
-                                style="height: 45rem"
-                        />
-                    </div>
+                <div class="carousel-item">
+                    <img src="assets/images/homepage/Beige Gray Aesthetic Photo Collage Shop New Collection Promotion Banner.png"
+                         class="d-block w-100 img-fluid"
+                         alt="...">
                 </div>
-                <div class="col-12 column__3">
-                    <div class="longbox quietman">
-                        <a
-                                href="${pageContext.request.contextPath}/navigate?type=collectionSection&collectionName=VICTOR"
-                        >
-                            <div></div>
-                        </a>
-                        <span>THE QUIET MAN</span>
-                        <img src="assets/images/men1.jpg" alt=""/>
-                    </div>
+                <div class="carousel-item">
+                    <img src="assets/images/emo.jpg"
+                         class="d-block w-100 img-fluid"
+
+                         alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="assets/images/victor.jpg"
+                         class="d-block w-100 img-fluid"
+
+                         alt="...">
                 </div>
             </div>
         </div>
+
+
+        <button
+                class="carousel-control-prev"
+                type="button"
+                data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="prev"
+
+        >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button
+                class="carousel-control-next"
+                type="button"
+                data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="next"
+
+        >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
+    </div>
+</section>
+<section>
 
     <div class="tabEvent">
         <ul class="nav nav__Tab nav-fill nav-tabs" role="tablist">
@@ -369,32 +332,30 @@
                     aria-labelledby="fill-tab-0"
             >
                 <div class="list__product container">
-                    <div class="row" id="list__product__row">
-                        <div class="list__product__element">
-                            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-                                <c:forEach var="n" items="${newArrivalsList}" end="7">
-                                    <div class="col product__col">
-                                        <a href="productDetails?beltId=${n.id}"
-                                           class="product__link text-decoration-none">
-                                            <div class="card product__card border-0 shadow-sm"
-                                                 style="width: 19rem; height: 28rem;">
-                                                <div class="position-relative">
-                                                    <img
-                                                            src="${pageContext.request.contextPath}${n.mainImage}"
-                                                            class="card-img-top img-fluid product__image rounded"
-                                                            alt="${n.name}"
-                                                            style="height: 15rem; object-fit: cover;"
-                                                    />
-                                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                    <div class="list__product container">
+                        <div class="row" id="list__product__row">
+                            <div class="list__product__element">
+                                <div class="carousel-item active">
+                                    <div class="d-flex justify-content-center gap-3 ">
+                                        <c:forEach var="n" items="${newArrivalsList}" end="7">
+                                            <a href="productDetails?beltId=${n.id}" class="text-decoration-none text-dark">
+                                                <div class="text-center  hover--black">
+                                                    <!-- Ảnh sản phẩm lớn hơn -->
+                                                    <img src="${pageContext.request.contextPath}${n.mainImage}"
+                                                         class="img-fluid w-100 rounded shadow-sm"
+                                                         alt="${n.name}"
+                                                         style="height: 25rem; object-fit: cover;">
+                                                    <!-- Thông tin sản phẩm -->
+                                                    <div class="mt-2 text-start ps-3">
+                                                        <p class="fw-bold fs-5 mb-1">${n.price} VNĐ</p>
+                                                        <p class="text-muted mb-1">${n.name}</p>
+                                                        <span class="badge bg-secondary">${n.discountPercent}%</span>
+                                                    </div>
                                                 </div>
-                                                <div class="card-body text-center">
-                                                    <h5 class="card-title product__title text-dark mb-2">${n.name}</h5>
-                                                    <p class="product__price text-primary fw-bold">${n.price} VND</p>
-                                                </div>
-                                            </div>
-                                        </a>
+                                            </a>
+                                        </c:forEach>
                                     </div>
-                                </c:forEach>
+                                </div>
                             </div>
                             <div class="text-center mt-4">
                                 <form action="newArrival" method="get">
@@ -403,6 +364,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
 
             </div>
@@ -414,32 +376,30 @@
                     aria-labelledby="fill-tab-1"
             >
                 <div class="list__product container">
-                    <div class="row" id="list__product__row">
-                        <div class="list__product__element">
-                            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-                                <c:forEach var="m" items="${mostPopularList}" end="7">
-                                    <div class="col product__col">
-                                        <a href="productDetails?beltId=${m.id}"
-                                           class="product__link text-decoration-none">
-                                            <div class="card product__card border-0 shadow-sm"
-                                                 style="width: 19rem; height: 28rem;">
-                                                <div class="position-relative">
-                                                    <img
-                                                            src="${pageContext.request.contextPath}${m.image[0]}"
-                                                            class="card-img-top img-fluid product__image rounded"
-                                                            alt="${m.name}"
-                                                            style="height: 15rem; object-fit: cover;"
-                                                    />
-                                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                    <div class="list__product container">
+                        <div class="row" id="list__product__row">
+                            <div class="list__product__element">
+                                <div class="carousel-item active">
+                                    <div class="d-flex justify-content-center gap-3 ">
+                                        <c:forEach var="m" items="${mostPopularList}" end="7">
+                                            <a href="productDetails?beltId=${m.id}" class="text-decoration-none text-dark">
+                                                <div class="text-center hover--black">
+                                                    <!-- Ảnh sản phẩm lớn hơn -->
+                                                    <img src="${pageContext.request.contextPath}${m.image[0]}"
+                                                         class="img-fluid w-100 rounded shadow-sm"
+                                                         alt="${m.name}"
+                                                         style="height: 25rem; object-fit: cover;">
+                                                    <!-- Thông tin sản phẩm -->
+                                                    <div class="mt-2 text-start ps-3">
+                                                        <p class="fw-bold fs-5 mb-1">${m.price} VNĐ</p>
+                                                        <p class="text-muted mb-1">${m.name}</p>
+                                                        <span class="badge bg-secondary">${m.discountPercent}%</span>
+                                                    </div>
                                                 </div>
-                                                <div class="card-body text-center">
-                                                    <h5 class="card-title product__title text-dark mb-2">${m.name}</h5>
-                                                    <p class="product__price text-primary fw-bold">${m.price} VND</p>
-                                                </div>
-                                            </div>
-                                        </a>
+                                            </a>
+                                        </c:forEach>
                                     </div>
-                                </c:forEach>
+                                </div>
                             </div>
                             <div class="text-center mt-4">
                                 <form action="newArrival" method="get">
@@ -448,6 +408,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
 
 
@@ -457,46 +418,35 @@
     </div>
 </section>
 
-<section>
-    <div class="spotlight__component">
-        <p class="spotlight__title1">THOMAS Spotlight</p>
-        <p class="spotlight__title2">Đồng hành cùng bạn</p>
-        <div class="row spotlight__row">
-            <div class="col spotlight__col">
-                <div class="box">
-                    <img
-                            src="assets/images/homepage/465131741_18466090996040427_4498527421517500506_n 1.png"
-                            alt=""
-                    />
-                </div>
-            </div>
-            <div class="col spotlight__col">
-                <div class="box">
-                    <img
-                            src="assets/images/homepage/1aa7c0425353532126123f54fbaa2d16.png"
-                            alt=""
-                    />
-                </div>
-            </div>
-            <div class="col spotlight__col">
-                <div class="box">
-                    <img
-                            src="assets/images/homepage/minimalist-style-la-gi-3-jpg-1632887296-29092021104816.webp"
-                            alt=""
-                    />
-                </div>
-            </div>
-            <div class="col spotlight__col">
-                <div class="box">
-                    <img
-                            src="assets/images/homepage/Screenshot 2024-11-03 205020_upscayl_3x_realesrgan-x4plus 1.jpg"
-                            alt=""
-                    />
-                </div>
-            </div>
+<div class="container-fluid bg-black text-white d-flex flex-column justify-content-center align-items-center vh-100 px-4">
+    <div class="col-md-8 ">
+        <div class="fs-4 fw-bold text-uppercase mb-3 text-center">
+            CÂU CHUYỆN, PHONG CÁCH VÀ THẮT LƯNG TẠI THOMAS, TỪ NĂM 1949
         </div>
+        <p class="fs-5 lh-lg">
+            Thể thao giúp chúng ta khỏe mạnh. Giữ cho tâm trí tỉnh táo. Kết nối mọi người lại với nhau. Thông qua thể thao, chúng ta có sức mạnh để thay đổi cuộc sống.
+            Dù đó là những câu chuyện về các vận động viên truyền cảm hứng. Giúp bạn đứng dậy và vận động. Hay trang phục thể thao với công nghệ tiên tiến nhất để nâng cao hiệu suất của bạn. Phá vỡ giới hạn bản thân.
+            <br><br>
+            THOMAS là ngôi nhà của những người chạy bộ, cầu thủ bóng rổ, những đứa trẻ yêu bóng đá, những người đam mê thể hình. Những người thích leo núi vào cuối tuần để thoát khỏi thành phố. Những giáo viên yoga lan tỏa từng động tác. Biểu tượng 3 Sọc xuất hiện trong làng nhạc. Trên sân khấu, tại các lễ hội. Trang phục thể thao của chúng tôi giúp bạn tập trung trước tiếng còi khai cuộc. Trong suốt cuộc đua. Và khi cán đích.
+            <br><br>
+            Chúng tôi ở đây để hỗ trợ những người sáng tạo. Cải thiện cuộc chơi của họ. Cuộc sống của họ. Và thay đổi thế giới.
+        </p>
     </div>
-</section>
+    <div class="fs-3 fw-bold text-uppercase mt-3 letter-spacing">T H O M A S</div>
+</div>
+<div class="container-fluid  py-5 " style="background-color: #FFFF12;">
+    <div class="d-flex justify-content-center align-items-center px-4 ">
+        <!-- Nội dung text -->
+        <span class="fs-3 fw-bold text-dark text-center me-5">
+                Trở thành thành viên 15% giảm giá
+            </span>
+
+        <!-- Nút đăng ký -->
+        <a href="#" class="btn btn-dark fs-5 fw-bold px-4 py-3 d-flex align-items-center">
+            Đăng ký miễn phí <span class="ms-2">➝</span>
+        </a>
+    </div>
+</div>
 
 <jsp:include page="/frontend/header_footer/footer.jsp"/>
 

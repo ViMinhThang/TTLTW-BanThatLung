@@ -52,6 +52,7 @@ public class userAdminController extends HttpServlet {
         }
         List<User> userList = uploadUserService.getAllUsers();
         request.setAttribute("userList", userList);
+        System.out.println(request.getRequestURI().endsWith("users")?"1":"0");
         request.getRequestDispatcher("/frontend/AdminPage/allUser/allUser.jsp").forward(request, response);
     }
 

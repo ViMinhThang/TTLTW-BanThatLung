@@ -28,102 +28,14 @@
 
     <!-- Custom styles for this template-->
     <link href="${pageContext.request.contextPath}/css/adminGeneral.css" rel="stylesheet"/>
-    <link href="${pageContext.request.contextPath}/css/sb-admin-2.min.css" rel="stylesheet"/>
     <link href="${pageContext.request.contextPath}/css/dataTables.bootstrap4.min.css" rel="stylesheet"/>
+    <link href="${pageContext.request.contextPath}/css/adminGeneral.css" rel="stylesheet"/>
 
 </head>
 
 <body id="page-top">
 <div id="wrapper">
-    <ul
-            class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
-            id="accordionSidebar"
-    >
-        <a
-                class="sidebar-brand d-flex align-items-center justify-content-center"
-                href="${pageContext.request.contextPath}/"
-        >
-            <div class="sidebar-brand-icon rotate-n-15">
-            </div>
-            <div class="sidebar-brand-text mx-3">THOMAS Admin</div>
-        </a>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0"/>
-
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
-            <a class="nav-link" href="${pageContext.request.contextPath}/admin">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span></a
-            >
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider"/>
-
-        <!-- Heading -->
-
-        <!-- Nav Item - Utilities Collapse Menu -->
-        <li class="nav-item active">
-            <a
-                    class="nav-link collapsed"
-                    href="#"
-                    data-toggle="collapse"
-                    data-target="#collapseUtilities"
-                    aria-expanded="true"
-                    aria-controls="collapseUtilities"
-            >
-                <i class="fas fa-fw fa-table"></i>
-                <span>Bảng</span>
-            </a>
-            <div
-                    id="collapseUtilities"
-                    class="collapse"
-                    aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar"
-            >
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Các đối tượng:</h6>
-                    <a
-                            class="collapse-item"
-                            href="${pageContext.request.contextPath}/admin/table/users"
-                    >Người dùng</a
-                    >
-                    <a class="collapse-item"
-                       href="${pageContext.request.contextPath}/admin/table/belts">Sản
-                        phẩm</a>
-                    <a
-                            class="collapse-item"
-                            href="${pageContext.request.contextPath}/admin/table/reviews"
-                    >Đánh giá</a
-                    >
-                    <a
-                            class="collapse-item active"
-                            href="${pageContext.request.contextPath}/admin/table/coupons"
-                    >Coupon</a
-                    >
-                    <a
-                            class="collapse-item"
-                            href="${pageContext.request.contextPath}/admin/table/orders"
-                    >Đơn hàng</a
-                    >
-                    <a
-                            class="collapse-item"
-                            href="${pageContext.request.contextPath}/admin/table/collections"
-                    >Bộ sưu tập</a
-                    >
-                </div>
-            </div>
-        </li>
-        <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block"/>
-
-        <!-- Sidebar Toggler (Sidebar) -->
-        <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" id="sidebarToggle"></button>
-        </div>
-    </ul>
+    <jsp:include page="/frontend/components/sidebar/sidebar.jsp"/>
 
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
@@ -131,7 +43,7 @@
                     class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
             >
                 <button
-                        class="btn btn-white border border-dark"
+                        class="btn btn-white border border-dark custom_input--btn-group__input"
                         style="color: black"
                         data-bs-toggle="modal"
                         data-bs-target="#createModal"
@@ -352,7 +264,7 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <table
-                                    class="table table-bordered"
+                                    class="table"
                                     id="dataTable"
                                     width="100%"
                                     cellspacing="0"
@@ -410,13 +322,8 @@
                 </div>
             </div>
 
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; THOMAS 2021</span>
-                    </div>
-                </div>
-            </footer>
+            <jsp:include page="/frontend/components/adminFooter/adminFooter.jsp"/>
+
         </div>
     </div>
 
@@ -491,7 +398,7 @@
                 <div class="modal-footer">
                     <button
                             type="button"
-                            class="btn btn-white border border-dark"
+                            class="btn btn-white border border-dark custom_btn_style"
                             data-bs-dismiss="modal"
                             style="color: black"
                     >
@@ -501,7 +408,7 @@
                         <button
                                 id="removeUserBtn"
                                 type="submit"
-                                class="btn btn-dark"
+                                class="btn btn-dark custom_btn_style"
                                 style="color: white; background-color: black"
                         >
                             Xóa
@@ -525,19 +432,20 @@
                       method="POST">
                     <input class="messageCreateOrUpdate" type="hidden" name="message" value="create">
                     <div class="modal-header">
-                        <h5
+                        <h3
                                 class="modal-title"
                                 id="exampleModalLabel"
                                 style="color: black"
                         >
                             Tạo coupon mới
-                        </h5>
+                        </h3>
                         <button
                                 type="button"
                                 class="btn-close"
                                 data-bs-dismiss="modal"
                                 aria-label="Close"
-                        ></button>
+                        >&times;
+                        </button>
                     </div>
                     <div class="modal-body">
                         <input class="messageCreateOrUpdate" type="hidden" name="message" value="create">
@@ -548,25 +456,29 @@
                                     style="color: black"
                             >Mã coupon</label
                             >
-                            <input class="form-control" name="couponCode" type="text" required/>
+                            <input class="form-control custom_input--btn-group__input" name="couponCode" type="text"
+                                   required/>
                         </div>
                         <div class="d-flex flex-column mt-3">
                             <label class="fomr-label" for="discountPercentage" style="color: black"
                             >% Giảm giá</label
                             >
-                            <input class="form-control" name="discountPercentage" type="number" required/>
+                            <input class="form-control custom_input--btn-group__input" name="discountPercentage"
+                                   type="number" required/>
                         </div>
                         <div class="d-flex flex-column mt-3">
                             <label class="form-label" for="startDate" style="color: black"
                             >Nhập ngày bắt đầu</label
                             >
-                            <input class="form-control" name="startDate" type="date" required/>
+                            <input class="form-control custom_input--btn-group__input" name="startDate" type="date"
+                                   required/>
                         </div>
                         <div class="d-flex flex-column mt-3">
                             <label class="form-label" for="endDate" style="color: black"
                             >Nhập ngày hết hạn</label
                             >
-                            <input class="form-control" name="endDate" type="date" required/>
+                            <input class="form-control custom_input--btn-group__input" name="endDate" type="date"
+                                   required/>
                         </div>
                         <div class="d-flex flex mt-3">
                             <label class="form-label m-0 mr-2" style="color: black" for="isDeleted">
@@ -584,7 +496,7 @@
                     <div class="modal-footer">
                         <button
                                 type="button"
-                                class="btn btn-white border border-dark"
+                                class="btn btn-white border border-dark custom_input--btn-group__input"
                                 data-bs-dismiss="modal"
                                 style="color: black"
                         >
@@ -593,7 +505,7 @@
                         <form>
                             <button
                                     type="submit"
-                                    class="btn createOrUpdate"
+                                    class="btn createOrUpdate custom_input--btn-group__input"
                                     style="color: white; background-color: black"
                             >
                                 Tạo

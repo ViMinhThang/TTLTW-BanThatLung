@@ -29,8 +29,10 @@ public class loginController extends HttpServlet {
         User user = service.checkLogin(userEmail, password);
         if (user != null) {
             HttpSession session = request.getSession();
+            service.saveSession(user.getId(), session.getId());
             session.setAttribute("auth", user);
             response.sendRedirect("/");
+
         } else {
             request.setAttribute("errorMessage", "Sai mật khẩu hoặc tài khoản");
             request.getRequestDispatcher("/frontend/signInPage/signInPage.jsp").forward(request, response);
