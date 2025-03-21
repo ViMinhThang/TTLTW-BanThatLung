@@ -49,17 +49,17 @@
         </ol>
     </nav>
 </div>
-<div class="custom_margin--container" style="margin-top: 250px">
+<div class="custom_margin--container mt-5">
     <div class="row">
-        <div class="col-6 mb-5 pe-5" style="margin-left: 196.25px">
+        <div class="col-8 mb-5 pe-5">
             <div class="row">
                 <h1 class="ps-0">Giỏ hàng của bạn</h1>
-                <h3 class="ps-0 fw-light fs-5 totalOrdersCountDisplay">
-                    Tổng [${totalOrders} đơn hàng]
-                </h3>
+<%--                <h3 class="ps-0 fw-light fs-5 totalOrdersCountDisplay">--%>
+<%--                    Tổng [${totalOrders} đơn hàng]--%>
+<%--                </h3>--%>
             </div>
             <c:forEach var="entry" items="${cart}">
-                <div class="row border border-dark mt-4 custom_remove" style="width: 719.58px; height: 242px">
+                <div class="row border border-dark mt-4 custom_remove">
                     <input type="hidden" class="beltId" name="beltId" value="${entry.key}">
                     <div class="col-4 p-0">
                         <img
@@ -71,17 +71,16 @@
                         <div class="row">
                             <div class="flex-grow-1" style="flex-basis: 90%">
                                 <div
-                                        class="d-flex justify-content-between flex-column flex-grow-2"
-                                        style="height: 100%"
+                                        class="d-flex justify-content-between flex-column flex-grow-2 m-3"
                                 >
                                     <div class="d-flex justify-content-between flex-column">
-                                        <div class="d-flex justify-content-between mt-3">
-                                            <p class="custom_size--16">
+                                        <div class="d-flex justify-content-between m-3">
+                                            <p class="fs-2 fw-bold custom_size--19">
                                                     ${entry.value.belt.name}
                                             </p>
-                                            <p class="custom_size--16">${entry.value.price} VNĐ</p>
+                                            <p class="fs-3 custom_size--16">${entry.value.price} VNĐ</p>
                                         </div>
-                                        <div class="d-flex mt-3">
+                                        <div class="d-flex">
                                             <c:forEach var="category" items="${entry.value.belt.categories}">
                                                 <p class="custom_size--16 p-2 me-2 fw-bold"
                                                    style="background-color: #DFDFDF">${category}</p>
@@ -124,53 +123,8 @@
 
             </c:forEach>
         </div>
-        <div class="col-3 mb-5 ps-5" style="width: 450px">
+        <div class="col-4 mt-5">
             <div class="row custom_insert">
-                <c:choose>
-                    <c:when test="${empty sessionScope.cart || sessionScope.auth==null}">
-                        <c:if test="${sessionScope.auth==null}">
-                            <p class="ps-0">Vui lòng đăng nhập để thanh toán</p>
-                        </c:if>
-                        <a
-                                href="#"
-                                class="btn btn-dark px-3 py-2 fs-5 custom_button checkoutPage disabled fw-bold"
-                                style="pointer-events: none; padding-top: 12px;
-                                padding-bottom: 12px;"
-                        >Tiến hành thanh toán
-                            <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    height="24px"
-                                    viewBox="0 -960 960 960"
-                                    width="24px"
-                                    fill="#EFEFEF"
-                            >
-                                <path
-                                        d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"
-                                />
-                            </svg>
-                        </a>
-                    </c:when>
-                    <c:otherwise>
-                        <a
-                                href="${pageContext.request.contextPath}/checkout"
-                                class="btn btn-dark px-3 py-2 fs-5 custom_button checkoutPage fw-bold"
-                                style="padding-top: 12px;padding-bottom: 12px;"
-                        >Tiến hành thanh toán
-                            <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    height="24px"
-                                    viewBox="0 -960 960 960"
-                                    width="24px"
-                                    fill="#EFEFEF"
-                            >
-                                <path
-                                        d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"
-                                />
-                            </svg>
-                        </a>
-                    </c:otherwise>
-                </c:choose>
-
                 <div class="mt-4 ps-0">
                     <div class="pb-2 mb-3">
                         <h5 class="fw-bold fs-3">Tóm tắt đơn hàng</h5>
@@ -211,6 +165,55 @@
                             Áp dụng
                         </button>
                     </div>
+
+                    <div class="mt-4">
+                        <c:choose>
+                            <c:when test="${empty sessionScope.cart || sessionScope.auth==null}">
+                                <c:if test="${sessionScope.auth==null}">
+                                    <p class="ps-0">Vui lòng đăng nhập để thanh toán</p>
+                                </c:if>
+                                <a
+                                        href="#"
+                                        class="btn btn-dark px-3 py-2 fs-5 custom_button checkoutPage disabled fw-bold"
+                                        style="pointer-events: none; padding-top: 12px;
+                                padding-bottom: 12px;"
+                                >Tiến hành thanh toán
+                                    <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            height="24px"
+                                            viewBox="0 -960 960 960"
+                                            width="24px"
+                                            fill="#EFEFEF"
+                                    >
+                                        <path
+                                                d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"
+                                        />
+                                    </svg>
+                                </a>
+                            </c:when>
+                            <c:otherwise>
+                                <a
+                                        href="${pageContext.request.contextPath}/checkout"
+                                        class="btn btn-dark px-3 py-2 fs-5 custom_button checkoutPage fw-bold"
+                                        style="padding-top: 12px;padding-bottom: 12px;"
+                                >Tiến hành thanh toán
+                                    <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            height="24px"
+                                            viewBox="0 -960 960 960"
+                                            width="24px"
+                                            fill="#EFEFEF"
+                                    >
+                                        <path
+                                                d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"
+                                        />
+                                    </svg>
+                                </a>
+                            </c:otherwise>
+                        </c:choose>
+
+                    </div>
+
                 </div>
             </div>
         </div>
