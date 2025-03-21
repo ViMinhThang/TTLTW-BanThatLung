@@ -1,10 +1,7 @@
 package com.thomas.dao.db;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-import com.thomas.dao.model.Coupon;
-import com.thomas.dao.model.Reviews;
-import com.thomas.dao.model.Token;
-import com.thomas.dao.model.User;
+import com.thomas.dao.model.*;
 import org.jdbi.v3.core.Jdbi;
 
 import java.sql.SQLException;
@@ -34,6 +31,8 @@ public class JDBIConnect {
         jdbi.registerRowMapper(Token.class, new TokenMapper());
         jdbi.registerRowMapper(User.class, new UserMapper());
         jdbi.registerRowMapper(Reviews.class, new ReviewMapper());
-        jdbi.registerRowMapper(UsersUsageMapper.class, new UsersUsageMapper());
+        jdbi.registerRowMapper(UsersUsage.class, new UsersUsageMapper());
+        jdbi.registerRowMapper(Belts.class, new BeltMapper());
+        jdbi.registerRowMapper(BeltVariant.class, new BeltVariantsMapper());
     }
 }

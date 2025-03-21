@@ -69,6 +69,7 @@
     <c:otherwise>create</c:otherwise>
 </c:choose>"/>
                     <input type="hidden" name="beltId" value="${param.id}"/>
+                    <input type="hidden" name="variantId" value="${param.variantId}"/>
                     <div class="d-flex w-100">
                         <div class="col-12 bg-white">
                             <div

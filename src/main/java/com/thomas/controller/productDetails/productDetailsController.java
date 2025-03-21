@@ -4,7 +4,7 @@ import com.thomas.dao.model.Category;
 import com.thomas.dao.model.Belts;
 import com.thomas.dao.model.User;
 import com.thomas.services.UploadFavoriteService;
-import com.thomas.services.UploadProductService;
+import com.thomas.services.ProductService;
 import com.thomas.services.UploadReviewService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -15,7 +15,7 @@ import java.util.List;
 
 @WebServlet(name = "productDetailsController", value = "/productDetails")
 public class productDetailsController extends HttpServlet {
-    UploadProductService uploadProductService = new UploadProductService();
+    ProductService productService = new ProductService();
     UploadReviewService uploadReviewService = new UploadReviewService();
     UploadFavoriteService uploadFavoriteService = new UploadFavoriteService();
 
@@ -24,26 +24,30 @@ public class productDetailsController extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("auth");
         int beltId = Integer.parseInt(request.getParameter("beltId"));
-        uploadProductService.saveBeltView(beltId);
+        int variantId = Integer.parseInt(request.getParameter("variantId"));
+        productService.saveBeltView(beltId);
         boolean isPurchasedBelt = false;
         if (user != null) {
-            isPurchasedBelt = uploadProductService.isUserPurchased(beltId, user.getId());
+            isPurchasedBelt = productService.isUserPurchased(beltId, user.getId(), variantId);
 
         }
-        Belts belt = uploadProductService.getProductById(beltId);
-        belt.setPrice(belt.getPrice());
-        belt.setImage(uploadProductService.getProductImages(beltId));
-        List<Category> beltCategory = uploadProductService.getAllCategoriesById(beltId);
+        Belts belt = productService.find(beltId).get(0);
+        belt.setBeltVariants(productService.findVariants(beltId, null, null, variantId));
+        List<Category> beltCategory = productService.findCategory(beltId, variantId);
         int totalReview = uploadReviewService.getTotalReviewsCount(beltId);
-        List<String> descBeltImage = uploadProductService.getAllDescImage(beltId);
-        List<Belts> randomBelts = uploadProductService.getRandomBelts();
+        List<String> descBeltImage = productService.getAllDescImage(beltId);
+        List<Belts> randomBelts = productService.getRandomBelts();
         for (Belts b : randomBelts) {
-            b.setImage(uploadProductService.getProductImages(b.getId()));
+            b.setBeltVariants(productService.findVariants(b.getId(), null, null, null));
+            b.getBeltVariants().forEach(v -> v.setImages(productService.getVariantImages(v.getId())));
         }
-        List<Belts> beltViewCount = uploadProductService.getBeltByViewCount();
+        List<Belts> beltViewCount = productService.getBeltByViewCount();
         for (Belts b : beltViewCount) {
-            b.setImage(uploadProductService.getProductImages(b.getId()));
+            b.setBeltVariants(productService.findVariants(b.getId(), null, null, null));
+            b.getBeltVariants().forEach(v -> v.setImages(productService.getVariantImages(v.getId())));
         }
+        request.setAttribute("allVariant", productService.findVariants(beltId, null, null, null));
+        request.setAttribute("variant", belt.getBeltVariants().get(0));
         request.setAttribute("isPurchasedBelt", isPurchasedBelt);
         request.setAttribute("beltViewCount", beltViewCount);
         request.setAttribute("randomBelts", randomBelts);

@@ -14,7 +14,6 @@
 <script src="${pageContext.request.contextPath}/js/jquery.easing.min.js"></script>
 
 <!-- Custom scripts for all pages-->
-<script src="${pageContext.request.contextPath}/js/allUser.js"></script>
 <script src="${pageContext.request.contextPath}/js/sb-admin-2.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 

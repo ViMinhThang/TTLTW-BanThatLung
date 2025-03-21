@@ -105,7 +105,7 @@ public class UserDao {
 
     public boolean registerUser(User user) {
         return JDBIConnect.get().withHandle(h -> {
-            String insertedsql = "INSERT INTO users (name, email, dateOfBirth, password, createAt,gender,phoneNumber, isDeleted, role,isActive) " +
+            String insertedsql = "INSERT INTO users (name, email, dateOfBirth, password, createdAt,gender,phoneNumber, isDeleted, role,isActive) " +
                     "VALUES (:name, :email, :dateOfBirth, :password, :createAt,:gender,:phoneNumber, :isDeleted, :role,:isActive)";
             return h.createUpdate(insertedsql)
                     .bind("name", user.getName())

@@ -60,23 +60,33 @@
         </thead>
         <tbody>
         <c:forEach var="belt" items="${favoriteBelts}">
-            <tr class="fs-5 fw-light tr-favorite">
-                <input class="beltId" type="hidden" name="beltId" value="${belt.id}">
-                <input class="userId" type="hidden" name="userId" value="${sessionScope.auth.id}">
-                <td>
-                    <span class="remove-btn">×</span>
-                </td>
-                <td class="text-start">
-                    <img
-                            src="${pageContext.request.contextPath}${belt.image[0]}"
-                            alt="Product Image"
-                            class="belts-img img-fluid" style="width: 10%"
-                    />
-                        ${belt.name}
-                </td>
-                <td class="text-center">${belt.price} vnđ</td>
-                <td class="text-center">${belt.stockQuantity !=0 ? "Còn hàng" : "Hết hàng"}</td>
-            </tr>
+            <c:forEach var="variant" items="${belt.beltVariants}">
+                <tr class="fs-5 fw-light tr-favorite">
+                    <input class="beltId" type="hidden" name="beltId" value="${belt.id}">
+                    <input class="variantId" type="hidden" name="variantId" value="${variant.id}">
+                    <input class="userId" type="hidden" name="userId" value="${sessionScope.auth.id}">
+
+                    <td>
+                        <span class="remove-btn">×</span>
+                    </td>
+                    <td class="text-start d-flex align-items-center">
+                        <!-- Ảnh đầu tiên của variant -->
+                        <c:if test="${not empty variant.images}">
+                            <img src="${pageContext.request.contextPath}${variant.images[0]}"
+                                 alt="Product Image"
+                                 class="belts-img img-fluid me-3" style="width: 80px; height: 80px; object-fit: cover;">
+                        </c:if>
+                        <div>
+                            <p class="mb-0">${belt.name} - ${variant.color} (${variant.size})</p>
+                            <c:forEach var="category" items="${variant.categories}">
+                                <span class="badge bg-secondary">${category.name}</span>
+                            </c:forEach>
+                        </div>
+                    </td>
+                    <td class="text-center">${belt.price} vnđ</td>
+                    <td class="text-center">${variant.stockQuantity != 0 ? "Còn hàng" : "Hết hàng"}</td>
+                </tr>
+            </c:forEach>
         </c:forEach>
         </tbody>
     </table>

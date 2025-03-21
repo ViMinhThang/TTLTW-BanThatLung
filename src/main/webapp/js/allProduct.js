@@ -1,54 +1,33 @@
 $(document).ready(function () {
-    $(".filter__title").on("click", function () {
-        $("#dimmer3").toggleClass("active");
-        $("#overlay3").toggleClass("active");
+    $(".fa-trash-can").on("click", function () {
+        const variantRow = $(this).closest("tr"); // Get clicked row
+        console.log("Variant Row:", variantRow);
+
+        // Find the nearest product row inside the same tbody
+        const productRow = variantRow.closest("tbody").find("tr.belt-row").first();
+        console.log("Product Row Found:", productRow);
+
+        const productId = productRow.find(".productId").text().trim();
+        const variantId = variantRow.find(".variantId").text().trim();
+
+        console.log("Extracted Product ID:", productId);
+        console.log("Extracted Variant ID:", variantId);
+
+        $(".removeModalBody").text(`Xóa sản phẩm này #${productId}`);
+        $(".deleteBtn input[name='productId']").remove();
+        $(".deleteBtn input[name='variantId']").remove();
+        $(".deleteBtn input[name='message']").remove();
+
+        $(".deleteBtn").prepend(`
+            <input type="hidden" name="productId" value="${productId}">
+            <input type="hidden" name="variantId" value="${variantId}">
+            <input type="hidden" name="message" value="delete">
+        `);
     });
 
-    $(".apply__button").on("click", function () {
-        $("#dimmer3").toggleClass("active");
-        $("#overlay3").toggleClass("active");
-    });
-
-    $(document).on("click", function (event) {
-        if (!$(event.target).closest("#overlay3, .filter__title").length) {
-            $("#overlay3").removeClass("active");
-            $("#dimmer3").removeClass("active");
-        }
-    });
-
-    $("#closeButton").on("click", function () {
-        $("#overlay3").removeClass("active");
-        $("#dimmer3").removeClass("active");
+    $('#removeModal').on('hidden.bs.modal', function () {
+        $(".deleteBtn input[name='variantId']").remove();
+        $(".deleteBtn input[name='productId']").remove();
+        $(".deleteBtn input[name='message']").remove();
     });
 });
-
-
-// $.ajax({
-//   type: "GET",
-//   url: '/Nhom38_BanThatLung_war/allProduct',
-//   success(res) {
-//     if($("#is_reloaded").length === 0) {
-//       document.location.reload();
-//     }
-//   }
-// });
-//
-
-
-// if (!sessionStorage.getItem("is_reloaded")) {
-//     // Kiểm tra nếu sessionStorage chưa có flag "is_reloaded"
-//     $.ajax({
-//         type: "GET",
-//         url: '/Nhom38_BanThatLung_war/allProduct',
-//         success(res) {
-//             sessionStorage.setItem("is_reloaded", 'true'); // Đặt flag
-//             document.location.reload(); // Reload trang sau khi hoàn thành AJAX
-//         },
-//         error(err) {
-//             console.error("Lỗi khi gửi yêu cầu AJAX:", err);
-//         }
-//     });
-// }
-
-
-

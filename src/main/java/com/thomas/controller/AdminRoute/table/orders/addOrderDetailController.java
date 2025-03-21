@@ -5,7 +5,7 @@ import com.thomas.dao.model.Order;
 import com.thomas.dao.model.OrderDetails;
 import com.thomas.services.UploadOrderDetailService;
 import com.thomas.services.UploadOrderService;
-import com.thomas.services.UploadProductService;
+import com.thomas.services.ProductService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -17,7 +17,7 @@ import java.util.List;
 @WebServlet(name = "orderDetailController", value = "/add-Order-details")
 public class addOrderDetailController extends HttpServlet {
     UploadOrderDetailService uploadOrderDetailService = new UploadOrderDetailService();
-    UploadProductService uploadProductService = new UploadProductService();
+    ProductService productService = new ProductService();
     UploadOrderService uploadOrderService = new UploadOrderService();
 
     @Override
@@ -30,7 +30,7 @@ public class addOrderDetailController extends HttpServlet {
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         double price = Double.parseDouble(request.getParameter("price"));
         int orderId = Integer.parseInt(request.getParameter("orderId"));
-        List<Belts> allBelts = uploadProductService.getProducts();
+        List<Belts> allBelts = productService.find(null);
         int beltId = 0;
         for (Belts b : allBelts) {
             if (b.getName().equals(productName)) {

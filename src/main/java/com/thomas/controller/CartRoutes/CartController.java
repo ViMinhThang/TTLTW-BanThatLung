@@ -2,7 +2,7 @@ package com.thomas.controller.CartRoutes;
 
 import com.thomas.dao.model.CartItem;
 import com.thomas.dao.model.Belts;
-import com.thomas.services.UploadProductService;
+import com.thomas.services.ProductService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 @WebServlet(name = "CartController", value = "/Cart")
 public class CartController extends HttpServlet {
-    UploadProductService uploadProductService = new UploadProductService();
+    ProductService productService = new ProductService();
     DecimalFormatSymbols symbols = new DecimalFormatSymbols();
     DecimalFormat formatter = new DecimalFormat("#,###.000", symbols);
 
@@ -27,9 +27,9 @@ public class CartController extends HttpServlet {
         symbols.setDecimalSeparator('.');
         HttpSession session = request.getSession();
         Map<Integer, CartItem> cart = (Map<Integer, CartItem>) session.getAttribute("cart");
-        List<Belts> suggestionBelts = uploadProductService.getRandomBelts();
+        List<Belts> suggestionBelts = productService.getRandomBelts();
         for (Belts b : suggestionBelts) {
-            b.setImage(uploadProductService.getProductImages(b.getId()));
+            b.setBeltVariants(productService.findVariants(b.getId(), null, null, null));
         }
         if (cart == null) {
             cart = new HashMap<Integer, CartItem>();
@@ -86,14 +86,17 @@ public class CartController extends HttpServlet {
         if ("add".equals(message)) {
             double price = Double.parseDouble(request.getParameter("price"));
             int quantity = Integer.parseInt(request.getParameter("quantity"));
+            String color = request.getParameter("color");
+            String size = request.getParameter("size");
             int beltId = Integer.parseInt(request.getParameter("beltId"));
-            Belts belt = uploadProductService.getProductById(beltId);
-            belt.setImage(uploadProductService.getProductImages(beltId));
-            belt.setTag(uploadProductService.getAllCategoriesById(beltId));
+            int variantId = Integer.parseInt(request.getParameter("variantId"));
+            Belts belt = productService.find(beltId).get(0);
+            belt.setBeltVariants(productService.findVariants(beltId, color, size, variantId));
+            belt.getBeltVariants().forEach(v -> v.setCategories(productService.findCategory(beltId, variantId)));
 
             CartItem item = cart.get(beltId);
             if (item == null) {
-                item = new CartItem(belt, quantity, price);
+                item = new CartItem(belt, quantity, price, belt.getBeltVariants().get(0));
                 cart.put(beltId, item);
             } else {
                 item.setQuantity(item.getQuantity() + quantity);

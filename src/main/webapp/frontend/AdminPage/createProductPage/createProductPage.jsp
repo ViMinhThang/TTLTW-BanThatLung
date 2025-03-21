@@ -316,6 +316,7 @@
                                                required
                                         />
                                     </div>
+
                                     <div class="row mb-3">
                                         <p
                                                 class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
@@ -344,7 +345,37 @@
                                                 type="number"
                                                 class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
                                                 placeholder="Nhập số lượng khách hàng có thể chọn"
-                                                value="${product.stockQuantity}"
+                                                value="${variants.stockQuantity}"
+                                                required
+                                        />
+                                    </div>
+                                    <div class="row mb-3">
+                                        <p
+                                                class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
+                                        >
+                                            Nhập màu
+                                        </p>
+                                        <input
+                                                name="color"
+                                                type="text"
+                                                class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
+                                                placeholder="Nhập màu"
+                                                value="${variants.color}"
+                                                required
+                                        />
+                                    </div>
+                                    <div class="row mb-3">
+                                        <p
+                                                class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
+                                        >
+                                            Nhập size
+                                        </p>
+                                        <input
+                                                name="size"
+                                                type="text"
+                                                class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
+                                                placeholder="Nhập size"
+                                                value="${variants.size}"
                                                 required
                                         />
                                     </div>
@@ -406,20 +437,11 @@
                                         </p>
                                         <input
                                                 type="number"
-                                                name="discountPercent"
+                                                name="discountRate"
                                                 class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                value="${product.discountPercent}"
+                                                value="${product.discountRate}"
                                         />
                                     </div>
-                                    <%--                                    <div class="row mb-3">--%>
-                                    <%--                                        <p class="col-3 mb-0 d-flex justify-content-end align-items-top fs-5">--%>
-                                    <%--                                            Mô tả--%>
-                                    <%--                                        </p>--%>
-                                    <%--                                        <div class="document-editor">--%>
-                                    <%--                                            <div class="document-editor__toolbar"></div>--%>
-                                    <%--                                            <div class="document-editor__editing" name="Description"></div>--%>
-                                    <%--                                        </div>--%>
-                                    <%--                                    </div>--%>
                                     <div class="row d-flex justify-content-end mb-3 ps-sm-5">
                                         <button type="submit" class="btn btn-dark custom_btn_style"
                                                 style="width: 30%; height: 47px">

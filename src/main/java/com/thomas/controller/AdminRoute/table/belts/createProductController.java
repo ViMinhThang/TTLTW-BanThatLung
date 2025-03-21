@@ -1,7 +1,8 @@
 package com.thomas.controller.AdminRoute.table.belts;
 
+import com.thomas.dao.model.BeltVariant;
 import com.thomas.dao.model.Belts;
-import com.thomas.services.UploadProductService;
+import com.thomas.services.ProductService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -9,9 +10,11 @@ import jakarta.servlet.annotation.*;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "createProductController", value = "/admin/table/belts/createProduct")
 @MultipartConfig(
@@ -22,20 +25,28 @@ import java.util.List;
 public class createProductController extends HttpServlet {
     private static final String ULOAD_DIR = "uploads";
     private static final String UPLOAD_DIR_SERVER = "C:\\Users\\huynh\\OneDrive\\Desktop\\Nhom38-BanThatLung\\src\\main\\webapp\\uploads";
-    private static final UploadProductService uploadProductService = new UploadProductService();
+    private static final ProductService PRODUCT_SERVICE = new ProductService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String beltIdParam = request.getParameter("id");
-        if (beltIdParam != null) {
+        String variantIdParam = request.getParameter("variantId");
+        if (beltIdParam != null && variantIdParam != null) {
             int beltId = Integer.parseInt(beltIdParam);
-            Belts belts = uploadProductService.getProductById(beltId);
-            List<String> image = uploadProductService.getProductImages(beltId);
-            String[] tagsArray = uploadProductService.getTags(beltId);
+            Belts belts = PRODUCT_SERVICE.find(beltId).get(0);
+            List<BeltVariant> variants = PRODUCT_SERVICE.findVariants(beltId, null, null, null);
+            BeltVariant bv = variants.stream()
+                    .filter(v -> v.getId() == Integer.parseInt(variantIdParam))
+                    .findFirst()
+                    .orElse(null);
+
+            bv.setImages(PRODUCT_SERVICE.getVariantImages(bv.getId()));
+            String[] tagsArray = PRODUCT_SERVICE.getTags(beltId);
             if (belts != null) {
                 request.setAttribute("product", belts);
+                request.setAttribute("variants", bv);
                 int count = 0;
-                for (String s : image) {
+                for (String s : bv.getImages()) {
                     request.setAttribute("image" + count, s);
                     count++;
                 }
@@ -53,38 +64,43 @@ public class createProductController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
         int productId = 0;
+        int variantId = 0;
         if (request.getParameter("beltId") != null && !request.getParameter("beltId").isEmpty()) {
             productId = Integer.parseInt(request.getParameter("beltId"));
         }
+        if (request.getParameter("variantId") != null && !request.getParameter("variantId").isEmpty()) {
+            variantId = Integer.parseInt(request.getParameter("variantId"));
+        }
         String message = request.getParameter("message").trim();
         String productName = request.getParameter("beltName");
+        String color = request.getParameter("color");
+        String size = request.getParameter("size");
         String[] tags = request.getParameter("tags").split(" ");
         String releaseDateString = request.getParameter("releaseDate");
-        LocalDate releaseDate = LocalDate.parse(releaseDateString, formatter);
+        LocalDateTime releaseDate = LocalDate.parse(releaseDateString, formatter).atStartOfDay();
         String gender = request.getParameter("gender");
         double price = Double.parseDouble(request.getParameter("price"));
-        System.out.println(price);
-        double discountPercent = Double.parseDouble(request.getParameter("discountPercent"));
+        double discountRate = Double.parseDouble(request.getParameter("discountRate"));
         int stockQuantity = Integer.parseInt(request.getParameter("quantity"));
         int isDeleted = Integer.parseInt(request.getParameter("isDeleted"));
         String material = request.getParameter("material");
 
         if (message.equals("create")) {
-            uploadProductService.saveProduct(productName, tags, discountPercent, releaseDate, gender, price, stockQuantity, material, isDeleted);
+            PRODUCT_SERVICE.saveProduct(productName, tags, discountRate, releaseDate, gender, price, stockQuantity, material, isDeleted, color, size);
         } else if (message.equals("update")) {
             productId = Integer.parseInt(request.getParameter("beltId"));
-            uploadProductService.updateProduct(productId, productName, tags, discountPercent, releaseDate, gender, price, stockQuantity, material, isDeleted);
+            PRODUCT_SERVICE.updateProduct(productId, productName, tags, discountRate, releaseDate, gender, price, stockQuantity, material, isDeleted, color, size, variantId);
         }
         String uploadPath = request.getServletContext().getRealPath("") + File.separator + ULOAD_DIR;
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
             uploadDir.mkdirs();
         }
-        handleFileUpload(request, productName, uploadPath, message, uploadProductService, productId);
+        handleFileUpload(request, productName, uploadPath, message, PRODUCT_SERVICE, productId, variantId);
         response.sendRedirect(request.getContextPath() + "/admin/table/belts");
     }
 
-    private void handleFileUpload(HttpServletRequest request, String productName, String uploadPath, String message, UploadProductService uploadProductService, int productId) throws ServletException, IOException {
+    private void handleFileUpload(HttpServletRequest request, String productName, String uploadPath, String message, ProductService productService, int productId, int variantId) throws ServletException, IOException {
         try {
             int count = 0;
             List<String> extraImages = new ArrayList<>();
@@ -120,10 +136,11 @@ public class createProductController extends HttpServlet {
 
             if (mainImage != null) {
                 if ("create".equals(message)) {
-                    int beltId = uploadProductService.getLatestProductId();
-                    uploadProductService.saveImagePath(beltId, mainImage, extraImages);
+                    int beltId = productService.getLatestProductId();
+                    int varId = productService.getLatestVariantId();
+                    productService.saveOrUpdateImagePath(beltId, mainImage, extraImages, varId, false);
                 } else if ("update".equals(message)) {
-                    uploadProductService.updateImagePath(productId, mainImage, extraImages);
+                    productService.saveOrUpdateImagePath(productId, mainImage, extraImages, variantId, true);
                 }
             }
         } catch (Exception e) {

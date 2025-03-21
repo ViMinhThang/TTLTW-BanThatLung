@@ -1,7 +1,7 @@
 package com.thomas.controller.AdminRoute.chart;
 
 import com.thomas.dao.model.Belts;
-import com.thomas.services.UploadProductService;
+import com.thomas.services.ProductService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -12,11 +12,11 @@ import java.util.List;
 
 @WebServlet(name = "chartPieAdminController", value = "/chart-pie")
 public class chartPieAdminController extends HttpServlet {
-    UploadProductService uploadProductService = new UploadProductService();
+    ProductService productService = new ProductService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Belts> hotSellingProducts = uploadProductService.getHotSeliingProducts();
+        List<Belts> hotSellingProducts = productService.hotSelling();
         hotSellingProducts = hotSellingProducts.subList(hotSellingProducts.size() - 5, hotSellingProducts.size());
         String[] labels = new String[hotSellingProducts.size()];
         for (int i = 0; i < hotSellingProducts.size(); i++) {
@@ -24,7 +24,7 @@ public class chartPieAdminController extends HttpServlet {
         }
         int[] data = new int[hotSellingProducts.size()];
         for (int i = 0; i < hotSellingProducts.size(); i++) {
-            data[i] = hotSellingProducts.get(i).getTotalQuantity();
+            data[i] = hotSellingProducts.get(i).getTotalSold();
         }
         StringBuilder jsonResponse = new StringBuilder();
         jsonResponse.append("{");

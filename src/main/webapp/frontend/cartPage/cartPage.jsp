@@ -59,70 +59,47 @@
                 </h3>
             </div>
             <c:forEach var="entry" items="${cart}">
-                <div class="row border border-dark mt-4 custom_remove" style="width: 719.58px; height: 242px">
-                    <input type="hidden" class="beltId" name="beltId" value="${entry.key}">
-                    <div class="col-4 p-0">
-                        <img
-                                src="${pageContext.request.contextPath}${entry.value.belt.image[0]}"
-                                class="img-fluid p-0"
-                        />
+                <c:set var="cartItem" value="${entry.value}"/>
+
+                <div class="cart-item d-flex p-3 border-bottom">
+                    <!-- Ảnh sản phẩm -->
+                    <div class="me-3">
+                        <img src="${pageContext.request.contextPath}${cartItem.variant.images[0]}"
+                             class="img-fluid rounded shadow-sm"
+                             alt="${cartItem.belt.name}"
+                             style="width: 100px; height: 100px; object-fit: cover;">
                     </div>
-                    <div class="col-8 fw-light pb-0">
-                        <div class="row">
-                            <div class="flex-grow-1" style="flex-basis: 90%">
-                                <div
-                                        class="d-flex justify-content-between flex-column flex-grow-2"
-                                        style="height: 100%"
-                                >
-                                    <div class="d-flex justify-content-between flex-column">
-                                        <div class="d-flex justify-content-between mt-3">
-                                            <p class="custom_size--16">
-                                                    ${entry.value.belt.name}
-                                            </p>
-                                            <p class="custom_size--16">${entry.value.price} VNĐ</p>
-                                        </div>
-                                        <div class="d-flex mt-3">
-                                            <c:forEach var="category" items="${entry.value.belt.categories}">
-                                                <p class="custom_size--16 p-2 me-2 fw-bold"
-                                                   style="background-color: #DFDFDF">${category}</p>
 
-                                            </c:forEach>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex">
-                                        <select
-                                                id="quantitySelect"
-                                                class="form-select w-25 p-3 border border-dark quantitySelectCart"
-                                                aria-label="Select a number"
-                                        >
-                                            <option selected>${entry.value.quantity}</option>
-                                            <c:forEach var="i" begin="1" end="${entry.value.belt.stockQuantity}">
-                                                <option value="${i}">${i}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- Thông tin sản phẩm -->
+                    <div class="d-flex flex-column flex-grow-1">
+                        <div class="d-flex justify-content-between">
+                            <p class="fw-bold">${cartItem.belt.name}
+                                - ${cartItem.variant.color}, ${cartItem.variant.size}</p>
+                            <p class="fw-bold">${cartItem.price} VNĐ</p>
+                        </div>
 
-                            <div class="flex-grow-1 ps-0 mt-3" style="flex-basis: 10%">
-                                <svg
-                                        class="remove_button"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        height="24px"
-                                        viewBox="0 -960 960 960"
-                                        width="24px"
-                                        fill="#00000"
-                                >
-                                    <path
-                                            d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"
-                                    />
-                                </svg>
-                            </div>
+                        <!-- Danh mục (Categories) của Variant -->
+                        <div class="d-flex mt-2">
+                            <c:forEach var="category" items="${cartItem.variant.categories}">
+                                <span class="badge bg-secondary me-2">${category}</span>
+                            </c:forEach>
+                        </div>
+
+                        <!-- Chọn số lượng -->
+                        <div class="mt-2">
+                            <label for="quantity-${cartItem.variant.id}" class="fw-bold">Số lượng:</label>
+                            <select id="quantity-${cartItem.variant.id}"
+                                    class="form-select w-25 d-inline-block"
+                                    onchange="updateCart(${cartItem.variant.id}, this.value)">
+                                <c:forEach var="i" begin="1" end="${cartItem.variant.stockQuantity}">
+                                    <option value="${i}" ${i == cartItem.quantity ? 'selected' : ''}>${i}</option>
+                                </c:forEach>
+                            </select>
                         </div>
                     </div>
                 </div>
-
             </c:forEach>
+
         </div>
         <div class="col-3 mb-5 ps-5" style="width: 450px">
             <div class="row custom_insert">

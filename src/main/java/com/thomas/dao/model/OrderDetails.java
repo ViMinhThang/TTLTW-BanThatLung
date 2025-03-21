@@ -8,6 +8,7 @@ public class OrderDetails implements Serializable {
     private int orderId;
     private double price;
     private int beltId;
+    private int variantId;
     private int quantity;
     private String beltName;
     private List<String> beltImages;
@@ -17,12 +18,13 @@ public class OrderDetails implements Serializable {
 
     }
 
-    public OrderDetails(int id, int orderId, double price, int beltId, int quantity) {
+    public OrderDetails(int id, int orderId, double price, int beltId, int quantity, int variantId) {
         this.id = id;
         this.orderId = orderId;
         this.price = price;
         this.beltId = beltId;
         this.quantity = quantity;
+        this.variantId = variantId;
     }
 
     public int getId() {
@@ -87,5 +89,13 @@ public class OrderDetails implements Serializable {
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;
+    }
+
+    public int getVariantId() {
+        return variantId;
+    }
+
+    public void setVariantId(int variantId) {
+        this.variantId = variantId;
     }
 }

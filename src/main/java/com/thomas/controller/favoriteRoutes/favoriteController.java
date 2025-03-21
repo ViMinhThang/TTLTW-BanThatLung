@@ -2,7 +2,7 @@ package com.thomas.controller.favoriteRoutes;
 
 import com.thomas.dao.model.Belts;
 import com.thomas.services.UploadFavoriteService;
-import com.thomas.services.UploadProductService;
+import com.thomas.services.ProductService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -13,7 +13,7 @@ import java.util.List;
 @WebServlet(name = "favoriteController", value = "/favorite")
 public class favoriteController extends HttpServlet {
     UploadFavoriteService uploadFavoriteService = new UploadFavoriteService();
-    UploadProductService uploadProductService = new UploadProductService();
+    ProductService productService = new ProductService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,9 +29,6 @@ public class favoriteController extends HttpServlet {
             }
         }
         List<Belts> favoriteBelts = uploadFavoriteService.getFavoritesBeltByUserId(userId);
-        for (Belts favoriteBelt : favoriteBelts) {
-            favoriteBelt.setImage(uploadProductService.getProductImages(favoriteBelt.getId()));
-        }
         request.setAttribute("favoriteBelts", favoriteBelts);
         request.getRequestDispatcher("/frontend/favoritePage/favoritePage.jsp").forward(request, response);
     }
@@ -41,9 +38,10 @@ public class favoriteController extends HttpServlet {
         String message = request.getParameter("message");
         int userId = Integer.parseInt(request.getParameter("userId"));
         int beltId = Integer.parseInt(request.getParameter("beltId"));
+        int variantId = Integer.parseInt(request.getParameter("variantId"));
         switch (message) {
             case "addFavorite":
-                if (uploadFavoriteService.addFavoriteByUserId(userId, beltId)) {
+                if (uploadFavoriteService.addFavoriteByUserId(userId, beltId, variantId)) {
                     response.setStatus(200);
                 } else {
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -51,13 +49,13 @@ public class favoriteController extends HttpServlet {
                 }
                 break;
             case "removeFavorite":
-                if (uploadFavoriteService.deleteFavoriteBelt(userId, beltId)) {
-                    response.setStatus(200);
-                } else {
-                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    response.getWriter().println("Something went wrong");
-                }
-                break;
+                if (uploadFavoriteService.deleteFavoriteBelt(userId, beltId,variantId)){
+                response.setStatus(200);
+            } else{
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().println("Something went wrong");
+            }
+            break;
         }
     }
 }

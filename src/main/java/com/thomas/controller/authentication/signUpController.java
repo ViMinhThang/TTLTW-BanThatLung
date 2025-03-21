@@ -13,6 +13,8 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -96,13 +98,16 @@ public class signUpController extends HttpServlet {
         Token userToken = new Token(token, u.getId(), LocalDateTime.now().plusHours(24));
         boolean isSaveToken = service.saveResetToken(userToken);
 
-        if (!isSuccess && isSaveToken) {
-            request.setAttribute("errorMessage", "Tài khoản đã tồn tại");
+        if (!isSuccess || !isSaveToken) {
+            request.setAttribute("errorMessage", "Tài khoản đã tồn tại hoặc có lỗi xảy ra.");
             request.getRequestDispatcher("/frontend/signInPage/signUpPage/signUp.jsp").forward(request, response);
-
+            return;
         }
 
-        response.sendRedirect("/verify");
+        String message1 = "Kiểm tra email của bạn để kích hoạt tài khoản";
+        String encodedMessage = URLEncoder.encode(message1, StandardCharsets.UTF_8);
+
+        response.sendRedirect("/verify?messageRedirect=" + encodedMessage);
     }
 }
 

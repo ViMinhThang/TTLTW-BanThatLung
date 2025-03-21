@@ -1,7 +1,7 @@
 package com.thomas.controller;
 
 import com.thomas.dao.model.Belts;
-import com.thomas.services.UploadProductService;
+import com.thomas.services.ProductService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -9,12 +9,14 @@ import jakarta.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "allProductController", value = "/navigate")
 public class NavigateController extends HttpServlet {
-    UploadProductService uploadProductService = new UploadProductService();
+    ProductService productService = new ProductService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -72,22 +74,22 @@ public class NavigateController extends HttpServlet {
             handleRoute(type, title, bigTitle, mainImage, minPrice, maxPrice, request, response, session, sort, sortedList);
 
         }
-        if (type.equals("collection")) {
-            beltsList = uploadProductService.getCollection();
-            request.setAttribute("beltsList", beltsList);
-            request.getRequestDispatcher("/frontend/collectionPage/collectionsPage.jsp").forward(request, response);
-        }
-        if (type.equals("collectionSection")) {
-            String collectionName = request.getParameter("collectionName");
-            beltsList = uploadProductService.getProductInCollection(collectionName);
-            request.setAttribute("collectionList", beltsList);
-            if (collectionName.equalsIgnoreCase("VICTOR")) {
-                request.getRequestDispatcher("frontend/collectionPage/collectionSection/VICTOR.jsp").forward(request, response);
-            }
-            if (collectionName.equalsIgnoreCase("EMO")) {
-                request.getRequestDispatcher("frontend/collectionPage/collectionSection/EMO.jsp").forward(request, response);
-            }
-        }
+//        if (type.equals("collection")) {
+//            beltsList = productService.getCollection();
+//            request.setAttribute("beltsList", beltsList);
+//            request.getRequestDispatcher("/frontend/collectionPage/collectionsPage.jsp").forward(request, response);
+//        }
+//        if (type.equals("collectionSection")) {
+//            String collectionName = request.getParameter("collectionName");
+//            beltsList = productService.getProductInCollection(collectionName);
+//            request.setAttribute("collectionList", beltsList);
+//            if (collectionName.equalsIgnoreCase("VICTOR")) {
+//                request.getRequestDispatcher("frontend/collectionPage/collectionSection/VICTOR.jsp").forward(request, response);
+//            }
+//            if (collectionName.equalsIgnoreCase("EMO")) {
+//                request.getRequestDispatcher("frontend/collectionPage/collectionSection/EMO.jsp").forward(request, response);
+//            }
+//        }
         if (type.equals("onsale")) {
             String title = "Nữ Canvas";
             String bigTitle = "Sản Phẩm Giảm Giá";
@@ -103,19 +105,21 @@ public class NavigateController extends HttpServlet {
         request.setAttribute("bigTitle", bigTitle);
         session.setAttribute("type", type);
         request.setAttribute("mainImage", mainImage);
-        List<Belts> listBelt = uploadProductService.getAllProductsForDisplay();
+        List<Belts> listBelt = productService.find(null);
         if (minPrice != null && maxPrice != null) {
-            listBelt = uploadProductService.filterProduct(listBelt, Double.parseDouble(minPrice), Double.parseDouble(maxPrice));
+            listBelt = productService.filterProduct(listBelt, Double.parseDouble(minPrice), Double.parseDouble(maxPrice));
         }
         if (sort != null) {
-            sortedList = uploadProductService.getSortedListBelts(sort, listBelt);
-            for (int i = 0; i < sortedList.size(); i++) {
-                for (int j = 0; j < listBelt.size(); j++) {
-                    if (sortedList.get(i).getName().equals(listBelt.get(j).getName())) {
-                        sortedList.get(i).setMainImage(listBelt.get(j).getMainImage());
-                    }
+            sortedList = listBelt.stream()
+                    .map(Belts::new)
+                    .collect(Collectors.toList());
+            sortedList.sort(new Comparator<Belts>() {
+
+                @Override
+                public int compare(Belts o1, Belts o2) {
+                    return Double.compare(o2.getPrice(), o1.getPrice());
                 }
-            }
+            });
         }
         if (sortedList != null) {
             request.setAttribute("listBelt", sortedList);

@@ -54,9 +54,9 @@
         </div>
         <div class="overlay__body d-flex align-items-left justify-content-between" style="height: 500px">
             <div class="w-100">
-                <c:set var="filterUrlBase" value="${pageContext.request.contextPath}/navigate?type=${param.type}" />
+                <c:set var="filterUrlBase" value="${pageContext.request.contextPath}/navigate?type=${param.type}"/>
                 <c:if test="${param.descPrice != null}">
-                    <c:set var="filterUrlBase" value="${filterUrlBase}&descPrice=${param.descPrice}" />
+                    <c:set var="filterUrlBase" value="${filterUrlBase}&descPrice=${param.descPrice}"/>
                 </c:if>
 
                 <div class="accordion border-top-0 w-100" id="filterAccordion">
@@ -99,12 +99,13 @@
                             </div>
                         </div>
                     </div>
-                </div>`
+                </div>
+                `
                 <div class="apply__container mt-3 d-flex flex-column">
                     <!-- Các liên kết áp dụng -->
                     <c:forEach var="priceRange" items="${['100-500', '500-900']}">
-                        <c:set var="minPrice" value="${fn:split(priceRange, '-')[0]}" />
-                        <c:set var="maxPrice" value="${fn:split(priceRange, '-')[1]}" />
+                        <c:set var="minPrice" value="${fn:split(priceRange, '-')[0]}"/>
+                        <c:set var="maxPrice" value="${fn:split(priceRange, '-')[1]}"/>
                         <a href="${filterUrlBase}&minPrice=${minPrice}&maxPrice=${maxPrice}"
                            class="apply__button text-decoration-none d-block mt-2 p-2">
                             Giá từ ${minPrice}.000 VNĐ đến ${maxPrice}.000 VNĐ
@@ -291,28 +292,34 @@
     <nav aria-label="Page__navigation__example" id="pagination__bar">
         <div class="container paginationWrapper">
             <ul class="pagination pagination__Ul">
-                <c:forEach var="o" begin="1" end="${totalPages}" step="1">
-                    <li class="page-item ${o == currentPage ? 'active' : ''}">
-                        <c:choose>
-                            <c:when test="${param.descPrice!=null&&param.minPrice!=null&&param.maxPrice!=null}">
-                                <a class="page-link"
-                                   href="${pageContext.request.contextPath}/navigate?type=${type}&page=${o}&descPrice=${param.descPrice}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}">${o}</a>
-                            </c:when>
-                            <c:when test="${param.descPrice == null && param.minPrice!=null&&param.maxPrice!=null}">
-                                <a class="page-link"
-                                   href="${pageContext.request.contextPath}/navigate?type=${type}&page=${o}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}">${o}</a>
-                            </c:when>
-                            <c:when test="${param.descPrice != null && param.minPrice==null&&param.maxPrice==null}">
-                                <a class="page-link"
-                                   href="${pageContext.request.contextPath}/navigate?type=${type}&page=${o}&descPrice=${param.descPrice}">${o}</a>
-                            </c:when>
-                            <c:otherwise>
-                                <a class="page-link"
-                                   href="${pageContext.request.contextPath}/navigate?type=${type}&page=${o}">${o}</a>
-                            </c:otherwise>
-                        </c:choose>
-                    </li>
+                <c:forEach var="b" items="${beltsList}">
+                    <div class="col product__col">
+                        <a href="${pageContext.request.contextPath}/productDetails?beltId=${b.id}"
+                           class="text-decoration-none">
+                            <div class="belts h-100 d-flex flex-column">
+                                <div class="ratio ratio-1x1">
+                                    <c:choose>
+                                        <c:when test="${not empty b.beltVariants and not empty b.beltVariants[0].images}">
+                                            <img src="${pageContext.request.contextPath}${b.beltVariants[0].images[0]}"
+                                                 class="img-fluid object-fit-cover"
+                                                 alt="Leather Belt"/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img src="${pageContext.request.contextPath}/images/default-belt.jpg"
+                                                 class="img-fluid object-fit-cover"
+                                                 alt="No Image Available"/>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                                <div class="product__title mt-auto text-center">
+                                    <h4 class="title">${b.name}</h4>
+                                    <p class="product__price">${b.price} VNĐ</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 </c:forEach>
+
                 <%--                <li class="page-item pageNumber">--%>
                 <%--                    <a class="page-link" href="./allProduct1.html">2</a>--%>
                 <%--                </li>--%>

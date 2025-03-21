@@ -1,11 +1,12 @@
 package com.thomas.controller.userInfoRoutes;
 
+import com.thomas.dao.model.BeltVariant;
 import com.thomas.dao.model.Order;
 import com.thomas.dao.model.OrderDetails;
 import com.thomas.dao.model.User;
 import com.thomas.services.UploadOrderDetailService;
 import com.thomas.services.UploadOrderService;
-import com.thomas.services.UploadProductService;
+import com.thomas.services.ProductService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -19,8 +20,8 @@ import java.util.List;
 
 @WebServlet(name = "userViewOrderController", value = "/viewOrders")
 public class userViewOrderController extends HttpServlet {
-    UploadProductService uploadProductService = new UploadProductService();
-    UploadProductService uploadProductService2 = new UploadProductService();
+    ProductService productService = new ProductService();
+    ProductService productService2 = new ProductService();
     UploadOrderService uploadOrderService = new UploadOrderService();
     UploadOrderDetailService uploadOrderDetailService = new UploadOrderDetailService();
     DecimalFormatSymbols symbols = new DecimalFormatSymbols();
@@ -38,8 +39,9 @@ public class userViewOrderController extends HttpServlet {
         }
         for (Order order : userOrders) {
             for (OrderDetails od : order.getOrderDetails()) {
-                od.setBeltImages(uploadProductService.getProductImages(od.getBeltId()));
-                od.setCategories(uploadProductService.getAllCategoriesById(od.getBeltId()));
+                List<BeltVariant> beltVariants = productService.findVariants(od.getBeltId(), null, null, od.getVariantId());
+                od.setBeltImages(productService.getVariantImages(beltVariants.get(0).getId()));
+                od.setCategories(productService.findCategory(od.getBeltId(),beltVariants.get(0).getId()));
                 uploadOrderDetailService.setBeltName(od);
             }
             order.setShippingDate();

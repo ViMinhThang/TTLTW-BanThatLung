@@ -1,6 +1,6 @@
 package com.thomas.controller.uploadMediaRoute;
 
-import com.thomas.services.UploadProductService;
+import com.thomas.services.ProductService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -20,7 +20,7 @@ import java.util.List;
 
 public class uploadController extends HttpServlet {
     // Path where files will be saved
-    UploadProductService uploadProductService = new UploadProductService();
+    ProductService productService = new ProductService();
     private static final String ULOAD_DIR = "uploads";
     private static final String UPLOAD_DIR_SERVER = "C:\\Users\\huynh\\OneDrive\\Desktop\\Nhom38-BanThatLung\\src\\main\\webapp\\assets\\uploads";
 
@@ -37,6 +37,7 @@ public class uploadController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int beltId = Integer.parseInt(request.getParameter("id"));
+        int variantId = Integer.parseInt(request.getParameter("variantId"));
         // Check if the request contains a file upload
         if (request.getContentType() != null && request.getContentType().startsWith("multipart/")) {
 
@@ -87,7 +88,7 @@ public class uploadController extends HttpServlet {
                     }
                 }
             }
-            uploadProductService.saveDescImg(beltId, descImage);
+            productService.saveDescImg(beltId, descImage, variantId);
 
             jsonResponse.append("]");
             jsonResponse.append("}");

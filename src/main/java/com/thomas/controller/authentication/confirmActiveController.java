@@ -42,7 +42,7 @@ public class confirmActiveController extends HttpServlet {
             }
         } else {
             request.setAttribute("active", 1);
-            request.setAttribute("messageRedirect", "Kích hoạt tài khoản thành công");
+            request.setAttribute("messageRedirect", message);
         }
         request.getRequestDispatcher("/frontend/signInPage/confirmSuccessSignUp/confirmSuccess.jsp").forward(request, response);
     }

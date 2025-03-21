@@ -2,7 +2,7 @@ package com.thomas.controller.AdminRoute;
 
 import com.thomas.services.UploadOrderService;
 import com.thomas.services.UploadPaymentMethod;
-import com.thomas.services.UploadProductService;
+import com.thomas.services.ProductService;
 import com.thomas.services.UploadReviewService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,7 +18,7 @@ import java.text.DecimalFormatSymbols;
 public class adminController extends HttpServlet {
     UploadOrderService uploadOrderService = new UploadOrderService();
     UploadReviewService uploadReviewService = new UploadReviewService();
-    UploadProductService uploadProductService = new UploadProductService();
+    ProductService productService = new ProductService();
     UploadPaymentMethod uploadPaymentMethod = new UploadPaymentMethod();
     DecimalFormatSymbols symbols = new DecimalFormatSymbols();
     DecimalFormat formatter = new DecimalFormat("#,###.000", symbols);
@@ -30,7 +30,7 @@ public class adminController extends HttpServlet {
         int totalOrder = uploadOrderService.getOrderCount();
         double totalOrderMoney = uploadOrderService.getTotalOrderMoney();
         int reviewTotal = uploadReviewService.getReviews().size();
-        int outofStockNumber = uploadProductService.numberOfOutOfStockProducts();
+        int outofStockNumber = productService.outOfStockBelt().size();
         String formattedTotalOrderMoney = formatter.format(totalOrderMoney).replace(",", ".");
 
         request.setAttribute("totalOrder", totalOrder);
