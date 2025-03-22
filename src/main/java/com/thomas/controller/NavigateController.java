@@ -106,6 +106,8 @@ public class NavigateController extends HttpServlet {
         session.setAttribute("type", type);
         request.setAttribute("mainImage", mainImage);
         List<Belts> listBelt = productService.find(null);
+        listBelt.forEach(b -> b.setBeltVariants(productService.findVariants(b.getId(), null, null, null)));
+        listBelt.forEach(b -> b.getBeltVariants().forEach(v -> v.setImages(productService.getVariantImages(v.getId()))));
         if (minPrice != null && maxPrice != null) {
             listBelt = productService.filterProduct(listBelt, Double.parseDouble(minPrice), Double.parseDouble(maxPrice));
         }
