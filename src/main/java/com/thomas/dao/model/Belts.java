@@ -14,8 +14,8 @@ public class Belts implements Serializable {
     private double price;
     private String gender;
     private LocalDateTime releaseDate;
-    private LocalDateTime createdDate;
-    private LocalDateTime updatedDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private int isDeleted;
     private double discountRate;
     private String materialBelt;
@@ -48,8 +48,8 @@ public class Belts implements Serializable {
         this.price = price;
         this.gender = gender;
         this.releaseDate = releaseDate;
-        this.createdDate = createdDate;
-        this.updatedDate = updatedDate;
+        this.createdAt = createdDate;
+        this.updatedAt = updatedDate;
         this.isDeleted = isDeleted;
         this.discountRate = discountRate;
         this.materialBelt = materialBelt;
@@ -107,20 +107,20 @@ public class Belts implements Serializable {
         this.releaseDate = releaseDate;
     }
 
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createdDate = createDate;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedDate() {
-        return updatedDate;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdatedDate(LocalDateTime updateDate) {
-        this.updatedDate = updateDate;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public int getIsDeleted() {
@@ -141,7 +141,7 @@ public class Belts implements Serializable {
     }
 
     public String getFormattedCreateDate() {
-        return createdDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
     public String getFormattedReleaseDate() {
@@ -149,7 +149,7 @@ public class Belts implements Serializable {
     }
 
     public String getFormattedUpdateDate() {
-        return updatedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return updatedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
     public double getDiscountRate() {

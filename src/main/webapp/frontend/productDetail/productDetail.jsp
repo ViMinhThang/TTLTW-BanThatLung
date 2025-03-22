@@ -130,23 +130,35 @@
             </div>
             <div class="mb-3 mt-3">
                 <label for="quantity" class="form-label fw-5"><strong>Màu sắc:</strong></label>
-                <div class="flex">
+                <div class="d-flex flex-wrap gap-2">
                     <c:forEach var="variant" items="${allVariant}">
                         <a href="/productDetails?beltId=${param.beltId}&variantId=${variant.id}"
-                           class="variantTag">
-                            <img class="w-25" src="${variant.images[0]}"/>
-                            <p>${variant.color}</p>
+                           class="variantTag text-black d-inline-flex align-items-start"
+                           style="flex-direction: column; width: 100px">
+                            <img class="img-fluid" src="${variant.images[0]}"/>
+                            <span>${variant.color} / ${variant.size!=null? variant.size:""}</span>
                         </a>
                     </c:forEach>
                 </div>
             </div>
             <div class="mb-3 mt-2">
                 <label for="quantity" class="form-label fw-5"><strong>Size:</strong></label>
-                <div class="flex">
-                    <c:forEach var="variant" items="${allVariant}">
-                        <a href="/productDetails?beltId=${param.beltId}&variantId=${variant.id}"
-                           class="me-2 mt-2 variantTag">
-                            <p>${variant.size}</p>
+                <div class="d-flex gap-2">
+                    <c:set var="sizes" value="XS,S,M,L,XL"/>
+
+                    <c:forEach var="size" items="${fn:split(sizes, ',')}">
+                        <c:set var="exists" value="false"/>
+
+                        <c:forEach var="variant" items="${similarVariants}">
+                            <c:if test="${variant.size eq size}">
+                                <c:set var="exists" value="true"/>
+                            </c:if>
+                        </c:forEach>
+
+                        <a href="${pageContext.request.contextPath}/productDetails?beltId=${param.beltId}&variantId=${variant.id}&variantColor=${variant.color}&variantSize=${variant.size}"
+                           class="variantTag text-black d-inline-flex justify-content-center align-items-center p-2"
+                           style="background-color: ${exists ? 'darkgray' : 'lightgray'}; opacity: ${exists ? '1' : '0.5'}; pointer-events: ${exists ? 'auto' : 'none'}; border-radius: 0; min-width: 50px; text-align: center;">
+                            <p class="m-0">${size}</p>
                         </a>
                     </c:forEach>
                 </div>

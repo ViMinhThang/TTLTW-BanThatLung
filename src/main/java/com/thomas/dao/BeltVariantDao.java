@@ -51,17 +51,25 @@ public class BeltVariantDao {
         });
     }
 
-    public boolean deleteVariant(int beltId, int variantId) {
+    public boolean deleteVariant(Integer beltId, Integer variantId) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "DELETE FROM beltVariants WHERE id = :id AND beltId=:beltId";
-            return h.createUpdate(sql).bind("id", variantId).bind("beltId", beltId).execute() > 0;
+            String sql;
+
+            if (variantId != null) {
+                sql = "DELETE FROM beltVariants WHERE id = :id AND beltId = :beltId";
+                return h.createUpdate(sql).bind("id", variantId).bind("beltId", beltId).execute() > 0;
+            } else {
+                sql = "DELETE FROM belts WHERE id = :beltId";
+                return h.createUpdate(sql).bind("beltId", beltId).execute() > 0;
+            }
         });
     }
 
+
     public void saveVariants(BeltVariant beltVariant) {
-        String sql = "UPDATE beltVariants SET color = :color, size = :size,stockQuantity = :stockQuantity,createdAt = :createdAt, updatedAt = :updatedAt WHERE beltId = :beltId";
+        String sql = "UPDATE beltVariants SET color = :color, size = :size,stockQuantity = :stockQuantity,createdAt = :createdAt, updatedAt = :updatedAt WHERE id = :variantId";
         JDBIConnect.get().withHandle(h -> {
-            return h.createUpdate(sql).bind("beltId", beltVariant.getBeltId())
+            return h.createUpdate(sql).bind("variantId", beltVariant.getId())
                     .bind("color", beltVariant.getColor())
                     .bind("size", beltVariant.getSize())
                     .bind("stockQuantity", beltVariant.getStockQuantity())

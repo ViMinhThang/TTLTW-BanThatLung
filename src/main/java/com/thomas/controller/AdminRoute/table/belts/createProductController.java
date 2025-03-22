@@ -75,21 +75,37 @@ public class createProductController extends HttpServlet {
         String productName = request.getParameter("beltName");
         String color = request.getParameter("color");
         String size = request.getParameter("size");
-        String[] tags = request.getParameter("tags").split(" ");
-        String releaseDateString = request.getParameter("releaseDate");
-        LocalDateTime releaseDate = LocalDate.parse(releaseDateString, formatter).atStartOfDay();
-        String gender = request.getParameter("gender");
-        double price = Double.parseDouble(request.getParameter("price"));
-        double discountRate = Double.parseDouble(request.getParameter("discountRate"));
         int stockQuantity = Integer.parseInt(request.getParameter("quantity"));
-        int isDeleted = Integer.parseInt(request.getParameter("isDeleted"));
-        String material = request.getParameter("material");
-
+        String[] tags = null;
+        LocalDateTime releaseDate = null;
+        String gender = null;
+        double price = 0;
+        double discountRate = 0;
+        int isDeleted = 0;
+        String material = null;
+        if (!message.equals("createVariant")) {
+            tags = request.getParameter("tags").split(" ");
+            releaseDate = LocalDate.parse(request.getParameter("releaseDate"), formatter).atStartOfDay();
+            gender = request.getParameter("gender");
+            price = Double.parseDouble(request.getParameter("price"));
+            discountRate = Double.parseDouble(request.getParameter("discountRate"));
+            isDeleted = Integer.parseInt(request.getParameter("isDeleted"));
+            material = request.getParameter("material");
+        }
         if (message.equals("create")) {
             PRODUCT_SERVICE.saveProduct(productName, tags, discountRate, releaseDate, gender, price, stockQuantity, material, isDeleted, color, size);
         } else if (message.equals("update")) {
             productId = Integer.parseInt(request.getParameter("beltId"));
             PRODUCT_SERVICE.updateProduct(productId, productName, tags, discountRate, releaseDate, gender, price, stockQuantity, material, isDeleted, color, size, variantId);
+        } else if (message.equals("createVariant")) {
+            BeltVariant bv = new BeltVariant();
+            bv.setBeltId(productId);
+            bv.setColor(color);
+            bv.setSize(size);
+            bv.setStockQuantity(stockQuantity);
+            bv.setCreatedAt(LocalDateTime.now());
+            bv.setUpdatedAt(LocalDateTime.now());
+            PRODUCT_SERVICE.createVariant(bv);
         }
         String uploadPath = request.getServletContext().getRealPath("") + File.separator + ULOAD_DIR;
         File uploadDir = new File(uploadPath);
@@ -141,6 +157,12 @@ public class createProductController extends HttpServlet {
                     productService.saveOrUpdateImagePath(beltId, mainImage, extraImages, varId, false);
                 } else if ("update".equals(message)) {
                     productService.saveOrUpdateImagePath(productId, mainImage, extraImages, variantId, true);
+                } else if ("createVariant".equals(message)) {
+                    if (variantId == 0) {
+                        variantId = productService.getLatestVariantId();
+                    }
+                    productService.saveOrUpdateImagePath(productId, mainImage, extraImages, variantId, true);
+
                 }
             }
         } catch (Exception e) {

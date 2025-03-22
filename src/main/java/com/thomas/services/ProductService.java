@@ -38,7 +38,7 @@ public class ProductService {
         return beltsList;
     }
 
-    public List<BeltVariant> findVariants(int beltId, String color, String size, Integer variantId) {
+    public List<BeltVariant> findVariants(Integer beltId, String color, String size, Integer variantId) {
         List<BeltVariant> beltVariants = productDao.findVariants(beltId, color, size, variantId);
         for (BeltVariant v : beltVariants) {
             v.setImages(getVariantImages(v.getId()));
@@ -136,6 +136,10 @@ public class ProductService {
 
     public void saveVariant(BeltVariant beltVariant) {
         beltVariantDao.saveVariants(beltVariant);
+    }
+
+    public void createVariant(BeltVariant beltVariant) {
+        beltVariantDao.createVariant(beltVariant);
     }
 
     public Category getOrCreateCategory(String tag) {
@@ -296,5 +300,9 @@ public class ProductService {
 
     public int getLatestVariantId() {
         return productDao.getLatestVariantId();
+    }
+
+    public boolean deleteProduct(int beltId, Integer variantId) {
+        return productDao.deleteProductById(beltId) && beltVariantDao.deleteVariant(beltId, null);
     }
 }

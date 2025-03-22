@@ -1,11 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:choose>
-    <c:when test="${param.id!=null}">
-        <jsp:useBean id="tags" scope="request" type="java.lang.String"/>
-    </c:when>
-</c:choose>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -76,8 +72,10 @@
                 <form id="productForm" method="POST"
                       class="d-flex flex-column justify-content-between" enctype="multipart/form-data">
                     <input type="hidden" name="beltId" value="${param.id}"/>
-                    <input type="hidden" name="message" value="<c:choose>
+                    <input type="hidden" name="message" value="
+<c:choose>
     <c:when test='${param.message == "update"}'>update</c:when>
+    <c:when test='${param.message == "createVariant"}'>createVariant</c:when>
     <c:otherwise>create</c:otherwise>
 </c:choose>"/>
                     <input type="hidden" name="productId" class="custom_input--btn-group__input"/>
@@ -256,192 +254,236 @@
                                     </c:choose>
                                 </div>
                                 <div class="d-flex flex-column mt-5 w-50">
-                                    <div class="row mb-3">
-                                        <p
-                                                class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                        >
-                                            Tên sản phẩm
-                                        </p>
-                                        <input
-                                                name="beltName"
-                                                type="text"
-                                                class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                placeholder="Nhập tên sản phẩm"
-                                                value="${product.name}"
-                                                required
-
-                                        />
-                                    </div>
-                                    <div class="row mb-3">
-                                        <p
-                                                class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                        >
-                                            Nhập tags
-                                        </p>
-                                        <input
-                                                placeholder="các tag cách nhau bởi dấu cách"
-                                                name="tags"
-                                                type="text"
-                                                class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                value="${tags}"
-                                                required
-                                        />
-                                    </div>
-                                    <div class="row mb-3">
-                                        <p
-                                                class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                        >
-                                            Chất liệu
-                                        </p>
-                                        <select
-                                                style="color: black"
-                                                class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                name="material"
-                                                aria-label="Default select example"
-                                        >
-                                            <option value="Da">Da</option>
-                                            <option value="Canvas">Canvas</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <p
-                                                class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                        >
-                                            Ngày ra mắt
-                                        </p>
-                                        <input name="releaseDate" type="date"
-                                               class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                               value="${product.releaseDate}"
-                                               required
-                                        />
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <p
-                                                class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                        >
-                                            Giá
-                                        </p>
-                                        <input
-                                                id="price-input"
-                                                name="price"
-                                                type="text"
-                                                class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                placeholder="Nhập giá sản phẩm"
-                                        <%--                                                oninput="formatNumber(this)"--%>
-                                                value="${product.price}"
-                                                required
-                                        />
-                                    </div>
-                                    <div class="row mb-3">
-                                        <p
-                                                class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                        >
-                                            Số lượng
-                                        </p>
-                                        <input
-                                                name="quantity"
-                                                type="number"
-                                                class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                placeholder="Nhập số lượng khách hàng có thể chọn"
-                                                value="${variants.stockQuantity}"
-                                                required
-                                        />
-                                    </div>
-                                    <div class="row mb-3">
-                                        <p
-                                                class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                        >
-                                            Nhập màu
-                                        </p>
-                                        <input
-                                                name="color"
-                                                type="text"
-                                                class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                placeholder="Nhập màu"
-                                                value="${variants.color}"
-                                                required
-                                        />
-                                    </div>
-                                    <div class="row mb-3">
-                                        <p
-                                                class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                        >
-                                            Nhập size
-                                        </p>
-                                        <input
-                                                name="size"
-                                                type="text"
-                                                class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                placeholder="Nhập size"
-                                                value="${variants.size}"
-                                                required
-                                        />
-                                    </div>
-                                    <div class="row mb-3">
-                                        <p
-                                                class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                        >
-                                            Giới tính
-                                        </p>
-                                        <div class="col d-flex align-items-center">
-                                            <div class="form-check me-4 d-flex align-items-center">
+                                    <c:choose>
+                                        <c:when test="${param.message == 'createVariant'}">
+                                            <!-- Chỉ hiện các trường liên quan đến biến thể -->
+                                            <div class="row mb-3">
+                                                <p class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5">
+                                                    Nhập màu</p>
                                                 <input
-                                                        class=" me-3 mb-1 "
-                                                        type="radio"
-                                                        name="gender"
-                                                        id="exampleRadios1"
-                                                        value="M"
-                                                ${product.gender == 'M' ? 'checked' : ''}
+                                                        name="color"
+                                                        type="text"
+                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
+                                                        placeholder="Nhập màu"
+                                                        value="${variants.color}"
+                                                        required
                                                 />
-                                                <label class="form-check-label mb-1 p-sm-1 fs-5"
-                                                       for="exampleRadios1">
-                                                    Nam
-                                                </label>
                                             </div>
-                                            <div class="form-check me-4 d-flex align-items-center">
+                                            <div class="row mb-3">
+                                                <p class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5">
+                                                    Nhập size</p>
                                                 <input
-                                                        class="me-3 mb-1"
-                                                        type="radio"
-                                                        name="gender"
-                                                        id="exampleRadios2"
-                                                        value="N"
-                                                ${product.gender == 'N' ? 'checked' : ''}
+                                                        name="size"
+                                                        type="text"
+                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
+                                                        placeholder="Nhập size"
+                                                        value="${variants.size}"
+                                                        required
                                                 />
-                                                <label class="form-check-label mb-1 p-sm-1 fs-5"
-                                                       for="exampleRadios2">
-                                                    Nữ
-                                                </label>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <p class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5">
-                                            Xóa mềm
-                                        </p>
-                                        <input
-                                                type="checkbox"
-                                                id="isDeleted"
-                                                name="isDeleted"
-                                                value="1"
-                                        ${product.isDeleted == 1 ? "checked" : ""}
-                                        />
-                                        <input type="hidden" name="isDeleted" value="0"/>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <p
-                                                class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                        >
-                                            Giảm giá
-                                        </p>
-                                        <input
-                                                type="number"
-                                                name="discountRate"
-                                                class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                value="${product.discountRate}"
-                                        />
-                                    </div>
+                                            <div class="row mb-3">
+                                                <p class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5">
+                                                    Số lượng</p>
+                                                <input
+                                                        name="quantity"
+                                                        type="number"
+                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
+                                                        placeholder="Nhập số lượng khách hàng có thể chọn"
+                                                        value="${variants.stockQuantity}"
+                                                        required
+                                                />
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="row mb-3">
+                                                <p
+                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
+                                                >
+                                                    Tên sản phẩm
+                                                </p>
+                                                <input
+                                                        name="beltName"
+                                                        type="text"
+                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
+                                                        placeholder="Nhập tên sản phẩm"
+                                                        value="${product.name}"
+                                                        required
+
+                                                />
+                                            </div>
+                                            <div class="row mb-3">
+                                                <p
+                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
+                                                >
+                                                    Nhập tags
+                                                </p>
+                                                <input
+                                                        placeholder="các tag cách nhau bởi dấu cách"
+                                                        name="tags"
+                                                        type="text"
+                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
+                                                        value="${tags}"
+                                                        required
+                                                />
+                                            </div>
+                                            <div class="row mb-3">
+                                                <p
+                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
+                                                >
+                                                    Chất liệu
+                                                </p>
+                                                <select
+                                                        style="color: black"
+                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
+                                                        name="material"
+                                                        aria-label="Default select example"
+                                                >
+                                                    <option value="Da">Da</option>
+                                                    <option value="Canvas">Canvas</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <p
+                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
+                                                >
+                                                    Ngày ra mắt
+                                                </p>
+                                                    <input name="releaseDate" type="date"
+                                                           class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
+                                                       value="${product.releaseDate}"
+                                                       required
+                                                />
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <p
+                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
+                                                >
+                                                    Giá
+                                                </p>
+                                                <input
+                                                        id="price-input"
+                                                        name="price"
+                                                        type="text"
+                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
+                                                        placeholder="Nhập giá sản phẩm"
+                                                    <%--                                                oninput="formatNumber(this)"--%>
+                                                        value="${product.price}"
+                                                        required
+                                                />
+                                            </div>
+                                            <div class="row mb-3">
+                                                <p
+                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
+                                                >
+                                                    Số lượng
+                                                </p>
+                                                <input
+                                                        name="quantity"
+                                                        type="number"
+                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
+                                                        placeholder="Nhập số lượng khách hàng có thể chọn"
+                                                        value="${variants.stockQuantity}"
+                                                        required
+                                                />
+                                            </div>
+                                            <div class="row mb-3">
+                                                <p
+                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
+                                                >
+                                                    Nhập màu
+                                                </p>
+                                                <input
+                                                        name="color"
+                                                        type="text"
+                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
+                                                        placeholder="Nhập màu"
+                                                        value="${variants.color}"
+                                                        required
+                                                />
+                                            </div>
+                                            <div class="row mb-3">
+                                                <p
+                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
+                                                >
+                                                    Nhập size
+                                                </p>
+                                                <input
+                                                        name="size"
+                                                        type="text"
+                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
+                                                        placeholder="Nhập size"
+                                                        value="${variants.size}"
+                                                        required
+                                                />
+                                            </div>
+                                            <div class="row mb-3">
+                                                <p
+                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
+                                                >
+                                                    Giới tính
+                                                </p>
+                                                <div class="col d-flex align-items-center">
+                                                    <div class="form-check me-4 d-flex align-items-center">
+                                                        <input
+                                                                class=" me-3 mb-1 "
+                                                                type="radio"
+                                                                name="gender"
+                                                                id="exampleRadios1"
+                                                                value="M"
+                                                            ${product.gender == 'M' ? 'checked' : ''}
+                                                        />
+                                                        <label class="form-check-label mb-1 p-sm-1 fs-5"
+                                                               for="exampleRadios1">
+                                                            Nam
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check me-4 d-flex align-items-center">
+                                                        <input
+                                                                class="me-3 mb-1"
+                                                                type="radio"
+                                                                name="gender"
+                                                                id="exampleRadios2"
+                                                                value="N"
+                                                            ${product.gender == 'N' ? 'checked' : ''}
+                                                        />
+                                                        <label class="form-check-label mb-1 p-sm-1 fs-5"
+                                                               for="exampleRadios2">
+                                                            Nữ
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <p class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5">
+                                                    Xóa mềm
+                                                </p>
+                                                <input
+                                                        type="checkbox"
+                                                        id="isDeleted"
+                                                        name="isDeleted"
+                                                        value="1"
+                                                    ${product.isDeleted == 1 ? "checked" : ""}
+                                                />
+                                                <input type="hidden" name="isDeleted" value="0"/>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <p
+                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
+                                                >
+                                                    Giảm giá
+                                                </p>
+                                                <input
+                                                        type="number"
+                                                        name="discountRate"
+                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
+                                                        value="${product.discountRate}"
+                                                />
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+
                                     <div class="row d-flex justify-content-end mb-3 ps-sm-5">
                                         <button type="submit" class="btn btn-dark custom_btn_style"
                                                 style="width: 30%; height: 47px">
@@ -456,6 +498,7 @@
                                         </button>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>

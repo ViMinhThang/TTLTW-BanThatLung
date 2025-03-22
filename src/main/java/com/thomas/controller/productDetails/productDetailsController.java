@@ -1,5 +1,6 @@
 package com.thomas.controller.productDetails;
 
+import com.thomas.dao.model.BeltVariant;
 import com.thomas.dao.model.Category;
 import com.thomas.dao.model.Belts;
 import com.thomas.dao.model.User;
@@ -25,14 +26,24 @@ public class productDetailsController extends HttpServlet {
         User user = (User) session.getAttribute("auth");
         int beltId = Integer.parseInt(request.getParameter("beltId"));
         int variantId = Integer.parseInt(request.getParameter("variantId"));
+        String color = request.getParameter("variantColor");
+        String size = request.getParameter("variantSize");
         productService.saveBeltView(beltId);
         boolean isPurchasedBelt = false;
         if (user != null) {
             isPurchasedBelt = productService.isUserPurchased(beltId, user.getId(), variantId);
 
         }
+
         Belts belt = productService.find(beltId).get(0);
-        belt.setBeltVariants(productService.findVariants(beltId, null, null, variantId));
+
+        if (color != null & size != null) {
+            belt.setBeltVariants(productService.findVariants(beltId, color, size, variantId));
+
+        } else {
+            belt.setBeltVariants(productService.findVariants(beltId, null, null, variantId));
+
+        }
         List<Category> beltCategory = productService.findCategory(beltId, variantId);
         int totalReview = uploadReviewService.getTotalReviewsCount(beltId);
         List<String> descBeltImage = productService.getAllDescImage(beltId);
@@ -46,7 +57,12 @@ public class productDetailsController extends HttpServlet {
             b.setBeltVariants(productService.findVariants(b.getId(), null, null, null));
             b.getBeltVariants().forEach(v -> v.setImages(productService.getVariantImages(v.getId())));
         }
+        BeltVariant v = productService.findVariants(beltId, null, null, variantId).get(0);
+
+        List<BeltVariant> similarVariants = productService.findVariants(null, v.getColor(), v.getSize(), null);
+
         request.setAttribute("allVariant", productService.findVariants(beltId, null, null, null));
+        request.setAttribute("similarVariants", similarVariants);
         request.setAttribute("variant", belt.getBeltVariants().get(0));
         request.setAttribute("isPurchasedBelt", isPurchasedBelt);
         request.setAttribute("beltViewCount", beltViewCount);

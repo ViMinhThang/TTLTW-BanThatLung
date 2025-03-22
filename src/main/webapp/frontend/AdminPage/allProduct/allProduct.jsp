@@ -148,13 +148,16 @@
                                         <td class="productId">${belt.id}</td>
                                         <td></td>
                                         <td><strong>${belt.name}</strong></td>
-                                        <td>${belt.createdDate}</td>
+                                        <td>${belt.createdAt}</td>
                                         <td><strong>${belt.price} vnđ</strong></td>
                                         <td>${belt.discountRate}</td>
                                         <td>${belt.materialBelt}</td>
                                         <td>${belt.isDeleted == 0 ? "Chưa xóa" : "Xóa mềm"}</td>
                                         <td class="text-center">
-                                            -
+                                            <a href="${pageContext.request.contextPath}/admin/table/belts/createProduct?id=${belt.id}&message=createVariant"
+                                               class="btn btn-dark fa-solid fa-pen-to-square"></a>
+                                            <button class="btn btn-danger fa-solid fa-trash-can custom_action_hover"
+                                                    data-bs-toggle="modal" data-bs-target="#removeModal"></button>
                                         </td>
                                     </tr>
 
@@ -196,8 +199,6 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
-    <!-- Modal -->
     <div class="modal fade" id="removeModal" tabindex="-1" aria-labelledby="removeModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

@@ -17,8 +17,8 @@ public class BeltMapper implements RowMapper<Belts> {
         belts.setPrice(rs.getDouble("price"));
         belts.setGender(rs.getString("gender"));
         belts.setReleaseDate(rs.getTimestamp("releaseDate").toLocalDateTime());
-        belts.setReleaseDate(rs.getTimestamp("createdDate").toLocalDateTime());
-        belts.setReleaseDate(rs.getTimestamp("updatedDate").toLocalDateTime());
+        belts.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
+        belts.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
         belts.setIsDeleted(rs.getInt("isDeleted"));
         belts.setDiscountRate(rs.getDouble("discountRate"));
         belts.setMaterialBelt(rs.getString("materialBelt"));

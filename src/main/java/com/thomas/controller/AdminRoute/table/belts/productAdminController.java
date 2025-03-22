@@ -35,6 +35,9 @@ public class productAdminController extends HttpServlet {
             PRODUCT_SERVICE.deleteProductVariant(beltId, variantId);
             response.sendRedirect(request.getContextPath() + "/admin/table/belts");
             return;
+        } else if (message.equals("deleteRealVariant")) {
+            int beltId = Integer.parseInt(request.getParameter("productId"));
+            PRODUCT_SERVICE.deleteProduct(beltId, null);
         }
 
 

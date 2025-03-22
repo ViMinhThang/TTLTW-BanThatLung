@@ -7,12 +7,13 @@ import com.thomas.dao.model.Belts;
 import org.jdbi.v3.core.statement.Query;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ProductDao {
     public boolean createProduct(Belts belts) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "INSERT INTO belts ( name, releaseDate, gender, price ,materialBelt,isDeleted,discountRate) VALUES (:productName,:releaseDate,:gender,:price,:material,:isDeleted,:discountRate)";
+            String sql = "INSERT INTO belts ( name, releaseDate,createdAt, gender, price ,materialBelt,isDeleted,discountRate) VALUES (:productName,:releaseDate,:gender,:price,:material,:isDeleted,:discountRate)";
             return h.createUpdate(sql).bind("productName", belts.getName())
                     .bind("releaseDate", belts.getReleaseDate())
                     .bind("gender", belts.getGender())
@@ -20,6 +21,7 @@ public class ProductDao {
                     .bind("material", belts.getMaterialBelt())
                     .bind("isDeleted", belts.getIsDeleted())
                     .bind("discountRate", belts.getDiscountRate())
+                    .bind("createdAt", LocalDateTime.now())
                     .execute() > 0;
         });
     }
@@ -207,9 +209,12 @@ public class ProductDao {
     }
 
 
-    public List<BeltVariant> findVariants(int beltId, String color, String size, Integer variantId) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM beltVariants WHERE beltId = :beltId");
+    public List<BeltVariant> findVariants(Integer beltId, String color, String size, Integer variantId) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM beltVariants WHERE 1=1");
 
+        if (beltId != null) {
+            sql.append(" AND beltId = :beltId");
+        }
         if (color != null && !color.isEmpty()) {
             sql.append(" AND color = :color");
         }
@@ -221,15 +226,18 @@ public class ProductDao {
         }
 
         return JDBIConnect.get().withHandle(handle -> {
-            Query query = handle.createQuery(sql.toString()).bind("beltId", beltId);
+            Query query = handle.createQuery(sql.toString());
 
+            if (beltId != null) {
+                query.bind("beltId", beltId);
+            }
             if (color != null && !color.isEmpty()) {
                 query.bind("color", color);
             }
             if (size != null && !size.isEmpty()) {
                 query.bind("size", size);
             }
-            if (variantId != null) { // Bind variantId nếu có
+            if (variantId != null) {
                 query.bind("variantId", variantId);
             }
 
