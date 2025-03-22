@@ -13,11 +13,12 @@ import java.util.List;
 public class ProductDao {
     public boolean createProduct(Belts belts) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "INSERT INTO belts ( name, releaseDate,createdAt, gender, price ,materialBelt,isDeleted,discountRate) VALUES (:productName,:releaseDate,:gender,:price,:material,:isDeleted,:discountRate)";
+            String sql = "INSERT INTO belts ( name, releaseDate,createdAt, gender, price ,materialBelt,isDeleted,discountRate) VALUES (:productName,:releaseDate,:createdAt,:gender,:price,:material,:isDeleted,:discountRate)";
             return h.createUpdate(sql).bind("productName", belts.getName())
                     .bind("releaseDate", belts.getReleaseDate())
                     .bind("gender", belts.getGender())
                     .bind("price", belts.getPrice())
+                    .bind("createdAt", belts.getCreatedAt())
                     .bind("material", belts.getMaterialBelt())
                     .bind("isDeleted", belts.getIsDeleted())
                     .bind("discountRate", belts.getDiscountRate())
