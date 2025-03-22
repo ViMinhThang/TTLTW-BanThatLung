@@ -48,8 +48,8 @@
                             <input type="radio" name="paymentMethod" id="paymentMethod${method.id}" value="${method.name}" autocomplete="off" ${counter == 1 ? 'checked' : ''} required>
                             <label class="m-2" for="paymentMethod${method.id}">
                                 <img class="me-2" src="${pageContext.request.contextPath}/assets/icons/${method.name}.svg" alt="${method.name}"/>
+                                ${method.name}
                             </label>
-                            ${method.name}
                         </div>
                     </c:forEach>
                 </div>
