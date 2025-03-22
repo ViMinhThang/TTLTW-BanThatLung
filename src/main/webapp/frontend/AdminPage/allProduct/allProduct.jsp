@@ -14,29 +14,13 @@
     <meta name="author" content=""/>
 
     <title>THOMAS - Admin</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/assets/icons/favicon.svg" type="image/x-icon"/>
-
-    <!-- Custom fonts for this template-->
-    <link
-            href="${pageContext.request.contextPath}/css/fontawesome-free-6.6.0-web/fontawesome-free-6.6.0-web/css/all.min.css"
-            rel="stylesheet"
-            type="text/css"
-    />
-    <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet"
-    />
-    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/44.0.0/ckeditor5.css">
-
-    <!-- Custom styles for this template-->
-    <link href="${pageContext.request.contextPath}/css/dataTables.bootstrap4.min.css" rel="stylesheet"/>
-    <link href="${pageContext.request.contextPath}/css/adminGeneral.css" rel="stylesheet"/>
+    <jsp:include page="/frontend/components/Admin/adminLink/adminLink.jsp"/>
 
 </head>
 
 <body id="page-top">
 <div id="wrapper">
-    <jsp:include page="/frontend/components/sidebar/sidebar.jsp"/>
+    <jsp:include page="/frontend/components/Admin/sidebar/sidebar.jsp"/>
 
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
@@ -130,19 +114,15 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table
-                                    class="table"
-                                    id="dataTable"
-                                    width="100%"
-                                    cellspacing="0"
-                            >
+                            <table class="table" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Variant ID</th>
                                     <th>Tên sản phẩm</th>
                                     <th>Ngày tạo</th>
-                                    <th>giá</th>
-                                    <th>% giảm giá</th>
+                                    <th>Giá</th>
+                                    <th>% Giảm giá</th>
                                     <th>Chất liệu</th>
                                     <th>Xóa</th>
                                     <th>Hành động</th>
@@ -151,10 +131,11 @@
                                 <tfoot>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Variant ID</th>
                                     <th>Tên sản phẩm</th>
                                     <th>Ngày tạo</th>
-                                    <th>giá</th>
-                                    <th>% giảm giá</th>
+                                    <th>Giá</th>
+                                    <th>% Giảm giá</th>
                                     <th>Chất liệu</th>
                                     <th>Xóa</th>
                                     <th>Hành động</th>
@@ -163,35 +144,54 @@
                                 <tbody>
                                 <jsp:useBean id="beltList" scope="request" type="java.util.List"/>
                                 <c:forEach var="belt" items="${beltList}">
-                                    <tr>
-                                        <td class="beltId">${belt.id}</td>
-                                        <td>${belt.name}</td>
-                                        <td>${belt.createdDate}</td>
-                                        <td>${belt.price} vnđ</td>
-                                        <td>${belt.discountPercent}</td>
+                                    <tr class="belt-row">
+                                        <td class="productId">${belt.id}</td>
+                                        <td></td>
+                                        <td><strong>${belt.name}</strong></td>
+                                        <td>${belt.createdAt}</td>
+                                        <td><strong>${belt.price} vnđ</strong></td>
+                                        <td>${belt.discountRate}</td>
                                         <td>${belt.materialBelt}</td>
-                                        <td>${belt.isDeleted ==0 ? "Chưa xóa":"Xóa mềm"}</td>
+                                        <td>${belt.isDeleted == 0 ? "Chưa xóa" : "Xóa mềm"}</td>
                                         <td class="text-center">
-                                            <input type="hidden" name="beltId" value="${belt.id}"/>
-                                            <input type="hidden" name="message" value="update"/>
-                                            <a href="${pageContext.request.contextPath}/admin/table/belts/createProduct?id=${belt.id}&message=update"
+                                            <a href="${pageContext.request.contextPath}/admin/table/belts/createProduct?id=${belt.id}&message=createVariant"
                                                class="btn btn-dark fa-solid fa-pen-to-square"></a>
-
-                                            <button
-                                                    class="btn btn-danger fa-solid fa-trash-can custom_action_hover"
-                                                    data-bs-toggle="modal" data-bs-target="#removeModal"
-                                            ></button>
+                                            <button class="btn btn-danger fa-solid fa-trash-can custom_action_hover"
+                                                    data-bs-toggle="modal" data-bs-target="#removeModal"></button>
                                         </td>
                                     </tr>
+
+                                    <c:forEach var="variant" items="${belt.beltVariants}">
+                                        <tr class="variant-row">
+                                            <td></td> <!-- Cột ID trống -->
+                                            <td class="variantId">${variant.id}</td>
+                                            <td colspan="1"><i>Màu: ${variant.color}, Size: ${variant.size}</i></td>
+                                            <!-- Chỉ colspan="2" -->
+                                            <td>-</td> <!-- Ngày tạo (để trống) -->
+                                            <td>-</td> <!-- Giá (để trống) -->
+                                            <td>-</td> <!-- % Giảm giá (để trống) -->
+                                            <td>-</td> <!-- Chất liệu -->
+                                            <td>-</td> <!-- Xóa -->
+                                            <td class="text-center">
+                                                <a href="${pageContext.request.contextPath}/admin/table/belts/createProduct?id=${belt.id}&message=update&variantId=${variant.id}"
+                                                   class="btn btn-dark fa-solid fa-pen-to-square"></a>
+                                                <button class="btn btn-danger fa-solid fa-trash-can custom_action_hover"
+                                                        data-bs-toggle="modal" data-bs-target="#removeModal"></button>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+
+
                                 </c:forEach>
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
                 </div>
             </div>
 
-            <jsp:include page="/frontend/components/adminFooter/adminFooter.jsp"/>
+            <jsp:include page="/frontend/components/Admin/adminFooter/adminFooter.jsp"/>
 
         </div>
     </div>
@@ -199,8 +199,6 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
-    <!-- Modal -->
     <div class="modal fade" id="removeModal" tabindex="-1" aria-labelledby="removeModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -228,25 +226,10 @@
         </div>
     </div>
 
-    <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"
-    ></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
+    <jsp:include page="/frontend/components/Admin/scripts/adminScripts/datatable.jsp"/>
 
-    <!-- Core plugin JavaScript-->
-    <script src="${pageContext.request.contextPath}/js/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="${pageContext.request.contextPath}/js/allProductAdmin.js"></script>
-    <script src="${pageContext.request.contextPath}/js/sb-admin-2.min.js"></script>
-
-    <script src="${pageContext.request.contextPath}/js/jquery.dataTables.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/dataTables.bootstrap4.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/datatable.js"></script>
 
 </div>
 </body>
 </html>
+<script src="${pageContext.request.contextPath}/js/allProduct.js"></script>

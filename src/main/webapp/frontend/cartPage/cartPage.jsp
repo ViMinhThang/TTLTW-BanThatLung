@@ -49,82 +49,105 @@
         </ol>
     </nav>
 </div>
-<div class="custom_margin--container mt-5">
+<div class="custom_margin--container" style="margin-top: 250px">
     <div class="row">
-        <div class="col-8 mb-5 pe-5">
+        <div class="col-6 mb-5 pe-5" style="margin-left: 196.25px">
             <div class="row">
                 <h1 class="ps-0">Giỏ hàng của bạn</h1>
-<%--                <h3 class="ps-0 fw-light fs-5 totalOrdersCountDisplay">--%>
-<%--                    Tổng [${totalOrders} đơn hàng]--%>
-<%--                </h3>--%>
+                <h3 class="ps-0 fw-light fs-5 totalOrdersCountDisplay">
+                    Tổng [${totalOrders} đơn hàng]
+                </h3>
             </div>
             <c:forEach var="entry" items="${cart}">
-                <div class="row border border-dark mt-4 custom_remove">
-                    <input type="hidden" class="beltId" name="beltId" value="${entry.key}">
-                    <div class="col-4 p-0">
-                        <img
-                                src="${pageContext.request.contextPath}${entry.value.belt.image[0]}"
-                                class="img-fluid p-0"
-                        />
+                <c:set var="cartItem" value="${entry.value}"/>
+
+                <div class="cart-item d-flex p-3 border-bottom">
+                    <!-- Ảnh sản phẩm -->
+                    <div class="me-3">
+                        <img src="${pageContext.request.contextPath}${cartItem.variant.images[0]}"
+                             class="img-fluid rounded shadow-sm"
+                             alt="${cartItem.belt.name}"
+                             style="width: 100px; height: 100px; object-fit: cover;">
                     </div>
-                    <div class="col-8 fw-light pb-0">
-                        <div class="row">
-                            <div class="flex-grow-1" style="flex-basis: 90%">
-                                <div
-                                        class="d-flex justify-content-between flex-column flex-grow-2 m-3"
-                                >
-                                    <div class="d-flex justify-content-between flex-column">
-                                        <div class="d-flex justify-content-between m-3">
-                                            <p class="fs-2 fw-bold custom_size--19">
-                                                    ${entry.value.belt.name}
-                                            </p>
-                                            <p class="fs-3 custom_size--16">${entry.value.price} VNĐ</p>
-                                        </div>
-                                        <div class="d-flex">
-                                            <c:forEach var="category" items="${entry.value.belt.categories}">
-                                                <p class="custom_size--16 p-2 me-2 fw-bold"
-                                                   style="background-color: #DFDFDF">${category}</p>
 
-                                            </c:forEach>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex">
-                                        <select
-                                                id="quantitySelect"
-                                                class="form-select w-25 p-3 border border-dark quantitySelectCart"
-                                                aria-label="Select a number"
-                                        >
-                                            <option selected>${entry.value.quantity}</option>
-                                            <c:forEach var="i" begin="1" end="${entry.value.belt.stockQuantity}">
-                                                <option value="${i}">${i}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- Thông tin sản phẩm -->
+                    <div class="d-flex flex-column flex-grow-1">
+                        <div class="d-flex justify-content-between">
+                            <p class="fw-bold">${cartItem.belt.name}
+                                - ${cartItem.variant.color}, ${cartItem.variant.size}</p>
+                            <p class="fw-bold">${cartItem.price} VNĐ</p>
+                        </div>
 
-                            <div class="flex-grow-1 ps-0 mt-3" style="flex-basis: 10%">
-                                <svg
-                                        class="remove_button"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        height="24px"
-                                        viewBox="0 -960 960 960"
-                                        width="24px"
-                                        fill="#00000"
-                                >
-                                    <path
-                                            d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"
-                                    />
-                                </svg>
-                            </div>
+                        <!-- Danh mục (Categories) của Variant -->
+                        <div class="d-flex mt-2">
+                            <c:forEach var="category" items="${cartItem.variant.categories}">
+                                <span class="badge bg-secondary me-2">${category}</span>
+                            </c:forEach>
+                        </div>
+
+                        <!-- Chọn số lượng -->
+                        <div class="mt-2">
+                            <label for="quantity-${cartItem.variant.id}" class="fw-bold">Số lượng:</label>
+                            <select id="quantity-${cartItem.variant.id}"
+                                    class="form-select w-25 d-inline-block"
+                                    onchange="updateCart(${cartItem.variant.id}, this.value)">
+                                <c:forEach var="i" begin="1" end="${cartItem.variant.stockQuantity}">
+                                    <option value="${i}" ${i == cartItem.quantity ? 'selected' : ''}>${i}</option>
+                                </c:forEach>
+                            </select>
                         </div>
                     </div>
                 </div>
-
             </c:forEach>
+
         </div>
-        <div class="col-4 mt-5">
+        <div class="col-3 mb-5 ps-5" style="width: 450px">
             <div class="row custom_insert">
+                <c:choose>
+                    <c:when test="${empty sessionScope.cart || sessionScope.auth==null}">
+                        <c:if test="${sessionScope.auth==null}">
+                            <p class="ps-0">Vui lòng đăng nhập để thanh toán</p>
+                        </c:if>
+                        <a
+                                href="#"
+                                class="btn btn-dark px-3 py-2 fs-5 custom_button checkoutPage disabled fw-bold"
+                                style="pointer-events: none; padding-top: 12px;
+                                padding-bottom: 12px;"
+                        >Tiến hành thanh toán
+                            <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    height="24px"
+                                    viewBox="0 -960 960 960"
+                                    width="24px"
+                                    fill="#EFEFEF"
+                            >
+                                <path
+                                        d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"
+                                />
+                            </svg>
+                        </a>
+                    </c:when>
+                    <c:otherwise>
+                        <a
+                                href="${pageContext.request.contextPath}/checkout"
+                                class="btn btn-dark px-3 py-2 fs-5 custom_button checkoutPage fw-bold"
+                                style="padding-top: 12px;padding-bottom: 12px;"
+                        >Tiến hành thanh toán
+                            <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    height="24px"
+                                    viewBox="0 -960 960 960"
+                                    width="24px"
+                                    fill="#EFEFEF"
+                            >
+                                <path
+                                        d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"
+                                />
+                            </svg>
+                        </a>
+                    </c:otherwise>
+                </c:choose>
+
                 <div class="mt-4 ps-0">
                     <div class="pb-2 mb-3">
                         <h5 class="fw-bold fs-3">Tóm tắt đơn hàng</h5>
@@ -165,55 +188,6 @@
                             Áp dụng
                         </button>
                     </div>
-
-                    <div class="mt-4">
-                        <c:choose>
-                            <c:when test="${empty sessionScope.cart || sessionScope.auth==null}">
-                                <c:if test="${sessionScope.auth==null}">
-                                    <p class="ps-0">Vui lòng đăng nhập để thanh toán</p>
-                                </c:if>
-                                <a
-                                        href="#"
-                                        class="btn btn-dark px-3 py-2 fs-5 custom_button checkoutPage disabled fw-bold"
-                                        style="pointer-events: none; padding-top: 12px;
-                                padding-bottom: 12px;"
-                                >Tiến hành thanh toán
-                                    <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            height="24px"
-                                            viewBox="0 -960 960 960"
-                                            width="24px"
-                                            fill="#EFEFEF"
-                                    >
-                                        <path
-                                                d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"
-                                        />
-                                    </svg>
-                                </a>
-                            </c:when>
-                            <c:otherwise>
-                                <a
-                                        href="${pageContext.request.contextPath}/checkout"
-                                        class="btn btn-dark px-3 py-2 fs-5 custom_button checkoutPage fw-bold"
-                                        style="padding-top: 12px;padding-bottom: 12px;"
-                                >Tiến hành thanh toán
-                                    <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            height="24px"
-                                            viewBox="0 -960 960 960"
-                                            width="24px"
-                                            fill="#EFEFEF"
-                                    >
-                                        <path
-                                                d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"
-                                        />
-                                    </svg>
-                                </a>
-                            </c:otherwise>
-                        </c:choose>
-
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -229,35 +203,28 @@
                             class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-between"
                     >
                         <c:forEach var="belt" items="${suggestionBelts}">
-                            <div class="card p-0" style="position: relative">
-                                <input class="beltId" type="hidden" name="beltId" value="${belt.id}">
-                                <input class="userId" type="hidden" name="userId" value="${sessionScope.auth.id}">
-                                <c:if test="${sessionScope.auth!=null}">
-                                    <button class="btn bg-light favorite-button pt-2 px-2"
-                                            style="position: absolute; top: 10px; right: 10px; z-index: 10; border-radius: 50%; border: none;">
-                                        <svg class="custom_favorite_click" xmlns="http://www.w3.org/2000/svg"
-                                             height="24px"
-                                             viewBox="0 -960 960 960"
-                                             width="24px" fill="#000000">
-                                            <path
-                                                    d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z"/>
-                                        </svg>
-                                    </button>
-                                </c:if>
+                            <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariants[0].id}"
+                               class="text-decoration-none text-dark">
+                                <div class="text-center hover--black">
+                                    <!-- Hiển thị ảnh của biến thể đầu tiên -->
+                                    <c:if test="${not empty belt.beltVariants}">
+                                        <c:set var="firstVariant" value="${belt.beltVariants[0]}"/>
+                                        <c:if test="${not empty firstVariant.images}">
+                                            <img src="${pageContext.request.contextPath}${firstVariant.images[0]}"
+                                                 class="img-fluid w-100 rounded shadow-sm"
+                                                 alt="${belt.name}"
+                                                 style="height: 25rem; object-fit: cover;">
+                                        </c:if>
+                                    </c:if>
 
-
-                                <img src="${pageContext.request.contextPath}${belt.image[0]}" class="card-img-top"
-                                     alt="..."/>
-                                <a href="/productDetails?beltId=${belt.id}">
-                                    <div class="card-body text-start">
-                                        <h5 class="card-title text-start">
-                                                ${belt.name}
-                                        </h5>
-                                        <p class="card-text text-start">${belt.price} VNĐ
-                                        </p>
+                                    <!-- Thông tin sản phẩm -->
+                                    <div class="mt-2 text-start ps-3">
+                                        <p class="fw-bold fs-5 mb-1">${belt.price} VNĐ</p>
+                                        <p class="text-muted mb-1">${belt.name}</p>
+                                        <span class="badge bg-secondary">${belt.discountRate}%</span>
                                     </div>
-                                </a>
-                            </div>
+                                </div>
+                            </a>
                         </c:forEach>
                     </div>
                 </div>

@@ -176,12 +176,6 @@ li {
   display: flex;
 }
 
-/* Tổng quan */
-.list__product {
-  margin: 0 auto;
-}
-
-/* Đảm bảo các sản phẩm có kích thước đồng nhất */
 
 .product__col {
   width: 100%;
@@ -268,4 +262,13 @@ li {
 .pagination .page-link:hover {
   color: white;
   background-color: #565656;
+}
+.hover--black{
+  border: 2px solid transparent; /* Mặc định không có viền */
+  transition: border 0.3s ease-in-out; /* Hiệu ứng mượt khi hover */
+}
+
+.hover--black:hover {
+  border: 2px solid black !important; /* Khi hover vào sẽ có viền đen */
+  border-radius: 8px; /* Giữ bo góc đẹp */
 }

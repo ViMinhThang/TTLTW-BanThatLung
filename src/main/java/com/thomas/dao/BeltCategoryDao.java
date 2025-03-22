@@ -7,10 +7,10 @@ import com.thomas.dao.model.Category;
 import java.util.List;
 
 public class BeltCategoryDao {
-    public boolean createBeltCategory(int productId, int categoryId) {
+    public boolean createBeltCategory(int productId, int categoryId, int variantId) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "INSERT INTO beltCategory(beltId,categoryId) VALUES(:beltId,:categoryId)";
-            return h.createUpdate(sql).bind("beltId", productId).bind("categoryId", categoryId).execute() > 0;
+            String sql = "INSERT INTO beltCategory(beltId,categoryId,variantId) VALUES(:beltId,:categoryId,:variantId)";
+            return h.createUpdate(sql).bind("beltId", productId).bind("categoryId", categoryId).bind("variantId",variantId).execute() > 0;
         });
     }
 

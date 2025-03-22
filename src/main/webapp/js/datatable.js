@@ -1,3 +1,7 @@
-$(document).ready(function() {
-    $('#dataTable').DataTable();
+new DataTable('#dataTable', {
+    layout: {
+        topStart: {
+            buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+        }
+    }
 });

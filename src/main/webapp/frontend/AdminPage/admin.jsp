@@ -13,22 +13,7 @@
     <meta name="author" content=""/>
 
     <title>THOMAS - Admin</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/assets/icons/favicon.svg" type="image/x-icon"/>
-
-    <!-- Custom fonts for this template-->
-    <link
-            href="${pageContext.request.contextPath}/css/fontawesome-free-6.6.0-web/fontawesome-free-6.6.0-web/css/all.min.css"
-            rel="stylesheet"
-            type="text/css"
-    />
-    <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet"
-    />
-
-    <!-- Custom styles for this template-->
-    <link href="${pageContext.request.contextPath}/css/dataTables.bootstrap4.min.css" rel="stylesheet"/>
-    <link href="${pageContext.request.contextPath}/css/adminGeneral.css" rel="stylesheet"/>
+    <jsp:include page="/frontend/components/Admin/adminLink/adminLink.jsp"/>
 
 </head>
 
@@ -36,7 +21,7 @@
 <!-- Page Wrapper -->
 <div id="wrapper">
     <!-- Sidebar -->
-    <jsp:include page="/frontend/components/sidebar/sidebar.jsp"/>
+    <jsp:include page="/frontend/components/Admin/sidebar/sidebar.jsp"/>
 
     <!-- End of Sidebar -->
 
@@ -394,7 +379,7 @@
         <!-- End of Main Content -->
 
         <!-- Footer -->
-        <jsp:include page="/frontend/components/adminFooter/adminFooter.jsp"/>
+        <jsp:include page="/frontend/components/Admin/adminFooter/adminFooter.jsp"/>
 
         <!-- End of Footer -->
     </div>
@@ -447,19 +432,7 @@
 </div>
 
 <!-- Bootstrap core JavaScript-->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
+<jsp:include page="/frontend/components/Admin/scripts/adminScripts/datatable.jsp"/>
 
-<!-- Core plugin JavaScript-->
-<script src="${pageContext.request.contextPath}/js/jquery.easing.min.js"></script>
-
-<!-- Custom scripts for all pages-->
-<script src="${pageContext.request.contextPath}/js/sb-admin-2.min.js"></script>
-<!-- Page level plugins -->
-<script src="${pageContext.request.contextPath}/js/Chart.min.js"></script>
-
-<!-- Page level custom scripts -->
-<script src="${pageContext.request.contextPath}/js/chart-area-demo.js"></script>
-<script src="${pageContext.request.contextPath}/js/chart-pie-demo.js"></script>
 </body>
 </html>

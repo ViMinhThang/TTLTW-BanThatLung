@@ -38,6 +38,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/allProduct.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/HomePage.css"/>
     <script src="${pageContext.request.contextPath}/js/allProduct.js"></script>
 </head>
 
@@ -54,9 +55,9 @@
         </div>
         <div class="overlay__body d-flex align-items-left justify-content-between" style="height: 500px">
             <div class="w-100">
-                <c:set var="filterUrlBase" value="${pageContext.request.contextPath}/navigate?type=${param.type}" />
+                <c:set var="filterUrlBase" value="${pageContext.request.contextPath}/navigate?type=${param.type}"/>
                 <c:if test="${param.descPrice != null}">
-                    <c:set var="filterUrlBase" value="${filterUrlBase}&descPrice=${param.descPrice}" />
+                    <c:set var="filterUrlBase" value="${filterUrlBase}&descPrice=${param.descPrice}"/>
                 </c:if>
 
                 <div class="accordion border-top-0 w-100" id="filterAccordion">
@@ -99,12 +100,13 @@
                             </div>
                         </div>
                     </div>
-                </div>`
+                </div>
+                `
                 <div class="apply__container mt-3 d-flex flex-column">
                     <!-- Các liên kết áp dụng -->
                     <c:forEach var="priceRange" items="${['100-500', '500-900']}">
-                        <c:set var="minPrice" value="${fn:split(priceRange, '-')[0]}" />
-                        <c:set var="maxPrice" value="${fn:split(priceRange, '-')[1]}" />
+                        <c:set var="minPrice" value="${fn:split(priceRange, '-')[0]}"/>
+                        <c:set var="maxPrice" value="${fn:split(priceRange, '-')[1]}"/>
                         <a href="${filterUrlBase}&minPrice=${minPrice}&maxPrice=${maxPrice}"
                            class="apply__button text-decoration-none d-block mt-2 p-2">
                             Giá từ ${minPrice}.000 VNĐ đến ${maxPrice}.000 VNĐ
@@ -121,7 +123,7 @@
 
 <!-- Banner với chữ lồng vào giữa -->
 <div class="banner position-relative">
-    <img src="${pageContext.request.contextPath}${mainImage}" alt="" style="width: 100%; height: auto;" />
+    <img src="${pageContext.request.contextPath}${mainImage}" alt="" style="width: 100%; height: auto;"/>
     <!-- Chữ lồng vào giữa -->
     <div class="position-absolute top-50 start-50 translate-middle text-center">
         <div class="belts-header display-4 text-white ">${bigTitle}</div>
@@ -153,9 +155,11 @@
             <!-- Sort Column -->
             <div class="col-3 sort__column">
                 <div class="sort__container d-flex align-items-center justify-content-end">
-                    <img src="${pageContext.request.contextPath}/assets/icons/sort (1).png" alt="" style="height: 20px;" class="me-2">
+                    <img src="${pageContext.request.contextPath}/assets/icons/sort (1).png" alt="" style="height: 20px;"
+                         class="me-2">
                     <div class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
                             Sắp Xếp
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
@@ -171,31 +175,35 @@
     </div>
 </div>
 
-<div class="list__product container">
+<div class="list__product ms-2">
     <div class="row" id="list__product__row">
         <div class="list__product__element">
-            <div class="carousel-item active">
-                <div class="d-flex justify-content-center gap-3 ">
-                    <c:forEach var="b" items="${beltsList}" end="7">
-                        <a href="${pageContext.request.contextPath}/productDetails?beltId=${b.id}"
-                           class="text-decoration-none text-dark">
-                            <div class="text-center hover--black">
-                                <!-- Ảnh sản phẩm lớn hơn -->
-                                <img src="${pageContext.request.contextPath}${b.mainImage}"
-                                     class="img-fluid w-100 rounded shadow-sm"
-                                     alt="${b.name}"
-                                     style="height: 25rem; object-fit: cover;">
-                                <!-- Thông tin sản phẩm -->
-                                <div class="mt-2 text-start ps-3">
-                                    <p class="fw-bold fs-5 mb-1">${b.price} VNĐ</p>
-                                    <p class="text-muted mb-1">${b.name}</p>
-                                    <span class="badge bg-secondary">${b.discountPercent}%</span>
+                <div class="d-flex gap-3 align-items-center flex-wrap">
+                    <c:forEach var="belt" items="${beltsList}">
+                        <c:forEach var="variant" items="${belt.beltVariants}">
+                            <a href="productDetails?beltId=${belt.id}&variantId=${variant.id}"
+                               class="text-decoration-none text-dark">
+                                <div class="text-center hover--black">
+                                    <!-- Hiển thị ảnh của từng biến thể -->
+                                    <c:if test="${not empty variant.images}">
+                                        <img src="${pageContext.request.contextPath}${variant.images[0]}"
+                                             class="img-fluid w-100 rounded shadow-sm"
+                                             alt="${belt.name} - ${variant.color} (${variant.size})"
+                                             style="height: 25rem; object-fit: cover;">
+                                    </c:if>
+
+                                    <!-- Thông tin sản phẩm -->
+                                    <div class="mt-2 text-start ps-3">
+                                        <p class="fw-bold fs-5 mb-1">${belt.price} VNĐ</p>
+                                        <p class="text-muted mb-1">${belt.name} - ${variant.color} (${variant.size})</p>
+                                        <span class="badge bg-secondary">${belt.discountRate}%</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </c:forEach>
                     </c:forEach>
                 </div>
-            </div>
+
         </div>
     </div>
 </div>
@@ -245,7 +253,6 @@
         </div>
     </nav>
 </section>
-
 <jsp:include page="/frontend/header_footer/footer.jsp"/>
 
 </body>

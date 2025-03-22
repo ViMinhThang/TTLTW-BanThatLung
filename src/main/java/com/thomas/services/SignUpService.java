@@ -4,6 +4,7 @@ import com.thomas.dao.UserDao;
 import com.thomas.dao.model.User;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class SignUpService {
 
@@ -18,7 +19,7 @@ public class SignUpService {
         u.setName(middleName + " " + name);
         u.setIsDeleted(0);
         u.setDateOfBirth(birthDate);
-        u.setCreateAt(LocalDate.now());
+        u.setCreateAt(LocalDateTime.now());
         u.setIsActive(0);
         return userDao.registerUser(u);
     }

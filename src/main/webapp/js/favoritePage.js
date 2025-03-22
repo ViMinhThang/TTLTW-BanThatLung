@@ -2,6 +2,7 @@ $(document).ready(function () {
     $(".remove-btn").on('click', function () {
         const $this = $(this);
         const beltId = $(this).closest(".tr-favorite").find(".beltId").val();
+        const variantId = $(this).closest(".tr-favorite").find(".variantId").val();
         const userId = $(this).closest(".tr-favorite").find(".userId").val();
         $.ajax({
             url: `/favorite`,
@@ -9,6 +10,7 @@ $(document).ready(function () {
             data: {
                 userId: userId,
                 beltId: beltId,
+                variantId: variantId,
                 message: "removeFavorite"
             },
             success: function () {
