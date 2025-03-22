@@ -185,3 +185,15 @@
 .custom_hover:hover {
   box-shadow: 0 0 0 2px #fff, 0 0 0 4px #303135;
 }
+
+.user-shipping-address {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.user-address-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
