@@ -26,13 +26,13 @@ public class CartController extends HttpServlet {
         symbols.setGroupingSeparator(',');
         symbols.setDecimalSeparator('.');
         HttpSession session = request.getSession();
-        Map<Integer, CartItem> cart = (Map<Integer, CartItem>) session.getAttribute("cart");
+        Map<String, CartItem> cart = (Map<String, CartItem>) session.getAttribute("cart");
         List<Belts> suggestionBelts = productService.getRandomBelts();
         for (Belts b : suggestionBelts) {
             b.setBeltVariants(productService.findVariants(b.getId(), null, null, null));
         }
         if (cart == null) {
-            cart = new HashMap<Integer, CartItem>();
+            cart = new HashMap<String, CartItem>();
             session.setAttribute("cart", cart);
         }
 
@@ -76,7 +76,7 @@ public class CartController extends HttpServlet {
         symbols.setDecimalSeparator('.');
         String message = request.getParameter("message");
         HttpSession session = request.getSession();
-        Map<Integer, CartItem> cart = (Map<Integer, CartItem>) session.getAttribute("cart");
+        Map<String, CartItem> cart = (Map<String, CartItem>) session.getAttribute("cart");
 
         if (cart == null) {
             cart = new HashMap<>();
@@ -94,16 +94,20 @@ public class CartController extends HttpServlet {
             belt.setBeltVariants(productService.findVariants(beltId, color, size, variantId));
             belt.getBeltVariants().forEach(v -> v.setCategories(productService.findCategory(beltId, variantId)));
 
+
+            String key = beltId + "-" + variantId;
             CartItem item = cart.get(beltId);
             if (item == null) {
                 item = new CartItem(belt, quantity, price, belt.getBeltVariants().get(0));
-                cart.put(beltId, item);
+                cart.put(key, item);
             } else {
                 item.setQuantity(item.getQuantity() + quantity);
             }
         } else if ("remove".equals(message)) {
             int beltId = Integer.parseInt(request.getParameter("beltId"));
-            if (cart.remove(beltId) != null) {
+            int variantId = Integer.parseInt(request.getParameter("variantId"));
+            String key = beltId + "-" + variantId;
+            if (cart.remove(key) != null) {
                 session.setAttribute("cart", cart);
                 int cartSize = cart.size();
                 double totalPrice = 0;

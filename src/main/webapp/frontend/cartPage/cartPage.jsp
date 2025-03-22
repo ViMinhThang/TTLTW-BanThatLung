@@ -203,35 +203,28 @@
                             class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-between"
                     >
                         <c:forEach var="belt" items="${suggestionBelts}">
-                            <div class="card p-0" style="position: relative">
-                                <input class="beltId" type="hidden" name="beltId" value="${belt.id}">
-                                <input class="userId" type="hidden" name="userId" value="${sessionScope.auth.id}">
-                                <c:if test="${sessionScope.auth!=null}">
-                                    <button class="btn bg-light favorite-button pt-2 px-2"
-                                            style="position: absolute; top: 10px; right: 10px; z-index: 10; border-radius: 50%; border: none;">
-                                        <svg class="custom_favorite_click" xmlns="http://www.w3.org/2000/svg"
-                                             height="24px"
-                                             viewBox="0 -960 960 960"
-                                             width="24px" fill="#000000">
-                                            <path
-                                                    d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z"/>
-                                        </svg>
-                                    </button>
-                                </c:if>
+                            <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariants[0].id}"
+                               class="text-decoration-none text-dark">
+                                <div class="text-center hover--black">
+                                    <!-- Hiển thị ảnh của biến thể đầu tiên -->
+                                    <c:if test="${not empty belt.beltVariants}">
+                                        <c:set var="firstVariant" value="${belt.beltVariants[0]}"/>
+                                        <c:if test="${not empty firstVariant.images}">
+                                            <img src="${pageContext.request.contextPath}${firstVariant.images[0]}"
+                                                 class="img-fluid w-100 rounded shadow-sm"
+                                                 alt="${belt.name}"
+                                                 style="height: 25rem; object-fit: cover;">
+                                        </c:if>
+                                    </c:if>
 
-
-                                <img src="${pageContext.request.contextPath}${belt.image[0]}" class="card-img-top"
-                                     alt="..."/>
-                                <a href="/productDetails?beltId=${belt.id}">
-                                    <div class="card-body text-start">
-                                        <h5 class="card-title text-start">
-                                                ${belt.name}
-                                        </h5>
-                                        <p class="card-text text-start">${belt.price} VNĐ
-                                        </p>
+                                    <!-- Thông tin sản phẩm -->
+                                    <div class="mt-2 text-start ps-3">
+                                        <p class="fw-bold fs-5 mb-1">${belt.price} VNĐ</p>
+                                        <p class="text-muted mb-1">${belt.name}</p>
+                                        <span class="badge bg-secondary">${belt.discountRate}%</span>
                                     </div>
-                                </a>
-                            </div>
+                                </div>
+                            </a>
                         </c:forEach>
                     </div>
                 </div>
