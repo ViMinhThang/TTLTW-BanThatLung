@@ -39,7 +39,7 @@ $(document).ready(function () {
         const fullText = $(".belts-price").clone().children().remove().end().text().trim();
         const beltId = $("#beltIdReviews").val();
         const price = fullText.replace('VNĐ', '').trim();
-
+        const variantId = $("#variantIdReviews").val();
         $.ajax({
             url: `/Cart?message=add&beltName=${beltName}`,
             type: 'POST',
@@ -48,6 +48,7 @@ $(document).ready(function () {
                 beltId: beltId,
                 beltName: beltName,
                 quantity: quantity,
+                variantId: variantId,
                 price: price,
             },
             success: function (response) {

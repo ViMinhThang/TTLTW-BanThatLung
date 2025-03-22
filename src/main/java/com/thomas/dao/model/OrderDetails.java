@@ -13,6 +13,7 @@ public class OrderDetails implements Serializable {
     private String beltName;
     private List<String> beltImages;
     private List<Category> categories;
+    private BeltVariant beltVariant;
 
     public OrderDetails() {
 
@@ -97,5 +98,13 @@ public class OrderDetails implements Serializable {
 
     public void setVariantId(int variantId) {
         this.variantId = variantId;
+    }
+
+    public BeltVariant getBeltVariant() {
+        return beltVariant;
+    }
+
+    public void setBeltVariant(BeltVariant beltVariant) {
+        this.beltVariant = beltVariant;
     }
 }

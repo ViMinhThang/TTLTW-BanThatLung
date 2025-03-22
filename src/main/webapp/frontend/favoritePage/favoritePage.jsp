@@ -78,9 +78,6 @@
                         </c:if>
                         <div>
                             <p class="mb-0">${belt.name} - ${variant.color} (${variant.size})</p>
-                            <c:forEach var="category" items="${variant.categories}">
-                                <span class="badge bg-secondary">${category.name}</span>
-                            </c:forEach>
                         </div>
                     </td>
                     <td class="text-center">${belt.price} vnđ</td>

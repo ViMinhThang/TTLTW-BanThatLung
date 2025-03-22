@@ -7,7 +7,10 @@ import com.thomas.dao.model.Favorite;
 import com.thomas.dao.model.Belts;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UploadFavoriteService {
     FavoriteDao favoriteDao;
@@ -19,7 +22,10 @@ public class UploadFavoriteService {
     }
 
     public List<Belts> getFavoritesBeltByUserId(int userId) {
-        List<Belts> beltsList = favoriteDao.getAllFavoriteBelts(userId);
+        Set<Integer> beltIds = new HashSet<>();
+        List<Belts> beltsList = favoriteDao.getAllFavoriteBelts(userId).stream()
+                .filter(b -> beltIds.add(b.getId()))
+                .collect(Collectors.toList());
         beltsList.forEach(b -> b.setBeltVariants(getFavoritesBeltVariantByBeltId(b.getId(), userId)));
         beltsList.forEach(b -> b.getBeltVariants().forEach(v -> v.setImages(productDao.getVariantImages(v.getId()))));
         return beltsList;
@@ -33,7 +39,11 @@ public class UploadFavoriteService {
         List<Belts> favoriteBelts = getFavoritesBeltByUserId(userId);
         for (Belts belt : favoriteBelts) {
             if (belt.getId() == beltId) {
-                return false;
+                for (BeltVariant variant : belt.getBeltVariants()) {
+                    if (variant.getId() == variantId) {
+                        return false;
+                    }
+                }
             }
         }
         boolean isAdded = favoriteDao.addFavoriteByUserId(userId, beltId, variantId);
@@ -42,6 +52,6 @@ public class UploadFavoriteService {
     }
 
     public boolean deleteFavoriteBelt(int userId, int beltId, int variantId) {
-        return favoriteDao.removeFavoriteBelt(userId, beltId,variantId);
+        return favoriteDao.removeFavoriteBelt(userId, beltId, variantId);
     }
 }

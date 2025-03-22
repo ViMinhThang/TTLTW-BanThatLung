@@ -96,7 +96,7 @@ public class CartController extends HttpServlet {
 
 
             String key = beltId + "-" + variantId;
-            CartItem item = cart.get(beltId);
+            CartItem item = cart.get(key);
             if (item == null) {
                 item = new CartItem(belt, quantity, price, belt.getBeltVariants().get(0));
                 cart.put(key, item);

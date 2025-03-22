@@ -253,7 +253,7 @@
 </div>
 <div class="p-5 my-5">
     <input id="beltIdReviews" type="hidden" name="beltId" value="${belt.id}">
-    <input id="beltIdReviews" type="hidden" name="beltId" value="${belt.id}">
+    <input id="variantIdReviews" type="hidden" name="variantId" value="${variant.id}">
     <div class="col-7">
         <p class="fs-3">${totalReview} đánh giá</p>
         <div class="d-flex border-bottom mb-3">

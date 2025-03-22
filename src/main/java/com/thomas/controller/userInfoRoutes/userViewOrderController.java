@@ -29,33 +29,40 @@ public class userViewOrderController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        symbols.setGroupingSeparator(',');
-        symbols.setDecimalSeparator('.');
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("auth");
+
+        if (user == null) {
+            response.sendRedirect("/");
+            return;
+        }
+
         List<Order> userOrders = uploadOrderService.getAllOrdersByUserId(user.getId());
+
         for (Order order : userOrders) {
             uploadOrderDetailService.setOrderDetails(order);
-        }
-        for (Order order : userOrders) {
+
             for (OrderDetails od : order.getOrderDetails()) {
                 List<BeltVariant> beltVariants = productService.findVariants(od.getBeltId(), null, null, od.getVariantId());
-                od.setBeltImages(productService.getVariantImages(beltVariants.get(0).getId()));
-                od.setCategories(productService.findCategory(od.getBeltId(),beltVariants.get(0).getId()));
-                uploadOrderDetailService.setBeltName(od);
+
+                if (!beltVariants.isEmpty()) {
+                    BeltVariant selectedVariant = beltVariants.get(0);
+                    od.setBeltVariant(selectedVariant);
+                    od.setBeltImages(productService.getVariantImages(selectedVariant.getId()));
+                    od.setCategories(productService.findCategory(od.getBeltId(), selectedVariant.getId()));
+                    uploadOrderDetailService.setBeltName(od);
+                }
             }
+
             order.setShippingDate();
         }
-        Collections.sort(userOrders, new Comparator<Order>() {
 
-            @Override
-            public int compare(Order o1, Order o2) {
-                return o2.getOrderDate().compareTo(o1.getOrderDate());
-            }
-        });
+        userOrders.sort((o1, o2) -> o2.getOrderDate().compareTo(o1.getOrderDate()));
+
         request.setAttribute("orders", userOrders);
         request.getRequestDispatcher("/frontend/userInfoPage/orderView/ordersView.jsp").forward(request, response);
     }
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

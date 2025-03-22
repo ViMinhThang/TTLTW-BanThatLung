@@ -40,14 +40,15 @@ public class OrderDetailsDao {
 
     public void createOrderDetail(OrderDetails od) {
         JDBIConnect.get().withHandle(handle -> {
-            String sql = "INSERT INTO orderDetails (orderId, price, beltId, quantity) " +
-                    "VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO orderDetails (orderId, price, beltId, quantity,variantId) " +
+                    "VALUES (?, ?, ?, ?,?)";
 
             handle.createUpdate(sql)
                     .bind(0, od.getOrderId())
                     .bind(1, od.getPrice())
                     .bind(2, od.getBeltId())
                     .bind(3, od.getQuantity())
+                    .bind(4, od.getVariantId())
                     .execute();
             return null;
         });
