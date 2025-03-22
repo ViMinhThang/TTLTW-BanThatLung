@@ -7,8 +7,9 @@ $(document).ready(function () {
     let isFavoriteUpdated = false;
     $(".favorite-button").on('click', function () {
         const beltId = $(this).closest(".card").find(".beltId").val();
+        const variantId = $(this).closest(".card").find(".variantId").val();
         const userId = $(this).closest(".card").find(".userId").val();
-        if(userId === ""){
+        if (userId === "") {
             $(".custom_toast_text").text("Bạn chưa đăng nhập")
             $("#liveToast").removeClass("hide").addClass("show")
             return;
@@ -22,6 +23,7 @@ $(document).ready(function () {
             data: {
                 userId: userId,
                 beltId: beltId,
+                variantId: variantId,
                 message: "addFavorite"
             },
             success: function () {
@@ -46,11 +48,12 @@ $(document).ready(function () {
         $button.html(loadingSpinner).prop("disabled", true);
 
         const beltId = $(this).closest(".beltProp").find(".beltId").val();
+        const variantId = $(this).closest(".beltProp").find(".variantId").val();
         const userId = $(this).closest(".beltProp").find(".userId").val();
 
         console.log(beltId);
         console.log(userId);
-        if(userId === ""){
+        if (userId === "") {
             $(".custom_toast_text").text("Bạn chưa đăng nhập")
             $("#liveToast").removeClass("hide").addClass("show")
             $button.html(originalContent).prop("disabled", false);
@@ -62,6 +65,7 @@ $(document).ready(function () {
             data: {
                 userId: userId,
                 beltId: beltId,
+                variantId: variantId,
                 message: "addFavorite"
             },
             success: function () {

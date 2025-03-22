@@ -29,12 +29,13 @@ public class UploadOrderDetailService {
         return orderDetailsDao.deleteOrderDetail(orderItemId);
     }
 
-    public void createOrderDetail(int id, double price, int beltId, int quantity) {
+    public void createOrderDetail(int id, double price, int beltId, int quantity, int variantId) {
         OrderDetails od = new OrderDetails();
         od.setOrderId(id);
         od.setPrice(price);
         od.setBeltId(beltId);
         od.setQuantity(quantity);
+        od.setVariantId(variantId);
         orderDetailsDao.createOrderDetail(od);
     }
 

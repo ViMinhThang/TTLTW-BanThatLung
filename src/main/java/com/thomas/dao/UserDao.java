@@ -64,34 +64,12 @@ public class UserDao {
     }
 
     public List<User> getAllUsers() {
-        List<User> userList = new ArrayList<>();
         String sql = "SELECT * FROM users ORDER BY id DESC";
-
-        // Using JDBI to fetch data
-        JDBIConnect.get().withHandle(handle -> {
-            try (ResultSet rs = handle.getConnection().createStatement().executeQuery(sql)) {
-                while (rs.next()) {
-                    User user = new User();
-                    user.setId(rs.getInt("id"));
-                    user.setName(rs.getString("name"));
-                    user.setEmail(rs.getString("email"));
-                    user.setDateOfBirth(rs.getDate("dateOfBirth").toLocalDate());
-                    user.setPassword(rs.getString("password"));
-                    user.setImage(rs.getString("image"));
-                    user.setCreateAt(rs.getDate("createAt").toLocalDate());
-                    user.setIsDeleted(rs.getInt("isDeleted"));
-                    user.setGender(rs.getString("gender"));
-                    user.setPhoneNumber(rs.getLong("phoneNumber"));
-                    user.setRole(rs.getInt("role"));
-                    userList.add(user);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        });
-
-        return userList;
+        return JDBIConnect.get().withHandle(handle ->
+                handle.createQuery(sql)
+                        .mapToBean(User.class)
+                        .list()
+        );
     }
 
 
@@ -127,14 +105,14 @@ public class UserDao {
 
     public boolean registerUser(User user) {
         return JDBIConnect.get().withHandle(h -> {
-            String insertedsql = "INSERT INTO users (name, email, dateOfBirth, password, createAt,gender,phoneNumber, isDeleted, role,isActive) " +
+            String insertedsql = "INSERT INTO users (name, email, dateOfBirth, password, createdAt,gender,phoneNumber, isDeleted, role,isActive) " +
                     "VALUES (:name, :email, :dateOfBirth, :password, :createAt,:gender,:phoneNumber, :isDeleted, :role,:isActive)";
             return h.createUpdate(insertedsql)
                     .bind("name", user.getName())
                     .bind("email", user.getEmail())
                     .bind("dateOfBirth", Timestamp.valueOf(user.getDateOfBirth().atStartOfDay()))
                     .bind("password", user.getPassword())
-                    .bind("createAt", Timestamp.valueOf(user.getCreateAt().atStartOfDay()))
+                    .bind("createAt", user.getCreateAt())
                     .bind("isDeleted", user.getIsDeleted())
                     .bind("role", user.getRole())
                     .bind("gender", user.getGender())
@@ -151,9 +129,9 @@ public class UserDao {
         });
     }
 
-    public boolean activeByToken(String token) {
+    public boolean activeByToken(int userId) {
         return JDBIConnect.get().withHandle(h -> {
-            return h.createUpdate("update users set isActive = 1 where token = :token").bind("token", token).execute() > 0;
+            return h.createUpdate("update users set isActive = 1 where id=:userId").bind("userId", userId).execute() > 0;
         });
     }
 
@@ -172,30 +150,16 @@ public class UserDao {
     }
 
     public List<User> searchUser(String query) {
-        List<User> userList = new ArrayList<>();
-        String sql = "SELECT id, name " +
-                "FROM users WHERE name LIKE ? AND isDeleted = 0";
+        String sql = "SELECT id, name FROM users WHERE name LIKE :query AND isDeleted = 0";
 
-        JDBIConnect.get().withHandle(handle -> {
-            try (PreparedStatement ps = handle.getConnection().prepareStatement(sql)) {
-                ps.setString(1, "%" + query + "%");
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        User user = new User();
-                        user.setId(rs.getInt("id"));
-                        user.setName(rs.getString("name"));
-                        userList.add(user);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        });
-
-        return userList;
+        return JDBIConnect.get().withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("query", "%" + query + "%")
+                        .mapToBean(User.class)
+                        .list()
+        );
     }
+
 
     public User getUserBySessionId(String sessionId) {
         return JDBIConnect.get().withHandle(h -> {
@@ -229,5 +193,4 @@ public class UserDao {
                     .execute() > 0;
         });
     }
-
 }

@@ -140,93 +140,43 @@
                     <h2 class="fw-light custom_size--19">Order#${order.id}</h2>
 
                     <c:forEach var="item" items="${order.orderDetails}">
-                        <div class="container ps-sm-0 border rounded mb-3" id="item1">
+                        <div class="container ps-sm-0 border rounded mb-3">
                             <div class="row-sm">
                                 <div class="col-sm col-md-6 col-lg-12">
                                     <div class="ps-0 row-sm d-lg-flex container-fluid pr-sm-0">
-                                        <div
-                                                class="col-sm col-md-2 col-lg-2 ps-sm-0 d-flex justify-content-center me-2"
-                                        >
-                                            <img
-                                                    class="img-fluid"
-                                                    src="${pageContext.request.contextPath}${item.beltImages[0]}"
-                                                    alt="black belt"
-                                                    height="200px"
-                                            />
+                                        <div class="col-sm col-md-2 col-lg-2 ps-sm-0 d-flex justify-content-center me-2">
+                                            <!-- Hiển thị ảnh đầu tiên nếu có -->
+                                            <c:if test="${not empty item.beltImages}">
+                                                <img class="img-fluid"
+                                                     src="${pageContext.request.contextPath}${item.beltImages[0]}"
+                                                     alt="Belt Image" height="200px"/>
+                                            </c:if>
                                         </div>
-                                        <div
-                                                class="col-sm col-md-6 col-lg-10 border-dark ps-sm-0 pr-sm-0 mt-sm-4"
-                                        >
-                                            <div
-                                                    class="d-flex justify-content-between custom_title_container"
-                                            >
-                                                <h4 class="custom_size--19 m-l3 fw-bold d-lg-none title">
-                                                        ${item.beltName}
-                                                </h4>
-                                                <h4 class="custom_size--19 ml-3 fw-bold d-none d-lg-block">
-                                                        ${item.beltName}
-                                                </h4>
-                                                <h4
-                                                        class="d-sm-none d-md-none d-lg-block custom_size--19 fw-light custom_price_container"
-                                                >
-                                                        ${item.price}₫
-                                                </h4>
+                                        <div class="col-sm col-md-6 col-lg-10 border-dark ps-sm-0 pr-sm-0 mt-sm-4">
+                                            <div class="d-flex justify-content-between">
+                                                <h4 class="fw-bold">${item.beltName} - ${item.beltVariant.color}
+                                                    (${item.beltVariant.size})</h4>
+                                                <h4 class="fw-light">${item.price}₫</h4>
                                             </div>
 
-                                            <div class="row mt-sm-2 custom_tag_container">
-                                                <c:forEach var="category" items="${item.categories}">
-                                                      <span
-                                                              class="col-sm-1 ms-sm-2 badge bg-light text-dark me-2 tag1"
-                                                      >${category}</span
-                                                      >
-                                                </c:forEach>
-                                            </div>
-                                            <div class="col-sm col-md-6 col-lg-12 pr-sm-0">
-                                                <div
-                                                        class="mt-sm-2 mt-lg-3 ms-sm-0 row w-100 custom_quantity_container"
-                                                ></div>
-                                                <div class="row w-100">
-                                                    <p
-                                                            class="ms-sm-2 mt-sm-4 mb-sm-4 ps-sm-1 fs-2 d-sm-block d-md-block d-lg-none"
-                                                    >
-                                                            ${item.price}
-                                                    </p>
-                                                </div>
-                                            </div>
+                                            <p class="mt-3">Số lượng: ${item.quantity}</p>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-4 col-md-6 col-lg-12"></div>
                             </div>
                         </div>
-
                     </c:forEach>
 
                     <h2 class="fw-bold custom_size--19">
                         Tổng tiền: ${order.orderTotal} vnđ
                     </h2>
                     <div class="py-2 w-100 d-flex justify-content-between mt-3">
-                        <p
-                                class="col-sm-10 ms-sm-2 mt-sm-2 mb-sm-2 ps-sm-0 ms-4 ms-2 d-md-none d-lg-none"
-                                style="margin-left: 37px"
-                        >
-                            <strong>Vận chuyển: </strong>nhận hàng từ ${order.shippingDate}
-                        </p>
-                        <p
-                                class="d-sm-none d-md-none d-lg-block col-lg-6 mt-lg-2 fs-6 ps-sm-0 my-1"
-                        >
-                            <strong>Vận chuyển: </strong>nhận hàng từ ${order.shippingDate}
-                        </p>
-                        <button
-                                class="btn btn-dark custom__btn"
-                                data-bs-toggle="modal"
-                                data-bs-target="#exampleModal"
-                        >
+                        <p><strong>Vận chuyển: </strong>Nhận hàng từ ${order.shippingDate}</p>
+                        <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Gửi yêu cầu hủy đơn hàng
                         </button>
                     </div>
                 </div>
-
             </c:forEach>
         </div>
     </div>

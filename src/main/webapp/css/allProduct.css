@@ -176,12 +176,6 @@ li {
   display: flex;
 }
 
-/* Tổng quan */
-.list__product {
-  margin: 0 auto;
-}
-
-/* Đảm bảo các sản phẩm có kích thước đồng nhất */
 
 .product__col {
   width: 100%;

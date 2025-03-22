@@ -3,6 +3,8 @@ package com.thomas.dao;
 import com.thomas.dao.db.JDBIConnect;
 import com.thomas.dao.model.Category;
 
+import java.util.List;
+
 public class CategoryDao {
     public CategoryDao() {
     }
@@ -26,6 +28,20 @@ public class CategoryDao {
             String sql = "SELECT id FROM categories ORDER BY id DESC LIMIT 1";
             return h.createQuery(sql).mapTo(Integer.class).first();
         });
+    }
+
+    public List<Category> find(int beltId, int variantId) {
+        String sql = "SELECT * FROM categories c " +
+                "JOIN beltCategory bc ON c.id = bc.categoryId " +
+                "WHERE bc.beltId = :beltId AND bc.variantId = :variantId";
+
+        return JDBIConnect.get().withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("beltId", beltId)
+                        .bind("variantId", variantId)
+                        .mapToBean(Category.class)
+                        .list()
+        );
     }
 
 }

@@ -39,7 +39,7 @@
                         <div class="mb-md-5 mt-md-4 pb-5">
                             <c:choose>
                                 <c:when test="${active==1}">
-                                    <h2 class="fw-bold mb-2 text-uppercase">Tài khoản của bạn đã được xác nhận</h2>
+                                    <h2 class="fw-bold mb-2 text-uppercase">${messageRedirect}</h2>
                                     <i class="bi bi-check2"></i>
 
                                     <a href="${pageContext.request.contextPath}/"

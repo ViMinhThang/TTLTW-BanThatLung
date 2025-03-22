@@ -3,46 +3,57 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap");
 
 :root {
-  --margin-left-standard: 145px;
-  --margin-bottom-small: 6px;
-  --margin-left-medium: 75px;
-  --font-size-standard: 20px;
-  --width-big: 929px;
+    --margin-left-standard: 145px;
+    --margin-bottom-small: 6px;
+    --margin-left-medium: 75px;
+    --font-size-standard: 20px;
+    --width-big: 929px;
 }
 
 * {
-  font-family: "IBM Plex Sans Condensed", sans-serif;
+    font-family: "IBM Plex Sans Condensed", sans-serif;
 }
 
 header {
-  position: fixed;
-  z-index: 100;
-  width: 100vw;
-  top: 0;
+    position: fixed;
+    z-index: 100;
+    width: 100vw;
+    top: 0;
+}
+
+.dropdown-item {
+    padding: 10px !important;
 }
 
 #logo {
-  color: black;
-  margin-left: 5rem;
-  font-size: 40px;
-  font-family: Instrument Serif;
-  letter-spacing: 13px;
-  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.35);
+    color: black;
+    margin-left: 3rem;
+    font-size: 40px;
+    font-family: Instrument Serif;
+    letter-spacing: 13px;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.35);
+    padding-bottom: 0;
 }
 
 .navbar {
-  border-bottom: 1px solid #efefef;
+    border-bottom: 1px solid #efefef;
+}
+
+.navbar-nav {
+    flex-direction: row;
 }
 
 .navitem__group a {
-  font-size: 19px;
-  letter-spacing: 1px;
-  color: black;
+    font-size: 17px;
+    letter-spacing: 1px;
+    color: black;
+    padding: 2px;
+    align-items: end;
+    font-weight: 500;
 }
 
 .navitem__group {
-  gap: 40px;
-  width: 48%;
+    gap: 40px;
 }
 
 /* ------------------------------------------- */
@@ -55,12 +66,10 @@ header {
 /*  max-width: 200px; !* Giới hạn chiều rộng tối đa nếu cần *!*/
 /*}*/
 
-/*!* Các icon chung *!*/
-/*.nav-item {*/
-/*  display: flex; !* Sử dụng Flexbox cho nội dung bên trong icon *!*/
-/*  align-items: center; !* Căn giữa nội dung bên trong *!*/
-/*  justify-content: center; !* Căn giữa nội dung theo chiều ngang *!*/
-/*}*/
+/* Các icon chung */
+.nav-item {
+    padding-bottom: 3px;
+}
 
 /*!* Icon cụ thể *!*/
 /*.nav-icon {*/
@@ -97,189 +106,200 @@ header {
 
 
 .header__icon__group {
-  display: flex;
-  gap: 20px;
+    display: flex;
+    gap: 20px;
 
 }
 
 .header__icon__group .favorite:hover {
-  transform: scale(1.2);
-  transition: all 0.3s;
+    transform: scale(1.2);
+    transition: all 0.3s;
 }
 
 
 .header__icon__group .user:hover {
-  transform: scale(1.2);
-  transition: all 0.3s;
+    transform: scale(1.2);
+    transition: all 0.3s;
 }
 
 .header__icon__group .cart:hover {
-  transform: scale(1.2);
-  transition: all 0.3s;
+    transform: scale(1.2);
+    transition: all 0.3s;
 }
 
 /* -------------------------------------------------- */
 .dropdown-menu {
-  display: none;
+    display: none;
 }
 
 .dropdown-menu:hover {
-  display: block;
+    display: block;
 }
 
 #search__icon {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .nav-icon {
-  margin-top: 6px;
-  width: 30px;
-  height: 30px;
+    margin-top: 6px;
+    width: 30px;
+    height: 30px;
 }
 
-.navbar_nav {}
+.navbar_nav {
+}
+
+.product__col {
+    width: 50%;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+}
 
 .header__icon__group {
-  display: flex;
-  gap: 20px;
+    margin-bottom: 3px;
+    display: flex;
+    gap: 20px;
 }
 
 .favorite {
-  position: relative;
-  text-decoration: none;
+    position: relative;
+    text-decoration: none;
+}
+
+.hover--black:hover {
+    border: 2px solid black !important; /* Khi hover vào sẽ có viền đen */
+    border-radius: 8px; /* Giữ bo góc đẹp */
 }
 
 .favorite__count {
-  position: absolute;
-  top: -1px;
-  right: -6px;
-  font-size: 12px;
-  display: inline-block;
-  color: white;
-  background: black;
-  border-radius: 50%;
-  width: 18px;
-  text-align: center;
+    position: absolute;
+    top: -1px;
+    right: -6px;
+    font-size: 12px;
+    display: inline-block;
+    color: black;
+    background: #ffeb00;
+    border-radius: 50%;
+    width: 18px;
+    text-align: center;
 }
 
 
 /* Hiển thị menu khi hover */
 .dropdown-hover:hover .dropdown-menu {
-  display: block;
-  margin-top: 0;
-  /* Đảm bảo menu xuất hiện sát đối tượng */
+    display: block;
+    margin-top: 0;
+    /* Đảm bảo menu xuất hiện sát đối tượng */
 }
 
 /* Đảm bảo sự chuyển động mượt mà */
 .dropdown-menu {
-  margin-left: -1rem;
-  transition: all 0.3s ease-in-out;
+    margin-left: -1rem;
+    transition: all 0.3s ease-in-out;
 }
-
-
-
 
 
 .cart {
-  position: relative;
-  text-decoration: none;
+    position: relative;
+    text-decoration: none;
 }
 
 .cart__count {
-  position: absolute;
-  top: -1px;
-  right: -6px;
-  font-size: 12px;
-  display: inline-block;
-  color: white;
-  background: black;
-  border-radius: 50%;
-  width: 18px;
-  text-align: center;
-  text-decoration: none;
+    position: absolute;
+    top: -1px;
+    right: -6px;
+    font-size: 12px;
+    display: inline-block;
+    color: white;
+    background: black;
+    border-radius: 50%;
+    width: 18px;
+    text-align: center;
+    text-decoration: none;
 }
 
 .overlay {
-  position: fixed;
-  top: 0;
-  left: -100%;
-  height: 100%;
-  width: 20%;
-  background: white;
-  transition: left 0.5s ease;
-  z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    height: 100%;
+    width: 20%;
+    background: white;
+    transition: left 0.5s ease;
+    z-index: 1000;
 }
 
 .overlay.active {
-  left: 0;
+    left: 0;
 }
 
 .overlay2 {
-  position: fixed;
-  top: 0;
-  right: -100%;
-  height: 100%;
-  width: 45%;
-  background: white;
-  transition: right 0.5s ease;
-  z-index: 1000;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100%;
+    width: 45%;
+    background: white;
+    transition: right 0.5s ease;
+    z-index: 1000;
 }
 
 .overlay2.active {
-  right: 0;
+    right: 0;
 }
 
 .dimmer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
 }
 
 .dimmer.active {
-  opacity: 1;
-  pointer-events: all;
+    z-index: 1;
+    opacity: 1;
+    pointer-events: all;
 }
 
 /* ---------------------------------------------------------------------------------------------- */
 .dimmer2 {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
 }
 
 .dimmer2.active {
-  opacity: 1;
-  pointer-events: all;
+    opacity: 1;
+    pointer-events: all;
 }
 
 .custom_design {
-  border: 2.5px solid black;
+    border: 2.5px solid black;
 }
-
 
 
 footer {
-  background-color: #f4f4f4;
+    background-color: #f4f4f4;
 }
 
 #closeButton2 {
-  position: absolute;
-  top: 10px;
-  left: -70px;
-  font-size: 30px;
-  cursor: pointer;
+    position: absolute;
+    top: 10px;
+    left: -70px;
+    font-size: 30px;
+    cursor: pointer;
 }
 
 /* 
@@ -323,6 +343,6 @@ footer {
   cursor: pointer;
 } */
 .cart--inputCoupon:focus {
-  border-color: #222;
-  height: 48px;
+    border-color: #222;
+    height: 48px;
 }

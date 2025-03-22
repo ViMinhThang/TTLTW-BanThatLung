@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class UploadUserService {
@@ -57,7 +58,7 @@ public class UploadUserService {
         user.setPhoneNumber(phone);
         user.setIsDeleted(isDeleted);
         user.setDateOfBirth(birthDate);
-        user.setCreateAt(LocalDate.now());
+        user.setCreateAt(LocalDateTime.now());
         return userDao.registerUser(user);
     }
 
@@ -100,5 +101,8 @@ public class UploadUserService {
         return userDao.searchUser(query);
     }
 
+    public User findUserByEmail(String email) {
+        return userDao.findUserEmail(email);
+    }
 
 }

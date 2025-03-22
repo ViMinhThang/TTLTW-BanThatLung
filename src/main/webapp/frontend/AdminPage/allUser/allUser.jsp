@@ -13,29 +13,13 @@
     <meta name="author" content=""/>
 
     <title>THOMAS - Admin</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/assets/icons/favicon.svg" type="image/x-icon"/>
-
-    <!-- Custom fonts for this template-->
-    <link
-            href="${pageContext.request.contextPath}/css/fontawesome-free-6.6.0-web/fontawesome-free-6.6.0-web/css/all.min.css"
-            rel="stylesheet"
-            type="text/css"
-    />
-    <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet"
-    />
-
-    <!-- Custom styles for this template-->
-    <link href="${pageContext.request.contextPath}/css/favorite.css" rel="stylesheet"/>
-    <link href="${pageContext.request.contextPath}/css/dataTables.bootstrap4.min.css" rel="stylesheet"/>
-    <link href="${pageContext.request.contextPath}/css/adminGeneral.css" rel="stylesheet"/>
+    <jsp:include page="/frontend/components/Admin/adminLink/adminLink.jsp"/>
 
 </head>
 
 <body id="page-top">
 <div id="wrapper">
-    <jsp:include page="/frontend/components/sidebar/sidebar.jsp"/>
+    <jsp:include page="/frontend/components/Admin/sidebar/sidebar.jsp"/>
 
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
@@ -263,21 +247,29 @@
                         </h6>
                     </div>
                     <div class="card-body">
+                        <div class="d-flex justify-content-end align-items-center">
+                            <h3 class="mr-5">Import CSV</h3>
+                            <form method="post" enctype="multipart/form-data"
+                                  action="${pageContext.request.contextPath}/admin/table/users?message=import">
+                                <input type="file" name="file">
+                                <button type="submit">Upload</button>
+                            </form>
+                        </div>
                         <div class="table-responsive">
                             <table
-                                    class="table"
+                                    class="display nowrap"
                                     id="dataTable"
-                                    width="100%"
-                                    cellspacing="0"
+                                    style="width: 100%"
                             >
                                 <thead>
                                 <tr>
                                     <th>ID</th>
                                     <th>Tên</th>
-                                    <th>Ngày tạo</th>
-                                    <th>Giới tính</th>
                                     <th>Email</th>
+                                    <th>Mật khẩu</th>
+                                    <th>Giới tính</th>
                                     <th>Quyền</th>
+                                    <th>Ngày sinh</th>
                                     <th>Số điện thoại</th>
                                     <th>Trạng thái</th>
                                     <th>Hành động</th>
@@ -287,10 +279,11 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Tên</th>
-                                    <th>Ngày tạo</th>
-                                    <th>Giới tính</th>
                                     <th>Email</th>
+                                    <th>Mật khẩu</th>
+                                    <th>Giới tính</th>
                                     <th>Quyền</th>
+                                    <th>Ngày sinh</th>
                                     <th>Số điện thoại</th>
                                     <th>Trạng thái</th>
                                     <th>Hành động</th>
@@ -302,10 +295,11 @@
                                     <tr>
                                         <td class="userId">${user.id}</td>
                                         <td>${user.name}</td>
-                                        <td>${user.createAt}</td>
-                                        <td>${user.gender}</td>
                                         <td>${user.email}</td>
+                                        <td>${user.password}</td>
+                                        <td>${user.gender}</td>
                                         <td>${user.role}</td>
+                                        <td>${user.dateOfBirth}</td>
                                         <td>${user.phoneNumber}</td>
                                         <td>${user.isDeleted == 0 ? "Chưa xóa":"Xóa mềm"}</td>
                                         <td class="text-center">
@@ -326,7 +320,7 @@
                 </div>
             </div>
 
-            <jsp:include page="/frontend/components/adminFooter/adminFooter.jsp"/>
+            <jsp:include page="/frontend/components/Admin/adminFooter/adminFooter.jsp"/>
 
         </div>
     </div>
@@ -557,26 +551,8 @@
             </div>
         </div>
     </div>
-    <!-- Bootstrap core JavaScript-->
 
-    <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"
-    ></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="${pageContext.request.contextPath}/js/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="${pageContext.request.contextPath}/js/allUser.js"></script>
-    <script src="${pageContext.request.contextPath}/js/sb-admin-2.min.js"></script>
-
-    <script src="${pageContext.request.contextPath}/js/jquery.dataTables.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/dataTables.bootstrap4.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/datatable.js"></script>
+    <jsp:include page="/frontend/components/Admin/scripts/adminScripts/datatable.jsp"/>
     <script>
         const checkbox = document.getElementById('showDeleted');
         const hiddenInput = document.querySelector('.isDeleted');
@@ -584,8 +560,6 @@
         checkbox.addEventListener('change', function () {
             hiddenInput.value = this.checked ? 1 : 0;
         });
-    </script>
-    <script>
         document.getElementById("createUserForm").addEventListener("submit", function (e) {
             const messageCreateOrUpdate = document.getElementsByClassName("messageCreateOrUpdate").value;
             if (messageCreateOrUpdate == "create") {

@@ -4,13 +4,15 @@ import java.math.BigDecimal;
 
 public class CartItem {
     private Belts belt;
+    private BeltVariant variant;
     private int quantity;
     private double price;
 
-    public CartItem(Belts belt, int quantity, double price) {
+    public CartItem(Belts belt, int quantity, double price, BeltVariant variant) {
         this.belt = belt;
         this.quantity = quantity;
         this.price = price;
+        this.variant = variant;
     }
 
     public Belts getBelt() {
@@ -35,5 +37,13 @@ public class CartItem {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public BeltVariant getVariant() {
+        return variant;
+    }
+
+    public void setVariant(BeltVariant variant) {
+        this.variant = variant;
     }
 }
