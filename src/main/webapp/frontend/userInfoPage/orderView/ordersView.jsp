@@ -83,60 +83,62 @@
         </div>
     </div>
 </div>
-<div class="container-lg mt-3 mb-5">
-    <div
-            class="d-flex justify-content-between"
-            style="white-space: nowrap; margin-top: 150px"
-    >
-        <div class="d-inline-block fw-bold mb-4" style="padding: 12px">
-            <a
-                    class="text-dark text-decoration-none custom_size--19"
-                    href="${pageContext.request.contextPath}/userInfo"
-            >Tài khoản</a
-            >
-        </div>
-        <div class="d-inline-block fw-bold " style="padding: 12px">
-            <a
-                    class="text-dark text-decoration-none custom_size--19"
-                    href="${pageContext.request.contextPath}/userProfile"
-            >Hồ sơ</a
-            >
-        </div>
-        <div class="d-inline-block fw-bold" style="padding: 12px">
-            <a
-                    class="text-dark text-decoration-none custom_size--19"
-                    href="${pageContext.request.contextPath}/userAddress?userId=${sessionScope.auth.id}"
-            >Địa chỉ</a
-            >
-        </div>
-        <div class="d-inline-block fw-bold " style="padding: 12px">
-            <a
-                    class="text-dark text-decoration-none custom_size--19"
-                    href="${pageContext.request.contextPath}/userPrivacy"
-            >Riêng tư</a
-            >
-        </div>
-        <div class="d-inline-block fw-bold custom_active" style="padding: 12px">
-            <a
-                    class="text-dark text-decoration-none custom_size--19"
-                    href="${pageContext.request.contextPath}/viewOrders"
-            >Đơn hàng</a
-            >
+<div class="container my-3">
+    <div class="row">
+        <h2 class="mt-5 mb-3">Tài khoản của tôi</h2>
+        <div
+                class="d-flex col-12"
+                style="white-space: nowrap;"
+        >
+            <div class="d-inline-block fw-bold mb-4" style="padding: 12px">
+                <a
+                        class="custom_size--19"
+                        href="${pageContext.request.contextPath}/userInfo"
+                >Tài khoản</a
+                >
+            </div>
+            <div class="d-inline-block fw-bold " style="padding: 12px">
+                <a
+                        class="custom_size--19"
+                        href="${pageContext.request.contextPath}/userProfile"
+                >Hồ sơ</a
+                >
+            </div>
+            <div class="d-inline-block fw-bold" style="padding: 12px">
+                <a
+                        class="custom_size--19"
+                        href="${pageContext.request.contextPath}/userAddress?userId=${sessionScope.auth.id}"
+                >Địa chỉ</a
+                >
+            </div>
+            <div class="d-inline-block fw-bold " style="padding: 12px">
+                <a
+                        class="custom_size--19"
+                        href="${pageContext.request.contextPath}/userPrivacy"
+                >Riêng tư</a
+                >
+            </div>
+            <div class="d-inline-block fw-bold custom_active" style="padding: 12px">
+                <a
+                        class="text-white custom_size--19"
+                        href="${pageContext.request.contextPath}/viewOrders"
+                >Đơn hàng</a
+                >
+            </div>
         </div>
     </div>
-    <div class="container">
+
+    <div class="container container-sm border rounded">
         <div class="userInfo__content--middle mb-5">
             <h2 class="mt-4 mb-4 fw-light">Các đơn hàng mà bạn đã đặt</h2>
             <c:forEach var="order" items="${orders}">
-                <div class="border rounded p-3 container-sm mb-2">
+                <div class="border p-3 container-sm mb-2">
                     <fmt:parseDate value="${order.orderDate}" pattern="yyyy-MM-dd" var="formattedDate"/>
-                    <h2 class="ms-1 fw-light custom_size--19">
+                    <h2 class="fw-light custom_size--19">
                         Ngày đặt hàng: <fmt:formatDate value="${formattedDate}" pattern="dd-MM-yyyy"/>
                     </h2>
-                    <h2 class="ms-1 fw-light custom_size--19">Order#${order.id}</h2>
-                    <h2 class="ms-1 fw-light custom_size--16">
-                        Tổng tiền: ${order.orderTotal} vnđ
-                    </h2>
+                    <h2 class="fw-light custom_size--19">Order#${order.id}</h2>
+
                     <c:forEach var="item" items="${order.orderDetails}">
                         <div class="container ps-sm-0 border rounded mb-3" id="item1">
                             <div class="row-sm">
@@ -158,10 +160,10 @@
                                             <div
                                                     class="d-flex justify-content-between custom_title_container"
                                             >
-                                                <h4 class="custom_size--19 fw-light d-lg-none title">
+                                                <h4 class="custom_size--19 m-l3 fw-bold d-lg-none title">
                                                         ${item.beltName}
                                                 </h4>
-                                                <h4 class="custom_size--19 fw-light d-none d-lg-block">
+                                                <h4 class="custom_size--19 ml-3 fw-bold d-none d-lg-block">
                                                         ${item.beltName}
                                                 </h4>
                                                 <h4
@@ -199,6 +201,10 @@
                         </div>
 
                     </c:forEach>
+
+                    <h2 class="fw-bold custom_size--19">
+                        Tổng tiền: ${order.orderTotal} vnđ
+                    </h2>
                     <div class="py-2 w-100 d-flex justify-content-between mt-3">
                         <p
                                 class="col-sm-10 ms-sm-2 mt-sm-2 mb-sm-2 ps-sm-0 ms-4 ms-2 d-md-none d-lg-none"
@@ -212,7 +218,7 @@
                             <strong>Vận chuyển: </strong>nhận hàng từ ${order.shippingDate}
                         </p>
                         <button
-                                class="btn btn-dark fs-6 custom__btn"
+                                class="btn btn-dark custom__btn"
                                 data-bs-toggle="modal"
                                 data-bs-target="#exampleModal"
                         >
