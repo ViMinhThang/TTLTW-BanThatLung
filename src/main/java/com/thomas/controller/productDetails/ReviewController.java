@@ -20,15 +20,15 @@ public class ReviewController extends HttpServlet {
         int beltId = Integer.parseInt(request.getParameter("beltId"));
         int page = Integer.parseInt(request.getParameter("page"));
         int size = Integer.parseInt(request.getParameter("size"));
-
+        int variantId = Integer.parseInt(request.getParameter("variantId"));
         //offset để skip bao nhiêu row trong csdl
         int offset = (page - 1) * size;
 
-        List<Reviews> reviews = uploadReviewService.getReviewsByBeltIdPagination(beltId, offset, size);
+        List<Reviews> reviews = uploadReviewService.getReviewsByBeltIdPagination(beltId, offset, size, variantId);
         for (Reviews review : reviews) {
             uploadReviewService.setReviewerName(review);
         }
-        int totalReviews = uploadReviewService.getTotalReviewsCount(beltId);
+        int totalReviews = uploadReviewService.getTotalReviewsCount(beltId,variantId);
 
         String reviewsHTML = generateReviewsHTML(reviews);
 

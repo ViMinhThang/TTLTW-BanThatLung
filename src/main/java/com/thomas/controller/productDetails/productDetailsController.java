@@ -45,7 +45,7 @@ public class productDetailsController extends HttpServlet {
 
         }
         List<Category> beltCategory = productService.findCategory(beltId, variantId);
-        int totalReview = uploadReviewService.getTotalReviewsCount(beltId);
+        int totalReview = uploadReviewService.getTotalReviewsCount(beltId,variantId);
         List<String> descBeltImage = productService.getAllDescImage(beltId);
         List<Belts> randomBelts = productService.getRandomBelts();
         for (Belts b : randomBelts) {
@@ -82,8 +82,9 @@ public class productDetailsController extends HttpServlet {
             int rating = Integer.parseInt(request.getParameter("rating"));
             String content = request.getParameter("desc");
             int beltId = Integer.parseInt(request.getParameter("beltId"));
-            if (uploadReviewService.createReview(rating, content, beltId, userId)) {
-                response.sendRedirect("/productDetails?beltId=" + beltId);
+            int variantId = Integer.parseInt(request.getParameter("variantId"));
+            if (uploadReviewService.createReview(rating, content, beltId, userId, variantId)) {
+                response.sendRedirect("/productDetails?beltId=" + beltId + "&variantId=" + variantId);
             }
         }
     }

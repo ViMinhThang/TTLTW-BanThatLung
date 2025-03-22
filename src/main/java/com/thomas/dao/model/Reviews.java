@@ -12,11 +12,13 @@ public class Reviews implements java.io.Serializable {
     private int reviewerStar;
     private String reviewerName;
     private String beltName;
+    private int variantId;
+
     public Reviews() {
 
     }
 
-    public Reviews(int id, int beltId, int userId, String content, LocalDateTime createdAt, int reviewerStar, String reviewerName, String beltName) {
+    public Reviews(int id, int beltId, int userId, String content, LocalDateTime createdAt, int reviewerStar, String reviewerName, String beltName, int variantId) {
         this.id = id;
         this.beltId = beltId;
         this.userId = userId;
@@ -25,6 +27,7 @@ public class Reviews implements java.io.Serializable {
         this.reviewerStar = reviewerStar;
         this.reviewerName = reviewerName;
         this.beltName = beltName;
+        this.variantId = variantId;
     }
 
     public int getId() {
@@ -89,5 +92,13 @@ public class Reviews implements java.io.Serializable {
 
     public void setBeltName(String beltName) {
         this.beltName = beltName;
+    }
+
+    public int getVariantId() {
+        return variantId;
+    }
+
+    public void setVariantId(int variantId) {
+        this.variantId = variantId;
     }
 }

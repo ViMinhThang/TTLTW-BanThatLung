@@ -44,21 +44,22 @@ public class UploadReviewService {
         return reviewDao.findProductNameByReviewId(reviewId);
     }
 
-    public List<Reviews> getReviewsByBeltIdPagination(int beltId, int offset, int size) {
-        return reviewDao.getReviewsByBeltIdPagination(beltId, offset, size);
+    public List<Reviews> getReviewsByBeltIdPagination(int beltId, int offset, int size, int variantId) {
+        return reviewDao.getReviewsByBeltIdPagination(beltId, offset, size, variantId);
     }
 
-    public boolean createReview(int rating, String content, int beltId, int userId) {
+    public boolean createReview(int rating, String content, int beltId, int userId, int variantId) {
         Reviews review = new Reviews();
         review.setBeltId(beltId);
         review.setUserId(userId);
         review.setContent(content);
         review.setReviewerStar(rating);
         review.setCreatedAt(LocalDateTime.now());
+        review.setVariantId(variantId);
         return reviewDao.createReview(review);
     }
 
-    public int getTotalReviewsCount(int beltId) {
-        return reviewDao.getAllReviewByIdSize(beltId);
+    public int getTotalReviewsCount(int beltId, int variantId) {
+        return reviewDao.getAllReviewByIdSize(beltId, variantId);
     }
 }

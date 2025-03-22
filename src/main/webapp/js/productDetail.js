@@ -4,11 +4,13 @@ $(document).ready(function () {
     var reviewsPerPage = 5;
     window.loadReviews = function (page) {
         var beltId = $("#beltIdReviews").val();
+        var variantId = $("#variantIdReviews").val()
         $.ajax({
             url: '/getReviews',
             type: 'GET',
             data: {
                 beltId: beltId,
+                variantId: variantId,
                 page: page,
                 size: reviewsPerPage
             },

@@ -122,6 +122,7 @@ CREATE TABLE reviews
     beltId     INT NOT NULL,
     userId     INT NOT NULL,
     content    VARCHAR(1000),
+    variantId  INT NOT NULL,
     ratingStar INT CHECK (ratingStar BETWEEN 1 AND 5),
     createdAt  DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (beltId) REFERENCES belts (id) ON DELETE CASCADE,

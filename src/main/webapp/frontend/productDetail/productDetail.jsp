@@ -52,19 +52,19 @@
             <div class="col-2 belts-thumbnails d-flex flex-column align-item-start justify-content-between mt-0 me-2">
                 <c:forEach var="image" items="${variant.images}" varStatus="status">
                     <img src="${pageContext.request.contextPath}${image}"
-                         class="${status.index!=4 ? "mb-2":""}"
+                         class="${status.index!=4 ? "mb-2":""} w-50"
                          alt="Thumbnail ${status.index+1}" data-bs-target="#productCarousel"
                          data-bs-slide-to="${status.index}"/>
                 </c:forEach>
 
             </div>
-            <div id="productCarousel" class="carousel slide col-2 belts w-75 h-1`00">
-                <div class="carousel-inner h-100">
+            <div id="productCarousel" class="carousel slide col-2 belts w-75">
+                <div class="carousel-inner">
                     <c:set var="globalIndex" value="0" scope="page"/>
                     <c:forEach var="image" items="${variant.images}" varStatus="status">
-                        <div class="carousel-item h-100 ${globalIndex == 0 ? "active":""}">
+                        <div class="carousel-item ${globalIndex == 0 ? "active":""}">
                             <img src="${pageContext.request.contextPath}${image}"
-                                 class="img-fluid h-100"
+                                 class="img-fluid"
                                  alt="Product Image ${globalIndex}"/>
                         </div>
                         <c:set var="globalIndex" value="${globalIndex + 1}" scope="page"/>
@@ -205,144 +205,164 @@
                     Thêm vào yêu thích
                 </button>
             </div>
-
-            <div class="accordion" id="productAccordion">
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingDescription">
-                        <button class="accordion-button rounded-0" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseDescription" aria-expanded="true"
-                                aria-controls="collapseDescription">
-                            Mô tả sản phẩm
-                        </button>
-                    </h2>
-                    <div id="collapseDescription" class="accordion-collapse collapse show"
-                         aria-labelledby="headingDescription"
-                         data-bs-parent="#productAccordion">
-                        <div class="accordion-body">
-                            ${belt.description}
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingCareLabel">
-                        <button class="accordion-button collapsed rounded-0"
-                                type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#collapseCareLabel"
-                                aria-expanded="false"
-                                aria-controls="collapseCareLabel">
-                            Ảnh
-                        </button>
-                    </h2>
-                    <div id="collapseCareLabel"
-                         class="accordion-collapse collapse"
-                         aria-labelledby="headingCareLabel"
-                         data-bs-parent="#productAccordion">
-                        <div class="accordion-body overflow-auto d-flex justify-content-center flex-column align-items-center"
-                             style="height: 500px;">
-                            <c:forEach var="image" items="${descBeltImage}" varStatus="status">
-                                <img class="mb-5" src="${pageContext.request.contextPath}${image}" alt="${status.index}"
-                                     style="width: 100%">
-                            </c:forEach>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
-<div class="p-5 my-5">
-    <input id="beltIdReviews" type="hidden" name="beltId" value="${belt.id}">
-    <input id="variantIdReviews" type="hidden" name="variantId" value="${variant.id}">
-    <div class="col-7">
-        <p class="fs-3">${totalReview} đánh giá</p>
-        <div class="d-flex border-bottom mb-3">
-            <p class="mb-0 fs-4">Đánh giá cho sản phẩm này</p>
-            <span class="ps-3 pe-3 pb-1 pt-1 ms-2 bg-light rounded-pill mb-2">${totalReview}</span>
-        </div>
-        <div id="reviewsContainer">
+<div class="d-flex flex-column ms-5">
+    <section class="content-item">
+        <div id="navigation-target-description">
+            <div data-testid="accordion" class="accordion">
+                <!-- Phần header của accordion -->
+                <button class="accordion__header">
+                    <div class="accordion__header-text">
+                        <h2 class="accordion-title">Mô tả</h2>
+                    </div>
+                    <div class="accordion__header-icon">
+                    <span data-testid="dropdown" class="icon-wrapper" role="img">
+                        <!-- Sử dụng icon mũi tên từ FontAwesome -->
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+                    </div>
+                </button>
 
-        </div>
-    </div>
-    <section class="mt-3">
-        <nav aria-label="Page__navigation__example" id="pagination__bar">
-            <div class="container paginationWrapper ps-0">
-                <ul class="pagination pagination__Ul">
-
-                </ul>
+                <!-- Phần nội dung của accordion -->
+                <div class="accordion__content">
+                    <div class="content-padding">
+                        <div class="description">
+                            <!-- Phần văn bản mô tả -->
+                            <div class="text-content">
+                                <p class="gl-vspace">${belt.description}</p> <!-- Dữ liệu động từ biến -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </nav>
+        </div>
     </section>
-    <c:if test="${sessionScope.auth.id!=null && isPurchasedBelt}">
-        <div class="d-flex flex-column mt-5 custom_bg p-4" style="width: 60%">
-            <form action="${pageContext.request.contextPath}/productDetails" method="POST">
-                <input type="hidden" name="userId" value="${sessionScope.auth.id}">
-                <input type="hidden" name="message" value="postComment">
-                <input type="hidden" name="beltId" value="${belt.id}">
-                <h2>Viết đánh giá</h2>
-                <div class="row mt-2">
-                    <div class="d-flex align-item-center">
-                        <img src="${pageContext.request.contextPath}${variant.images[0]}" class=""
-                             alt="..." width="200px"/>
-                        <div class="ms-4">
-                            <h5 class="card-title text-start fs-6">
-                                    ${belt.name}
-                            </h5>
-                            <div class="rating-card ">
-                                <div class="star-rating animated-stars">
-                                    <input type="radio" id="star5" name="rating" value="5">
-                                    <label for="star5" class="bi bi-star-fill"></label>
-                                    <input type="radio" id="star4" name="rating" value="4">
-                                    <label for="star4" class="bi bi-star-fill"></label>
-                                    <input type="radio" id="star3" name="rating" value="3">
-                                    <label for="star3" class="bi bi-star-fill"></label>
-                                    <input type="radio" id="star2" name="rating" value="2">
-                                    <label for="star2" class="bi bi-star-fill"></label>
-                                    <input type="radio" id="star1" name="rating" value="1">
-                                    <label for="star1" class="bi bi-star-fill"></label>
+    <section class="content-item">
+        <div id="navigation-target-reviews">
+            <div data-testid="accordion" class="accordion">
+                <!-- Phần header của accordion đánh giá -->
+                <button class="accordion__header">
+                    <div class="accordion__header-text">
+                        <h2 class="accordion-title">Đánh giá</h2>
+                    </div>
+                    <div class="accordion__header-icon">
+                    <span data-testid="dropdown" class="icon-wrapper" role="img">
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+                    </div>
+                </button>
+
+                <!-- Phần nội dung của accordion đánh giá -->
+                <div class="accordion__content">
+                    <div class="content-padding">
+                        <div class="d-flex flex-column justify-content-center">
+                            <input id="beltIdReviews" type="hidden" name="beltId" value="${belt.id}">
+                            <input id="variantIdReviews" type="hidden" name="variantId" value="${variant.id}">
+                            <div class="d-flex justify-content-center flex-column">
+                                <p class="fs-3">${totalReview} đánh giá</p>
+                                <div class="d-flex border-bottom mb-3">
+                                    <p class="mb-0 fs-4">Đánh giá cho sản phẩm này</p>
+                                    <span class="ps-3 pe-3 pb-1 pt-1 ms-2 bg-light rounded-pill mb-2">${totalReview}</span>
+                                </div>
+                                <div id="reviewsContainer">
+
                                 </div>
                             </div>
-                            <textarea name="desc" class="pt-2 ps-1 mt-4" cols="100" rows="5" style="resize: none">
-              </textarea>
+                            <section class="d-flex justify-content-end">
+                                <nav aria-label="Page__navigation__example" id="pagination__bar">
+                                    <div class="container paginationWrapper ps-0">
+                                        <ul class="pagination pagination__Ul">
+
+                                        </ul>
+                                    </div>
+                                </nav>
+                            </section>
+                            <c:if test="${sessionScope.auth.id!=null && isPurchasedBelt}">
+                                <div class="d-flex flex-column mt-5 custom_bg p-4">
+                                    <form action="${pageContext.request.contextPath}/productDetails" method="POST">
+                                        <input type="hidden" name="userId" value="${sessionScope.auth.id}">
+                                        <input type="hidden" name="message" value="postComment">
+                                        <input type="hidden" name="beltId" value="${belt.id}">
+                                        <input type="hidden" name="variantId" value="${variant.id}">
+                                        <h2>Viết đánh giá</h2>
+                                        <div class="row mt-2">
+                                            <div class="d-flex align-item-center">
+                                                <img src="${pageContext.request.contextPath}${variant.images[0]}"
+                                                     class=""
+                                                     alt="..." width="200px"/>
+                                                <div class="ms-4">
+                                                    <h5 class="card-title text-start fs-6">
+                                                            ${belt.name}
+                                                    </h5>
+                                                    <div class="rating-card ">
+                                                        <div class="star-rating animated-stars">
+                                                            <input type="radio" id="star5" name="rating" value="5">
+                                                            <label for="star5" class="bi bi-star-fill"></label>
+                                                            <input type="radio" id="star4" name="rating" value="4">
+                                                            <label for="star4" class="bi bi-star-fill"></label>
+                                                            <input type="radio" id="star3" name="rating" value="3">
+                                                            <label for="star3" class="bi bi-star-fill"></label>
+                                                            <input type="radio" id="star2" name="rating" value="2">
+                                                            <label for="star2" class="bi bi-star-fill"></label>
+                                                            <input type="radio" id="star1" name="rating" value="1">
+                                                            <label for="star1" class="bi bi-star-fill"></label>
+                                                        </div>
+                                                    </div>
+                                                    <textarea name="desc" class="pt-2 ps-1 mt-4" cols="70" rows="5"
+                                                              style="resize: none">
+                                                    </textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex ms-3">
+                                            <c:choose>
+                                                <c:when test="${sessionScope.auth.image == null}">
+                                                    <img src="${pageContext.request.contextPath}/assets/icons/default_profile.svg"
+                                                         alt="User Avatar"
+
+                                                         class="mt-3" width="50px" height="50px">
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <img src="${sessionScope.auth.image}"
+                                                         alt="User Avatar"
+
+                                                         class="mt-3" width="50px" height="50px">
+                                                </c:otherwise>
+                                            </c:choose>
+                                            <p class="mt-4 ms-3">Đánh giá bởi ${sessionScope.auth.name}</p>
+                                        </div>
+                                        <div class="d-flex justify-content-end">
+                                            <c:choose>
+                                                <c:when test="${sessionScope.auth != null}">
+                                                    <button type="submit" class="btn btn-dark me-4 p-2 px-3 mt-3">Gửi
+                                                        đánh
+                                                        giá
+                                                    </button>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <a href="${pageContext.request.contextPath}/login"
+                                                       class="btn btn-dark me-4 p-2 px-3 mt-3">Gửi
+                                                        đánh giá</a>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
+
+                                    </form>
+
+
+                                </div>
+
+                            </c:if>
                         </div>
                     </div>
                 </div>
-                <div class="d-flex ms-3">
-                    <c:choose>
-                        <c:when test="${sessionScope.auth.image == null}">
-                            <img src="${pageContext.request.contextPath}/assets/icons/default_profile.svg"
-                                 alt="User Avatar"
-
-                                 class="mt-3" width="50px" height="50px">
-                        </c:when>
-                        <c:otherwise>
-                            <img src="${sessionScope.auth.image}"
-                                 alt="User Avatar"
-
-                                 class="mt-3" width="50px" height="50px">
-                        </c:otherwise>
-                    </c:choose>
-                    <p class="mt-4 ms-3">Đánh giá bởi ${sessionScope.auth.name}</p>
-                </div>
-                <div class="d-flex justify-content-end">
-                    <c:choose>
-                        <c:when test="${sessionScope.auth != null}">
-                            <button type="submit" class="btn btn-dark me-4 p-2 px-3 mt-3">Gửi đánh giá</button>
-                        </c:when>
-                        <c:otherwise>
-                            <a href="${pageContext.request.contextPath}/login" class="btn btn-dark me-4 p-2 px-3 mt-3">Gửi
-                                đánh giá</a>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-
-            </form>
-
-
+            </div>
         </div>
-
-    </c:if>
+    </section>
 </div>
+
 <div class="viewed__component ps-5 pt-3 youmightlike__component mb-5 pe-5 pb-5"
      style="margin-top: 200px">
     <p class="viewed__title ms-0 fs-2">Bạn có thể thích</p>
@@ -440,6 +460,33 @@
         if (parseInt(quantity.value) > 1) {
             quantity.value = parseInt(quantity.value) - 1;
         }
+    });
+    document.querySelectorAll('.star-rating:not(.readonly) label').forEach(star => {
+        star.addEventListener('click', function () {
+            this.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 200);
+        });
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        const descriptionHeader = document.querySelector("#navigation-target-description .accordion__header");
+        const descriptionContent = document.querySelector("#navigation-target-description .accordion__content");
+        const descriptionArrow = document.querySelector("#navigation-target-description .fa-chevron-down");
+
+        descriptionHeader.addEventListener("click", function () {
+            descriptionContent.classList.toggle("active");
+            descriptionArrow.style.transform = descriptionContent.classList.contains("active") ? "rotate(180deg)" : "rotate(0deg)";
+        });
+
+        const reviewsHeader = document.querySelector("#navigation-target-reviews .accordion__header");
+        const reviewsContent = document.querySelector("#navigation-target-reviews .accordion__content");
+        const reviewsArrow = document.querySelector("#navigation-target-reviews .fa-chevron-down");
+
+        reviewsHeader.addEventListener("click", function () {
+            reviewsContent.classList.toggle("active");
+            reviewsArrow.style.transform = reviewsContent.classList.contains("active") ? "rotate(180deg)" : "rotate(0deg)";
+        });
     });
 </script>
 <jsp:include page="/frontend/header_footer/footer.jsp"/>

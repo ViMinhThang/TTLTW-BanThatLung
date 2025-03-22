@@ -213,7 +213,6 @@
                     class="nav-icon"
                     src="${pageContext.request.contextPath}/assets/icons/cart.svg"
                     alt=""
-                    style="width: 26px; height: 26px"
             />
             <span id="cart_received" class="nav-item favorite__count">${cartSize!=null ?cartSize:0}</span>
         </a>

@@ -73,12 +73,13 @@ public class ReviewDao {
         });
     }
 
-    public int getAllReviewByIdSize(int beltId) {
-        String sql = "SELECT COUNT(*) FROM reviews WHERE beltId = :beltId";
+    public int getAllReviewByIdSize(int beltId, int variantId) {
+        String sql = "SELECT COUNT(*) FROM reviews WHERE beltId = :beltId AND variantId = :variantId";
 
         return JDBIConnect.get().withHandle(handle ->
                 handle.createQuery(sql)
                         .bind("beltId", beltId)
+                        .bind("variantId", variantId)
                         .mapTo(Integer.class)
                         .one()
         );
@@ -87,24 +88,26 @@ public class ReviewDao {
 
     public boolean createReview(Reviews review) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "INSERT INTO reviews (beltId,userId,content,ratingStar,createdAt) VALUES (:beltId,:userId,:content,:ratingStar,:createdAt)";
+            String sql = "INSERT INTO reviews (beltId,userId,variantId,content,ratingStar,createdAt) VALUES (:beltId,:userId,:variantId,:content,:ratingStar,:createdAt)";
             return h.createUpdate(sql)
                     .bind("beltId", review.getBeltId())
                     .bind("userId", review.getUserId())
                     .bind("content", review.getContent())
                     .bind("ratingStar", review.getReviewerStar())
+                    .bind("variantId", review.getVariantId())
                     .bind("createdAt", review.getCreatedAt()).execute() > 0;
         });
     }
 
-    public List<Reviews> getReviewsByBeltIdPagination(int beltId, int offset, int size) {
-        String sql = "SELECT * FROM reviews WHERE beltId = :beltId LIMIT :size OFFSET :offset";
+    public List<Reviews> getReviewsByBeltIdPagination(int beltId, int offset, int size, int variantId) {
+        String sql = "SELECT * FROM reviews WHERE beltId = :beltId AND variantId=:variantId LIMIT :size OFFSET :offset";
 
         return JDBIConnect.get().withHandle(handle ->
                 handle.createQuery(sql)
                         .bind("beltId", beltId)
                         .bind("size", size)
                         .bind("offset", offset)
+                        .bind("variantId", variantId)
                         .mapToBean(Reviews.class)
                         .list()
         );
