@@ -49,7 +49,7 @@
         </ol>
     </nav>
 </div>
-<div class="custom_margin--container" style="margin-top: 250px">
+<div class="custom_margin--container" style="margin-top: 150px">
     <div class="row">
         <div class="col-6 mb-5 pe-5" style="margin-left: 196.25px">
             <div class="row">
@@ -89,8 +89,9 @@
                         <div class="mt-2">
                             <label for="quantity-${cartItem.variant.id}" class="fw-bold">Số lượng:</label>
                             <select id="quantity-${cartItem.variant.id}"
-                                    class="form-select w-25 d-inline-block"
-                                    onchange="updateCart(${cartItem.variant.id}, this.value)">
+                                    class="form-select option_select"
+                                    onchange="updateCart(${cartItem.variant.id}, this.value)"
+                                ${cartItem.variant.stockQuantity == 0 ? 'disabled' : ''}>
                                 <c:forEach var="i" begin="1" end="${cartItem.variant.stockQuantity}">
                                     <option value="${i}" ${i == cartItem.quantity ? 'selected' : ''}>${i}</option>
                                 </c:forEach>

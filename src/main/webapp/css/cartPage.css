@@ -9,7 +9,7 @@
   border-radius: 0px;
 }
 .form-select:focus {
-  box-shadow: none;
+  /*box-shadow: none;*/
 }
 .custom_button {
   display: flex;
@@ -69,4 +69,11 @@
 
 .breadcrumb-item.active {
   color: #1c1c1c;
+}
+
+.option_select {
+  width: 100px;
+  height: 35px;
+  text-align: center;
+  border: 1px solid black;
 }
