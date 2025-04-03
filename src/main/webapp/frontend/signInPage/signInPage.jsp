@@ -16,7 +16,15 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/signInPage.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css"/>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- Thêm script reCAPTCHA v3 -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6Ld-QAgrAAAAAJTKPkDgBUW7_qoOrzAMiDOocwfR"></script>
+    <script>
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6Ld-QAgrAAAAAJTKPkDgBUW7_qoOrzAMiDOocwfR', {action: 'login'}).then(function(token) {
+                document.getElementById('g-recaptcha-response').value = token;
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -58,7 +66,7 @@
                     <p class="text-danger mt-2 custom_size--16 mb-0">${errorMessage}</p>
                 </c:if>
             </div>
-            <div class="g-recaptcha" data-sitekey="6Le5fgQrAAAAAMgyKfVTQAw72R84_TEawwQORoVY"></div>
+            <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
             <div class="d-flex flex-column mt-3">
                 <a
                         class="text-dark"
