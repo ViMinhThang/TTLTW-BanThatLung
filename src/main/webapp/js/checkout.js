@@ -94,7 +94,7 @@ $(document).ready(function () {
             $("#popUpPayment").fadeOut();
         } else if (paymentMethod === "Thanh toán khi nhận hàng") {
             $("#openFormButtonPayment").text("Thanh toán khi nhận hàng");
-            $(".method-image-display").attr("src", "/assets/icons/Delivery.svg");
+            $(".method-image-display").attr("src", "/assets/icons/COD.svg");
             $(".submitPaymentMethod").val("Delivery")
             $("#popUpPayment").fadeOut();
         }

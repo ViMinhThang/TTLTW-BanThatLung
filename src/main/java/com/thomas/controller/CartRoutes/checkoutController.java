@@ -1,6 +1,7 @@
 package com.thomas.controller.CartRoutes;
 
 import com.thomas.dao.model.*;
+import com.thomas.services.EmailService;
 import com.thomas.services.UploadAddressService;
 import com.thomas.services.UploadPaymentMethod;
 import com.thomas.services.UploadUserService;
@@ -21,6 +22,7 @@ public class checkoutController extends HttpServlet {
     UploadPaymentMethod uploadPaymentMethod = new UploadPaymentMethod();
     DecimalFormatSymbols symbols = new DecimalFormatSymbols();
     DecimalFormat formatter = new DecimalFormat("#,###.000", symbols);
+    EmailService emailService = new EmailService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -58,6 +60,12 @@ public class checkoutController extends HttpServlet {
         request.setAttribute("shipmentPrice", formattedShipmentPrice);
         request.setAttribute("grandTotal", formattedGrandTotal);
         request.setAttribute("totalPrice", formattedTotalPrice);
+
+        String subject = "Thông báo đơn hàng";
+        String content = "Đơn hàng của bạn đã được đặt thành công. Tổng giá trị đơn hàng là: " + formattedGrandTotal + " VNĐ.\n" +
+                "Chi tiết đơn hàng:\n" + cart.toString() + "\n" + "cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.\n";
+        emailService.sendEmail(user.getEmail(), subject, content);
+
         request.getRequestDispatcher("/frontend/cartPage/checkoutPage/checkoutPage.jsp").forward(request, response);
     }
 
