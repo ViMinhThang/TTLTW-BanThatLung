@@ -1,3 +1,55 @@
+CREATE PROCEDURE insert_coupons()
+BEGIN
+    DECLARE
+i INT DEFAULT 1;
+    WHILE
+i <= 100 DO
+        INSERT INTO coupons (code, discountRate, startDate, endDate, isActive)
+        VALUES (
+            CONCAT('CODE', i),                            -- Code: CODE1, CODE2, ..., CODE100
+            ROUND(RAND() * 100, 2),                      -- DiscountRate: Random discount between 0 and 100
+            DATE_ADD(NOW(), INTERVAL i DAY),             -- StartDate: Current date + i days
+            DATE_ADD(NOW(), INTERVAL (i + 30) DAY),      -- EndDate: StartDate + 30 days
+            IF(i % 2 = 0, 1, 0)                          -- isActive: Alternates between 1 and 0
+        );
+        SET
+i = i + 1;
+END WHILE;
+END
+
+CALL insert_coupons();
+
+
+
+CREATE PROCEDURE insert_users()
+BEGIN
+    DECLARE
+i INT DEFAULT 1;
+    WHILE
+i <= 100 DO
+        INSERT INTO users (name, email, dateOfBirth, password, image, isDeleted, gender, phoneNumber, role, token, isActive)
+        VALUES (
+            CONCAT('User ', i),                                -- name: User 1, User 2, ..., User 100
+            CONCAT('user', i, '@example.com'),                  -- email: user1@example.com, user2@example.com, ...
+            DATE_ADD('1990-01-01', INTERVAL (i * 10) YEAR),     -- dateOfBirth: Starting from 1990, increments by 10 years
+            '202cb962ac59075b964b07152d234b70',                -- password: Same for all users (MD5 hashed "123")
+            CONCAT('/images/users/user', i, '.jpg'),            -- image: /images/users/user1.jpg, /images/users/user2.jpg, ...
+            0,                                                 -- isDeleted: 0 (not deleted)
+            IF(i % 2 = 0, 'Female', IF(i % 3 = 0, 'Male', 'Non-binary')), -- gender: Alternates between Male, Female, and Non-binary
+            1234567890 + i,                                    -- phoneNumber: Incremental phone numbers starting from 1234567891
+            IF(i % 2 = 0, 1, IF(i % 3 = 0, 2, 3)),             -- role: Alternates between 1, 2, 3
+            NULL,                                              -- token: NULL
+            1                                                  -- isActive: 1 (active)
+        );
+        SET
+i = i + 1;
+END WHILE;
+END
+
+CALL insert_users();
+
+
+
 INSERT INTO users (name, email, dateOfBirth, password, image, isDeleted, gender, phoneNumber, role, token, isActive)
 VALUES ('John Doe', 'john.doe@example.com', '1990-05-15', '202cb962ac59075b964b07152d234b70', '/images/users/john.jpg',
         0, 'Male', 1234567890, 1, NULL, 1),
@@ -13,7 +65,7 @@ VALUES ('John Doe', 'john.doe@example.com', '1990-05-15', '202cb962ac59075b964b0
 INSERT INTO paymentMethods (name, isActive)
 VALUES ('GooglePay', 1),
        ('Delivery', 1),
-       ('Momo', 1);
+       ('Bank', 1);
 
 INSERT INTO belts (name, description, price, gender, releaseDate, isDeleted, discountRate, materialBelt)
 VALUES ('Classic Leather Belt', 'A premium leather belt for formal wear.', 29.99, 'Unisex', '2024-03-01', 0, 10.0,
