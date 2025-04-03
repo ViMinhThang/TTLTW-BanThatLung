@@ -162,15 +162,6 @@ CREATE TABLE beltfavorites
     FOREIGN KEY (favoriteId) REFERENCES favorites (id) ON DELETE CASCADE
 );
 
-CREATE TABLE userPaymentMethods
-(
-    userId          INT NOT NULL,
-    paymentMethodId INT NOT NULL,
-    isUse           INT NOT NULL,
-    PRIMARY KEY (userId, paymentMethodId),
-    FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE,
-    FOREIGN KEY (paymentMethodId) REFERENCES paymentMethods (id) ON DELETE CASCADE
-);
 
 CREATE TABLE coupons
 (

@@ -33,14 +33,10 @@ public class productAdminController extends HttpServlet {
             int variantId = Integer.parseInt(request.getParameter("variantId"));
             int beltId = Integer.parseInt(request.getParameter("productId"));
             PRODUCT_SERVICE.deleteProductVariant(beltId, variantId);
-            response.sendRedirect(request.getContextPath() + "/admin/table/belts");
-            return;
         } else if (message.equals("deleteRealVariant")) {
             int beltId = Integer.parseInt(request.getParameter("productId"));
             PRODUCT_SERVICE.deleteProduct(beltId, null);
         }
-
-
-        response.sendRedirect("/admin/table/belts/createProduct");
+        response.sendRedirect("/admin/table/belts");
     }
 }
