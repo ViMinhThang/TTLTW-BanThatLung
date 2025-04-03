@@ -7,7 +7,7 @@ public class AuthService {
     UserDao udao = new UserDao();
 
     public User checkLogin(String email, String password) {
-        User u = udao.findUserEmail(email);
+        User u = udao.findUserEmail(email,null);
         if (u != null && password != null && u.getIsActive() == 1 && u.getIsDeleted() == 0) {
 
             if (MD5Service.hashPassword(password).equals(u.getPassword())) {

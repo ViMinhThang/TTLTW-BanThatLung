@@ -1,5 +1,6 @@
 package com.thomas.controller.authentication;
 
+import com.thomas.dao.model.User;
 import com.thomas.services.TokenService;
 import com.thomas.services.UploadUserService;
 import jakarta.servlet.*;
@@ -16,6 +17,8 @@ public class confirmActiveController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String message = request.getParameter("messageRedirect");
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("auth");
         TokenService tokenService = new TokenService();
         String token = request.getParameter("token");
         if (token != null) {
@@ -24,7 +27,7 @@ public class confirmActiveController extends HttpServlet {
             if (userId != 0) {
                 active = tokenService.activeUser(userId);
             } else {
-                uploadUserService.deleteUser(userId);
+                uploadUserService.deleteUser(userId, user.getId());
             }
             if (userId != 0 && active) {
                 request.setAttribute("active", 1);
@@ -36,8 +39,8 @@ public class confirmActiveController extends HttpServlet {
             if (message != null) {
                 request.setAttribute("messageRedirect", message);
                 if (message.equals("orderDetailSuccess")) {
-                    HttpSession session = request.getSession();
-                    session.removeAttribute("cart");
+                    HttpSession session1 = request.getSession();
+                    session1.removeAttribute("cart");
                 }
             }
         } else {

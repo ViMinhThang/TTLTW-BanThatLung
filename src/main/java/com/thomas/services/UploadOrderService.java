@@ -46,7 +46,7 @@ public class UploadOrderService {
         return orderDao.deleteOrderById(orderId);
     }
 
-    public boolean createOrder(int userId, int paymentMethodId, int addressId, LocalDate orderDate, double grandTotal, String state, int isDeleted) {
+    public boolean createOrder(int userId, int paymentMethodId, int addressId, LocalDate orderDate, double grandTotal, String state, int isDeleted, int ediorId) {
         Order order = new Order();
         order.setUserId(userId);
         order.setPaymentMethodId(paymentMethodId);
@@ -55,7 +55,7 @@ public class UploadOrderService {
         order.setOrderTotal(grandTotal);
         order.setOrderStatus(state);
         order.setIsDeleted(isDeleted);
-        return orderDao.createOrder(order);
+        return orderDao.createOrderAndLog(order, ediorId);
     }
 
     public Order getLatestOrder() {
@@ -81,7 +81,7 @@ public class UploadOrderService {
         return orderDao.getAllOrderByUserId(userId);
     }
 
-    public boolean updateOrder(Order order) {
-        return orderDao.updateOrder(order);
+    public boolean updateOrder(Order order, int userId) {
+        return orderDao.updateOrderAndLog(order, userId);
     }
 }

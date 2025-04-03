@@ -3,6 +3,7 @@ package com.thomas.controller.AdminRoute.table.orders;
 import com.thomas.dao.model.Belts;
 import com.thomas.dao.model.Order;
 import com.thomas.dao.model.OrderDetails;
+import com.thomas.dao.model.User;
 import com.thomas.services.UploadOrderDetailService;
 import com.thomas.services.UploadOrderService;
 import com.thomas.services.ProductService;
@@ -26,6 +27,8 @@ public class addOrderDetailController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("auth");
         String productName = request.getParameter("productName");
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         double price = Double.parseDouble(request.getParameter("price"));
@@ -46,7 +49,7 @@ public class addOrderDetailController extends HttpServlet {
         newOrderDetail.setPrice(price);
         Order order = uploadOrderService.getOrderById(orderId);
         order.setOrderTotal(order.getOrderTotal() + newOrderDetail.getPrice());
-        uploadOrderService.updateOrder(order);
+        uploadOrderService.updateOrder(order, user.getId());
         boolean success = uploadOrderDetailService.addOrderDetails(newOrderDetail);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

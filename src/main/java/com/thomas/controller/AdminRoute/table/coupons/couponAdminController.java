@@ -1,6 +1,7 @@
 package com.thomas.controller.AdminRoute.table.coupons;
 
 import com.thomas.dao.model.Coupon;
+import com.thomas.dao.model.User;
 import com.thomas.services.UploadCouponService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -64,13 +65,14 @@ public class couponAdminController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("auth");
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
         String message = request.getParameter("message");
         if (message.equals("import")) {
             Part filePart = request.getPart("file");
             if (filePart != null) {
-                importCSV(filePart);
+                importCSV(filePart, user.getId());
                 response.sendRedirect("/admin/table/coupons");
                 return;
             }
@@ -78,7 +80,7 @@ public class couponAdminController extends HttpServlet {
         int couponId = 0;
         if (message.equals("delete")) {
             couponId = Integer.parseInt(request.getParameter("couponId"));
-            uploadCouponService.deleteCoupon(couponId);
+            uploadCouponService.deleteCoupon(couponId, user.getId());
             response.sendRedirect(request.getContextPath() + "/admin/table/coupons");
         } else {
             String startDateString = request.getParameter("startDate");
@@ -89,18 +91,18 @@ public class couponAdminController extends HttpServlet {
             double discountPercentage = Double.parseDouble(request.getParameter("discountPercentage"));
             int isActive = Integer.parseInt(request.getParameter("isActive"));
             if (message.equals("create")) {
-                uploadCouponService.createCoupon(startDate, endDate, couponCode.toUpperCase(), discountPercentage, isActive);
+                uploadCouponService.createCoupon(startDate, endDate, couponCode.toUpperCase(), discountPercentage, isActive, user.getId());
 
             } else if (message.equals("update")) {
                 couponId = Integer.parseInt(request.getParameter("couponId"));
-                uploadCouponService.updateCoupon(couponId, startDate, endDate, couponCode.toUpperCase(), discountPercentage, isActive);
+                uploadCouponService.updateCoupon(couponId, startDate, endDate, couponCode.toUpperCase(), discountPercentage, isActive, user.getId());
             }
             response.sendRedirect(request.getContextPath() + "/admin/table/coupons");
         }
 
     }
 
-    private void importCSV(Part filePart) {
+    private void importCSV(Part filePart, int userId) {
         List<String[]> data = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(filePart.getInputStream()))) {
             String line;
@@ -109,21 +111,21 @@ public class couponAdminController extends HttpServlet {
                 data.add(values);
             }
             if (data.size() > 0) {
-                saveToDatabase(data);
+                saveToDatabase(data, userId);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void saveToDatabase(List<String[]> data) {
+    private void saveToDatabase(List<String[]> data, int userId) {
         data = data.subList(1, data.size() - 1)
                 .stream()
                 .map(arr -> Arrays.stream(arr)
                         .map(s -> s.replaceAll("\"", ""))
                         .toArray(String[]::new)).collect(Collectors.toList());
         for (String[] row : data) {
-            uploadCouponService.createCoupon(LocalDate.parse(row[3]), LocalDate.parse(row[4]), row[1], Double.parseDouble(row[2]), row[5].equals("Có") ? 1 : 0);
+            uploadCouponService.createCoupon(LocalDate.parse(row[3]), LocalDate.parse(row[4]), row[1], Double.parseDouble(row[2]), row[5].equals("Có") ? 1 : 0, userId);
         }
     }
 }

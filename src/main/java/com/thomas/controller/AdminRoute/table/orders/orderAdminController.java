@@ -3,6 +3,7 @@ package com.thomas.controller.AdminRoute.table.orders;
 import com.thomas.dao.model.Address;
 import com.thomas.dao.model.Order;
 import com.thomas.dao.model.OrderDetails;
+import com.thomas.dao.model.User;
 import com.thomas.services.UploadAddressService;
 import com.thomas.services.UploadOrderDetailService;
 import com.thomas.services.UploadOrderService;
@@ -37,6 +38,8 @@ public class orderAdminController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("auth");
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
         String message = request.getParameter("message");
         if (message.equals("delete")) {
@@ -55,7 +58,7 @@ public class orderAdminController extends HttpServlet {
             uploadAddressService.createAddress(userId, addressCity, addressStreet);
             Address ad = uploadAddressService.getLatestAddress(userId, addressCity, addressStreet);
             uploadAddressService.setIsUseAddress(ad.getId(), userId);
-            uploadOrderService.createOrder(userId, paymentMethodId, ad.getId(), orderDate, 1, orderState, isDeleted);
+            uploadOrderService.createOrder(userId, paymentMethodId, ad.getId(), orderDate, 1, orderState, isDeleted, user.getId());
         }
         response.sendRedirect("/admin/table/orders");
 

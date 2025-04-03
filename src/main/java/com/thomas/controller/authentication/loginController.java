@@ -45,7 +45,7 @@ public class loginController extends HttpServlet {
             if (user != null) {
                 HttpSession session = request.getSession();
                 service.saveSession(user.getId(), session.getId());
-                usesUsageService.trackUserActivity(userEmail, ipAddress.getClientIp(request));
+                usesUsageService.trackUserActivity(user.getId(), ipAddress.getClientIp(request));
                 session.setAttribute("auth", user);
                 response.sendRedirect("/");
             } else {

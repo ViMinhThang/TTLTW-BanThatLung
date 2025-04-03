@@ -1,9 +1,9 @@
 package com.thomas.controller.userInfoRoutes;
 
 import com.thomas.dao.model.User;
+import com.thomas.services.EmailService;
 import com.thomas.services.MD5Service;
 import com.thomas.services.UploadUserService;
-import com.thomas.services.EmailService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -23,11 +23,12 @@ public class userInfoController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String message = request.getParameter("message");
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("auth");
         int userId = Integer.parseInt(request.getParameter("userId"));
 
         if (message.equals("updatePassword")) {
             String password = request.getParameter("currentPassword");
-            String newPassword = request.getParameter("updatePassword");
             if (uploadUserService.getUser(userId).getPassword().equals(MD5Service.hashPassword(password))) {
                 handlePasswordUpdate(request, response, userId);
                 response.sendRedirect("/userInfo");
@@ -38,7 +39,7 @@ public class userInfoController extends HttpServlet {
         } else if (message.equals("updateEmail")) {
             String password = request.getParameter("password");
             String email = request.getParameter("newEmail");
-            if (uploadUserService.updateEmail(request, email, userId, password)) {
+            if (uploadUserService.updateEmail(request, email, userId, password, user.getId())) {
                 handleEmailUpdate(request, response, userId);
                 response.sendRedirect("/userInfo");
             } else {
@@ -53,14 +54,14 @@ public class userInfoController extends HttpServlet {
         String password = request.getParameter("password");
 
         // cập nhật trong database
-        boolean success = uploadUserService.updateEmail(request, newEmail, userId, password);
+        boolean success = uploadUserService.updateEmail(request, newEmail, userId, password, userId);
         if (success) {
             // Gửi mail thông báo
             String subject = "Thông báo thay đổi email";
             String content = "Email của bạn đã được thay đổi thành công sang: " + newEmail;
             emailService.sendEmail(newEmail, subject, content);
         } else {
-            request.setAttribute("errorMessage", "Cập nhật mật khẩu không thành công!");
+            request.setAttribute("errorMessage", "Cập nhật Email không thành công!");
             request.getRequestDispatcher("/userInfo").forward(request, response);
         }
     }

@@ -10,69 +10,49 @@ import org.jdbi.v3.core.statement.Query;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class ProductDao {
+public class ProductDao implements UsageInterface {
     public boolean createProduct(Belts belts) {
         return JDBIConnect.get().withHandle(h -> {
             String sql = "INSERT INTO belts ( name, releaseDate,createdAt, gender, price ,materialBelt,isDeleted,discountRate) VALUES (:productName,:releaseDate,:createdAt,:gender,:price,:material,:isDeleted,:discountRate)";
-            return h.createUpdate(sql).bind("productName", belts.getName())
-                    .bind("releaseDate", belts.getReleaseDate())
-                    .bind("gender", belts.getGender())
-                    .bind("price", belts.getPrice())
-                    .bind("createdAt", belts.getCreatedAt())
-                    .bind("material", belts.getMaterialBelt())
-                    .bind("isDeleted", belts.getIsDeleted())
-                    .bind("discountRate", belts.getDiscountRate())
-                    .bind("createdAt", LocalDateTime.now())
-                    .execute() > 0;
+            return h.createUpdate(sql).bind("productName", belts.getName()).bind("releaseDate", belts.getReleaseDate()).bind("gender", belts.getGender()).bind("price", belts.getPrice()).bind("createdAt", belts.getCreatedAt()).bind("material", belts.getMaterialBelt()).bind("isDeleted", belts.getIsDeleted()).bind("discountRate", belts.getDiscountRate()).bind("createdAt", LocalDateTime.now()).execute() > 0;
         });
+    }
+
+    public boolean createAndSaveLog(Belts belts, int userId) {
+        boolean result = createProduct(belts);
+
+        if (result) {
+            saveLogToDB(userId, "tạo sản phẩm", "Xanh");
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public String[] getTags(int beltId) {
         return JDBIConnect.get().withHandle(handle -> {
-            // Execute the query to fetch category names
-            List<String> categories = handle.createQuery(
-                            "SELECT c.name " +
-                                    "FROM beltCategory bc " +
-                                    "JOIN categories c ON bc.categoryId = c.id " +
-                                    "WHERE bc.beltId = :beltId"
-                    )
-                    .bind("beltId", beltId)
-                    .mapTo(String.class)
-                    .list();
+            List<String> categories = handle.createQuery("SELECT c.name " + "FROM beltCategory bc " + "JOIN categories c ON bc.categoryId = c.id " + "WHERE bc.beltId = :beltId").bind("beltId", beltId).mapTo(String.class).list();
 
-            // Convert the list to an array and return
             return categories.toArray(new String[0]);
         });
     }
 
 
     public List<String> getProductImages(int beltId) {
-        return JDBIConnect.get().withHandle(handle ->
-                handle.createQuery(
-                                "SELECT imagePath FROM imageEntry WHERE beltId = :beltId AND imageType IN ('main', 'extra')")
-                        .bind("beltId", beltId)
-                        .mapTo(String.class)
-                        .list()
-        );
+        return JDBIConnect.get().withHandle(handle -> handle.createQuery("SELECT imagePath FROM imageEntry WHERE beltId = :beltId AND imageType IN ('main', 'extra')").bind("beltId", beltId).mapTo(String.class).list());
     }
 
 
     public void saveDesc(int beltId, String desc, int variantId) {
         JDBIConnect.get().withHandle(h -> {
             String sql = "UPDATE belts SET description = :desc WHERE id = :beltId AND variantId = :variantId";
-            return h.createUpdate(sql)
-                    .bind("variantId", variantId)
-                    .bind("beltId", beltId)
-                    .bind("desc", desc)
-                    .execute() > 0;
+            return h.createUpdate(sql).bind("variantId", variantId).bind("beltId", beltId).bind("desc", desc).execute() > 0;
         });
     }
 
 
     public List<Belts> find(Integer id) {
-        String sql = (id != null)
-                ? "SELECT * FROM belts WHERE id = :id ORDER BY id DESC"
-                : "SELECT * FROM belts ORDER BY id DESC";
+        String sql = (id != null) ? "SELECT * FROM belts WHERE id = :id ORDER BY id DESC" : "SELECT * FROM belts ORDER BY id DESC";
 
         return JDBIConnect.get().withHandle(handle -> {
             Query query = handle.createQuery(sql);
@@ -85,26 +65,21 @@ public class ProductDao {
 
     public boolean updateProduct(Belts belts) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "UPDATE belts SET name = :productName, " +
-                    "releaseDate = :releaseDate, " +
-                    "gender = :gender, " +
-                    "price = :price, " +
-                    "materialBelt = :material, " +
-                    "isDeleted = :isDeleted, " +
-                    "discountRate = :discountRate " +
-                    "WHERE id = :id";
+            String sql = "UPDATE belts SET name = :productName, " + "releaseDate = :releaseDate, " + "gender = :gender, " + "price = :price, " + "materialBelt = :material, " + "isDeleted = :isDeleted, " + "discountRate = :discountRate " + "WHERE id = :id";
 
-            return h.createUpdate(sql)
-                    .bind("productName", belts.getName())
-                    .bind("releaseDate", belts.getReleaseDate())
-                    .bind("gender", belts.getGender())
-                    .bind("price", belts.getPrice())
-                    .bind("material", belts.getMaterialBelt())
-                    .bind("id", belts.getId())
-                    .bind("isDeleted", belts.getIsDeleted())
-                    .bind("discountRate", belts.getDiscountRate())
-                    .execute() > 0;
+            return h.createUpdate(sql).bind("productName", belts.getName()).bind("releaseDate", belts.getReleaseDate()).bind("gender", belts.getGender()).bind("price", belts.getPrice()).bind("material", belts.getMaterialBelt()).bind("id", belts.getId()).bind("isDeleted", belts.getIsDeleted()).bind("discountRate", belts.getDiscountRate()).execute() > 0;
         });
+    }
+
+    public boolean updateProductAndLog(Belts belts, int userId) {
+        boolean result = updateProduct(belts);
+
+        if (result) {
+            saveLogToDB(userId, "Chỉnh sửa sản phẩm" + belts.getName(), "Vàng");
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean deleteProductById(int id) {
@@ -114,17 +89,22 @@ public class ProductDao {
         });
     }
 
+    public boolean deleteProductAndLog(int beltId, int userId) {
+        boolean result = deleteProductById(beltId);
+
+        if (result) {
+            saveLogToDB(userId, "Xóa sản toàn bộ sản phẩm", "Đỏ");
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public void saveImage(int beltId, int variantId, String imageType, String imagePath) {
         JDBIConnect.get().useHandle(handle -> {
-            String sql = "INSERT INTO imageEntry (beltId,variantId, imageType, imagePath) " +
-                    "VALUES (:beltId,:variantId, :imageType, :imagePath)";
-            handle.createUpdate(sql)
-                    .bind("beltId", beltId)
-                    .bind("variantId", variantId)
-                    .bind("imageType", imageType)  // 'main', 'extra', or 'description'
-                    .bind("imagePath", imagePath)
-                    .execute();
+            String sql = "INSERT INTO imageEntry (beltId,variantId, imageType, imagePath) " + "VALUES (:beltId,:variantId, :imageType, :imagePath)";
+            handle.createUpdate(sql).bind("beltId", beltId).bind("variantId", variantId).bind("imageType", imageType)  // 'main', 'extra', or 'description'
+                    .bind("imagePath", imagePath).execute();
         });
     }
 
@@ -132,11 +112,7 @@ public class ProductDao {
     public int updateImage(int beltId, int variantId, String imageType) {
         return JDBIConnect.get().withHandle(handle -> {
             String sql = " DELETE FROM imageEntry WHERE variantId = :variantId AND imageType = :imageType AND beltId =:beltId";
-            return handle.createUpdate(sql)
-                    .bind("variantId", variantId)
-                    .bind("beltId", beltId)
-                    .bind("imageType", imageType)
-                    .execute();
+            return handle.createUpdate(sql).bind("variantId", variantId).bind("beltId", beltId).bind("imageType", imageType).execute();
         });
     }
 
@@ -158,55 +134,28 @@ public class ProductDao {
     public List<Belts> getRandomBelts() {
         String sql = "SELECT * FROM belts ORDER BY RAND() LIMIT 4";
 
-        return JDBIConnect.get().withHandle(handle ->
-                handle.createQuery(sql)
-                        .mapToBean(Belts.class)
-                        .list()
-        );
+        return JDBIConnect.get().withHandle(handle -> handle.createQuery(sql).mapToBean(Belts.class).list());
     }
 
 
     public void saveBeltView(int beltId) {
         JDBIConnect.get().withHandle(h -> {
-            String sql = "INSERT INTO beltViews (beltId, viewDate, viewCount)" +
-                    "VALUES (:beltId, CURDATE(), 1)" +
-                    "ON DUPLICATE KEY UPDATE viewCount = viewCount + 1;";
+            String sql = "INSERT INTO beltViews (beltId, viewDate, viewCount)" + "VALUES (:beltId, CURDATE(), 1)" + "ON DUPLICATE KEY UPDATE viewCount = viewCount + 1;";
             return h.createUpdate(sql).bind("beltId", beltId).execute() > 0;
         });
     }
 
     public List<Belts> getBeltsByViewCount() {
-        String sql = "SELECT b.* FROM belts b " +
-                "JOIN beltViews bv ON b.id = bv.beltId " +
-                "ORDER BY bv.viewCount DESC " +
-                "LIMIT 4";
+        String sql = "SELECT b.* FROM belts b " + "JOIN beltViews bv ON b.id = bv.beltId " + "ORDER BY bv.viewCount DESC " + "LIMIT 4";
 
-        return JDBIConnect.get().withHandle(handle ->
-                handle.createQuery(sql)
-                        .mapToBean(Belts.class)
-                        .list()
-        );
+        return JDBIConnect.get().withHandle(handle -> handle.createQuery(sql).mapToBean(Belts.class).list());
     }
 
 
     public boolean isUserPurchased(int beltId, int userId, int variantId) {
-        String sql = "SELECT EXISTS (" +
-                "    SELECT 1 " +
-                "    FROM orders o " +
-                "    INNER JOIN orderDetails od ON o.id = od.orderId " +
-                "    WHERE o.userID = :userId " +
-                "      AND od.beltId = :beltId " +
-                "      AND od.variantId = :variantId" +
-                ")";
+        String sql = "SELECT EXISTS (" + "    SELECT 1 " + "    FROM orders o " + "    INNER JOIN orderDetails od ON o.id = od.orderId " + "    WHERE o.userID = :userId " + "      AND od.beltId = :beltId " + "      AND od.variantId = :variantId" + ")";
 
-        return JDBIConnect.get().withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("userId", userId)
-                        .bind("beltId", beltId)
-                        .bind("variantId", variantId)
-                        .mapTo(Boolean.class)
-                        .one()
-        );
+        return JDBIConnect.get().withHandle(handle -> handle.createQuery(sql).bind("userId", userId).bind("beltId", beltId).bind("variantId", variantId).mapTo(Boolean.class).one());
     }
 
 
@@ -250,33 +199,34 @@ public class ProductDao {
     public List<String> getVariantImages(int variantId) {
         String sql = "SELECT imagePath FROM imageEntry WHERE variantId = :variantId";
 
-        return JDBIConnect.get().withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("variantId", variantId)
-                        .mapTo(String.class)
-                        .list()
-        );
+        return JDBIConnect.get().withHandle(handle -> handle.createQuery(sql).bind("variantId", variantId).mapTo(String.class).list());
     }
 
     public int getTotalSold(int beltId) {
-        String sql = "SELECT SUM(od.quantity) " +
-                "FROM orderDetails od " +
-                "JOIN beltVariants bv ON od.variantId = bv.id " +
-                "WHERE bv.beltId = :beltId";
+        String sql = "SELECT SUM(od.quantity) " + "FROM orderDetails od " + "JOIN beltVariants bv ON od.variantId = bv.id " + "WHERE bv.beltId = :beltId";
 
-        return JDBIConnect.get().withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("beltId", beltId)
-                        .mapTo(Integer.class)
-                        .findOne()
-                        .orElse(0)
-        );
+        return JDBIConnect.get().withHandle(handle -> handle.createQuery(sql).bind("beltId", beltId).mapTo(Integer.class).findOne().orElse(0));
     }
 
     public int getLatestVariantId() {
         return JDBIConnect.get().withHandle(h -> {
             String sql = "SELECT id FROM beltVariants ORDER BY id DESC LIMIT 1";
             return h.createQuery(sql).mapTo(Integer.class).findFirst().orElse(0);
+        });
+    }
+
+    @Override
+    public void saveLogToDB(int userId, String log, String alert) {
+        JDBIConnect.get().withHandle(h -> {
+            String sql = "INSERT INTO usersusage (userId,lastActivity,label,alert) VALUES(:userId,:lastActivity,:label,:alert)";
+            return h.createUpdate(sql).bind("userId", userId).bind("lastActivity", LocalDateTime.now()).bind("alert", alert).bind("label", log).execute() > 0;
+        });
+    }
+
+    public List<Belts> search(String query) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "SELECT * FROM belts where name like :query";
+            return h.createQuery(sql).bind("query", "%" + query + "%").mapTo(Belts.class).list();
         });
     }
 }

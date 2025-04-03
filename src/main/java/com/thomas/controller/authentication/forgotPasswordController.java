@@ -9,12 +9,8 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Properties;
 import java.util.UUID;
 
 @WebServlet(name = "forgotPasswordController", value = "/forgotPassword")
