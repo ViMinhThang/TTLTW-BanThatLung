@@ -20,7 +20,7 @@ import java.util.Scanner;
 
 @WebServlet(name = "loginController", value = "/login")
 public class loginController extends HttpServlet {
-    private static final String SECRET_KEY = "6Le5fgQrAAAAAMTV1TBfbcU5S10d7Eb8yGL_JSRD";
+    private static final String SECRET_KEY = "6Ld-QAgrAAAAAAJrDp50efjXGmaIMCrr5dBK-clG";
     UsesUsageService usesUsageService = new UsesUsageService();
 
     @Override
@@ -80,7 +80,7 @@ public class loginController extends HttpServlet {
             in.close();
 
             JSONObject json = new JSONObject(response.toString());
-            return json.getBoolean("success");
+            return json.getBoolean("success") && json.getDouble("score") >=  0.5;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
