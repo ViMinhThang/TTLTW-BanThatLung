@@ -11,11 +11,13 @@ public class UsersUsageMapper implements RowMapper<UsersUsage> {
     public UsersUsage map(ResultSet rs, StatementContext ctx) throws SQLException {
         UsersUsage usersUsage = new UsersUsage();
         usersUsage.setId(rs.getInt("id"));
-        usersUsage.setUserEmail(rs.getString("userEmail"));
+        usersUsage.setUserId(rs.getInt("userId"));
         usersUsage.setLastLogin(rs.getTimestamp("lastLogin").toLocalDateTime());
         usersUsage.setLastActivity(rs.getTimestamp("lastActivity").toLocalDateTime());
         usersUsage.setIpAddress(rs.getString("ipAddress"));
         usersUsage.setLastActivateRoute(rs.getString("lastActivateRoute"));
+        usersUsage.setLabel(rs.getString("label"));
+        usersUsage.setAlert(rs.getString("Alert"));
         return usersUsage;
     }
 }

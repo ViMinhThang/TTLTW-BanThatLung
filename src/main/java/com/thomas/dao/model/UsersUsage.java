@@ -5,23 +5,28 @@ import java.time.LocalDateTime;
 
 public class UsersUsage implements java.io.Serializable {
     private int id;
-    private String userEmail;
+    private int userId;
     private LocalDateTime lastLogin;
     private LocalDateTime lastActivity;
     private String ipAddress;
     private String lastActivateRoute;
+    private String userEmail;
+    private String label;
+    private String alert;
 
     public UsersUsage() {
 
     }
 
-    public UsersUsage(int id, String userEmail, LocalDateTime lastLogin, LocalDateTime lastActivity, String ipAddress, String lastActivateRoute) {
+    public UsersUsage(int id, int userId, LocalDateTime lastLogin, LocalDateTime lastActivity, String ipAddress, String lastActivateRoute, String label, String alert) {
         this.id = id;
-        this.userEmail = userEmail;
+        this.userId = userId;
         this.lastLogin = lastLogin;
         this.lastActivity = lastActivity;
         this.ipAddress = ipAddress;
         this.lastActivateRoute = lastActivateRoute;
+        this.label = label;
+        this.alert = alert;
     }
 
     public int getId() {
@@ -32,12 +37,12 @@ public class UsersUsage implements java.io.Serializable {
         this.id = id;
     }
 
-    public String getUserEmail() {
-        return this.userEmail;
+    public int getUserId() {
+        return this.userId;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public LocalDateTime getLastLogin() {
@@ -93,5 +98,29 @@ public class UsersUsage implements java.io.Serializable {
 
     public String getLastActivityFormatted() {
         return formatTimeAgo(lastActivity);
+    }
+
+    public String setUserEmail(String email) {
+        return this.userEmail = email;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getAlert() {
+        return alert;
+    }
+
+    public void setAlert(String alert) {
+        this.alert = alert;
     }
 }

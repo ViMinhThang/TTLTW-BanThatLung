@@ -27,7 +27,7 @@
             <nav
                     class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
             >
-                <form method="POST">
+                <a href="/admin/table/belts/createProduct">
                     <button
                             type="submit"
                             class="btn btn-white border border-dark custom_input--btn-group__input"
@@ -38,7 +38,7 @@
                         Tạo 1 sản phẩm mới
                     </button>
                     <input type="hidden" name="message" value="create">
-                </form>
+                </a>
 
                 <input name="productId" id="productId" type="hidden"/>
                 <ul class="navbar-nav ml-auto">
@@ -212,7 +212,7 @@
                     >&times;
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="removeModalBody">
 
                 </div>
                 <div class="modal-footer">
@@ -228,8 +228,8 @@
 
     <jsp:include page="/frontend/components/Admin/scripts/adminScripts/datatable.jsp"/>
 
+    <script src="${pageContext.request.contextPath}/js/allProduct.js"></script>
 
 </div>
 </body>
 </html>
-<script src="${pageContext.request.contextPath}/js/allProduct.js"></script>

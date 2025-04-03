@@ -2,6 +2,7 @@ package com.thomas.controller.AdminRoute.table.orders;
 
 import com.thomas.dao.model.Order;
 import com.thomas.dao.model.OrderDetails;
+import com.thomas.dao.model.User;
 import com.thomas.services.UploadOrderDetailService;
 import com.thomas.services.UploadOrderService;
 import jakarta.servlet.*;
@@ -36,6 +37,8 @@ public class orderDetailsController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String message = request.getParameter("message");
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("auth");
         if (message.equals("delete")) {
             int orderItemId = Integer.parseInt(request.getParameter("orderItemId"));
             int orderId = Integer.parseInt(request.getParameter("orderId"));
@@ -47,7 +50,7 @@ public class orderDetailsController extends HttpServlet {
             if (orderDetails != null) {
                 Order order = uploadOrderService.getOrderById(orderId);
                 order.setOrderTotal(order.getOrderTotal() - orderDetails.getPrice());
-                uploadOrderService.updateOrder(order);
+                uploadOrderService.updateOrder(order, user.getId());
                 uploadOrderDetailService.deleteOrderDetail(orderItemId);
                 response.sendRedirect("/admin/table/orders/details?id=" + orderId);
             }

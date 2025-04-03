@@ -71,6 +71,7 @@
                 </div>
                 <form id="productForm" method="POST"
                       class="d-flex flex-column justify-content-between" enctype="multipart/form-data">
+                    <input type="hidden" name="userId" value="${sessionScope.auth.id}"/>
                     <input type="hidden" name="beltId" value="${param.id}"/>
                     <input type="hidden" name="message" value="
 <c:choose>
@@ -349,8 +350,8 @@
                                                 >
                                                     Ngày ra mắt
                                                 </p>
-                                                    <input name="releaseDate" type="date"
-                                                           class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
+                                                <input name="releaseDate" type="date"
+                                                       class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
                                                        value="${product.releaseDate}"
                                                        required
                                                 />

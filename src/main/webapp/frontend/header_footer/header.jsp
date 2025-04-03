@@ -220,7 +220,7 @@
     </div>
 </nav>
 <div class="dropdown-menu search-dropdown w-100">
-    <div id="list__product__row">
+    <div id="list__product__row" class="row p-5">
 
     </div>
 </div>

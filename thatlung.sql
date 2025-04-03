@@ -167,7 +167,7 @@ CREATE TABLE coupons
 (
     id        INT AUTO_INCREMENT PRIMARY KEY,
     code      VARCHAR(50) NOT NULL,
-    discountPercent DOUBLE DEFAULT 0.0,
+    discountRate DOUBLE DEFAULT 0.0,
     startDate DATETIME,
     endDate   DATETIME,
     isActive  INT DEFAULT 1
@@ -229,9 +229,11 @@ CREATE TABLE tokens
 CREATE TABLE usersUsage
 (
     id              INT AUTO_INCREMENT PRIMARY KEY,
-    userEmail       VARCHAR(255) DEFAULT NULL,
+    userId          INT          DEFAULT NULL,
     lastLogin       DATETIME     DEFAULT NULL,
     lastActivity    DATETIME     DEFAULT NULL,
     ipAddress       VARCHAR(45)  DEFAULT NULL,
-    lastActiveRoute VARCHAR(255) DEFAULT NULL
+    lastActiveRoute VARCHAR(255) DEFAULT NULL,
+    label           VARCHAR(255) DEFAULT NULL,
+    Alert           VARCHAR(255) DEFAULT NULL
 );

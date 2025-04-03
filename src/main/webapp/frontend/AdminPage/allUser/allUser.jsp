@@ -14,7 +14,6 @@
 
     <title>THOMAS - Admin</title>
     <jsp:include page="/frontend/components/Admin/adminLink/adminLink.jsp"/>
-
 </head>
 
 <body id="page-top">
@@ -572,6 +571,7 @@
             }
         });
     </script>
+    <script src="${pageContext.request.contextPath}/js/allUser.js"></script>
 </div>
 </body>
 </html>

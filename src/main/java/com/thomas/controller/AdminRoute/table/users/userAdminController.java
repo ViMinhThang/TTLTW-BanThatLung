@@ -66,7 +66,8 @@ public class userAdminController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("auth");
         String message = request.getParameter("message");
         if (message.equals("import")) {
             Part filePart = request.getPart("file");
@@ -79,7 +80,7 @@ public class userAdminController extends HttpServlet {
 
         if (message.equals("delete")) {
             int userId = Integer.parseInt(request.getParameter("userId"));
-            uploadUserService.deleteUser(userId);
+            uploadUserService.deleteUser(userId, user.getId());
             response.sendRedirect(request.getContextPath() + "/admin/table/users");
             return;
         }
@@ -103,7 +104,7 @@ public class userAdminController extends HttpServlet {
             uploadUserService.saveUser(userName, email, MD5Service.hashPassword(password), gender, role, brithDate, phone, isDeleted);
 
         } else if (message.equals("update")) {
-            uploadUserService.updateUser(userId, userName, email, gender, role, brithDate, phone, isDeleted);
+            uploadUserService.updateUser(userId, userName, email, gender, role, brithDate, phone, isDeleted, user.getId());
         }
 
 

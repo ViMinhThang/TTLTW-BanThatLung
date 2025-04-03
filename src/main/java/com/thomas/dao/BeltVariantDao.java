@@ -4,9 +4,10 @@ import com.thomas.dao.db.JDBIConnect;
 import com.thomas.dao.model.BeltVariant;
 import org.jdbi.v3.core.statement.Query;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-public class BeltVariantDao {
+public class BeltVariantDao implements UsageInterface {
 
 
     public boolean createVariant(BeltVariant beltVariant) {
@@ -20,6 +21,18 @@ public class BeltVariantDao {
                     .bind("updatedAt", beltVariant.getUpdatedAt()).execute() > 0;
         });
     }
+
+    public boolean createVariantAndLog(BeltVariant beltVariant, int userId) {
+        boolean result = createVariant(beltVariant);
+
+        if (result) {
+            saveLogToDB(userId, "Tạo biến thể", "xanh");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     public List<BeltVariant> findVariants(int beltId, String color, String size, Integer variantId) {
         StringBuilder sql = new StringBuilder("SELECT * FROM beltVariants WHERE beltId = :beltId");
@@ -65,6 +78,15 @@ public class BeltVariantDao {
         });
     }
 
+    public boolean deleteVariantAndLog(Integer beltId, Integer variantId, int userId) {
+        boolean result = deleteVariant(beltId, variantId);
+        if (result) {
+            saveLogToDB(userId, "Xóa bản thể số " + variantId, "Đỏ");
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public void saveVariants(BeltVariant beltVariant) {
         String sql = "UPDATE beltVariants SET color = :color, size = :size,stockQuantity = :stockQuantity,createdAt = :createdAt, updatedAt = :updatedAt WHERE id = :variantId";
@@ -76,6 +98,16 @@ public class BeltVariantDao {
                     .bind("createdAt", beltVariant.getCreatedAt())
                     .bind("updatedAt", beltVariant.getUpdatedAt())
                     .execute();
+        });
+    }
+
+    public void saveLogToDB(int userId, String log, String alert) {
+        JDBIConnect.get().withHandle(h -> {
+            String sql = "INSERT INTO usersusage (userId,lastActivity,label,alert) VALUES(:userId,:lastActivity,:label,:alert)";
+            return h.createUpdate(sql).bind("userId", userId)
+                    .bind("lastActivity", LocalDateTime.now())
+                    .bind("alert", alert)
+                    .bind("label", log).execute() > 0;
         });
     }
 }
