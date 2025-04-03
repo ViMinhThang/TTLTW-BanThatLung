@@ -1,6 +1,7 @@
 package com.thomas.controller.AdminRoute.table.belts;
 
 import com.thomas.dao.model.Belts;
+import com.thomas.dao.model.User;
 import com.thomas.services.ProductService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -29,13 +30,15 @@ public class productAdminController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String message = request.getParameter("message");
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("auth");
         if (message.equals("delete")) {
             int variantId = Integer.parseInt(request.getParameter("variantId"));
             int beltId = Integer.parseInt(request.getParameter("productId"));
-            PRODUCT_SERVICE.deleteProductVariant(beltId, variantId);
+            PRODUCT_SERVICE.deleteProductVariant(beltId, variantId, user.getId());
         } else if (message.equals("deleteRealVariant")) {
             int beltId = Integer.parseInt(request.getParameter("productId"));
-            PRODUCT_SERVICE.deleteProduct(beltId, null);
+            PRODUCT_SERVICE.deleteProduct(beltId, null, user.getId());
         }
         response.sendRedirect("/admin/table/belts");
     }

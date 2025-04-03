@@ -45,7 +45,7 @@ public class productDetailsController extends HttpServlet {
 
         }
         List<Category> beltCategory = productService.findCategory(beltId, variantId);
-        int totalReview = uploadReviewService.getTotalReviewsCount(beltId,variantId);
+        int totalReview = uploadReviewService.getTotalReviewsCount(beltId, variantId);
         List<String> descBeltImage = productService.getAllDescImage(beltId);
         List<Belts> randomBelts = productService.getRandomBelts();
         for (Belts b : randomBelts) {
@@ -61,7 +61,11 @@ public class productDetailsController extends HttpServlet {
 
         List<BeltVariant> similarVariants = productService.findVariants(null, v.getColor(), v.getSize(), null);
 
-        request.setAttribute("allVariant", productService.findVariants(beltId, null, null, null));
+        List<BeltVariant> SimilarVariantColor = productService.findVariants(null, v.getColor(), null, null);
+        List<BeltVariant> allVariant = productService.findVariants(beltId, null, null, null);
+
+
+        request.setAttribute("allVariant", allVariant);
         request.setAttribute("similarVariants", similarVariants);
         request.setAttribute("variant", belt.getBeltVariants().get(0));
         request.setAttribute("isPurchasedBelt", isPurchasedBelt);
@@ -70,6 +74,7 @@ public class productDetailsController extends HttpServlet {
         request.setAttribute("descBeltImage", descBeltImage);
         request.setAttribute("totalReview", totalReview);
         request.setAttribute("beltCategory", beltCategory);
+        request.setAttribute("SimilarVariantColor", SimilarVariantColor);
         request.setAttribute("belt", belt);
         request.getRequestDispatcher("/frontend/productDetail/productDetail.jsp").forward(request, response);
     }

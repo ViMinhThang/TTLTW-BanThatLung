@@ -4,6 +4,7 @@ import com.thomas.dao.BeltCategoryDao;
 import com.thomas.dao.BeltVariantDao;
 import com.thomas.dao.CategoryDao;
 import com.thomas.dao.ProductDao;
+import com.thomas.dao.db.JDBIConnect;
 import com.thomas.dao.model.*;
 
 import java.time.LocalDateTime;
@@ -65,7 +66,7 @@ public class ProductService {
 
     public void saveProduct(String productName, String[] tags, double discountRate,
                             LocalDateTime releaseDate, String gender, double price, int stockQuantity,
-                            String material, int isDeleted, String color, String size) {
+                            String material, int isDeleted, String color, String size, int userId) {
         Belts belt = new Belts();
         belt.setName(productName);
         belt.setPrice(price);
@@ -74,13 +75,13 @@ public class ProductService {
         belt.setMaterialBelt(material);
         belt.setIsDeleted(isDeleted);
 
-        productDao.createProduct(belt);
+        productDao.createAndSaveLog(belt, userId);
 
         int beltId = getLatestProductId();
 
         BeltVariant variant = createBeltVariant(beltId, size, color, stockQuantity);
 
-        beltVariantDao.createVariant(variant);
+        beltVariantDao.createVariantAndLog(variant, userId);
         int variantId = getLatestVariantId();
 
         saveOrUpdateBeltCategory(tags, beltId, variantId);
@@ -88,7 +89,7 @@ public class ProductService {
 
     public void updateProduct(int id, String productName, String[] tags, double discountRate,
                               LocalDateTime releaseDate, String gender, double price, int stockQuantity,
-                              String material, int isDeleted, String color, String size, Integer variant) {
+                              String material, int isDeleted, String color, String size, Integer variant, int userId) {
         Belts belt = productDao.find(id).get(0);
         belt.setName(productName);
         belt.setPrice(price);
@@ -98,7 +99,7 @@ public class ProductService {
         belt.setIsDeleted(isDeleted);
         belt.setDiscountRate(discountRate);
 
-        productDao.updateProduct(belt);
+        productDao.updateProductAndLog(belt, userId);
         BeltVariant beltVariant = beltVariantDao.findVariants(id, null, null, variant).get(0);
         updateBeltVariant(beltVariant, color, size, stockQuantity);
 
@@ -164,8 +165,8 @@ public class ProductService {
         return bc;
     }
 
-    public boolean deleteProductVariant(int productId, int variantId) {
-        return beltVariantDao.deleteVariant(productId, variantId);
+    public boolean deleteProductVariant(int productId, int variantId, int userId) {
+        return beltVariantDao.deleteVariantAndLog(productId, variantId, userId);
     }
 
     public void saveImagePath(int beltId, String filePath, List<String> extraImages, int variantId) {
@@ -302,7 +303,20 @@ public class ProductService {
         return productDao.getLatestVariantId();
     }
 
-    public boolean deleteProduct(int beltId, Integer variantId) {
-        return productDao.deleteProductById(beltId) && beltVariantDao.deleteVariant(beltId, null);
+    public boolean deleteProduct(int beltId, Integer variantId, int userId) {
+        return productDao.deleteProductAndLog(beltId, userId) && beltVariantDao.deleteVariantAndLog(beltId, null, userId);
+    }
+
+    public List<Belts> searchProduct(String query) {
+        List<Belts> beltsList = productDao.search(query);
+        beltsList.forEach(b -> b.setBeltVariants(findVariants(b.getId(), null, null, null)));
+        beltsList.forEach(b -> b.setTotalSold(productDao.getTotalSold(b.getId())));
+        beltsList.sort(new Comparator<Belts>() {
+            @Override
+            public int compare(Belts o1, Belts o2) {
+                return o1.getTotalSold() - o2.getTotalSold();
+            }
+        });
+        return beltsList;
     }
 }

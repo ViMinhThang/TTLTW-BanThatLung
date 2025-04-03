@@ -19,36 +19,27 @@ public class UsersUsageDao {
             String sql = "SELECT * FROM usersUsage";
             return h.createQuery(sql).mapToBean(UsersUsage.class).list();
         });
-
-        Map<String, UsersUsage> uniqueUsers = new HashMap<>();
-        for (UsersUsage user : allUsers) {
-            uniqueUsers.putIfAbsent(user.getUserEmail(), user);
-            if (uniqueUsers.get(user.getUserEmail()).getLastLogin().isBefore(user.getLastLogin())) {
-                uniqueUsers.put(user.getUserEmail(), user);
-            }
-        }
-
-        return new ArrayList<>(uniqueUsers.values());
+        return allUsers;
     }
 
-    public boolean insertUsersUsage(String userEmail, String ipAddress) {
+    public boolean insertUsersUsage(int userId, String ipAddress) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "INSERT INTO usersUsage (userEmail, lastLogin, lastActivity, ipAddress) " +
-                    "VALUES (:userEmail, NOW(), NOW(), :ipAddress) " +
+            String sql = "INSERT INTO usersUsage (userId, lastLogin, lastActivity, ipAddress) " +
+                    "VALUES (:userId, NOW(), NOW(), :ipAddress) " +
                     "ON DUPLICATE KEY UPDATE lastLogin = NOW(), ipAddress = :ipAddress";
 
             return h.createUpdate(sql)
-                    .bind("userEmail", userEmail)
+                    .bind("userId", userId)
                     .bind("ipAddress", ipAddress)
                     .execute() > 0;
         });
     }
 
-    public boolean insertUsersUsageNotLogin(String userEmail, String route) {
+    public boolean insertUsersUsageNotLogin(int userId, String route) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "UPDATE usersUsage SET lastActivity = NOW(), lastActiveRoute=:route WHERE userEmail =:email";
+            String sql = "UPDATE usersUsage SET lastActivity = NOW(), lastActiveRoute=:route WHERE userId =:userId";
             return h.createUpdate(sql)
-                    .bind("email", userEmail)
+                    .bind("userId", userId)
                     .bind("route", route)
                     .execute() > 0;
         });

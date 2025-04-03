@@ -117,6 +117,8 @@
                                     <th>Lần hoạt động cuối</th>
                                     <th>IP Address của người dùng</th>
                                     <th>Truy cập mới nhất</th>
+                                    <th>Nhãn</th>
+                                    <th>Mức độ</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -126,6 +128,8 @@
                                     <th>Lần hoạt động cuối</th>
                                     <th>IP Address của người dùng</th>
                                     <th>Truy cập mới nhất</th>
+                                    <th>Nhãn</th>
+                                    <th>Mức độ</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
@@ -137,6 +141,9 @@
                                     <td>${user.lastActivityFormatted}</td>
                                     <td>${user.ipAddress}</td>
                                     <td>${user.lastActivateRoute}</td>
+                                    <td>${user.label}</td>
+                                    <td>${user.alert}</td>
+
                                     </c:forEach>
 
                                 </tbody>
