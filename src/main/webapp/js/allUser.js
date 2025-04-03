@@ -36,6 +36,7 @@ $(document).ready(function () {
         });
     });
     $(".fa-trash-can").on("click", function () {
+        console.log(1)
         const userId = $(this).closest("tr").find(".userId").text();
         $(".removeModalBody").text(`Xóa người dùng #${userId}`);
         // Xóa các input cũ trước khi thêm mới

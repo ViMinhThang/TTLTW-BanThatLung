@@ -1,5 +1,6 @@
 package com.thomas.controller.userInfoRoutes;
 
+import com.thomas.dao.model.User;
 import com.thomas.services.UploadUserService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -30,6 +31,8 @@ public class userProfileController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("auth");
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
         String message = request.getParameter("message");
         if (message.equals("update")) {
@@ -39,7 +42,7 @@ public class userProfileController extends HttpServlet {
             LocalDate birthday = LocalDate.parse(birthdayString, formatter);
             String username = request.getParameter("userName");
             long phoneNumber = Long.parseLong(request.getParameter("phoneNumber"));
-            uploadUserService.updateUserInfo(userId, gender, birthday, phoneNumber);
+            uploadUserService.updateUserInfo(userId, gender, birthday, phoneNumber, user.getId());
             String uploadPath = request.getServletContext().getRealPath("") + File.separator + ULOAD_DIR;
             Part filePart = request.getPart("uploadProfileImage");
             if (filePart != null && filePart.getSize() > 0) {

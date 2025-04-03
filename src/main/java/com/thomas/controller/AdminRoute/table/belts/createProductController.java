@@ -71,6 +71,7 @@ public class createProductController extends HttpServlet {
         if (request.getParameter("variantId") != null && !request.getParameter("variantId").isEmpty()) {
             variantId = Integer.parseInt(request.getParameter("variantId"));
         }
+        int userId = Integer.parseInt(request.getParameter("userId"));
         String message = request.getParameter("message").trim();
         String productName = request.getParameter("beltName");
         String color = request.getParameter("color");
@@ -93,10 +94,10 @@ public class createProductController extends HttpServlet {
             material = request.getParameter("material");
         }
         if (message.equals("create")) {
-            PRODUCT_SERVICE.saveProduct(productName, tags, discountRate, releaseDate, gender, price, stockQuantity, material, isDeleted, color, size);
+            PRODUCT_SERVICE.saveProduct(productName, tags, discountRate, releaseDate, gender, price, stockQuantity, material, isDeleted, color, size, userId);
         } else if (message.equals("update")) {
             productId = Integer.parseInt(request.getParameter("beltId"));
-            PRODUCT_SERVICE.updateProduct(productId, productName, tags, discountRate, releaseDate, gender, price, stockQuantity, material, isDeleted, color, size, variantId);
+            PRODUCT_SERVICE.updateProduct(productId, productName, tags, discountRate, releaseDate, gender, price, stockQuantity, material, isDeleted, color, size, variantId, userId);
         } else if (message.equals("createVariant")) {
             BeltVariant bv = new BeltVariant();
             bv.setBeltId(productId);
