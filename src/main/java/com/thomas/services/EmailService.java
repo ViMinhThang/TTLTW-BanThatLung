@@ -28,11 +28,13 @@ public class EmailService {
 
         try {
             Message message = new MimeMessage(session);
+            message.addHeader("Content-type", "text/HTML; charset=UTF-8");
             message.setFrom(new InternetAddress(HOST_EMAIL));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
             message.setSubject(subject);
             message.setText(content);
 
+            System.out.println("Sending email to: " + toEmail);
             Transport.send(message);
         } catch (MessagingException e) {
             e.printStackTrace();

@@ -29,7 +29,6 @@ public class userInfoController extends HttpServlet {
             String password = request.getParameter("currentPassword");
             String newPassword = request.getParameter("updatePassword");
             if (uploadUserService.getUser(userId).getPassword().equals(MD5Service.hashPassword(password))) {
-                uploadUserService.updateUserPassword(MD5Service.hashPassword(newPassword), userId);
                 handlePasswordUpdate(request, response, userId);
                 response.sendRedirect("/userInfo");
             } else {
@@ -71,7 +70,7 @@ public class userInfoController extends HttpServlet {
         String newPassword = request.getParameter("updatePassword");
 
         // cập nhật database
-        boolean success = uploadUserService.updateUserPassword(newPassword, userId);
+        boolean success = uploadUserService.updateUserPassword(MD5Service.hashPassword(newPassword), userId);
         String userEmail = user.getEmail();
         if (success) {
 
