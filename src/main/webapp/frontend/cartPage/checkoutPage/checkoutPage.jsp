@@ -16,6 +16,15 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/checkoutPage.css"/>
+    <script>
+        $(document).ready(function() {
+            $('input[name="paymentMethod"]').change(function() {
+                var selectedMethod = $(this).val();
+                $('.submitPaymentMethod').val(selectedMethod);
+                $('#openFormButtonPayment').text('Thanh toán với ' + selectedMethod);
+            });
+        });
+    </script>
 </head>
 <body>
 <jsp:include page="/frontend/header_footer/header.jsp"/>

@@ -10,6 +10,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.List;
@@ -22,7 +23,6 @@ public class checkoutController extends HttpServlet {
     UploadPaymentMethod uploadPaymentMethod = new UploadPaymentMethod();
     DecimalFormatSymbols symbols = new DecimalFormatSymbols();
     DecimalFormat formatter = new DecimalFormat("#,###.000", symbols);
-    EmailService emailService = new EmailService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -52,6 +52,7 @@ public class checkoutController extends HttpServlet {
         } else {
             request.setAttribute("userAddresses", userAddresses);
         }
+
         String formattedShipmentPrice = formatter.format(shipmentPrice).replace(",", ".");
         String formattedGrandTotal = formatter.format(grandTotal).replace(",", ".");
         String formattedTotalPrice = formatter.format(totalPrice).replace(",", ".");
@@ -60,12 +61,6 @@ public class checkoutController extends HttpServlet {
         request.setAttribute("shipmentPrice", formattedShipmentPrice);
         request.setAttribute("grandTotal", formattedGrandTotal);
         request.setAttribute("totalPrice", formattedTotalPrice);
-
-        String subject = "Thông báo đơn hàng";
-        String content = "Đơn hàng của bạn đã được đặt thành công. Tổng giá trị đơn hàng là: " + formattedGrandTotal + " VNĐ.\n" +
-                "Chi tiết đơn hàng:\n" + cart.toString() + "\n" + "cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.\n";
-        emailService.sendEmail(user.getEmail(), subject, content);
-
         request.getRequestDispatcher("/frontend/cartPage/checkoutPage/checkoutPage.jsp").forward(request, response);
     }
 
@@ -73,5 +68,7 @@ public class checkoutController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     }
+
+
 }
 
