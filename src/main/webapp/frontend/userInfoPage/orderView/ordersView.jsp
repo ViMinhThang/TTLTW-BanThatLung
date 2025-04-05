@@ -35,6 +35,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/ordersView.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/userInfo.css"/>
 </head>
 <body>
 <jsp:include page="/frontend/header_footer/header.jsp"/>
@@ -84,53 +85,37 @@
     </div>
 </div>
 <div class="container my-3">
-    <div class="row">
-        <h2 class="mt-5 mb-3">Tài khoản của tôi</h2>
-        <div
-                class="d-flex col-12"
-                style="white-space: nowrap;"
-        >
-            <div class="d-inline-block fw-bold mb-4" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userInfo"
-                >Tài khoản</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold " style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userProfile"
-                >Hồ sơ</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userAddress?userId=${sessionScope.auth.id}"
-                >Địa chỉ</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold " style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userPrivacy"
-                >Riêng tư</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold custom_active" style="padding: 12px">
-                <a
-                        class="text-white custom_size--19"
-                        href="${pageContext.request.contextPath}/viewOrders"
-                >Đơn hàng</a
-                >
-            </div>
-        </div>
-    </div>
+    <jsp:include page="/frontend/components/userInfo/navigationBar/navBar.jsp"/>
 
-    <div class="container container-sm border rounded">
+    <div class="container-fluid container-sm ps-0" style="width: 1900px">
+        <table class="table w-100">
+            <thead class="border-bottom">
+            <tr class="font-weight-light">
+                <th>Đơn hàng</th>
+                <th class="text-start">Ngày đặt</th>
+                <th>Trạng thái</th>
+                <th>Tổng</th>
+                <th class="text-end">Hành động</th>
+            </tr>
+            </thead>
+
+            <tbody class="p-2">
+            <c:forEach var="order" items="${orders}">
+                <fmt:parseDate value="${order.orderDate}" pattern="yyyy-MM-dd" var="formattedDate"/>
+                <tr class="py-2">
+                    <td>${order.id}</td>
+                    <td class="text-start"><fmt:formatDate value="${formattedDate}" pattern="dd-MM-yyyy"/></td>
+                    <td>${order.orderStatus}</td>
+                    <td>${order.orderTotal}</td>
+                    <td class="text-end">
+                        <a class="bg-dark p-2 text-white text-decoration-none rounded-0" href="#">Xem</a>
+                    </td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
         <div class="userInfo__content--middle mb-5">
-            <h2 class="mt-4 mb-4 fw-light">Các đơn hàng mà bạn đã đặt</h2>
+
             <c:forEach var="order" items="${orders}">
                 <div class="border p-3 container-sm mb-2">
                     <fmt:parseDate value="${order.orderDate}" pattern="yyyy-MM-dd" var="formattedDate"/>

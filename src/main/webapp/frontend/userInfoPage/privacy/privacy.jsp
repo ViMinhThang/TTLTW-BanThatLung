@@ -33,6 +33,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/privacy.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/userInfo.css"/>
 </head>
 <body>
 <jsp:include page="/frontend/header_footer/header.jsp"/>
@@ -47,57 +48,15 @@
     </nav>
 </div>
 <div class="container my-3">
-    <div class="row">
-        <h2 class="mt-5 mb-3">Tài khoản của tôi</h2>
-        <div
-                class="d-flex col-12"
-                style="white-space: nowrap;"
-        >
-            <div class="d-inline-block fw-bold mb-4" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userInfo"
-                >Tài khoản</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userProfile"
-                >Hồ sơ</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userAddress?userId=${sessionScope.auth.id}"
-                >Địa chỉ</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold custom_active" style="padding: 12px">
-                <a
-                        class="text-white custom_size--19"
-                        href="${pageContext.request.contextPath}/userPrivacy"
-                >Riêng tư</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/viewOrders"
-                >Đơn hàng</a
-                >
-            </div>
-        </div>
-    </div>
+    <jsp:include page="/frontend/components/userInfo/navigationBar/navBar.jsp"/>
 
-    <div class="container mb-5">
+    <div class="container mb-5 ps-0">
         <div class="userInfo__content--middle">
             <div class="userInfo--aboutyou">
-                <h2 class="Aboutyou">Cài đặt quyền riêng tư</h2>
-                <h3 class="mt-2 mb-1">Khả năng tìm kiếm</h3>
-                <div class="toogle__option d-flex">
-                    <p class="flex-shrink-1" style="width: 95%">
+                <h2 class="fs-3">Cài đặt quyền riêng tư</h2>
+                <h3 class="mt-2 mb-1 fs-3">Khả năng tìm kiếm</h3>
+                <div class="toogle__option d-flex align-items-center">
+                    <p class="flex-shrink-1 fs-4" style="width: 95%">
                         Bạn có muốn người khác có thể tìm thấy bạn bằng địa chỉ email
                         của bạn không? Địa chỉ email của bạn sẽ không được hiển thị công
                         khai.
@@ -113,12 +72,12 @@
 
                 <div class="userInfoAll">
                     <div class="userInfo--element">
-                        <h3 class="userInfo__aboutyou--smalltext">Sự đồng ý</h3>
-                        <p class="userInfo__aboutyou--name">
+                        <h3 class="fs-4">Sự đồng ý</h3>
+                        <p class="fs-4">
                             Thomas sử dụng cookie và các công nghệ tương tự để mang lại
                             cho bạn trải nghiệm tốt hơn, cho phép những điều như:
                         </p>
-                        <ul class="pl-3">
+                        <ul class="pl-3 fs-4">
                             <li>chức năng trang web cơ bản</li>
                             <li>đảm bảo giao dịch an toàn, bảo mật</li>
                             <li>đăng nhập tài khoản an toàn</li>
@@ -134,10 +93,10 @@
                         </ul>
                     </div>
                     <div class="userInfo--elements">
-                        <h3 class="userInfo__aboutyou--smalltext">
+                        <h3 class="fs-2">
                             Cookie & Công nghệ cần thiết
                         </h3>
-                        <p class="userInfo__aboutyou--name">
+                        <p class="fs-4">
                             Một số công nghệ chúng tôi sử dụng là cần thiết cho các chức
                             năng quan trọng như bảo mật và tính toàn vẹn của trang web,
                             xác thực tài khoản, tùy chọn bảo mật và quyền riêng tư, dữ
@@ -155,7 +114,7 @@
             <div class="userInfo--aboutyou userInfo--aboutyou--location">
                 <div class="userInfo__location--desc">
                     <h2>Đóng và xóa vĩnh viễn tài khoản Thomas của bạn</h2>
-                    <p>
+                    <p class="fs-4">
                         Đóng và xóa vĩnh viễn tài khoản của bạn. Một khi đã xóa, tài
                         khoản của bạn không thể được khôi phục.
                         <span>Tìm hiểu thêm. </span>

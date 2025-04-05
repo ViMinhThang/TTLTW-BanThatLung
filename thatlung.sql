@@ -66,6 +66,7 @@ CREATE TABLE beltVariants
     color         VARCHAR(100) NOT NULL,
     size          VARCHAR(50)  NOT NULL,
     stockQuantity INT      DEFAULT 0,
+    currentStock  INT DEFAULT 0,
     createdAt     DATETIME DEFAULT CURRENT_TIMESTAMP,
     updatedAt     DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (beltId) REFERENCES belts (id) ON DELETE CASCADE
@@ -276,3 +277,37 @@ CREATE TABLE GroupPermissions
     FOREIGN KEY (permissionId) REFERENCES Permissions (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+
+CREATE TABLE stockTransactions
+(
+    id             INT AUTO_INCREMENT PRIMARY KEY,
+    beltVariantId  INT NOT NULL,
+    transactionType VARCHAR(50) NOT NULL,
+    quantity       INT NOT NULL,
+    transactionDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    createdAt      DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updatedAt      DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (beltVariantId) REFERENCES beltVariants(id) ON DELETE CASCADE
+);
+
+CREATE TABLE suppliers
+(
+    id            INT AUTO_INCREMENT PRIMARY KEY,
+    name          VARCHAR(255) NOT NULL,
+    contactInfo   TEXT,
+    createdAt     DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updatedAt     DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE purchases
+(
+    id            INT AUTO_INCREMENT PRIMARY KEY,
+    supplierId    INT NOT NULL,
+    beltVariantId INT NOT NULL,
+    quantity      INT NOT NULL,
+    purchaseDate  DATETIME DEFAULT CURRENT_TIMESTAMP,
+    createdAt     DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updatedAt     DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (supplierId) REFERENCES suppliers(id),
+    FOREIGN KEY (beltVariantId) REFERENCES beltVariants(id) ON DELETE CASCADE
+);
