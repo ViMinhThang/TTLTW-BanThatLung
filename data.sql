@@ -62,6 +62,131 @@ VALUES ('John Doe', 'john.doe@example.com', '1990-05-15', '202cb962ac59075b964b0
        ('Charlie Davis', 'charlie.davis@example.com', '2000-01-30', '202cb962ac59075b964b07152d234b70', NULL, 0,
         'Non-binary', 9988776655, 3, NULL, 1);
 
+INSERT INTO `Groups` (groupName)
+VALUES ('admin');
+INSERT INTO `Groups` (groupName)
+VALUES ('editor');
+INSERT INTO `Groups` (groupName)
+VALUES ('viewer');
+
+INSERT INTO UserGroups (userId, groupId)
+VALUES (101, 1);
+INSERT INTO UserGroups (userId, groupId)
+VALUES (102, 2);
+INSERT INTO UserGroups (userId, groupId)
+VALUES (103, 3);
+
+
+INSERT INTO Resources (resourceName)
+VALUES ('adminPage');
+INSERT INTO Resources (resourceName)
+VALUES ('manageUsers');
+INSERT INTO Resources (resourceName)
+VALUES ('manageProducts');
+INSERT INTO Resources (resourceName)
+VALUES ('manageCoupons');
+INSERT INTO Resources (resourceName)
+VALUES ('manageOrders');
+INSERT INTO Resources (resourceName)
+VALUES ('viewReports');
+
+INSERT INTO Permissions (permissionName)
+VALUES ('read');
+INSERT INTO Permissions (permissionName)
+VALUES ('write');
+INSERT INTO Permissions (permissionName)
+VALUES ('execute');
+INSERT INTO Permissions (permissionName)
+VALUES ('access');
+
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 1, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 1, 2);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 1, 3);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 1, 4);
+
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 2, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 2, 2);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 2, 3);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 2, 4);
+
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 3, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 3, 2);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 3, 3);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 3, 4);
+
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 4, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 4, 2);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 4, 3);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 4, 4);
+
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 5, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 5, 2);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 5, 3);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 5, 4);
+
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 6, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 6, 2);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 6, 3);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 6, 4);
+
+
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (2, 1, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (2, 1, 2);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (2, 1, 3);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (2, 1, 4);
+
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (2, 5, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (2, 5, 2);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (2, 5, 3);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (2, 5, 4);
+
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (3, 1, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (3, 2, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (3, 3, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (3, 4, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (3, 5, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (3, 6, 1);
+
+
+
 INSERT INTO paymentMethods (name, isActive)
 VALUES ('GooglePay', 1),
        ('Delivery', 1),
