@@ -237,3 +237,42 @@ CREATE TABLE usersUsage
     label           VARCHAR(255) DEFAULT NULL,
     Alert           VARCHAR(255) DEFAULT NULL
 );
+CREATE TABLE `Groups`
+(
+    id        INT AUTO_INCREMENT PRIMARY KEY,
+    groupName VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE UserGroups
+(
+    userId  INT,
+    groupId INT,
+    PRIMARY KEY (userId, groupId),
+    FOREIGN KEY (userId) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (groupId) REFERENCES `Groups` (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+CREATE TABLE Resources
+(
+    id           INT AUTO_INCREMENT PRIMARY KEY,
+    resourceName VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Permissions
+(
+    id             INT AUTO_INCREMENT PRIMARY KEY,
+    permissionName VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE GroupPermissions
+(
+    groupId      INT,
+    resourceId   INT,
+    permissionId INT,
+    PRIMARY KEY (groupId, resourceId, permissionId),
+    FOREIGN KEY (groupId) REFERENCES `Groups` (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (resourceId) REFERENCES Resources (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (permissionId) REFERENCES Permissions (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+

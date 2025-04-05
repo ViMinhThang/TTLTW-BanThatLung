@@ -173,10 +173,19 @@
                                             <td>-</td> <!-- Chất liệu -->
                                             <td>-</td> <!-- Xóa -->
                                             <td class="text-center">
-                                                <a href="${pageContext.request.contextPath}/admin/table/belts/createProduct?id=${belt.id}&message=update&variantId=${variant.id}"
-                                                   class="btn btn-dark fa-solid fa-pen-to-square"></a>
-                                                <button class="btn btn-danger fa-solid fa-trash-can custom_action_hover"
-                                                        data-bs-toggle="modal" data-bs-target="#removeModal"></button>
+                                                <c:choose>
+                                                    <c:when test="${permissionToWrite == true &&permissionToExecute == true }">
+                                                        <a href="${pageContext.request.contextPath}/admin/table/belts/createProduct?id=${belt.id}&message=update&variantId=${variant.id}"
+                                                           class="btn btn-dark fa-solid fa-pen-to-square"></a>
+                                                        <button class="btn btn-danger fa-solid fa-trash-can custom_action_hover"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#removeModal"></button>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        -
+                                                    </c:otherwise>
+                                                </c:choose>
+
                                             </td>
                                         </tr>
                                     </c:forEach>

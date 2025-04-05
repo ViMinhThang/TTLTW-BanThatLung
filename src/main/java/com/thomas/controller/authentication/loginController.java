@@ -2,6 +2,7 @@ package com.thomas.controller.authentication;
 
 import com.thomas.dao.model.User;
 import com.thomas.services.AuthService;
+import com.thomas.services.PermissionService;
 import com.thomas.services.UsesUsageService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,6 +23,7 @@ import java.util.Scanner;
 public class loginController extends HttpServlet {
     private static final String SECRET_KEY = "6Ld-QAgrAAAAAAJrDp50efjXGmaIMCrr5dBK-clG";
     UsesUsageService usesUsageService = new UsesUsageService();
+    PermissionService permissionService = new PermissionService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -36,7 +38,6 @@ public class loginController extends HttpServlet {
         String userEmail = request.getParameter("userEmail");
         String password = request.getParameter("password");
         String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
-
         boolean isCaptchaValid = verifyCaptcha(gRecaptchaResponse);
 
         if (isCaptchaValid) {
@@ -46,6 +47,8 @@ public class loginController extends HttpServlet {
                 HttpSession session = request.getSession();
                 service.saveSession(user.getId(), session.getId());
                 usesUsageService.trackUserActivity(user.getId(), ipAddress.getClientIp(request));
+                boolean isAdmin = permissionService.checkPermission("adminPage", user.getId(), "access");
+                session.setAttribute("wasAdmin", isAdmin);
                 session.setAttribute("auth", user);
                 response.sendRedirect("/");
             } else {
@@ -80,7 +83,7 @@ public class loginController extends HttpServlet {
             in.close();
 
             JSONObject json = new JSONObject(response.toString());
-            return json.getBoolean("success") && json.getDouble("score") >=  0.5;
+            return json.getBoolean("success") && json.getDouble("score") >= 0.5;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
