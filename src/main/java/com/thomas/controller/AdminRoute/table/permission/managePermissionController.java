@@ -27,14 +27,21 @@ public class managePermissionController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String message = request.getParameter("message");
-        Integer userId = Integer.valueOf(request.getParameter("userId"));
-        if (message.equals("promote")) {
-            permissionService.promote(userId);
-        } else if (message.equals("demote")) {
-            permissionService.demote(userId);
-        }
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("auth");
 
+        String message = request.getParameter("message");
+        if (message.equals("promote")) {
+            Integer userId = Integer.valueOf(request.getParameter("userId"));
+            permissionService.promote(userId, user.getId());
+        } else if (message.equals("demote")) {
+            Integer userId = Integer.valueOf(request.getParameter("userId"));
+            permissionService.demote(userId, user.getId());
+        } else if (message.equals("addRole")) {
+            String userEmail = request.getParameter("userEmail");
+            String role = request.getParameter("role");
+            permissionService.setRole(userEmail, role, user.getId());
+        }
 
         response.sendRedirect("/admin/table/permission");
     }

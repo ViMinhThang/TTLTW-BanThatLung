@@ -31,7 +31,7 @@
                         data-bs-toggle="modal"
                         data-bs-target="#createModal"
                 >
-                    Tạo 1 bộ sưu tập mới
+                    Thêm quyền cho 1 người dùng
                 </button>
 
                 <ul class="navbar-nav ml-auto">
@@ -188,53 +188,6 @@
     </a>
     <div
             class="modal fade"
-            id="removeModal"
-            tabindex="-1"
-            aria-labelledby="removeModal"
-            aria-hidden="true"
-    >
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                        Bạn có muốn xóa bộ sưu tập này ?
-                    </h5>
-                    <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body removeModalBody">
-
-                </div>
-                <div class="modal-footer">
-                    <button
-                            type="button"
-                            class="btn btn-white border border-dark custom_btn_style"
-                            data-bs-dismiss="modal"
-                            style="color: black"
-                    >
-                        Hủy
-                    </button>
-                    <form class="deleteBtn" method="POST" action="/admin/table/collections">
-                        <button
-                                type="submit"
-                                class="btn btn-dark custom_btn_style"
-                                style="color: white; background-color: black"
-                        >
-                            Xóa vĩnh viễn
-                        </button>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div
-            class="modal fade"
             id="createModal"
             tabindex="-1"
             aria-labelledby="exampleModalLabel"
@@ -242,11 +195,11 @@
     >
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="${pageContext.request.contextPath}/admin/table/collections" method="POST">
-                    <input type="hidden" name="message" value="create">
+                <form action="/admin/table/permission" method="POST">
+                    <input type="hidden" name="message" value="addRole">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">
-                            Tạo 1 bộ sưu tập mới
+                            Thêm quyền cho 1 người dùng
                         </h5>
                         <button
                                 type="button"
@@ -258,28 +211,31 @@
                     </div>
                     <div class="modal-body">
                         <div class="container mt-2">
-                            <input type="hidden" name="message" value="create">
-                            <div class="mb-3">
-                                <label for="collectionName" class="form-label">Tên của bộ sưu tập</label>
+                            <div class="mb-3 ">
+                                <label class="form-label">Email của người dùng</label>
                                 <input
                                         type="text"
                                         class="form-control custom_input--btn-group__input"
-                                        id="collectionName"
-                                        name="collectionName"
+                                        name="userEmail"
                                         required
                                         autocomplete="off"
                                 />
                             </div>
-                            <div class="mb-3">
-                                <label for="createdDate" class="form-label"
-                                >Ngày tạo</label
+                            <div class="mb-3 flex flex-column">
+                                <label class="form-label"
+                                >Quyền</label
                                 >
-                                <input
-                                        type="date"
-                                        class="form-control custom_input--btn-group__input"
-                                        id="createdDate"
-                                        name="createdDate"
-                                />
+                                <select name="role" class="form-select">
+                                    <option value="admin">
+                                        admin
+                                    </option>
+                                    <option value="editor">
+                                        editor
+                                    </option>
+                                    <option value="admin">
+                                        viewer
+                                    </option>
+                                </select>
                             </div>
                         </div>
                     </div>
