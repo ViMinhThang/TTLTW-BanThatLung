@@ -20,12 +20,12 @@ public class PermissionService {
         return roleDao.checkPermission(resource, userId, permission);
     }
 
-    public boolean promote(int userId) {
-        return roleDao.promote(userId);
+    public boolean promote(int userId, int editorId) {
+        return roleDao.promoteAndLog(userId, editorId);
     }
 
-    public boolean demote(int userId) {
-        return roleDao.demote(userId);
+    public boolean demote(int userId, int editorId) {
+        return roleDao.demoteAndLog(userId, editorId);
     }
 
     public List<UserPermissionView> getAll() {
@@ -42,5 +42,11 @@ public class PermissionService {
         }
 
         return userPermissionViews;
+    }
+
+    public void setRole(String userEmail, String role, int editorId) {
+        int userId = userDao.findUserEmail(userEmail, null).getId();
+        int roleId = roleDao.getRole(role);
+        roleDao.setPermissionAndLog(userId, roleId, editorId);
     }
 }
