@@ -34,5 +34,6 @@ public class JDBIConnect {
         jdbi.registerRowMapper(UsersUsage.class, new UsersUsageMapper());
         jdbi.registerRowMapper(Belts.class, new BeltMapper());
         jdbi.registerRowMapper(BeltVariant.class, new BeltVariantsMapper());
+        jdbi.registerRowMapper(PuchasesMapper.class, new PuchasesMapper());
     }
 }

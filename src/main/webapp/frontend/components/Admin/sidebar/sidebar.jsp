@@ -155,7 +155,61 @@
     <%
         }
     %>
+    <li class="nav-item active">
+        <a
+                class="nav-link collapsed"
+                href="#"
+                data-toggle="collapse"
+                data-target="#collapseUtilitiesInventory"
+                aria-expanded="true"
+                aria-controls="collapseUtilities"
+        >
+            <i class="fas fa-fw fa-table"></i>
+            <span>Kho hàng</span>
+        </a>
+        <div
+                id="collapseUtilitiesInventory"
+                class="collapse"
+                aria-labelledby="headingUtilities"
+                data-parent="#accordionSidebar"
+        >
+            <div class="py-2 collapse-inner rounded" style="background-color:#dddddd;">
+                <a class="collapse-item <%=request.getHeader("referer").endsWith("suppliers") ? "active" : "" %>"
+                   href="${pageContext.request.contextPath}/admin/inventory/suppliers">
+                    Nhà cung cấp
+                </a>
+                <a class="collapse-item <%= request.getHeader("referer").endsWith("belts") ? "active" : "" %>"
+                   href="${pageContext.request.contextPath}/admin/inventory/purchases">
+                    Phiếu mua
+                </a>
+                <a class="collapse-item <%= request.getHeader("referer").endsWith("reviews") ? "active" : "" %>"
+                   href="${pageContext.request.contextPath}/admin/monitors/reviews">
+                    Đánh giá
+                </a>
+                <a class="collapse-item <%= request.getHeader("referer").endsWith("coupons") ? "active" : "" %>"
+                   href="${pageContext.request.contextPath}/admin/monitors/coupons">
+                    Coupon
+                </a>
+                <a class="collapse-item <%= request.getHeader("referer").endsWith("orders") ? "active" : "" %>"
+                   href="${pageContext.request.contextPath}/admin/monitors/orders">
+                    Đơn hàng
+                </a>
+                <a class="collapse-item <%= request.getHeader("referer").endsWith("collections") ? "active" : "" %>"
+                   href="${pageContext.request.contextPath}/admin/monitors/collections">
+                    Bộ sưu tập
+                </a>
 
+            </div>
+        </div>
+    </li>
+
+    <%
+        if (referer != null && referer.contains("/inventory")) {
+    %>
+    <hr class="sidebar-divider"/>
+    <%
+        }
+    %>
     <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>
