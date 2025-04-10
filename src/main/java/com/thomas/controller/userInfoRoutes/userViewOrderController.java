@@ -31,7 +31,27 @@ public class userViewOrderController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("auth");
+        String orderId = request.getParameter("orderId");
+        if (orderId != null) {
+            Order order = uploadOrderService.getOrderById(Integer.parseInt(orderId));
+            uploadOrderDetailService.setOrderDetails(order);
+            for (OrderDetails od : order.getOrderDetails()) {
+                List<BeltVariant> beltVariants = productService.findVariants(od.getBeltId(), null, null, od.getVariantId());
 
+                if (!beltVariants.isEmpty()) {
+                    BeltVariant selectedVariant = beltVariants.get(0);
+                    od.setBeltVariant(selectedVariant);
+                    od.setBeltImages(productService.getVariantImages(selectedVariant.getId()));
+                    od.setCategories(productService.findCategory(od.getBeltId(), selectedVariant.getId()));
+                    uploadOrderDetailService.setBeltName(od);
+                }
+            }
+            order.setShippingDate();
+            request.setAttribute("userOrder", order);
+            request.getRequestDispatcher("/frontend/userInfoPage/orderView/orderDetails/orderDetails.jsp").forward(request, response);
+        } else {
+
+        }
         if (user == null) {
             response.sendRedirect("/");
             return;
@@ -61,6 +81,7 @@ public class userViewOrderController extends HttpServlet {
 
         request.setAttribute("orders", userOrders);
         request.getRequestDispatcher("/frontend/userInfoPage/orderView/ordersView.jsp").forward(request, response);
+
     }
 
 

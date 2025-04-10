@@ -88,33 +88,54 @@
     <jsp:include page="/frontend/components/userInfo/navigationBar/navBar.jsp"/>
 
     <div class="container-fluid container-sm ps-0" style="width: 1900px">
-        <table class="table w-100">
-            <thead class="border-bottom">
-            <tr class="font-weight-light">
-                <th>Đơn hàng</th>
-                <th class="text-start">Ngày đặt</th>
-                <th>Trạng thái</th>
-                <th>Tổng</th>
-                <th class="text-end">Hành động</th>
-            </tr>
-            </thead>
+        <div class="userInfo__content--middle mb-5">
 
-            <tbody class="p-2">
-            <c:forEach var="order" items="${orders}">
-                <fmt:parseDate value="${order.orderDate}" pattern="yyyy-MM-dd" var="formattedDate"/>
-                <tr>
-                    <td>#${order.id}</td>
-                    <td><fmt:formatDate value="${formattedDate}" pattern="dd-MM-yyyy"/></td>
-                    <td>${order.orderStatus}</td>
-                    <td>${order.orderTotal} VNĐ</td>
-                    <td class="text-end">
-                        <a class="bg-dark p-2 text-white text-decoration-none rounded-0"
-                           href="${pageContext.request.contextPath}/viewOrders?orderId=${order.id}">Xem</a>
-                    </td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
+            <div class="p-0 container-sm mb-2">
+                <fmt:parseDate value="${userOrder.orderDate}" pattern="yyyy-MM-dd" var="formattedDate"/>
+                <h2 class="fw-bold custom_size--19 p-0">
+                    Đơn hàn được đặt vào ngày <fmt:formatDate value="${formattedDate}" pattern="dd-MM-yyyy"/>
+                </h2>
+                <h2 class="p-0 custom_size--19">Chi tiết đơn hàng</h2>
+                <div class="row">
+                    <div class="col-11">
+                        Sản phẩm
+                    </div>
+                    <div class="col-1 text-end">
+                        Tổng
+                    </div>
+                </div>
+                <hr/>
+                <c:forEach var="item" items="${userOrder.orderDetails}">
+                    <div class="row text-start">
+                        <div class="col-11">
+                            <img
+                                    src="${pageContext.request.contextPath}${item.beltImages[0]}"
+                                    alt="Belt Image" height="50px"/> ${item.beltName} x ${item.quantity}
+                        </div>
+                        <div class="col-1 text-end">
+                                ${item.price} vnđ
+                        </div>
+                    </div>
+                    <hr/>
+                </c:forEach>
+                <div class="row py-3" style="font-size: 20px">
+                    <div class="col-8 text-end">
+                        Tổng tiền:
+                    </div>
+                    <div class="col-4 text-end">
+                        ${userOrder.orderTotal}
+                    </div>
+                </div>
+                <div class="row py-3" style="font-size: 20px">
+                    <div class="col-8 text-end">
+                        Nhận hàng từ
+                    </div>
+                    <div class="col-4 text-end">
+                        ${userOrder.shippingDate}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
