@@ -10,11 +10,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
-import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Map;
-import java.util.Base64;
-import java.util.UUID;
+import java.util.*;
 import java.text.DecimalFormat;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -24,6 +21,22 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.util.Map;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -49,6 +62,13 @@ public class OrderController extends HttpServlet {
     private static final String PARTNER_CODE = "MOMOBKUN20180529";
     private static final String ACCESS_KEY = "klm05TvNBzhg7h7j";
     private static final String SECRET_KEY = "at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa";
+
+    // Các tham số VNPay API
+    public static final String VNP_PAY_URL = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+    public static final String VNP_RETURN_URL = "http://localhost:8080/VNPay-return";
+    public static final String VNP_TMN_CODE = "BQSZL9KZ";
+    public static final String VNP_SECRET_KEY = "T1J0EC8NQ7DYM9HDIR5MCGDD2LSK9Z44";
+    public static final String VNP_API_URL = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
 
     UploadAddressService uploadAddressService = new UploadAddressService();
     UploadOrderService uploadOrderService = new UploadOrderService();
@@ -83,25 +103,58 @@ public class OrderController extends HttpServlet {
             request.setAttribute("errorMessage", "Vui lòng chọn phương thức thanh toán");
             request.getRequestDispatcher("/frontend/checkoutPage/checkout.jsp").forward(request, response);
             return;
+        } else if (paymentMethod.equals("COD")) {
+            if (uploadOrderService.createOrder(userId, paymentMethodId, address.getId(), LocalDate.now(), grandTotal, "Đang xử lý", 0, user.getId())) {
+                Order order = uploadOrderService.getLatestOrder();
+                for (CartItem cartItem : cart.values()) {
+                    uploadOrderDetailService.createOrderDetail(order.getId(), cartItem.getPrice(), cartItem.getBelt().getId(), cartItem.getQuantity(), cartItem.getVariant().getId());
+                }
+                String subject = "Thông báo đơn hàng";
+                String content = "Đơn hàng của bạn đã được đặt thành công. Tổng giá trị đơn hàng là: " + totalPrice + " VNĐ.\n" +
+                        "Chi tiết đơn hàng:\n" + cart.toString() + "\n" + "cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.\n";
+                emailService.sendEmail(user.getEmail(), subject, content);
+                response.sendRedirect("/verify?messageRedirect=orderDetailSuccess");
+            }
         } else if (paymentMethod.equals("MoMo")) {
             try {
                 handleMomoPayment(request, response);
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
-            } catch (InvalidKeyException e) {
+                creatorder(request, response);
+            } catch (NoSuchAlgorithmException | InvalidKeyException e) {
                 throw new RuntimeException(e);
             }
-//            if (uploadOrderService.createOrder(userId, paymentMethodId, address.getId(), LocalDate.now(), grandTotal, "Đang xử lý", 0, user.getId())) {
-//                Order order = uploadOrderService.getLatestOrder();
-//                for (CartItem cartItem : cart.values()) {
-//                    uploadOrderDetailService.createOrderDetail(order.getId(), cartItem.getPrice(), cartItem.getBelt().getId(), cartItem.getQuantity(), cartItem.getVariant().getId());
-//                }
-//                String subject = "Thông báo đơn hàng";
-//                String content = "Đơn hàng của bạn đã được đặt thành công. Tổng giá trị đơn hàng là: " + totalPrice + " VNĐ.\n" +
-//                        "Chi tiết đơn hàng:\n" + cart.toString() + "\n" + "cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.\n";
-//                emailService.sendEmail(user.getEmail(), subject, content);
-//                response.sendRedirect("/verify?messageRedirect=orderDetailSuccess");
-//            }
+        } else if (paymentMethod.equals("VNPay")) {
+            handleVNPayPayment(request, response);
+            creatorder(request, response);
+        }
+    }
+
+    private void creatorder(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession();
+        Map<String, CartItem> cart = (Map<String, CartItem>) session.getAttribute("cart");
+        Coupon cp = (Coupon) session.getAttribute("appliedCoupon");
+        User user = (User) session.getAttribute("auth");
+        int userId = user.getId();
+        String paymentMethod = request.getParameter("paymentMethod");
+        Address address = uploadAddressService.getAddressByUserId(userId);
+        int paymentMethodId = uploadPaymentMethod.getPaymentMethodId(paymentMethod);
+        double totalPrice = 0, shippingCost = 0;
+        for (CartItem cartItem : cart.values()) {
+            totalPrice += cartItem.getPrice() * cartItem.getQuantity();
+            shippingCost = cartItem.getQuantity() * 15.000;
+        }
+        double discountRate = cp == null ? 0 : cp.getDiscountRate();
+        double discountAmount = totalPrice * (discountRate / 100);
+        double grandTotal = totalPrice + shippingCost + discountAmount;
+        if (uploadOrderService.createOrder(userId, paymentMethodId, address.getId(), LocalDate.now(), grandTotal, "Đang xử lý", 0, user.getId())) {
+            Order order = uploadOrderService.getLatestOrder();
+            for (CartItem cartItem : cart.values()) {
+                uploadOrderDetailService.createOrderDetail(order.getId(), cartItem.getPrice(), cartItem.getBelt().getId(), cartItem.getQuantity(), cartItem.getVariant().getId());
+            }
+            String subject = "Thông báo đơn hàng";
+            String content = "Đơn hàng của bạn đã được đặt thành công. Tổng giá trị đơn hàng là: " + totalPrice + " VNĐ.\n" +
+                    "Chi tiết đơn hàng:\n" + cart.toString() + "\n" + "cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.\n";
+            emailService.sendEmail(user.getEmail(), subject, content);
+//            response.sendRedirect("/verify?messageRedirect=orderDetailSuccess");
         }
     }
 
@@ -232,6 +285,188 @@ public class OrderController extends HttpServlet {
         String response = EntityUtils.toString(httpResponse.getEntity());
         httpClient.close();
         return response;
+    }
+
+    private void handleVNPayPayment(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String vnp_Version = "2.1.0";
+        String vnp_Command = "pay";
+        String orderType = "other";
+        String amountStr = req.getParameter("totalAmount").replace(".", "");;
+        long amount = Integer.parseInt(amountStr)*100;
+        String bankCode = req.getParameter("bankCode");
+
+        String vnp_TxnRef = getRandomNumber(8);
+        String vnp_IpAddr = getIpAddress(req);
+
+        String vnp_TmnCode = VNP_TMN_CODE;
+
+        Map<String, String> vnp_Params = new HashMap<>();
+        vnp_Params.put("vnp_Version", vnp_Version);
+        vnp_Params.put("vnp_Command", vnp_Command);
+        vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
+        vnp_Params.put("vnp_Amount", String.valueOf(amount));
+        vnp_Params.put("vnp_CurrCode", "VND");
+
+        if (bankCode != null && !bankCode.isEmpty()) {
+            vnp_Params.put("vnp_BankCode", bankCode);
+        }
+        vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
+        vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
+        vnp_Params.put("vnp_OrderType", orderType);
+
+        String locate = req.getParameter("language");
+        if (locate != null && !locate.isEmpty()) {
+            vnp_Params.put("vnp_Locale", locate);
+        } else {
+            vnp_Params.put("vnp_Locale", "vn");
+        }
+        vnp_Params.put("vnp_ReturnUrl", VNP_RETURN_URL);
+        vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
+
+        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        String vnp_CreateDate = formatter.format(cld.getTime());
+        vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
+
+        cld.add(Calendar.MINUTE, 15);
+        String vnp_ExpireDate = formatter.format(cld.getTime());
+        vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
+
+        List fieldNames = new ArrayList(vnp_Params.keySet());
+        Collections.sort(fieldNames);
+        StringBuilder hashData = new StringBuilder();
+        StringBuilder query = new StringBuilder();
+        Iterator itr = fieldNames.iterator();
+        while (itr.hasNext()) {
+            String fieldName = (String) itr.next();
+            String fieldValue = (String) vnp_Params.get(fieldName);
+            if ((fieldValue != null) && (fieldValue.length() > 0)) {
+                //Build hash data
+                hashData.append(fieldName);
+                hashData.append('=');
+                hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
+                //Build query
+                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString()));
+                query.append('=');
+                query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
+                if (itr.hasNext()) {
+                    query.append('&');
+                    hashData.append('&');
+                }
+            }
+        }
+        String queryUrl = query.toString();
+        String vnp_SecureHash = hmacSHA512(VNP_SECRET_KEY, hashData.toString());
+        queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
+        String paymentUrl = VNP_PAY_URL + "?" + queryUrl;
+//        com.google.gson.JsonObject job = new JsonObject();
+//        job.addProperty("code", "00");
+//        job.addProperty("message", "success");
+//        job.addProperty("data", paymentUrl);
+        resp.sendRedirect(paymentUrl);
+    }
+
+    //Util for VNPAY
+    private String md5(String message) {
+        String digest = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] hash = md.digest(message.getBytes("UTF-8"));
+            StringBuilder sb = new StringBuilder(2 * hash.length);
+            for (byte b : hash) {
+                sb.append(String.format("%02x", b & 0xff));
+            }
+            digest = sb.toString();
+        } catch (UnsupportedEncodingException ex) {
+            digest = "";
+        } catch (NoSuchAlgorithmException ex) {
+            digest = "";
+        }
+        return digest;
+    }
+
+    private String Sha256(String message) {
+        String digest = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(message.getBytes("UTF-8"));
+            StringBuilder sb = new StringBuilder(2 * hash.length);
+            for (byte b : hash) {
+                sb.append(String.format("%02x", b & 0xff));
+            }
+            digest = sb.toString();
+        } catch (UnsupportedEncodingException ex) {
+            digest = "";
+        } catch (NoSuchAlgorithmException ex) {
+            digest = "";
+        }
+        return digest;
+    }
+
+    private String hashAllFields(Map fields) {
+        List fieldNames = new ArrayList(fields.keySet());
+        Collections.sort(fieldNames);
+        StringBuilder sb = new StringBuilder();
+        Iterator itr = fieldNames.iterator();
+        while (itr.hasNext()) {
+            String fieldName = (String) itr.next();
+            String fieldValue = (String) fields.get(fieldName);
+            if ((fieldValue != null) && (fieldValue.length() > 0)) {
+                sb.append(fieldName);
+                sb.append("=");
+                sb.append(fieldValue);
+            }
+            if (itr.hasNext()) {
+                sb.append("&");
+            }
+        }
+        return hmacSHA512(VNP_SECRET_KEY,sb.toString());
+    }
+
+    private String hmacSHA512(final String key, final String data) {
+        try {
+
+            if (key == null || data == null) {
+                throw new NullPointerException();
+            }
+            final Mac hmac512 = Mac.getInstance("HmacSHA512");
+            byte[] hmacKeyBytes = key.getBytes();
+            final SecretKeySpec secretKey = new SecretKeySpec(hmacKeyBytes, "HmacSHA512");
+            hmac512.init(secretKey);
+            byte[] dataBytes = data.getBytes(StandardCharsets.UTF_8);
+            byte[] result = hmac512.doFinal(dataBytes);
+            StringBuilder sb = new StringBuilder(2 * result.length);
+            for (byte b : result) {
+                sb.append(String.format("%02x", b & 0xff));
+            }
+            return sb.toString();
+
+        } catch (Exception ex) {
+            return "";
+        }
+    }
+
+    private String getIpAddress(HttpServletRequest request) {
+        String ipAdress;
+        try {
+            ipAdress = request.getHeader("X-FORWARDED-FOR");
+            if (ipAdress == null) {
+                ipAdress = request.getRemoteAddr();
+            }
+        } catch (Exception e) {
+            ipAdress = "Invalid IP:" + e.getMessage();
+        }
+        return ipAdress;
+    }
+
+    private String getRandomNumber(int len) {
+        Random rnd = new Random();
+        String chars = "0123456789";
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++) {
+            sb.append(chars.charAt(rnd.nextInt(chars.length())));
+        }
+        return sb.toString();
     }
 }
 
