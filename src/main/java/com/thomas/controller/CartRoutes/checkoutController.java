@@ -22,7 +22,7 @@ public class checkoutController extends HttpServlet {
     UploadAddressService uploadAddressService = new UploadAddressService();
     UploadPaymentMethod uploadPaymentMethod = new UploadPaymentMethod();
     DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-    DecimalFormat formatter = new DecimalFormat("#,###.000", symbols);
+    DecimalFormat formatter = new DecimalFormat("#,###", symbols);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -37,11 +37,12 @@ public class checkoutController extends HttpServlet {
         double totalPrice = 0;
         for (CartItem cartItem : cart.values()) {
             totalPrice += cartItem.getQuantity() * cartItem.getPrice();
-            shipmentPrice += cartItem.getQuantity() * 15.000;
+            shipmentPrice += cartItem.getQuantity() * 15000;
         }
         double discountRate = cp == null ? 0 : cp.getDiscountRate();
         double discountAmount = totalPrice * (discountRate / 100);
-        double grandTotal = totalPrice + shipmentPrice + discountAmount;
+        double grandTotal = totalPrice + shipmentPrice - discountAmount;
+
         List<Address> userAddresses = uploadAddressService.getAddressList(user.getId());
 
         List<PaymentMethod> paymentMethods = uploadPaymentMethod.getPaymentMethods();
@@ -54,13 +55,15 @@ public class checkoutController extends HttpServlet {
         }
 
         String formattedShipmentPrice = formatter.format(shipmentPrice).replace(",", ".");
+        String formattedDiscountAmount = formatter.format(discountAmount).replace(",", ".");
         String formattedGrandTotal = formatter.format(grandTotal).replace(",", ".");
         String formattedTotalPrice = formatter.format(totalPrice).replace(",", ".");
         request.setAttribute("paymentMethods", paymentMethods);
         request.setAttribute("cartSize", cartSize);
         request.setAttribute("shipmentPrice", formattedShipmentPrice);
-        request.setAttribute("grandTotal", formattedGrandTotal);
+        request.setAttribute("discountAmount", formattedDiscountAmount);
         request.setAttribute("totalPrice", formattedTotalPrice);
+        request.setAttribute("grandTotal", formattedGrandTotal);
         request.getRequestDispatcher("/frontend/cartPage/checkoutPage/checkoutPage.jsp").forward(request, response);
     }
 
