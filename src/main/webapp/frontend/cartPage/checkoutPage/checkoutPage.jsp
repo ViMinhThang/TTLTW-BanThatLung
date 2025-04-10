@@ -16,6 +16,15 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/checkoutPage.css"/>
+    <script>
+        $(document).ready(function() {
+            $('input[name="paymentMethod"]').change(function() {
+                var selectedMethod = $(this).val();
+                $('.submitPaymentMethod').val(selectedMethod);
+                $('#openFormButtonPayment').text('Thanh toán với ' + selectedMethod);
+            });
+        });
+    </script>
 </head>
 <body>
 <jsp:include page="/frontend/header_footer/header.jsp"/>
@@ -24,7 +33,7 @@
     <h2 class="fw-bold text-center">Vui lòng xác nhận và gửi đơn đặt hàng của bạn</h2>
     <div class="row my-5">
         <div class="col-lg-8 p-3">
-            <h3 class="fw-bold my-3">Thông tin giao hàng</h3>
+            <h3 class="fw-bold py-2 bg-light">Thông tin giao hàng</h3>
             <div class="border-top border-bottom py-3">
                 <div class="d-flex flex-column justify-content-between">
                     <p class="fs-4">Tên: ${sessionScope.auth.name}</p>
@@ -39,26 +48,51 @@
 <%--                <button class="btn btn-outline-dark" id="openFormButton">Thay đổi</button>--%>
             </div>
 
-            <div class="mt-3">
-                <h3 class="fw-bold my-3">Phương thức thanh toán</h3>
-                <div class="d-inline-flex flex-column" role="group">
-                    <c:forEach var="method" items="${paymentMethods}">
-                        <c:set var="counter" value="${counter + 1}"/>
-                        <div>
-                            <input type="radio" name="paymentMethod" id="paymentMethod${method.id}" value="${method.name}" autocomplete="off" ${counter == 1 ? 'checked' : ''} required>
-                            <label class="m-2" for="paymentMethod${method.id}">
-                                <img class="me-2" src="${pageContext.request.contextPath}/assets/icons/${method.name}.svg" alt="${method.name}"/>
-                                ${method.name}
-                            </label>
-                        </div>
-                    </c:forEach>
-                </div>
-<%--                <div class="d-flex align-items-center">--%>
-<%--                    <img class="me-3" src="${pageContext.request.contextPath}/assets/icons/GooglePay.svg" alt="googlePay" style="max-width: 50px"/>--%>
-<%--                    <button class="btn btn-outline-dark" id="openFormButtonPay">Thay đổi</button>--%>
-<%--                </div>--%>
+            <h3 class="fw-bold py-2 bg-light mt-3">Phương thức thanh toán</h3>
+            <div class="d-inline-flex flex-row" role="group">
+                <c:set var="counter" value="0"/>
+                <c:forEach var="method" items="${paymentMethods}">
+                    <c:set var="counter" value="${counter + 1}"/>
+                    <div class="payment-option m-2">
+                        <label class="payment-label">
+                            <input type="radio" name="paymentMethod" value="${method.name}" ${counter == 1 ? 'checked' : ''} required>
+                            <span class="custom-check"></span>
+                            <span class="payment-text">${method.name}</span>
+                            <img class="payment-icon"
+                                 src="${pageContext.request.contextPath}/assets/icons/${method.name}.svg"
+                                 alt="${method.name}"/>
+                        </label>
+                    </div>
+                </c:forEach>
             </div>
+
+            <h3 class="fw-bold py-2 bg-light mt-3">Phương thức giao hàng</h3>
+<%--            <div class="d-inline-flex flex-row" role="group">--%>
+<%--                <c:set var="counter" value="0"/>--%>
+<%--                <c:forEach var="method" items="${paymentMethods}">--%>
+<%--                    <c:set var="counter" value="${counter + 1}"/>--%>
+<%--                    <div class="payment-option m-2">--%>
+<%--                        <label class="payment-label">--%>
+<%--                            <input type="radio"--%>
+<%--                                   name="paymentMethod"--%>
+<%--                                   value="${method.name}"--%>
+<%--                                ${counter == 1 ? 'checked' : ''}--%>
+<%--                                   required>--%>
+<%--                            <span class="custom-check"></span>--%>
+<%--                            <span class="payment-text">${method.name}</span>--%>
+<%--                            <img class="payment-icon"--%>
+<%--                                 src="${pageContext.request.contextPath}/assets/icons/${method.name}.svg"--%>
+<%--                                 alt="${method.name}"/>--%>
+<%--                        </label>--%>
+<%--                    </div>--%>
+<%--                </c:forEach>--%>
+<%--            </div>--%>
         </div>
+
+        <%--                <div class="d-flex align-items-center">--%>
+        <%--                    <img class="me-3" src="${pageContext.request.contextPath}/assets/icons/GooglePay.svg" alt="googlePay" style="max-width: 50px"/>--%>
+        <%--                    <button class="btn btn-outline-dark" id="openFormButtonPay">Thay đổi</button>--%>
+        <%--                </div>--%>
 
 <%--        <div id="popupForm" class="popup">--%>
 <%--            <div class="popup-content">--%>
@@ -138,12 +172,13 @@
             </div>
             <c:choose>
                 <c:when test="${userAddresses == null || paymentMethods == null || paymentMethods.isEmpty()||sessionScope.auth==null}">
-                    <button class="btn btn-dark mt-4 fs-4 w-100" disabled id="openFormButtonPaymentDisabled">Thanh toán với Google</button>
+                    <button class="btn btn-dark mt-4 fs-4 w-100" disabled id="openFormButtonPaymentDisabled">Thanh toán với COD</button>
                 </c:when>
                 <c:otherwise>
                     <form method="POST" action="${request.context.path}/Order">
+                        <input type="hidden" name="totalAmount" value="${grandTotal}"/>
                         <input class="submitPaymentMethod" type="hidden" name="paymentMethod" value="GooglePay">
-                        <button type="submit" class="btn btn-dark mt-4 fs-4 w-100" id="openFormButtonPayment">Thanh toán với Google</button>
+                        <button type="submit" class="btn btn-dark mt-4 fs-4 w-100" id="openFormButtonPayment">Thanh toán với COD</button>
                     </form>
                 </c:otherwise>
             </c:choose>

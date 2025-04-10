@@ -11,9 +11,9 @@ VALUES ('John Doe', 'john.doe@example.com', '1990-05-15', '202cb962ac59075b964b0
         'Non-binary', 9988776655, 3, NULL, 1);
 
 INSERT INTO paymentMethods (name, isActive)
-VALUES ('GooglePay', 1),
-       ('Delivery', 1),
-       ('Momo', 1);
+VALUES ('COD', 1),
+       ('MoMo', 1),
+       ('VNPay', 1);
 
 INSERT INTO belts (name, description, price, gender, releaseDate, isDeleted, discountRate, materialBelt)
 VALUES ('Classic Leather Belt', 'A premium leather belt for formal wear.', 29.99, 'Unisex', '2024-03-01', 0, 10.0,
