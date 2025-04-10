@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>Thanh toán MoMo</title>
+    <title>Kết quả thanh toán</title>
     <link rel="icon" href="${pageContext.request.contextPath}/assets/icons/favicon.svg" type="image/x-icon"/>
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -35,36 +35,39 @@
 <body>
 <jsp:include page="/frontend/header_footer/header.jsp"/>
 
-<div class="container mt-5">
-    <form id="redirectForm" action="/momo-return" method="POST">
-        <h2>Thanh toán MoMo</h2>
-        <hr>
-        <p><strong>Thông tin người mua:</strong></p>
-        <ul>
-            <li><strong>Tên:</strong> ${param.name}</li>
-            <li><strong>Địa chỉ:</strong> ${param.address}</li>
-            <li><strong>Số điện thoại:</strong> ${param.phone}</li>
-        </ul>
+    <div class="container mt-5">
+        <div class="row my-3">
+            <div class="col-12 col-md-8 col-lg-6">
+                <form id="redirectForm" action="/checkout-return" method="POST">
+                    <h2>Kết quả giao dịch</h2>
+                    <hr>
+                    <h3>Thông tin đơn hàng</h3>
+                    <ul>
+                        <li><strong>Tên:</strong> ${userName}</li>
+                        <li><strong>Mã đơn hàng:</strong> ${orderId}</li>
+                    </ul>
+                    <p><strong>Số tiền thanh toán:</strong> ${total}</p>
+                    <p>Trạng thái: ${status}</p>
 
-        <p><strong>Số tiền thanh toán:</strong> ${param.amount}</p>
 
-        <c:choose>
-            <c:when test="${param.resultCode == '0'}">
-                <h4 class="text-success">Thanh toán thành công!</h4>
-            </c:when>
-            <c:otherwise>
-                <h4 class="text-danger">Thanh toán thất bại!</h4>
-            </c:otherwise>
-        </c:choose>
+                    <c:if test="${message == 'success'}">
+                        <p>✅ Cảm ơn bạn đã mua hàng!</p>
+                    </c:if>
+                    <c:if test="${message == 'failed'}">
+                        <p>❌ Vui lòng thử lại hoặc chọn phương thức khác.</p>
+                    </c:if>
 
-        <div class="mb-md-5 mt-md-4 pb-5">
-            <a href="${pageContext.request.contextPath}/"
-               class="btn border-dark btn-lg px-5 text-dark"
-            >Quay về trang chủ
-            </a>
+                    <div class="mb-md-5 mt-md-4 pb-5">
+                        <a href="${pageContext.request.contextPath}/"
+                           class="btn border-dark btn-lg px-5 text-dark"
+                        >Quay về trang chủ
+                        </a>
+                    </div>
+                </form>
+
+            </div>
         </div>
-    </form>
-</div>
+    </div>
 
 <jsp:include page="/frontend/header_footer/footer.jsp"/>
 </body>

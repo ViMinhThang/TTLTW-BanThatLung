@@ -26,8 +26,7 @@ import java.security.MessageDigest;
 import java.util.Map;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import javax.mail.Session;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,12 +34,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.TimeZone;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -55,6 +49,13 @@ import jakarta.servlet.http.HttpSession;
 //03/07
 //OTP
 
+//VNPay test account
+//NCB
+//9704198526191432198
+//NGUYEN VAN A
+//07/15
+//123456
+
 @WebServlet(name = "OrderController", value = "/Order")
 public class OrderController extends HttpServlet {
     // Các tham số MoMo API
@@ -65,7 +66,7 @@ public class OrderController extends HttpServlet {
 
     // Các tham số VNPay API
     public static final String VNP_PAY_URL = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static final String VNP_RETURN_URL = "http://localhost:8080/VNPay-return";
+    public static final String VNP_RETURN_URL = "http://localhost:8080/checkout-return";
     public static final String VNP_TMN_CODE = "BQSZL9KZ";
     public static final String VNP_SECRET_KEY = "T1J0EC8NQ7DYM9HDIR5MCGDD2LSK9Z44";
     public static final String VNP_API_URL = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
@@ -99,36 +100,34 @@ public class OrderController extends HttpServlet {
         double discountRate = cp == null ? 0 : cp.getDiscountRate();
         double discountAmount = totalPrice * (discountRate / 100);
         double grandTotal = totalPrice + shippingCost + discountAmount;
+
         if (paymentMethod.isEmpty()) {
             request.setAttribute("errorMessage", "Vui lòng chọn phương thức thanh toán");
             request.getRequestDispatcher("/frontend/checkoutPage/checkout.jsp").forward(request, response);
             return;
         } else if (paymentMethod.equals("COD")) {
-            if (uploadOrderService.createOrder(userId, paymentMethodId, address.getId(), LocalDate.now(), grandTotal, "Đang xử lý", 0, user.getId())) {
-                Order order = uploadOrderService.getLatestOrder();
-                for (CartItem cartItem : cart.values()) {
-                    uploadOrderDetailService.createOrderDetail(order.getId(), cartItem.getPrice(), cartItem.getBelt().getId(), cartItem.getQuantity(), cartItem.getVariant().getId());
-                }
-                String subject = "Thông báo đơn hàng";
-                String content = "Đơn hàng của bạn đã được đặt thành công. Tổng giá trị đơn hàng là: " + totalPrice + " VNĐ.\n" +
-                        "Chi tiết đơn hàng:\n" + cart.toString() + "\n" + "cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.\n";
-                emailService.sendEmail(user.getEmail(), subject, content);
-                response.sendRedirect("/verify?messageRedirect=orderDetailSuccess");
-            }
+            createOrder(request, response);
+            request.setAttribute("paymentMethod", "COD");
+            request.setAttribute("orderId", uploadOrderService.getLatestOrder().getId());
+            request.setAttribute("total", grandTotal);
+            request.setAttribute("userName", user.getName());
+            request.setAttribute("status", "Đang xử lý");
+            request.setAttribute("message", "success");
+            request.getRequestDispatcher("/frontend/cartPage/checkoutPage/checkout-return.jsp").forward(request, response);
         } else if (paymentMethod.equals("MoMo")) {
             try {
                 handleMomoPayment(request, response);
-                creatorder(request, response);
+                request.setAttribute("paymentMethod", "MoMo");
             } catch (NoSuchAlgorithmException | InvalidKeyException e) {
                 throw new RuntimeException(e);
             }
         } else if (paymentMethod.equals("VNPay")) {
             handleVNPayPayment(request, response);
-            creatorder(request, response);
+            request.setAttribute("paymentMethod", "VNPay");
         }
     }
 
-    private void creatorder(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void createOrder(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         Map<String, CartItem> cart = (Map<String, CartItem>) session.getAttribute("cart");
         Coupon cp = (Coupon) session.getAttribute("appliedCoupon");
@@ -145,32 +144,34 @@ public class OrderController extends HttpServlet {
         double discountRate = cp == null ? 0 : cp.getDiscountRate();
         double discountAmount = totalPrice * (discountRate / 100);
         double grandTotal = totalPrice + shippingCost + discountAmount;
+
         if (uploadOrderService.createOrder(userId, paymentMethodId, address.getId(), LocalDate.now(), grandTotal, "Đang xử lý", 0, user.getId())) {
             Order order = uploadOrderService.getLatestOrder();
             for (CartItem cartItem : cart.values()) {
                 uploadOrderDetailService.createOrderDetail(order.getId(), cartItem.getPrice(), cartItem.getBelt().getId(), cartItem.getQuantity(), cartItem.getVariant().getId());
             }
-            String subject = "Thông báo đơn hàng";
-            String content = "Đơn hàng của bạn đã được đặt thành công. Tổng giá trị đơn hàng là: " + totalPrice + " VNĐ.\n" +
-                    "Chi tiết đơn hàng:\n" + cart.toString() + "\n" + "cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.\n";
-            emailService.sendEmail(user.getEmail(), subject, content);
-//            response.sendRedirect("/verify?messageRedirect=orderDetailSuccess");
         }
+        String subject = "Thông báo đơn hàng";
+        String content = "Đơn hàng của bạn đã được đặt thành công. Tổng giá trị đơn hàng là: " + totalPrice + " VNĐ.\n" +
+                "Chi tiết đơn hàng:\n" + cart.toString() + "\n" + "cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.\n";
+        emailService.sendEmail(user.getEmail(), subject, content);
     }
 
     private void handleMomoPayment(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, NoSuchAlgorithmException, InvalidKeyException {
-        String address = "aaaaa";
-        String phone = "123";
-        String customerName = "abc";
+        User user = (User) request.getSession().getAttribute("auth");
+
+        String address = request.getParameter("address");
+        String customerName = user.getName();
         DecimalFormat df = new DecimalFormat("#");
-        String amount = df.format(Float.parseFloat("100000")); // Số tiền thanh toán
-        String extraData = "MoMo";
+        String amountStr = request.getParameter("grandTotal").replace(".", "");;
+        String amount = df.format(Float.parseFloat(amountStr)); // Số tiền thanh toán
+        String extraData = "Thanh toan don hang";
 
         String orderId = String.valueOf(System.currentTimeMillis());
         String requestId = String.valueOf(System.currentTimeMillis());
-        String redirectUrl = "http://localhost:8080/momo-return";
+        String redirectUrl = "http://localhost:8080/checkout-return";
         String separator = redirectUrl.contains("?") ? "&" : "?";
-        redirectUrl += separator + "name=" + customerName + "&address=" + address + "&phone=" + phone
+        redirectUrl += separator + "&address=" + address + "&phone="
                 + "&amount=" + amount + "&totalAmount=" + amount;
         String IpnUrl = "http://localhost:8080/momo-notify";
 
@@ -213,12 +214,12 @@ public class OrderController extends HttpServlet {
 
         try {
             String responseBody = sendPostRequest(MOMO_ENDPOINT, json.toString()); // Gửi request HTTP POST
+//            System.out.println("Response from MoMo: " + responseBody);
 
             // Lấy URL thanh toán từ response
             JSONObject jsonResponse = new JSONObject(responseBody);
             String payUrl = jsonResponse.optString("payUrl", null);
             if (payUrl == null || payUrl.isEmpty()) {
-                System.out.println("Không nhận được URL thanh toán từ MoMo.");
                 request.setAttribute("msg", "Không nhận được URL thanh toán từ MoMo.");
                 request.getRequestDispatcher("/Checkout").forward(request, response);
                 return;
@@ -226,7 +227,6 @@ public class OrderController extends HttpServlet {
 
             int resultCode = jsonResponse.optInt("resultCode", -1);
             if (resultCode != 0) {
-                System.out.println("Lỗi thanh toán MoMo");
                 String errorMessage = jsonResponse.optString("message", "Lỗi không xác định");
                 request.setAttribute("msg", "Lỗi thanh toán MoMo: " + errorMessage);
                 request.getRequestDispatcher("/Checkout").forward(request, response);
@@ -291,19 +291,17 @@ public class OrderController extends HttpServlet {
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
-        String amountStr = req.getParameter("totalAmount").replace(".", "");;
-        long amount = Integer.parseInt(amountStr)*100;
+        String amountStr = req.getParameter("grandTotal").replace(".", "");;
+        long amount = Integer.parseInt(amountStr)* 100L;
         String bankCode = req.getParameter("bankCode");
 
         String vnp_TxnRef = getRandomNumber(8);
         String vnp_IpAddr = getIpAddress(req);
 
-        String vnp_TmnCode = VNP_TMN_CODE;
-
         Map<String, String> vnp_Params = new HashMap<>();
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
-        vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
+        vnp_Params.put("vnp_TmnCode", VNP_TMN_CODE);
         vnp_Params.put("vnp_Amount", String.valueOf(amount));
         vnp_Params.put("vnp_CurrCode", "VND");
 
@@ -367,7 +365,7 @@ public class OrderController extends HttpServlet {
     }
 
     //Util for VNPAY
-    private String md5(String message) {
+    public static String md5(String message) {
         String digest = null;
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -385,7 +383,7 @@ public class OrderController extends HttpServlet {
         return digest;
     }
 
-    private String Sha256(String message) {
+    public static String Sha256(String message) {
         String digest = null;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -403,7 +401,7 @@ public class OrderController extends HttpServlet {
         return digest;
     }
 
-    private String hashAllFields(Map fields) {
+    public static String hashAllFields(Map fields) {
         List fieldNames = new ArrayList(fields.keySet());
         Collections.sort(fieldNames);
         StringBuilder sb = new StringBuilder();
@@ -423,7 +421,7 @@ public class OrderController extends HttpServlet {
         return hmacSHA512(VNP_SECRET_KEY,sb.toString());
     }
 
-    private String hmacSHA512(final String key, final String data) {
+    public static String hmacSHA512(final String key, final String data) {
         try {
 
             if (key == null || data == null) {
@@ -446,7 +444,7 @@ public class OrderController extends HttpServlet {
         }
     }
 
-    private String getIpAddress(HttpServletRequest request) {
+    public static String getIpAddress(HttpServletRequest request) {
         String ipAdress;
         try {
             ipAdress = request.getHeader("X-FORWARDED-FOR");
@@ -459,7 +457,7 @@ public class OrderController extends HttpServlet {
         return ipAdress;
     }
 
-    private String getRandomNumber(int len) {
+    public static String getRandomNumber(int len) {
         Random rnd = new Random();
         String chars = "0123456789";
         StringBuilder sb = new StringBuilder(len);
