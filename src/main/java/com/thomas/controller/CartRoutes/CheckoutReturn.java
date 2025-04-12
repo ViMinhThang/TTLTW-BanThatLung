@@ -93,7 +93,7 @@ public class CheckoutReturn extends HttpServlet {
         Coupon cp = (Coupon) session.getAttribute("appliedCoupon");
         User user = (User) session.getAttribute("auth");
         int userId = user.getId();
-        String paymentMethod = request.getParameter("paymentMethod");
+        String paymentMethod = request.getParameter("resultCode") != null ? "MoMo" : "VNPay";
         Address address = uploadAddressService.getAddressByUserId(userId);
         int paymentMethodId = uploadPaymentMethod.getPaymentMethodId(paymentMethod);
         double totalPrice = 0, shippingCost = 0;
@@ -105,7 +105,7 @@ public class CheckoutReturn extends HttpServlet {
         double discountAmount = totalPrice * (discountRate / 100);
         double grandTotal = totalPrice + shippingCost + discountAmount;
 
-        if (uploadOrderService.createOrder(userId, 1, address.getId(), LocalDate.now(), grandTotal, "Đang xử lý", 0, user.getId())) {
+        if (uploadOrderService.createOrder(userId, paymentMethodId, address.getId(), LocalDate.now(), grandTotal, "Đang xử lý", 0, user.getId())) {
             Order order = uploadOrderService.getLatestOrder();
             for (CartItem cartItem : cart.values()) {
                 uploadOrderDetailService.createOrderDetail(order.getId(), cartItem.getPrice(), cartItem.getBelt().getId(), cartItem.getQuantity(), cartItem.getVariant().getId());

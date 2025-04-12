@@ -31,6 +31,70 @@
                 $('.submitDeliveryAddress').val(selectedAddress);
             });
         });
+
+        $(document).ready(function () {
+            loadProvinces();
+
+            $('#province').change(function () {
+                const provinceId = $(this).val();
+                $('#district').prop('disabled', false);
+                $.getJSON('/location?action=district&province_id=' + provinceId, function (data) {
+                    const districts = data.data;
+                    $('#district').empty().append('<option value="">Chọn quận/huyện</option>');
+                    districts.forEach(d => {
+                        $('#district').append('<option value="' + d.DistrictID + '">' + d.DistrictName + '</option>');
+                    });
+                });
+            });
+
+            $('#district').change(function () {
+                const districtId = $(this).val();
+                $('#ward').prop('disabled', false);
+                $.getJSON('/location?action=ward&district_id=' + districtId, function (data) {
+                    const wards = data.data;
+                    $('#ward').empty().append('<option value="">Chọn phường/xã</option>');
+                    wards.forEach(w => {
+                        $('#ward').append('<option value="' + w.WardCode + '">' + w.WardName + '</option>');
+                    });
+                });
+            });
+
+            $('#ward').change(function () {
+                const districtId = $('#district').val();
+                const wardCode = $(this).val();
+                calculateShipping(districtId, wardCode);
+            });
+
+            function loadProvinces() {
+                $.getJSON('/location?action=province', function (data) {
+                    const provinces = data.data;
+                    $('#province').empty().append('<option value="">Chọn tỉnh/thành phố</option>');
+                    provinces.forEach(p => {
+                        $('#province').append('<option value="' + p.ProvinceID + '">' + p.ProvinceName + '</option>');
+                    });
+                });
+            }
+
+            function calculateShipping(districtId, wardCode) {
+                $.ajax({
+                    url: '/shipping-fee',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        to_district_id: districtId,
+                        to_ward_code: wardCode
+                    }),
+                    success: function (response) {
+                        const fee = response.data.total;
+                        $('.shipmentPrice').text(fee + ' VNĐ');
+                        // Giả sử bạn có biến totalPrice là giá trị sản phẩm
+                        const productTotal = parseInt('${totalPrice}');
+                        const grandTotal = productTotal + fee;
+                        $('.totalCostDisplay').text(grandTotal + ' VNĐ');
+                    }
+                });
+            }
+        });
     </script>
 </head>
 <body>
@@ -44,15 +108,33 @@
             <div class="border-top border-bottom py-3">
                 <div class="d-flex flex-column justify-content-between">
                     <p class="fs-4">Tên: ${sessionScope.auth.name}</p>
-                    <select class="form-select" name="selectedAddress" id="selectedAddress">
-                        <c:forEach var="address" items="${userAddresses}">
-                            <option value="${address}" ${address.isUse == 1 ? 'selected' : ''}>
-                                    ${address.addressStreet}, ${address.addressCity} - SĐT: ${sessionScope.auth.phoneNumber}
-                            </option>
-                        </c:forEach>
-                    </select>
+                    <p class="fs-4">SĐT: ${sessionScope.auth.phoneNumber}</p>
                 </div>
             </div>
+
+            <h3 class="fw-bold py-2 bg-light">Địa chỉ giao hàng</h3>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Tỉnh / Thành phố</label>
+                    <select id="province" class="form-select" required></select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Quận / Huyện</label>
+                    <select id="district" class="form-select" required disabled></select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Phường / Xã</label>
+                    <select id="ward" class="form-select" required disabled></select>
+                </div>
+            </div>
+
+            <select class="form-select" name="selectedAddress" id="selectedAddress">
+                <c:forEach var="address" items="${userAddresses}">
+                    <option value="${address}" ${address.isUse == 1 ? 'selected' : ''}>
+                            ${address.addressStreet}, ${address.addressCity} - SĐT: ${sessionScope.auth.phoneNumber}
+                    </option>
+                </c:forEach>
+            </select>
 
             <h3 class="fw-bold py-2 bg-light mt-3">Phương thức thanh toán</h3>
             <div class="d-inline-flex flex-row" role="group">
@@ -69,28 +151,6 @@
                     </div>
                 </c:forEach>
             </div>
-
-            <h3 class="fw-bold py-2 bg-light mt-3">Phương thức giao hàng</h3>
-<%--            <div class="d-inline-flex flex-row" role="group">--%>
-<%--                <c:set var="counter" value="0"/>--%>
-<%--                <c:forEach var="method" items="${paymentMethods}">--%>
-<%--                    <c:set var="counter" value="${counter + 1}"/>--%>
-<%--                    <div class="payment-option m-2">--%>
-<%--                        <label class="payment-label">--%>
-<%--                            <input type="radio"--%>
-<%--                                   name="paymentMethod"--%>
-<%--                                   value="${method.name}"--%>
-<%--                                ${counter == 1 ? 'checked' : ''}--%>
-<%--                                   required>--%>
-<%--                            <span class="custom-check"></span>--%>
-<%--                            <span class="payment-text">${method.name}</span>--%>
-<%--                            <img class="payment-icon"--%>
-<%--                                 src="${pageContext.request.contextPath}/assets/icons/${method.name}.svg"--%>
-<%--                                 alt="${method.name}"/>--%>
-<%--                        </label>--%>
-<%--                    </div>--%>
-<%--                </c:forEach>--%>
-<%--            </div>--%>
         </div>
 
         <div class="col-lg-4 bg-light p-4 rounded">
@@ -101,7 +161,7 @@
             </div>
             <div class="d-flex justify-content-between mb-2">
                 <p class="mb-0">Vận chuyển</p>
-                <p class="mb-0">${shipmentPrice} VNĐ</p>
+                <p class="shipmentPrice mb-0">${shipmentPrice} VNĐ</p>
             </div>
             <div class="d-flex justify-content-between mb-2">
                 <p class="mb-0">Giảm giá</p>
