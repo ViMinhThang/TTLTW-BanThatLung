@@ -25,7 +25,10 @@ CREATE TABLE users
     token       VARCHAR(255),
     isActive    INT      DEFAULT 1
 );
-
+ALTER TABLE users
+    ADD COLUMN oauthProvider VARCHAR(50),
+ADD COLUMN oauthId       VARCHAR(255),
+MODIFY COLUMN password   VARCHAR(255) NULL;
 CREATE TABLE paymentMethods
 (
     id       INT AUTO_INCREMENT PRIMARY KEY,

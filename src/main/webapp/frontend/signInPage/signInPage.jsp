@@ -84,6 +84,14 @@
                         class="btn btn-dark p-2 custom__btn w-50">Đăng nhập
                 </button>
             </div>
+            <div class="d-flex justify-content-end align-items-center mt-5 mb-5">
+                <a href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid
+&redirect_uri=http://localhost:8080/
+&response_type=code
+&client_id=419463588392-j19277rui7jkcp9smth8s6fod3smjgjh.apps.googleusercontent.com
+
+&approval_prompt=force" class="btn btn-danger p-2 custom__btn w-50">Đăng nhập bằng Google</a>
+            </div>
         </div>
     </form>
     <div class="col-4 my-auto custom_bg--gray border rounded p-5">
