@@ -1,9 +1,13 @@
 package com.thomas;
 
 import java.io.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
-
+//import jakarta.servlet.http.*;
+//import jakarta.servlet.annotation.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
 @WebServlet(name = "helloServlet", value = "/hello-servlet")
 public class HelloServlet extends HttpServlet {
     private String message;

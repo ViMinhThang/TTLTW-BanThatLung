@@ -3,10 +3,14 @@ package com.thomas.controller.AdminRoute.table.coupons;
 import com.thomas.dao.model.Coupon;
 import com.thomas.dao.model.User;
 import com.thomas.services.UploadCouponService;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
-
+//import jakarta.servlet.*;
+//import jakarta.servlet.http.*;
+//import jakarta.servlet.annotation.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

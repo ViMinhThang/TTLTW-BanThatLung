@@ -3,9 +3,9 @@ package com.thomas.controller.AdminRoute.table.belts;
 import com.thomas.dao.model.BeltVariant;
 import com.thomas.dao.model.Belts;
 import com.thomas.services.ProductService;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+//import jakarta.servlet.*;
+//import jakarta.servlet.http.*;
+//import jakarta.servlet.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +15,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 @WebServlet(name = "createProductController", value = "/admin/table/belts/createProduct")
 @MultipartConfig(

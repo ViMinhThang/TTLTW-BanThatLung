@@ -6,10 +6,14 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
 import com.thomas.dao.model.Belts;
 import com.thomas.services.ProductService;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
-
+//import jakarta.servlet.*;
+//import jakarta.servlet.http.*;
+//import jakarta.servlet.annotation.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

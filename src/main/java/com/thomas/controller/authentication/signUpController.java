@@ -6,10 +6,14 @@ import com.thomas.services.EmailService;
 import com.thomas.services.SignUpService;
 import com.thomas.services.TokenService;
 import com.thomas.services.UploadUserService;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
-
+//import jakarta.servlet.*;
+//import jakarta.servlet.http.*;
+//import jakarta.servlet.annotation.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;

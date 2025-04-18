@@ -3,10 +3,14 @@ package com.thomas.controller.AdminRoute.table.reviews;
 import com.thomas.dao.model.Reviews;
 import com.thomas.services.UploadReviewService;
 import com.thomas.services.UploadUserService;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
-
+//import jakarta.servlet.*;
+//import jakarta.servlet.http.*;
+//import jakarta.servlet.annotation.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 
 @WebServlet(name = "reviewDetailsController", value = "/admin/table/reviews/reviewDetail")

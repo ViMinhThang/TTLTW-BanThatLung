@@ -2,10 +2,14 @@ package com.thomas.controller.authentication;
 
 import com.thomas.services.MD5Service;
 import com.thomas.services.TokenService;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
-
+//import jakarta.servlet.*;
+//import jakarta.servlet.http.*;
+//import jakarta.servlet.annotation.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 
 @WebServlet(name = "resetPasswordController", value = "/resetPassword")
