@@ -8,10 +8,14 @@ import com.thomas.services.UploadAddressService;
 import com.thomas.services.UploadOrderDetailService;
 import com.thomas.services.UploadOrderService;
 import com.thomas.services.UploadPaymentMethod;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
-
+//import jakarta.servlet.*;
+//import jakarta.servlet.http.*;
+//import jakarta.servlet.annotation.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
