@@ -7,8 +7,8 @@ VALUES ('John Doe', 'john.doe@example.com', '1990-05-15', '202cb962ac59075b964b0
         1122334455, 1, NULL, 1),
        ('Bob Johnson', 'bob.johnson@example.com', '1992-07-03', '202cb962ac59075b964b07152d234b70',
         '/images/users/bob.jpg', 0, 'Male', 5566778899, 2, NULL, 1),
-       ('Charlie Davis', 'charlie.davis@example.com', '2000-01-30', '202cb962ac59075b964b07152d234b70', NULL, 0,
-        'Non-binary', 9988776655, 3, NULL, 1);
+       ('Test', 'titphong012@gmail.com', '2004-01-01', '098f6bcd4621d373cade4e832627b4f6', '/images/users/john.jpg', 0,
+        'Male', 0123456789, 1, NULL, 1);
 
 INSERT INTO paymentMethods (name, isActive)
 VALUES ('COD', 1),
