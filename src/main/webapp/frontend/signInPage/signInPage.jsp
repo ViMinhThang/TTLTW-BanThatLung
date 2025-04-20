@@ -120,6 +120,12 @@
                             <i class="fab fa-google"></i>
                         </a>
                     </div>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="https://www.facebook.com/v13.0/dialog/oauth?client_id=<%=Iconstant.FACEBOOK_CLIENT_ID%>&redirect_uri=<%=Iconstant.FACEBOOK_REDIRECT_URI%>&scope=email"
+                           class="btn btn-outline-primary btn-floating btn-lg">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
