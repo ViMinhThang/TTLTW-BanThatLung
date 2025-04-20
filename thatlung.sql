@@ -33,16 +33,41 @@ CREATE TABLE paymentMethods
     isActive INT DEFAULT 1
 );
 
+CREATE TABLE provinces (
+    id INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE districts (
+    id INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    provinceId INT,
+    FOREIGN KEY (provinceId) REFERENCES provinces(id)
+);
+
+CREATE TABLE wards (
+    id INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    districtId INT,
+    FOREIGN KEY (districtId) REFERENCES districts(id)
+);
+
 CREATE TABLE addresses
 (
     id            INT AUTO_INCREMENT PRIMARY KEY,
     userId        INT          NOT NULL,
-    addressCity   VARCHAR(255) NOT NULL,
-    addressStreet VARCHAR(500),
+    provinceId INT NOT NULL,
+    districtId INT NOT NULL,
+    wardId INT NOT NULL,
+    address_detail VARCHAR(255) NOT NULL,
     isUse         INT DEFAULT 0,
     isDeleted     INT DEFAULT 0,
+    FOREIGN KEY (provinceId) REFERENCES provinces(id),
+    FOREIGN KEY (districtId) REFERENCES districts(id),
+    FOREIGN KEY (wardId) REFERENCES wards(id),
     FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
 );
+
 
 CREATE TABLE belts
 (
