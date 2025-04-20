@@ -46,41 +46,40 @@ a{
 .custom_bg--gray{
   background-color: rgb(249, 249, 249);
 }
-/* Thêm các style mới */
-.btn-floating {
-  width: 50px;
-  height: 50px;
-  border-radius: 50% !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s;
-  border: 1px solid #dee2e6 !important;
+
+.custom-login-btn {
+  border-radius: 0 !important; /* Bỏ bo góc */
+  border: 2px solid #000 !important; /* Thêm viền đen */
+  transition: all 0.3s ease;
 }
 
-.btn-floating i {
-  font-size: 1.5rem;
-  color: #DB4437; /* Màu logo Google */
-}
-
-.btn-floating:hover {
-  background-color: #f8f9fa;
+.custom-login-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  background-color: #333;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.text-muted.mb-3 {
-  font-size: 0.9rem;
-  letter-spacing: 0.5px;
-  margin-top: 2rem;
-}
-
-/* Căn chỉnh form */
-.form-control-lg {
+/* Nút Google - Tùy chỉnh hoàn toàn */
+.custom-google-btn {
+  border: 2px solid #DB4437 !important;
   border-radius: 8px !important;
+  background: white !important;
+  color: #DB4437 !important;
+  padding: 12px 24px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  transition: all 0.3s ease !important;
 }
 
-.custom__btn {
-  border-radius: 8px !important;
-  letter-spacing: 0.5px;
+.custom-google-btn i {
+  font-size: 1.2rem !important;
+  margin-right: 8px !important;
+}
+
+.custom-google-btn:hover {
+  background: #f8f9fa !important;
+  border-color: #c1351d !important;
+  color: #c1351d !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(219, 68, 55, 0.15);
 }

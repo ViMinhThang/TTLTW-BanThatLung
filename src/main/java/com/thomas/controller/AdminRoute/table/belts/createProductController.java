@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 )
 public class createProductController extends HttpServlet {
     private static final String ULOAD_DIR = "uploads";
-    private static final String UPLOAD_DIR_SERVER = "C:\\Users\\huynh\\OneDrive\\Desktop\\Nhom38-BanThatLung\\src\\main\\webapp\\uploads";
+    private static final String UPLOAD_DIR_SERVER = "C:\\Users\\HP\\Desktop\\Web\\TTLTW-BanThatLung\\src\\main\\webapp\\assets\\uploads";
     private static final ProductService PRODUCT_SERVICE = new ProductService();
 
     @Override

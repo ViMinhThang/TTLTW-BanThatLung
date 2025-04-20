@@ -21,7 +21,11 @@ public class UserMapper implements RowMapper<User> {
         user.setPhoneNumber(rs.getLong("phoneNumber"));
         user.setRole(rs.getInt("role"));
         user.setIsActive(rs.getInt("isActive"));
-        user.setLastActivateAt(rs.getTimestamp("lastActivateAt").toLocalDateTime());
+        user.setOauthProvider(rs.getString("oauthProvider"));
+        user.setOauthId(rs.getString("oauthId"));
+        if (rs.getTimestamp("lastActivateAt") != null) {
+            user.setLastActivateAt(rs.getTimestamp("lastActivateAt").toLocalDateTime());
+        }
         return user;
     }
 }

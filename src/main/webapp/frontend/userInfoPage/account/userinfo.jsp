@@ -94,7 +94,6 @@
     </div>
     <div class="container container-sm border rounded">
         <div class="d-flex flex-column mt-4 mb-2 ms-2">
-            <h3 class="font-weight-bold custom_size--19">Chào ${sessionScope.auth.firstName}</h3>
             <h5 class="custom_size--16">Họ tên</h5>
             <p class="custom_size--16">${sessionScope.auth.name}</p>
             <h5 class="font-weight-bold custom_size--19">Gia nhập từ</h5>

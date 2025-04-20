@@ -97,18 +97,29 @@
                 >Đăng ký</a
                 >
             </div>
-            <div class="d-flex justify-content-end align-items-center mt-5 mb-5">
-                <button type="submit"
-                        class="btn btn-dark p-2 custom__btn w-50">Đăng nhập
-                </button>
-            </div>
-            <div class="d-flex justify-content-end align-items-center mt-5 mb-5">
-                <p class="text-center mb-3">Hoặc đăng nhập bằng:</p>
-                <div class="d-flex justify-content-center gap-2">
-                    <a href="https://accounts.google.com/o/oauth2/auth?client_id=<%=Iconstant.GOOGLE_CLIENT_ID%>&redirect_uri=<%=Iconstant.GOOGLE_REDIRECT_URI%>&response_type=code&scope=email profile"
-                       class="btn btn-outline-danger btn-floating btn-lg">
-                        <i class="fab fa-google"></i>
-                    </a>
+            <div class="d-flex flex-column gap-4 mt-5">
+                <!-- Nút Đăng nhập (không bo viền) -->
+                <div class="d-flex justify-content-end">
+                    <button type="submit"
+                            class="btn btn-dark py-3 px-5 custom__btn custom-login-btn w-100 w-lg-50">
+                        Đăng nhập
+                    </button>
+                </div>
+
+                <!-- Phần đăng nhập bằng Google (có viền) -->
+                <div class="d-flex flex-column align-items-center gap-3 mt-4">
+                    <div class="d-flex align-items-center w-100">
+                        <hr class="flex-grow-1">
+                        <span class="px-3 custom_size--14 text-muted">Hoặc đăng nhập bằng</span>
+                        <hr class="flex-grow-1">
+                    </div>
+
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="https://accounts.google.com/o/oauth2/auth?client_id=<%=Iconstant.GOOGLE_CLIENT_ID%>&redirect_uri=<%=Iconstant.GOOGLE_REDIRECT_URI%>&response_type=code&scope=email profile"
+                           class="btn btn-floating btn-lg hover-lift custom-google-btn">
+                            <i class="fab fa-google"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

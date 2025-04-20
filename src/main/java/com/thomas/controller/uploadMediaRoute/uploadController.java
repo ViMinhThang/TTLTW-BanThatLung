@@ -22,7 +22,7 @@ public class uploadController extends HttpServlet {
     // Path where files will be saved
     ProductService productService = new ProductService();
     private static final String ULOAD_DIR = "uploads";
-    private static final String UPLOAD_DIR_SERVER = "C:\\Users\\huynh\\OneDrive\\Desktop\\Nhom38-BanThatLung\\src\\main\\webapp\\assets\\uploads";
+    private static final String UPLOAD_DIR_SERVER = "C:\\Users\\HP\\Desktop\\Web\\TTLTW-BanThatLung\\src\\main\\webapp\\assets\\uploads";
 
     // Configure the maximum file size
     private final int MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
