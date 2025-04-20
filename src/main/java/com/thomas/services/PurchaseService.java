@@ -1,8 +1,12 @@
 package com.thomas.services;
 
+import com.thomas.dao.BeltVariantDao;
 import com.thomas.dao.PurchasesDao;
+import com.thomas.dao.TransactionsDao;
+import com.thomas.dao.model.BeltVariant;
 import com.thomas.dao.model.Purchases;
 import com.thomas.dao.SupplierDao;
+import com.thomas.dao.model.Transactions;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,10 +15,14 @@ import java.util.List;
 public class PurchaseService {
     PurchasesDao dao;
     SupplierDao supplierDao;
+    TransactionsDao transactionsDao;
+    BeltVariantDao beltVariantDao;
 
     public PurchaseService() {
         this.dao = new PurchasesDao();
         this.supplierDao = new SupplierDao();
+        this.transactionsDao = new TransactionsDao();
+        this.beltVariantDao = new BeltVariantDao();
     }
 
     public List<Purchases> getPurchases(Integer id) {
@@ -22,6 +30,18 @@ public class PurchaseService {
     }
 
     public boolean createPurchase(Purchases purchases) {
+        Transactions transactions = new Transactions();
+        transactions.setTransactionType("IMPORT - " + purchases.getSupplierName());
+        transactions.setBeltId(purchases.getBeltId());
+        transactions.setQuantity(purchases.getQuantity());
+        transactions.setTransactionDate(LocalDateTime.now());
+        transactions.setCreatedAt(LocalDateTime.now());
+        transactions.setUpdatedAt(LocalDateTime.now());
+        transactions.setBeltVariantId(purchases.getBeltVariantId());
+        transactionsDao.addTransactions(transactions);
+        BeltVariant v = beltVariantDao.findVariants(purchases.getBeltId(), null, null, purchases.getBeltVariantId()).get(0);
+        v.setStockQuantity(purchases.getQuantity() + v.getStockQuantity());
+        beltVariantDao.saveVariants(v);
         return dao.createPurchases(purchases);
     }
 

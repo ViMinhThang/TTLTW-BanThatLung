@@ -23,7 +23,7 @@ $(document).ready(function () {
         const purchaseId = $(this).closest("tr").find(".purchaseId").text();
 
         $.ajax({
-            url: "http://localhost:8080/admin/inventory/suppliers",
+            url: "http://localhost:8080/admin/inventory/purchases",
             method: "GET",
             data: {
                 message: "takePurchase",
@@ -35,11 +35,12 @@ $(document).ready(function () {
                 console.log('Response Status:', textStatus);
                 $(".modal-title").text(`Sửa phiếu nhập #${purchaseId}`);
                 $(".messageCreateOrUpdate").val("update");
-                $("input[name='name']").val(data.name);
-                $("input[name='productName']").val(data.productName);
+                $("input[name='name']").val(data.supplierName);
+                $("input[name='productName']").val(data.beltName);
                 $("input[name='purchaseDate']").val(data.purchaseDate);
                 $("input[name='createdAt']").val(data.createdAt);
                 $("input[name='updatedAt']").val(data.updatedAt);
+                $("input[name='quantity']").val(data.quantity);
                 // Change button text to 'Cập nhật'
                 $(".createOrUpdate").text("Cập nhật").prepend(`
                     <input type="hidden" name="purchaseId" value="${purchaseId}">

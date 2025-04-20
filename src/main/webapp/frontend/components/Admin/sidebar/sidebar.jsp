@@ -182,9 +182,9 @@
                    href="${pageContext.request.contextPath}/admin/inventory/purchases">
                     Phiếu mua
                 </a>
-                <a class="collapse-item <%= request.getHeader("referer").endsWith("reviews") ? "active" : "" %>"
+                <a class="collapse-item <%= request.getHeader("referer").endsWith("transactions") ? "active" : "" %>"
                    href="${pageContext.request.contextPath}/admin/monitors/reviews">
-                    Đánh giá
+                    Giao dịch
                 </a>
                 <a class="collapse-item <%= request.getHeader("referer").endsWith("coupons") ? "active" : "" %>"
                    href="${pageContext.request.contextPath}/admin/monitors/coupons">

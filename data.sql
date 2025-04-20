@@ -379,3 +379,19 @@ VALUES (1, 1, 1, 100, '2025-04-01 09:00:00'),
        (3, 4, 8, 65, '2025-04-08 17:35:00'),
        (1, 2, 9, 55, '2025-04-09 08:25:00'),
        (2, 1, 10, 110, '2025-04-10 10:50:00');
+
+INSERT INTO stockTransactions (beltId, beltVariantId, transactionType, quantity)
+VALUES (1, 3, 'IMPORT', 20),  -- Classic Leather Belt - M - Black
+       (1, 4, 'IMPORT', 15),  -- Classic Leather Belt - L - Black
+       (2, 14, 'IMPORT', 10), -- Casual Canvas Belt - L - Beige
+       (3, 22, 'IMPORT', 8),  -- Luxury Gold Belt - S - Gold
+
+-- Giao dịch xuất kho
+       (1, 3, 'EXPORT', 5),
+       (1, 4, 'EXPORT', 3),
+       (2, 14, 'EXPORT', 2),
+       (3, 22, 'EXPORT', 1),
+
+-- Giao dịch điều chỉnh thủ công do kiểm kho
+       (1, 3, 'ADJUSTMENT', 2),
+       (2, 14, 'ADJUSTMENT', -1);

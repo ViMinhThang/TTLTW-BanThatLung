@@ -282,11 +282,10 @@ CREATE TABLE couponUsage
     FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE,
     FOREIGN KEY (orderId) REFERENCES orders (id) ON DELETE CASCADE
 );
-
--- 8. Nhập kho & xuất kho
 CREATE TABLE stockTransactions
 (
     id              INT AUTO_INCREMENT PRIMARY KEY,
+    beltId          INT         NOT NULL,
     beltVariantId   INT         NOT NULL,
     transactionType VARCHAR(50) NOT NULL,
     quantity        INT         NOT NULL,

@@ -11,7 +11,7 @@ public class PurchasesDao {
     public List<Purchases> getPurchases(Integer purchaseId) {
         String sql = "select * from purchases ";
         if (purchaseId != null) {
-            sql += "where purchaseId =" + purchaseId;
+            sql += "where id =" + purchaseId;
         }
         final String finalSql = sql;
         return JDBIConnect.get().withHandle(h -> h.createQuery(finalSql).mapToBean(Purchases.class).list());
@@ -19,9 +19,10 @@ public class PurchasesDao {
 
     public boolean updatePurchases(Purchases purchases) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "UPDATE purchases SET supplierId=:supplierId,beltVariantId=:beltVariantId,quantity=:quantity,purchaseDate=:purchaseDate,createdAt=:createdAt,updatedAt=:updatedAt ";
+            String sql = "UPDATE purchases SET supplierId=:supplierId,beltVariantId=:beltVariantId,quantity=:quantity,purchaseDate=:purchaseDate,createdAt=:createdAt,updatedAt=:updatedAt WHERE id =:purchaseId";
             return h.createUpdate(sql).bind("supplierId", purchases.getSupplierId())
                     .bind("beltVariantId", purchases.getBeltVariantId())
+                    .bind("purchaseId", purchases.getId())
                     .bind("quantity", purchases.getQuantity())
                     .bind("purchaseDate", purchases.getPurchaseDate())
                     .bind("createdAt", purchases.getCreatedAt())
