@@ -13,112 +13,13 @@
     <meta name="author" content=""/>
 
     <title>THOMAS - Admin</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/assets/icons/favicon.svg" type="image/x-icon"/>
+    <jsp:include page="/frontend/components/Admin/adminLink/adminLink.jsp"/>
 
-    <!-- Custom fonts for this template-->
-    <link
-            href="${pageContext.request.contextPath}/css/fontawesome-free-6.6.0-web/fontawesome-free-6.6.0-web/css/all.min.css"
-            rel="stylesheet"
-            type="text/css"
-    />
-    <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet"
-    />
-
-    <!-- Custom styles for this template-->
-    <link href="${pageContext.request.contextPath}/css/adminGeneral.css" rel="stylesheet"/>
-    <link href="${pageContext.request.contextPath}/css/sb-admin-2.min.css" rel="stylesheet"/>
-    <link href="${pageContext.request.contextPath}/css/dataTables.bootstrap4.min.css" rel="stylesheet"/>
 </head>
 
 <body id="page-top">
 <div id="wrapper">
-    <ul
-            class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
-            id="accordionSidebar"
-    >
-        <a
-                class="sidebar-brand d-flex align-items-center justify-content-center"
-                href="${pageContext.request.contextPath}/"
-        >
-            <div class="sidebar-brand-icon rotate-n-15">
-            </div>
-            <div class="sidebar-brand-text mx-3">THOMAS Admin</div>
-        </a>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0"/>
-
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
-            <a class="nav-link" href="${pageContext.request.contextPath}/admin">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span></a
-            >
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider"/>
-
-        <!-- Heading -->
-
-        <!-- Nav Item - Pages Collapse Menu -->
-        <!-- Nav Item - Utilities Collapse Menu -->
-        <li class="nav-item active">
-            <a
-                    class="nav-link collapsed"
-                    href="#"
-                    data-toggle="collapse"
-                    data-target="#collapseUtilities"
-                    aria-expanded="true"
-                    aria-controls="collapseUtilities"
-            >
-                <i class="fas fa-fw fa-table"></i>
-                <span>Bảng</span>
-            </a>
-            <div
-                    id="collapseUtilities"
-                    class="collapse"
-                    aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar"
-            >
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item"
-                       href="${pageContext.request.contextPath}/admin/table/users"
-                    >Người dùng</a
-                    >
-                    <a class="collapse-item"
-                       href="${pageContext.request.contextPath}/admin/table/belts">Sản
-                        phẩm</a>
-                    <a class="collapse-item active"
-                       href="${pageContext.request.contextPath}/admin/table/reviews"
-                    >Đánh giá</a
-                    >
-                    <a class="collapse-item"
-                       href="${pageContext.request.contextPath}/admin/table/coupons"
-                    >Coupon</a
-                    >
-                    <a class="collapse-item"
-                       href="${pageContext.request.contextPath}/admin/table/orders"
-                    >Đơn hàng</a
-                    >
-                    <a
-                            class="collapse-item"
-                            href="${pageContext.request.contextPath}/admin/table/collections"
-                    >Bộ sưu tập</a
-                    >
-                </div>
-            </div>
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider"/>
-        <!-- Sidebar Toggler (Sidebar) -->
-        <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" id="sidebarToggle"></button>
-        </div>
-    </ul>
+    <jsp:include page="/frontend/components/Admin/sidebar/sidebar.jsp"/>
 
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
@@ -340,7 +241,7 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <table
-                                    class="table table-bordered"
+                                    class="table"
                                     id="dataTable"
                                     width="100%"
                                     cellspacing="0"
@@ -395,60 +296,14 @@
                 </div>
             </div>
 
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; THOMAS 2021</span>
-                    </div>
-                </div>
-            </footer>
+            <jsp:include page="/frontend/components/Admin/adminFooter/adminFooter.jsp"/>
+
         </div>
     </div>
 
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
-    <div
-            class="modal fade"
-            id="logoutModal"
-            tabindex="-1"
-            role="dialog"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-    >
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                        Ready to Leave?
-                    </h5>
-                    <button
-                            class="close"
-                            type="button"
-                            data-dismiss="modal"
-                            aria-label="Close"
-                    >
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Select "Logout" below if you are ready to end your current
-                    session.
-                </div>
-                <div class="modal-footer">
-                    <button
-                            class="btn btn-secondary"
-                            type="button"
-                            data-dismiss="modal"
-                    >
-                        Cancel
-                    </button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div
             class="modal fade"
@@ -468,7 +323,8 @@
                             class="btn-close"
                             data-bs-dismiss="modal"
                             aria-label="Close"
-                    ></button>
+                    >&times;
+                    </button>
                 </div>
                 <div class="modal-body removeModalBody">
 
@@ -498,25 +354,8 @@
         </div>
     </div>
     <!-- Bootstrap core JavaScript-->
+    <jsp:include page="/frontend/components/Admin/scripts/adminScripts/datatable.jsp"/>
 
-    <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"
-    ></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="${pageContext.request.contextPath}/js/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="${pageContext.request.contextPath}/js/allReview.js"></script>
-    <script src="${pageContext.request.contextPath}/js/sb-admin-2.min.js"></script>
-
-    <script src="${pageContext.request.contextPath}/js/jquery.dataTables.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/dataTables.bootstrap4.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/datatable.js"></script>
 </div>
 </body>
 </html>

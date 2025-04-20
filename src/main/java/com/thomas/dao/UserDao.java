@@ -6,23 +6,11 @@ import com.thomas.dao.model.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDao {
-    public UserDao() {
-
-    }
-
-    public boolean saveResetToken(String toEmail, String token) {
-        return JDBIConnect.get().withHandle(h -> {
-            String sql = "UPDATE users SET token = :token WHERE email = :email";
-            return h.createUpdate(sql)
-                    .bind("email", toEmail)
-                    .bind("token", token)
-                    .execute() > 0;
-        });
-    }
+public class UserDao implements UsageInterface {
 
     public boolean deleteUserById(int userId) {
         return JDBIConnect.get().withHandle(h -> {
@@ -30,6 +18,17 @@ public class UserDao {
             return h.createUpdate(sql).bind("userId", userId).execute() > 0;
         });
     }
+
+    public boolean deleteUserAndLog(int userId, int editorId) {
+        boolean result = deleteUserById(userId);
+        if (result) {
+            saveLogToDB(editorId, "Xóa người dùng " + userId, "Đỏ");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     public boolean updateUser(User user) {
         return JDBIConnect.get().withHandle(handle -> {
@@ -50,6 +49,17 @@ public class UserDao {
         });
     }
 
+    public boolean updateUserAndLog(User user, int userId) {
+        boolean result = updateUser(user);
+
+        if (result) {
+            saveLogToDB(userId, "Chỉnh sửa người dùng", "Vàng");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public boolean updateUserPassword(User user) {
         return JDBIConnect.get().withHandle(handle -> {
             // SQL query for updating the user
@@ -64,34 +74,12 @@ public class UserDao {
     }
 
     public List<User> getAllUsers() {
-        List<User> userList = new ArrayList<>();
         String sql = "SELECT * FROM users ORDER BY id DESC";
-
-        // Using JDBI to fetch data
-        JDBIConnect.get().withHandle(handle -> {
-            try (ResultSet rs = handle.getConnection().createStatement().executeQuery(sql)) {
-                while (rs.next()) {
-                    User user = new User();
-                    user.setId(rs.getInt("id"));
-                    user.setName(rs.getString("name"));
-                    user.setEmail(rs.getString("email"));
-                    user.setDateOfBirth(rs.getDate("dateOfBirth").toLocalDate());
-                    user.setPassword(rs.getString("password"));
-                    user.setImage(rs.getString("image"));
-                    user.setCreateAt(rs.getDate("createAt").toLocalDate());
-                    user.setIsDeleted(rs.getInt("isDeleted"));
-                    user.setGender(rs.getString("gender"));
-                    user.setPhoneNumber(rs.getLong("phoneNumber"));
-                    user.setRole(rs.getInt("role"));
-                    userList.add(user);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        });
-
-        return userList;
+        return JDBIConnect.get().withHandle(handle ->
+                handle.createQuery(sql)
+                        .mapToBean(User.class)
+                        .list()
+        );
     }
 
 
@@ -119,27 +107,54 @@ public class UserDao {
         });
     }
 
-    public User findUserEmail(String email) {
+        public User findUserEmail(String email, Integer userId) {
         return JDBIConnect.get().withHandle(h -> {
-            return h.createQuery("select * from users where email = :email").bind("email", email).mapToBean(User.class).findFirst().orElse(null);
+            String sql = "SELECT * FROM users WHERE 1=1";
+
+            if (email != null && !email.isEmpty()) {
+                sql += " AND email = :email";
+            } else if (userId != null) {
+                sql += " AND id = :userId";
+            }
+
+            return h.createQuery(sql)
+                    .bind("email", email)
+                    .bind("userId", userId)
+                    .mapToBean(User.class)
+                    .findFirst()
+                    .orElse(null);
+        });
+    }
+    public User findUserByOAuth(String oauthId, String provider) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "SELECT * FROM users WHERE oauthId = :oauthId AND oauthProvider = :provider";
+            return h.createQuery(sql)
+                    .bind("oauthId", oauthId)
+                    .bind("provider", provider)
+                    .mapToBean(User.class)
+                    .findFirst()
+                    .orElse(null);
         });
     }
 
     public boolean registerUser(User user) {
         return JDBIConnect.get().withHandle(h -> {
-            String insertedsql = "INSERT INTO users (name, email, dateOfBirth, password, createAt,gender,phoneNumber, isDeleted, role,isActive) " +
-                    "VALUES (:name, :email, :dateOfBirth, :password, :createAt,:gender,:phoneNumber, :isDeleted, :role,:isActive)";
+            String insertedsql = "INSERT INTO users (name, email, dateOfBirth, password, createdAt, gender, phoneNumber, isDeleted, role, isActive, oauthProvider, oauthId) " +
+                    "VALUES (:name, :email, :dateOfBirth, :password, :createAt, :gender, :phoneNumber, :isDeleted, :role, :isActive, :oauthProvider, :oauthId)";
+
             return h.createUpdate(insertedsql)
                     .bind("name", user.getName())
                     .bind("email", user.getEmail())
-                    .bind("dateOfBirth", Timestamp.valueOf(user.getDateOfBirth().atStartOfDay()))
+                    .bind("dateOfBirth", user.getDateOfBirth() != null ? Timestamp.valueOf(user.getDateOfBirth().atStartOfDay()) : null)
                     .bind("password", user.getPassword())
-                    .bind("createAt", Timestamp.valueOf(user.getCreateAt().atStartOfDay()))
+                    .bind("createAt", user.getCreateAt())
                     .bind("isDeleted", user.getIsDeleted())
                     .bind("role", user.getRole())
                     .bind("gender", user.getGender())
                     .bind("phoneNumber", user.getPhoneNumber())
                     .bind("isActive", user.getIsActive())
+                    .bind("oauthProvider", user.getOauthProvider())
+                    .bind("oauthId", user.getOauthId())
                     .execute() > 0;
         });
     }
@@ -151,9 +166,9 @@ public class UserDao {
         });
     }
 
-    public boolean activeByToken(String token) {
+    public boolean activeByToken(int userId) {
         return JDBIConnect.get().withHandle(h -> {
-            return h.createUpdate("update users set isActive = 1 where token = :token").bind("token", token).execute() > 0;
+            return h.createUpdate("update users set isActive = 1 where id=:userId").bind("userId", userId).execute() > 0;
         });
     }
 
@@ -172,29 +187,55 @@ public class UserDao {
     }
 
     public List<User> searchUser(String query) {
-        List<User> userList = new ArrayList<>();
-        String sql = "SELECT id, name " +
-                "FROM users WHERE name LIKE ? AND isDeleted = 0";
+        String sql = "SELECT id, name FROM users WHERE name LIKE :query AND isDeleted = 0";
 
-        JDBIConnect.get().withHandle(handle -> {
-            try (PreparedStatement ps = handle.getConnection().prepareStatement(sql)) {
-                ps.setString(1, "%" + query + "%");
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        User user = new User();
-                        user.setId(rs.getInt("id"));
-                        user.setName(rs.getString("name"));
-                        userList.add(user);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        });
-
-        return userList;
+        return JDBIConnect.get().withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("query", "%" + query + "%")
+                        .mapToBean(User.class)
+                        .list()
+        );
     }
 
+
+    public User getUserBySessionId(String sessionId) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "select * from users u JOIN sessions s on s.userId=u.id WHERE s.sessionId=:sessionId";
+            return h.createQuery(sql).bind("sessionId", sessionId).mapToBean(User.class).findFirst().orElse(null);
+        });
+    }
+
+    public boolean saveSession(int userId, String sessionId) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "INSERT INTO sessions (userId, sessionId) VALUES (:userId, :newSessionId) ON DUPLICATE KEY UPDATE sessionId = :newSessionId";
+            return h.createUpdate(sql).bind("userId", userId).bind("newSessionId", sessionId).execute() > 0;
+        });
+    }
+
+    public boolean updateSessionId(int userId, String newSessionId) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "INSERT INTO sessions (userId, sessionId) VALUES (:userId, :newSessionId) ON DUPLICATE KEY UPDATE sessionId = :newSessionId";
+            return h.createUpdate(sql)
+                    .bind("newSessionId", newSessionId)
+                    .bind("userId", userId)
+                    .execute() > 0;
+        });
+    }
+
+    public boolean deleteSession(int userId) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "DELETE FROM sessions WHERE userId = :userId";
+            return h.createUpdate(sql)
+                    .bind("userId", userId)
+                    .execute() > 0;
+        });
+    }
+
+    @Override
+    public void saveLogToDB(int userId, String log, String alert) {
+        JDBIConnect.get().withHandle(h -> {
+            String sql = "INSERT INTO usersusage (userId,lastActivity,label,alert) VALUES(:userId,:lastActivity,:label,:alert)";
+            return h.createUpdate(sql).bind("userId", userId).bind("lastActivity", LocalDateTime.now()).bind("alert", alert).bind("label", log).execute() > 0;
+        });
+    }
 }

@@ -29,7 +29,7 @@ public class OrderController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Map<Integer, CartItem> cart = (Map<Integer, CartItem>) session.getAttribute("cart");
+        Map<String, CartItem> cart = (Map<String, CartItem>) session.getAttribute("cart");
         Coupon cp = (Coupon) session.getAttribute("appliedCoupon");
         User user = (User) session.getAttribute("auth");
         int userId = user.getId();
@@ -44,12 +44,12 @@ public class OrderController extends HttpServlet {
         double discountRate = cp == null ? 0 : cp.getDiscountRate();
         double discountAmount = totalPrice * (discountRate / 100);
         double grandTotal = totalPrice + shippingCost + discountAmount;
-        if (uploadOrderService.createOrder(userId, paymentMethodId, address.getId(), LocalDate.now(), grandTotal, "Đang xử lý", 0)) {
+        if (uploadOrderService.createOrder(userId, paymentMethodId, address.getId(), LocalDate.now(), grandTotal, "Đang xử lý", 0, user.getId())) {
             Order order = uploadOrderService.getLatestOrder();
             for (CartItem cartItem : cart.values()) {
-                uploadOrderDetailService.createOrderDetail(order.getId(), cartItem.getPrice(), cartItem.getBelt().getId(), cartItem.getQuantity());
+                uploadOrderDetailService.createOrderDetail(order.getId(), cartItem.getPrice(), cartItem.getBelt().getId(), cartItem.getQuantity(), cartItem.getVariant().getId());
             }
-            response.sendRedirect("/confirmSuccess?messageRedirect=orderDetailSuccess");
+            response.sendRedirect("/verify?messageRedirect=orderDetailSuccess");
         }
     }
 }

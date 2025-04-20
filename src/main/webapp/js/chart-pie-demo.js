@@ -6,8 +6,24 @@ $(document).ready(function () {
             labels: [],
             datasets: [{
                 data: [],
-                backgroundColor: ['#333333', '#555555', '#777777', '#999999', '#BBBBBB'],
-                hoverBackgroundColor: ['#444444', '#666666', '#888888', '#AAAAAA', '#CCCCCC'],
+                backgroundColor: [
+                    '#FF6384', // Soft Red
+                    '#36A2EB', // Blue
+                    '#FFCE56', // Yellow
+                    '#4BC0C0', // Teal
+                    '#9966FF', // Purple
+                    '#FF9F40', // Orange
+                    '#6D8B74', // Muted Green
+                ],
+                hoverBackgroundColor: [
+                    '#E55373', // Darker Red
+                    '#2A8CD6', // Darker Blue
+                    '#E5B748', // Darker Yellow
+                    '#3BA9A9', // Darker Teal
+                    '#8856E3', // Darker Purple
+                    '#E88A35', // Darker Orange
+                    '#5B7863', // Darker Muted Green
+                ],
                 hoverBorderColor: "rgba(255, 255, 255, 1)",
             }],
         },
@@ -20,13 +36,13 @@ $(document).ready(function () {
                 borderWidth: 1,
                 xPadding: 15,
                 yPadding: 15,
-                displayColors: false,
+                displayColors: true,
                 caretPadding: 10,
             },
             legend: {
                 display: false
             },
-            cutoutPercentage: 80,
+            cutoutPercentage: 75,
         },
     });
 
@@ -43,10 +59,11 @@ $(document).ready(function () {
             let legendHTML = '';
             labels.forEach((label, index) => {
                 legendHTML += `
-            <span class="mr-2">
-                ${label}
-            </span>
-        `;
+                <span class="mr-2">
+                    <i class="fas fa-circle" style="color:${myPieChart.data.datasets[0].backgroundColor[index]}"></i> 
+                    ${label}
+                </span>
+            `;
             });
             document.querySelector('.mt-4.text-center.small').innerHTML = legendHTML;
         },

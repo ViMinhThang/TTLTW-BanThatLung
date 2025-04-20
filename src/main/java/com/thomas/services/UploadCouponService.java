@@ -18,11 +18,11 @@ public class UploadCouponService {
         return couponDao.getAllCoupon();
     }
 
-    public boolean deleteCoupon(int couponId) {
-        return couponDao.deleteCouponById(couponId);
+    public boolean deleteCoupon(int couponId, int userId) {
+        return couponDao.deleteCouponAndLog(couponId, userId);
     }
 
-    public boolean createCoupon(LocalDate startDate, LocalDate endDate, String couponCode, double discountPercentage, int isActive) {
+    public boolean createCoupon(LocalDate startDate, LocalDate endDate, String couponCode, double discountPercentage, int isActive, int userId) {
         Coupon Coupon = new Coupon();
         if (couponDao.getCouponByCode(couponCode) != null) {
             return false;
@@ -33,7 +33,7 @@ public class UploadCouponService {
         coupon.setCode(couponCode);
         coupon.setDiscountRate(discountPercentage);
         coupon.setIsActive(isActive);
-        return couponDao.createCoupon(coupon);
+        return couponDao.createCouponAndUpdateUser(coupon, userId);
     }
 
     public Coupon getCoupon(int couponId) {
@@ -44,7 +44,7 @@ public class UploadCouponService {
         return couponDao.getDiscountRate(couponCode);
     }
 
-    public boolean updateCoupon(int couponId, LocalDate startDate, LocalDate endDate, String couponCode, double discountPercentage, int isActive) {
+    public boolean updateCoupon(int couponId, LocalDate startDate, LocalDate endDate, String couponCode, double discountPercentage, int isActive, int userId) {
         Coupon coupon = new Coupon();
         coupon.setStartDate(startDate);
         coupon.setEndDate(endDate);
@@ -52,6 +52,6 @@ public class UploadCouponService {
         coupon.setDiscountRate(discountPercentage);
         coupon.setId(couponId);
         coupon.setIsActive(isActive);
-        return couponDao.updateCoupon(coupon);
+        return couponDao.updateCouponAndLog(coupon, userId);
     }
 }

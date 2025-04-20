@@ -13,115 +13,16 @@
     <meta name="author" content=""/>
 
     <title>THOMAS - Admin</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/assets/icons/favicon.svg" type="image/x-icon"/>
+    <jsp:include page="/frontend/components/Admin/adminLink/adminLink.jsp"/>
 
-    <!-- Custom fonts for this template-->
-    <link
-            href="${pageContext.request.contextPath}/css/fontawesome-free-6.6.0-web/fontawesome-free-6.6.0-web/css/all.min.css"
-            rel="stylesheet"
-            type="text/css"
-    />
-    <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet"
-    />
-
-    <!-- Custom styles for this template-->
-    <link href="${pageContext.request.contextPath}/css/sb-admin-2.min.css" rel="stylesheet"/>
-    <link href="${pageContext.request.contextPath}/css/adminGeneral.css" rel="stylesheet"/>
 </head>
 
 <body id="page-top">
 <!-- Page Wrapper -->
 <div id="wrapper">
     <!-- Sidebar -->
-    <ul
-            class="navbar-nav sidebar sidebar-dark accordion"
-            id="accordionSidebar"
-            style="background-color: black"
-    >
-        <!-- Sidebar - Brand -->
-        <a
-                class="sidebar-brand d-flex align-items-center justify-content-center"
-                href="${pageContext.request.contextPath}/"
-        >
-            <div class="sidebar-brand-icon rotate-n-15">
-            </div>
-            <div class="sidebar-brand-text mx-3">THOMAS Admin</div>
-        </a>
+    <jsp:include page="/frontend/components/Admin/sidebar/sidebar.jsp"/>
 
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0"/>
-
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
-            <a class="nav-link" href="${pageContext.request.contextPath}/admin">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span></a
-            >
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider"/>
-
-        <!-- Heading -->
-        <div class="sidebar-heading">Interface</div>
-
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-            <a
-                    class="nav-link collapsed"
-                    href="#"
-                    data-toggle="collapse"
-                    data-target="#collapseUtilities"
-                    aria-expanded="true"
-                    aria-controls="collapseUtilities"
-            >
-                <i class="fas fa-fw fa-table"></i>
-                <span>Bảng</span>
-            </a>
-            <div
-                    id="collapseUtilities"
-                    class="collapse"
-                    aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar"
-            >
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item"
-                       href="${pageContext.request.contextPath}/admin/table/users"
-                    >Người dùng</a
-                    >
-                    <a class="collapse-item"
-                       href="${pageContext.request.contextPath}/admin/table/belts">Sản
-                        phẩm</a>
-                    <a class="collapse-item"
-                       href="${pageContext.request.contextPath}/admin/table/reviews"
-                    >Đánh giá</a
-                    >
-                    <a class="collapse-item"
-                       href="${pageContext.request.contextPath}/admin/table/coupons"
-                    >Coupon</a
-                    >
-                    <a class="collapse-item"
-                       href="${pageContext.request.contextPath}/admin/table/orders"
-                    >Đơn hàng</a
-                    >
-                    <a
-                            class="collapse-item"
-                            href="${pageContext.request.contextPath}/admin/table/collections"
-                    >Bộ sưu tập</a
-                    >
-                </div>
-            </div>
-        </li>
-        <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block"/>
-
-        <!-- Sidebar Toggler (Sidebar) -->
-        <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" id="sidebarToggle"></button>
-        </div>
-    </ul>
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -245,7 +146,7 @@
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div
                                 class="card shadow h-100 py-2"
-                                style="background-color: black"
+                                style="background-color: #71bd97;"
                         >
                             <div class="card-body">
                                 <div
@@ -271,7 +172,7 @@
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div
                                 class="card shadow h-100 py-2"
-                                style="background-color: black"
+                                style="background-color: #e16a6a;"
                         >
                             <div class="card-body">
                                 <div
@@ -303,7 +204,7 @@
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div
                                 class="card shadow h-100 py-2"
-                                style="background-color: black"
+                                style="background-color: #ffc884;"
                         >
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
@@ -333,7 +234,7 @@
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div
                                 class="card shadow h-100 py-2"
-                                style="background-color: black"
+                                style="background-color: #7c51ff;"
                         >
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
@@ -461,7 +362,7 @@
                     <div class="col-lg-6 mb-4">
                         <!-- Illustrations -->
                         <div class="card shadow mb-4">
-                            <div class="card-header py-3" style="background-color: black">
+                            <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold" style="color: white">
                                     Tính năng
                                 </h6>
@@ -478,13 +379,8 @@
         <!-- End of Main Content -->
 
         <!-- Footer -->
-        <footer class="sticky-footer bg-white">
-            <div class="container my-auto">
-                <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; THOMAS 2021</span>
-                </div>
-            </div>
-        </footer>
+        <jsp:include page="/frontend/components/Admin/adminFooter/adminFooter.jsp"/>
+
         <!-- End of Footer -->
     </div>
     <!-- End of Content Wrapper -->
@@ -536,19 +432,7 @@
 </div>
 
 <!-- Bootstrap core JavaScript-->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
+<jsp:include page="/frontend/components/Admin/scripts/adminScripts/datatable.jsp"/>
 
-<!-- Core plugin JavaScript-->
-<script src="${pageContext.request.contextPath}/js/jquery.easing.min.js"></script>
-
-<!-- Custom scripts for all pages-->
-<script src="${pageContext.request.contextPath}/js/sb-admin-2.min.js"></script>
-<!-- Page level plugins -->
-<script src="${pageContext.request.contextPath}/js/Chart.min.js"></script>
-
-<!-- Page level custom scripts -->
-<script src="${pageContext.request.contextPath}/js/chart-area-demo.js"></script>
-<script src="${pageContext.request.contextPath}/js/chart-pie-demo.js"></script>
 </body>
 </html>

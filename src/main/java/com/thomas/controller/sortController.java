@@ -1,7 +1,7 @@
 package com.thomas.controller;
 
 import com.thomas.dao.model.Belts;
-import com.thomas.services.UploadProductService;
+import com.thomas.services.ProductService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -16,37 +16,37 @@ public class sortController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UploadProductService uploadProductService = new UploadProductService();
-        HttpSession session = request.getSession();
-        String mainImage = "/assets/images/allProduct.png";
-        String descPrice = request.getParameter("descPrice");
-        String type = session.getAttribute("type").toString();
-        request.setAttribute("type", type);
-        List<Belts> sortedList = new ArrayList<>();
-        if (type.equalsIgnoreCase("all")) {
-            sortedList = uploadProductService.getSortedListBelts(type,uploadProductService.getAllProductsForDisplay());
-        }
-        if (type.equalsIgnoreCase("men")) {
-            sortedList = uploadProductService.getMaleOrFemaleAndMaterialProducts("M", "all");
-        }
-        if (type.equalsIgnoreCase("women")) {
-            sortedList = uploadProductService.getMaleOrFemaleAndMaterialProducts("F", "all");
-        }
-        if (type.equalsIgnoreCase("menLeather")) {
-            sortedList = uploadProductService.getMaleOrFemaleAndMaterialProducts("M", "da");
-        }
-        if (type.equalsIgnoreCase("menCanvas")) {
-            sortedList = uploadProductService.getMaleOrFemaleAndMaterialProducts("M", "canvas");
-        }
-        if (type.equalsIgnoreCase("womenLeather")) {
-            sortedList = uploadProductService.getMaleOrFemaleAndMaterialProducts("F", "da");
-        }
-        if (type.equalsIgnoreCase("menCanvas")) {
-            sortedList = uploadProductService.getMaleOrFemaleAndMaterialProducts("F", "canvas");
-        }
-        request.setAttribute("mainImage", mainImage);
-        pagingforPage(request, uploadProductService.getSortedListBelts(descPrice, sortedList));
-        request.getRequestDispatcher("/frontend/allProduct/allProduct1.jsp").forward(request, response);
+//        ProductService productService = new ProductService();
+//        HttpSession session = request.getSession();
+//        String mainImage = "/assets/images/allProduct.png";
+//        String descPrice = request.getParameter("descPrice");
+//        String type = session.getAttribute("type").toString();
+//        request.setAttribute("type", type);
+//        List<Belts> sortedList = new ArrayList<>();
+//        if (type.equalsIgnoreCase("all")) {
+//            sortedList = productService.getSortedListBelts(type, productService.getAllProductsForDisplay());
+//        }
+//        if (type.equalsIgnoreCase("men")) {
+//            sortedList = productService.getMaleOrFemaleAndMaterialProducts("M", "all");
+//        }
+//        if (type.equalsIgnoreCase("women")) {
+//            sortedList = productService.getMaleOrFemaleAndMaterialProducts("F", "all");
+//        }
+//        if (type.equalsIgnoreCase("menLeather")) {
+//            sortedList = productService.getMaleOrFemaleAndMaterialProducts("M", "da");
+//        }
+//        if (type.equalsIgnoreCase("menCanvas")) {
+//            sortedList = productService.getMaleOrFemaleAndMaterialProducts("M", "canvas");
+//        }
+//        if (type.equalsIgnoreCase("womenLeather")) {
+//            sortedList = productService.getMaleOrFemaleAndMaterialProducts("F", "da");
+//        }
+//        if (type.equalsIgnoreCase("menCanvas")) {
+//            sortedList = productService.getMaleOrFemaleAndMaterialProducts("F", "canvas");
+//        }
+//        request.setAttribute("mainImage", mainImage);
+//        pagingforPage(request, productService.getSortedListBelts(descPrice, sortedList));
+//        request.getRequestDispatcher("/frontend/allProduct/allProduct1.jsp").forward(request, response);
 
     }
 

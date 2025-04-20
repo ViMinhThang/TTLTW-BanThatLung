@@ -221,8 +221,7 @@
 }
 
 .address-title {
-  letter-spacing: 0.46515px;
-  font-size: 31.01px;
+  font-size: 32px;
   font-weight: 300;
   line-height: 1.1;
 }
@@ -437,3 +436,10 @@
 .breadcrumb-item.active {
   color: #1c1c1c;
 }
+
+.user-addresses {
+  padding: 10px;
+  justify-content: center;
+  transition: background-color 0.5s ease;
+}
+

@@ -46,3 +46,40 @@ a{
 .custom_bg--gray{
   background-color: rgb(249, 249, 249);
 }
+
+.custom-login-btn {
+  border-radius: 0 !important; /* Bỏ bo góc */
+  border: 2px solid #000 !important; /* Thêm viền đen */
+  transition: all 0.3s ease;
+}
+
+.custom-login-btn:hover {
+  transform: translateY(-2px);
+  background-color: #333;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Nút Google - Tùy chỉnh hoàn toàn */
+.custom-google-btn {
+  border: 2px solid #DB4437 !important;
+  border-radius: 8px !important;
+  background: white !important;
+  color: #DB4437 !important;
+  padding: 12px 24px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  transition: all 0.3s ease !important;
+}
+
+.custom-google-btn i {
+  font-size: 1.2rem !important;
+  margin-right: 8px !important;
+}
+
+.custom-google-btn:hover {
+  background: #f8f9fa !important;
+  border-color: #c1351d !important;
+  color: #c1351d !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(219, 68, 55, 0.15);
+}
