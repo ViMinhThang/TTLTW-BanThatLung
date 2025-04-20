@@ -1,4 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="com.thomas.constant.Iconstant" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +14,7 @@
             integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
             crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/signInPage.css"/>
@@ -36,7 +39,22 @@
         THOMAS / Đăng nhập
     </a>
 </div>
-
+<%-- khối hiển thị lỗi OAuth --%>
+<div class="container-lg">
+    <c:if test="${not empty param.error}">
+        <div class="alert alert-danger mt-4">
+            <c:choose>
+                <c:when test="${param.error == 'email_exists'}">
+                    ⚠️ Email này đã được đăng ký bằng phương thức thủ công.
+                    Vui lòng đăng nhập bằng email/mật khẩu.
+                </c:when>
+                <c:when test="${param.error == 'google_error'}">
+                    ⚠️ Đăng nhập Google thất bại. Vui lòng thử lại.
+                </c:when>
+            </c:choose>
+        </div>
+    </c:if>
+</div>
 <div class="container-lg d-flex justify-content-between">
     <form method="POST" class="col-7 mt-5" action="/login">
         <h2 class="custom_size--19 fw-light">Chào mừng bạn trở lại</h2>
@@ -85,12 +103,13 @@
                 </button>
             </div>
             <div class="d-flex justify-content-end align-items-center mt-5 mb-5">
-                <a href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid
-&redirect_uri=http://localhost:8080/
-&response_type=code
-&client_id=419463588392-j19277rui7jkcp9smth8s6fod3smjgjh.apps.googleusercontent.com
-
-&approval_prompt=force" class="btn btn-danger p-2 custom__btn w-50">Đăng nhập bằng Google</a>
+                <p class="text-center mb-3">Hoặc đăng nhập bằng:</p>
+                <div class="d-flex justify-content-center gap-2">
+                    <a href="https://accounts.google.com/o/oauth2/auth?client_id=<%=Iconstant.GOOGLE_CLIENT_ID%>&redirect_uri=<%=Iconstant.GOOGLE_REDIRECT_URI%>&response_type=code&scope=email profile"
+                       class="btn btn-outline-danger btn-floating btn-lg">
+                        <i class="fab fa-google"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </form>
