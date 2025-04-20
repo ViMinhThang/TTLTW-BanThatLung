@@ -124,8 +124,9 @@
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Tên</th>
-                                    <th>Thông tin liên lạc</th>
+                                    <th>Tên Loại</th>
+                                    <th>Sản phẩm</th>
+                                    <th>Ngày giao dịch</th>
                                     <th>Ngày tạo</th>
                                     <th>Ngày cập nhập</th>
                                     <th>Hành động</th>
@@ -134,8 +135,9 @@
                                 <tfoot>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Tên</th>
-                                    <th>Thông tin liên lạc</th>
+                                    <th>Tên Loại</th>
+                                    <th>Sản phẩm</th>
+                                    <th>Ngày giao dịch</th>
                                     <th>Ngày tạo</th>
                                     <th>Ngày cập nhập</th>
                                     <th>Hành động</th>

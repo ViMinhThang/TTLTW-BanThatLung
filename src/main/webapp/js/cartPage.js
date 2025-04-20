@@ -32,25 +32,31 @@ $(document).ready(function () {
     })
     $(".remove_button").on("click", function () {
         const $this = $(this);
-        const beltId = $(this).closest(".custom_remove").find(".beltId").val();
+        const beltId = $(this).closest(".cart-item").find(".beltId").val();
+        const variantId = $(this).closest(".cart-item").find(".variantId").val();
         $.ajax({
             url: `/Cart`,
             method: "POST",
             data: {
                 message: `remove`,
                 beltId: beltId,
+                variantId: variantId,
             },
             success(responseData) {
                 const data = responseData;
-                $this.closest(".custom_remove").fadeOut(300, function () {
+                $this.closest(".cart-item").fadeOut(300, function () {
                     $(this).remove();
                 });
-                $(".totalOrdersCountDisplay").text(`Tổng [${data.cartSize} đơn hàng]`);
-                $(".totalOrdersDisplayBelts").text(`${data.cartSize} sản phẩm`);
-                $(".totalPriceDisplay").text((data.totalPrice)+" VNĐ");
-                $(".shipmentDisplay").text((data.shipmentPrice)+"VNĐ");
-                $(".totalCostDisplay").text((data.grandTotal)+" VNĐ");
-                const cartCount = parseInt($("#cart_received").text(), 10) - 1
+                let totalQuantity = 0;
+                let totalPrice = 0;
+                data.forEach(item => {
+                    totalQuantity += item.quantity;
+                    totalPrice += item.quantity * item.price;
+                });
+                $(".totalOrdersCountDisplay").text(`Tổng [${totalQuantity} đơn hàng]`);
+                $(".totalOrdersDisplayBelts").text(`${totalQuantity} sản phẩm`);
+                $(".totalPriceDisplay").text(totalPrice.toLocaleString("vi-VN") + " VNĐ");
+                $(".totalCostDisplay").text(totalPrice.toLocaleString("vi-VN") + " VNĐ");
                 $("#cart_received").text(cartCount)
             },
             error(responseData) {
@@ -62,26 +68,32 @@ $(document).ready(function () {
 
     $(".quantitySelectCart").on("change", function () {
         const selectedQuantity = $(this).val();
+        const beltId = $(this).closest(".cart-item").find(".beltId").val();
+        const variantId = $(this).closest(".cart-item").find(".variantId").val();
 
-        const beltId = $(this).closest(".custom_remove").find(".beltId").val();
         $.ajax({
             url: '/Cart',
             type: 'POST',
             data: {
                 message: "update",
                 beltId: beltId,
+                variantId: variantId,
                 quantity: selectedQuantity,
             },
             success: function (response) {
                 console.log("Quantity updated successfully!");
                 const data = response;
-                $(".totalOrdersCountDisplay").text(`Tổng [${data.cartSize} đơn hàng]`);
-                $(".totalOrdersDisplayBelts").text(`${data.cartSize} sản phẩm`);
-                $(".totalPriceDisplay").text((data.totalPrice) + " VNĐ");
-                $(".shipmentDisplay").text((data.shipmentPrice) + " VNĐ");
-                $(".totalCostDisplay").text((data.grandTotal) + " VNĐ");
+                let totalQuantity = 0;
+                let totalPrice = 0;
+                data.forEach(item => {
+                    totalQuantity += item.quantity;
+                    totalPrice += item.quantity * item.price;
+                });
+                $(".totalOrdersCountDisplay").text(`Tổng [${totalQuantity} đơn hàng]`);
+                $(".totalOrdersDisplayBelts").text(`${totalQuantity} sản phẩm`);
+                $(".totalPriceDisplay").text(totalPrice.toLocaleString("vi-VN") + " VNĐ");
+                $(".totalCostDisplay").text(totalPrice.toLocaleString("vi-VN") + " VNĐ");
             },
-
             error: function (xhr, status, error) {
                 console.error("Error while updating quantity:", error);
             }

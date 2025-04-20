@@ -32,23 +32,6 @@ CREATE TABLE coupons
     isActive  INT
 );
 
-CREATE TABLE Resources
-(
-    id           INT AUTO_INCREMENT PRIMARY KEY,
-    resourceName VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE Permissions
-(
-    id             INT AUTO_INCREMENT PRIMARY KEY,
-    permissionName VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE `Groups`
-(
-    id        INT AUTO_INCREMENT PRIMARY KEY,
-    groupName VARCHAR(255) NOT NULL
-);
 
 CREATE TABLE categories
 (
@@ -69,9 +52,7 @@ CREATE TABLE suppliers
 CREATE TABLE users
 (
     id          INT AUTO_INCREMENT PRIMARY KEY,
-    name        VARCHAR(255)        NOT NULL,
     email       VARCHAR(255) UNIQUE NOT NULL,
-    dateOfBirth DATETIME,
     password    VARCHAR(255)        NOT NULL,
     name        VARCHAR(255),
     dateOfBirth DATETIME,
@@ -98,53 +79,50 @@ CREATE TABLE usersUsage
     Alert           VARCHAR(255) DEFAULT NULL,
     FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
 );
-CREATE TABLE paymentMethods
-(
-    id       INT AUTO_INCREMENT PRIMARY KEY,
-    name     VARCHAR(255) NOT NULL,
-    isActive INT DEFAULT 1
-);
 
-CREATE TABLE provinces (
-    id INT PRIMARY KEY,
+CREATE TABLE provinces
+(
+    id   INT PRIMARY KEY,
     name VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE districts (
-    id INT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+CREATE TABLE districts
+(
+    id         INT PRIMARY KEY,
+    name       VARCHAR(255) NOT NULL,
     provinceId INT,
-    FOREIGN KEY (provinceId) REFERENCES provinces(id)
+    FOREIGN KEY (provinceId) REFERENCES provinces (id)
 );
 
-CREATE TABLE wards (
-    id INT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+CREATE TABLE wards
+(
+    id         INT PRIMARY KEY,
+    name       VARCHAR(255) NOT NULL,
     districtId INT,
-    FOREIGN KEY (districtId) REFERENCES districts(id)
+    FOREIGN KEY (districtId) REFERENCES districts (id)
 );
 
 CREATE TABLE addresses
 (
-    id            INT AUTO_INCREMENT PRIMARY KEY,
-    userId        INT          NOT NULL,
-    provinceId INT NOT NULL,
-    districtId INT NOT NULL,
-    wardId INT NOT NULL,
+    id             INT AUTO_INCREMENT PRIMARY KEY,
+    userId         INT          NOT NULL,
+    provinceId     INT          NOT NULL,
+    districtId     INT          NOT NULL,
+    wardId         INT          NOT NULL,
     address_detail VARCHAR(255) NOT NULL,
-    isUse         INT DEFAULT 0,
-    isDeleted     INT DEFAULT 0,
-    FOREIGN KEY (provinceId) REFERENCES provinces(id),
-    FOREIGN KEY (districtId) REFERENCES districts(id),
-    FOREIGN KEY (wardId) REFERENCES wards(id),
+    isUse          INT DEFAULT 0,
+    isDeleted      INT DEFAULT 0,
+    FOREIGN KEY (provinceId) REFERENCES provinces (id),
+    FOREIGN KEY (districtId) REFERENCES districts (id),
+    FOREIGN KEY (wardId) REFERENCES wards (id),
     FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE belts
 (
-    id            INT AUTO_INCREMENT PRIMARY KEY,
-    name          VARCHAR(255) NOT NULL,
-    description   TEXT,
+    id           INT AUTO_INCREMENT PRIMARY KEY,
+    name         VARCHAR(255) NOT NULL,
+    description  TEXT,
     price DOUBLE NOT NULL,
     gender       VARCHAR(50)  NOT NULL,
     releaseDate  DATE,
@@ -161,7 +139,9 @@ CREATE TABLE beltVariants
     beltId        INT         NOT NULL,
     size          VARCHAR(50) NOT NULL,
     color         VARCHAR(50),
-    stockQuantity INT DEFAULT 0,
+    createdAt     DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updatedAt     DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    stockQuantity INT      DEFAULT 0,
     FOREIGN KEY (beltId) REFERENCES belts (id) ON DELETE CASCADE
 );
 
@@ -268,7 +248,13 @@ CREATE TABLE orderDetails
     FOREIGN KEY (variantId) REFERENCES beltVariants (id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (beltId) REFERENCES belts (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
+CREATE TABLE sessions
+(
+    sessionId VARCHAR(255) PRIMARY KEY,
+    userId    INT NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
+);
 CREATE TABLE couponUsage
 (
     id       INT AUTO_INCREMENT PRIMARY KEY,
@@ -280,6 +266,42 @@ CREATE TABLE couponUsage
     FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE,
     FOREIGN KEY (orderId) REFERENCES orders (id) ON DELETE CASCADE
 );
+CREATE TABLE Resources
+(
+    id           INT AUTO_INCREMENT PRIMARY KEY,
+    resourceName VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Permissions
+(
+    id             INT AUTO_INCREMENT PRIMARY KEY,
+    permissionName VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE `Groups`
+(
+    id        INT AUTO_INCREMENT PRIMARY KEY,
+    groupName VARCHAR(255) NOT NULL
+);
+CREATE TABLE UserGroups
+(
+    userId  INT,
+    groupId INT,
+    PRIMARY KEY (userId, groupId),
+    FOREIGN KEY (userId) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (groupId) REFERENCES `Groups` (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE GroupPermissions
+(
+    groupId      INT,
+    resourceId   INT,
+    permissionId INT,
+    PRIMARY KEY (groupId, resourceId, permissionId),
+    FOREIGN KEY (groupId) REFERENCES `Groups` (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (resourceId) REFERENCES Resources (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (permissionId) REFERENCES Permissions (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE TABLE stockTransactions
 (
     id              INT AUTO_INCREMENT PRIMARY KEY,
@@ -306,4 +328,18 @@ CREATE TABLE purchases
     FOREIGN KEY (beltId) REFERENCES belts (id),
     FOREIGN KEY (supplierId) REFERENCES suppliers (id),
     FOREIGN KEY (beltVariantId) REFERENCES beltVariants (id) ON DELETE CASCADE
+);
+CREATE TABLE cartItems
+(
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    userId     INT NOT NULL,
+    beltId     INT NOT NULL,
+    variantId  INT NOT NULL,
+    quantity   INT NOT NULL,
+    price DOUBLE NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES users (id),
+    FOREIGN KEY (beltId) REFERENCES belts (id),
+    FOREIGN KEY (variantId) REFERENCES beltVariants (id)
 );

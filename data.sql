@@ -18,11 +18,11 @@ INSERT INTO `Groups` (groupName)
 VALUES ('viewer');
 
 INSERT INTO UserGroups (userId, groupId)
-VALUES (101, 1);
+VALUES (1, 1);
 INSERT INTO UserGroups (userId, groupId)
-VALUES (102, 2);
+VALUES (2, 2);
 INSERT INTO UserGroups (userId, groupId)
-VALUES (103, 3);
+VALUES (3, 3);
 
 
 INSERT INTO Resources (resourceName)

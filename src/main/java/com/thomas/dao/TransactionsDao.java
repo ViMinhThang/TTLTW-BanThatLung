@@ -41,7 +41,7 @@ public class TransactionsDao {
 
     public boolean addTransactions(Transactions transactions) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "INSERT INTO stockTransactions(beltId,beltVariantId,transactionType,quantity,transactionDate,createdAt,updatedAt) VALUES(:beltId,beltVariantId,transactionType,:transactionType,quantity,:transactionDate,:createdAt,:updatedAt) ";
+            String sql = "INSERT INTO stockTransactions(beltId,beltVariantId,transactionType,quantity,transactionDate,createdAt,updatedAt) VALUES(:beltId,:beltVariantId,:transactionType,:quantity,:transactionDate,:createdAt,:updatedAt) ";
             return h.createUpdate(sql).bind("beltId", transactions.getBeltId())
                     .bind("beltVariantId", transactions.getBeltVariantId())
                     .bind("transactionType", transactions.getTransactionType())

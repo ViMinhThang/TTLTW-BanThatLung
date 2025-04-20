@@ -6,20 +6,13 @@ $(document).ready(function () {
         var beltId = $("#beltIdReviews").val();
         var variantId = $("#variantIdReviews").val()
         $.ajax({
-            url: '/getReviews',
-            type: 'GET',
-            data: {
-                beltId: beltId,
-                variantId: variantId,
-                page: page,
-                size: reviewsPerPage
-            },
-            success: function (response) {
+            url: '/getReviews', type: 'GET', data: {
+                beltId: beltId, variantId: variantId, page: page, size: reviewsPerPage
+            }, success: function (response) {
                 $('#reviewsContainer').html(response.reviewsHTML);
 
                 updatePagination(response.totalPages, page);
-            },
-            error: function () {
+            }, error: function () {
                 alert('Error loading reviews.');
             }
         });
@@ -43,25 +36,21 @@ $(document).ready(function () {
         const price = fullText.replace('VNĐ', '').trim();
         const variantId = $("#variantIdReviews").val();
         $.ajax({
-            url: `/Cart?message=add&beltName=${beltName}`,
-            type: 'POST',
-            data: {
+            url: `/Cart?message=add&beltName=${beltName}`, type: 'POST', data: {
                 message: "add",
                 beltId: beltId,
                 beltName: beltName,
                 quantity: quantity,
                 variantId: variantId,
                 price: price,
-            },
-            success: function (response) {
+            }, success: function (response) {
                 $("#liveToast").removeClass("hide").addClass("show");
-
+                console.log(response)
                 let cartCount = parseInt($("#cart_received").text(), 10) + 1;
                 $("#cart_received").text(cartCount);
 
                 $button.html(originalContent).prop("disabled", false);
-            },
-            error: function (xhr) {
+            }, error: function (xhr) {
                 $(".custom_toast_text").text("Thêm vào giỏ hàng thất bại");
                 $("#liveToast").removeClass("hide").addClass("show");
 

@@ -1,12 +1,22 @@
 package com.thomas.dao.model;
 
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class CartItem {
+    private int id;
+    private int userId;
+    private int beltId;
+    private int variantId;
+    private double price;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
     private Belts belt;
     private BeltVariant variant;
     private int quantity;
-    private double price;
+
+    public CartItem() {
+
+    }
 
     public CartItem(Belts belt, int quantity, double price, BeltVariant variant) {
         this.belt = belt;
@@ -46,4 +56,53 @@ public class CartItem {
     public void setVariant(BeltVariant variant) {
         this.variant = variant;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public int getBeltId() {
+        return beltId;
+    }
+
+    public void setBeltId(int beltId) {
+        this.beltId = beltId;
+    }
+
+    public int getVariantId() {
+        return variantId;
+    }
+
+    public void setVariantId(int variantId) {
+        this.variantId = variantId;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
 }

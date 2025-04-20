@@ -183,7 +183,7 @@
                     Phiếu mua
                 </a>
                 <a class="collapse-item <%= request.getHeader("referer").endsWith("transactions") ? "active" : "" %>"
-                   href="${pageContext.request.contextPath}/admin/monitors/reviews">
+                   href="${pageContext.request.contextPath}/admin/inventory/transactions">
                     Giao dịch
                 </a>
                 <a class="collapse-item <%= request.getHeader("referer").endsWith("coupons") ? "active" : "" %>"
