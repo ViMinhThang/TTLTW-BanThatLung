@@ -69,7 +69,9 @@ CREATE TABLE suppliers
 CREATE TABLE users
 (
     id          INT AUTO_INCREMENT PRIMARY KEY,
+    name        VARCHAR(255)        NOT NULL,
     email       VARCHAR(255) UNIQUE NOT NULL,
+    dateOfBirth DATETIME,
     password    VARCHAR(255)        NOT NULL,
     name        VARCHAR(255),
     dateOfBirth DATETIME,
@@ -83,7 +85,6 @@ CREATE TABLE users
     isDeleted   INT       DEFAULT 0,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 -- 3. Bảng phụ liên quan đến users
 CREATE TABLE usersUsage
 (
@@ -97,59 +98,61 @@ CREATE TABLE usersUsage
     Alert           VARCHAR(255) DEFAULT NULL,
     FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
 );
-
-CREATE TABLE sessions
+CREATE TABLE paymentMethods
 (
-    sessionId VARCHAR(255) PRIMARY KEY,
-    userId    INT NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id       INT AUTO_INCREMENT PRIMARY KEY,
+    name     VARCHAR(255) NOT NULL,
+    isActive INT DEFAULT 1
+);
+
+CREATE TABLE provinces (
+    id INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE districts (
+    id INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    provinceId INT,
+    FOREIGN KEY (provinceId) REFERENCES provinces(id)
+);
+
+CREATE TABLE wards (
+    id INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    districtId INT,
+    FOREIGN KEY (districtId) REFERENCES districts(id)
+);
+
+CREATE TABLE addresses
+(
+    id            INT AUTO_INCREMENT PRIMARY KEY,
+    userId        INT          NOT NULL,
+    provinceId INT NOT NULL,
+    districtId INT NOT NULL,
+    wardId INT NOT NULL,
+    address_detail VARCHAR(255) NOT NULL,
+    isUse         INT DEFAULT 0,
+    isDeleted     INT DEFAULT 0,
+    FOREIGN KEY (provinceId) REFERENCES provinces(id),
+    FOREIGN KEY (districtId) REFERENCES districts(id),
+    FOREIGN KEY (wardId) REFERENCES wards(id),
     FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
 );
 
-CREATE TABLE tokens
-(
-    tokenId   VARCHAR(255) PRIMARY KEY,
-    userId    INT      NOT NULL,
-    expiresAt DATETIME NOT NULL,
-    FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
-);
-
--- 4. Phân quyền
-CREATE TABLE UserGroups
-(
-    userId  INT,
-    groupId INT,
-    PRIMARY KEY (userId, groupId),
-    FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (groupId) REFERENCES `Groups` (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE GroupPermissions
-(
-    groupId      INT,
-    resourceId   INT,
-    permissionId INT,
-    PRIMARY KEY (groupId, resourceId, permissionId),
-    FOREIGN KEY (groupId) REFERENCES `Groups` (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (resourceId) REFERENCES Resources (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (permissionId) REFERENCES Permissions (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
--- 5. Bảng sản phẩm (belts) và các bảng liên quan
 CREATE TABLE belts
 (
     id            INT AUTO_INCREMENT PRIMARY KEY,
     name          VARCHAR(255) NOT NULL,
     description   TEXT,
     price DOUBLE NOT NULL,
-    gender        VARCHAR(50)  NOT NULL,
-    stockQuantity INT      DEFAULT 0,
-    releaseDate   DATE,
-    createdAt     DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updatedAt     DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    isDeleted     INT      DEFAULT 0,
+    gender       VARCHAR(50)  NOT NULL,
+    releaseDate  DATE,
+    createdAt    DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updatedAt    DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    isDeleted    INT      DEFAULT 0,
     discountRate DOUBLE DEFAULT 0.0,
-    materialBelt  VARCHAR(255)
+    materialBelt VARCHAR(255)
 );
 
 CREATE TABLE beltVariants
@@ -165,10 +168,25 @@ CREATE TABLE beltVariants
 CREATE TABLE beltCategory
 (
     beltId     INT NOT NULL,
+    variantId  INT NOT NULL,
     categoryId INT NOT NULL,
-    PRIMARY KEY (beltId, categoryId),
-    FOREIGN KEY (beltId) REFERENCES belts (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (categoryId) REFERENCES categories (id) ON DELETE CASCADE ON UPDATE CASCADE
+    PRIMARY KEY (beltId, categoryId, variantId),
+    FOREIGN KEY (beltId) REFERENCES belts (id) ON DELETE CASCADE,
+    FOREIGN KEY (variantId) REFERENCES beltVariants (id) ON DELETE CASCADE,
+    FOREIGN KEY (categoryId) REFERENCES categories (id) ON DELETE CASCADE
+);
+
+CREATE TABLE reviews
+(
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    beltId     INT NOT NULL,
+    userId     INT NOT NULL,
+    content    VARCHAR(1000),
+    variantId  INT NOT NULL,
+    ratingStar INT CHECK (ratingStar BETWEEN 1 AND 5),
+    createdAt  DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (beltId) REFERENCES belts (id) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE imageEntry
@@ -178,38 +196,30 @@ CREATE TABLE imageEntry
     variantId INT NOT NULL,
     imageType VARCHAR(50),
     imagePath VARCHAR(255),
-    FOREIGN KEY (beltId) REFERENCES belts (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (variantId) REFERENCES beltVariants (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE reviews
-(
-    id         INT AUTO_INCREMENT PRIMARY KEY,
-    beltId     INT NOT NULL,
-    userId     INT NOT NULL,
-    content    VARCHAR(1000),
-    ratingStar INT CHECK (ratingStar BETWEEN 1 AND 5),
-    createdAt  DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (beltId) REFERENCES belts (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (variantId) REFERENCES beltVariants (id) ON DELETE CASCADE,
+    FOREIGN KEY (beltId) REFERENCES belts (id) ON DELETE CASCADE
 );
 
 CREATE TABLE favorites
 (
-    id     INT AUTO_INCREMENT PRIMARY KEY,
-    beltId INT NOT NULL,
-    userId INT NOT NULL,
-    FOREIGN KEY (beltId) REFERENCES belts (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
+    id        INT AUTO_INCREMENT PRIMARY KEY,
+    beltId    INT NOT NULL,
+    variantId INT NOT NULL,
+    userId    INT NOT NULL,
+    FOREIGN KEY (variantId) REFERENCES beltVariants (id) ON DELETE CASCADE,
+    FOREIGN KEY (beltId) REFERENCES belts (id) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE beltfavorites
 (
     beltId     INT NOT NULL,
+    variantId  INT NOT NULL,
     favoriteId INT NOT NULL,
-    PRIMARY KEY (beltId, favoriteId),
-    FOREIGN KEY (beltId) REFERENCES belts (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (favoriteId) REFERENCES favorites (id) ON DELETE CASCADE ON UPDATE CASCADE
+    PRIMARY KEY (beltId, favoriteId, variantId),
+    FOREIGN KEY (beltId) REFERENCES belts (id) ON DELETE CASCADE,
+    FOREIGN KEY (variantId) REFERENCES beltVariants (id) ON DELETE CASCADE,
+    FOREIGN KEY (favoriteId) REFERENCES favorites (id) ON DELETE CASCADE
 );
 
 CREATE TABLE beltViews
@@ -229,18 +239,6 @@ CREATE TABLE collections
     name               VARCHAR(255) NOT NULL,
     collectionDetailId INT          NOT NULL,
     FOREIGN KEY (collectionDetailId) REFERENCES collectionDetails (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
--- 7. Đơn hàng & thanh toán
-CREATE TABLE addresses
-(
-    id          INT AUTO_INCREMENT PRIMARY KEY,
-    userId      INT NOT NULL,
-    addressLine VARCHAR(255),
-    city        VARCHAR(100),
-    country     VARCHAR(100),
-    createdAt   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE orders

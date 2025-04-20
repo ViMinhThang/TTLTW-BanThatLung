@@ -1,55 +1,3 @@
-CREATE PROCEDURE insert_coupons()
-BEGIN
-    DECLARE
-i INT DEFAULT 1;
-    WHILE
-i <= 100 DO
-        INSERT INTO coupons (code, discountRate, startDate, endDate, isActive)
-        VALUES (
-            CONCAT('CODE', i),                            -- Code: CODE1, CODE2, ..., CODE100
-            ROUND(RAND() * 100, 2),                      -- DiscountRate: Random discount between 0 and 100
-            DATE_ADD(NOW(), INTERVAL i DAY),             -- StartDate: Current date + i days
-            DATE_ADD(NOW(), INTERVAL (i + 30) DAY),      -- EndDate: StartDate + 30 days
-            IF(i % 2 = 0, 1, 0)                          -- isActive: Alternates between 1 and 0
-        );
-        SET
-i = i + 1;
-END WHILE;
-END
-
-CALL insert_coupons();
-
-
-
-CREATE PROCEDURE insert_users()
-BEGIN
-    DECLARE
-i INT DEFAULT 1;
-    WHILE
-i <= 100 DO
-        INSERT INTO users (name, email, dateOfBirth, password, image, isDeleted, gender, phoneNumber, role, token, isActive)
-        VALUES (
-            CONCAT('User ', i),                                -- name: User 1, User 2, ..., User 100
-            CONCAT('user', i, '@example.com'),                  -- email: user1@example.com, user2@example.com, ...
-            DATE_ADD('1990-01-01', INTERVAL (i * 10) YEAR),     -- dateOfBirth: Starting from 1990, increments by 10 years
-            '202cb962ac59075b964b07152d234b70',                -- password: Same for all users (MD5 hashed "123")
-            CONCAT('/images/users/user', i, '.jpg'),            -- image: /images/users/user1.jpg, /images/users/user2.jpg, ...
-            0,                                                 -- isDeleted: 0 (not deleted)
-            IF(i % 2 = 0, 'Female', IF(i % 3 = 0, 'Male', 'Non-binary')), -- gender: Alternates between Male, Female, and Non-binary
-            1234567890 + i,                                    -- phoneNumber: Incremental phone numbers starting from 1234567891
-            IF(i % 2 = 0, 1, IF(i % 3 = 0, 2, 3)),             -- role: Alternates between 1, 2, 3
-            NULL,                                              -- token: NULL
-            1                                                  -- isActive: 1 (active)
-        );
-        SET
-i = i + 1;
-END WHILE;
-END
-
-CALL insert_users();
-
-
-
 INSERT INTO users (name, email, dateOfBirth, password, image, isDeleted, gender, phoneNumber, role, token, isActive)
 VALUES ('John Doe', 'john.doe@example.com', '1990-05-15', '202cb962ac59075b964b07152d234b70', '/images/users/john.jpg',
         0, 'Male', 1234567890, 1, NULL, 1),
@@ -59,8 +7,8 @@ VALUES ('John Doe', 'john.doe@example.com', '1990-05-15', '202cb962ac59075b964b0
         1122334455, 1, NULL, 1),
        ('Bob Johnson', 'bob.johnson@example.com', '1992-07-03', '202cb962ac59075b964b07152d234b70',
         '/images/users/bob.jpg', 0, 'Male', 5566778899, 2, NULL, 1),
-       ('Charlie Davis', 'charlie.davis@example.com', '2000-01-30', '202cb962ac59075b964b07152d234b70', NULL, 0,
-        'Non-binary', 9988776655, 3, NULL, 1);
+       ('Test', 'titphong012@gmail.com', '2004-01-01', '098f6bcd4621d373cade4e832627b4f6', '/images/users/john.jpg', 0,
+        'Male', 0123456789, 1, NULL, 1);
 
 INSERT INTO `Groups` (groupName)
 VALUES ('admin');
@@ -188,9 +136,9 @@ VALUES (3, 6, 1);
 
 
 INSERT INTO paymentMethods (name, isActive)
-VALUES ('GooglePay', 1),
-       ('Delivery', 1),
-       ('Bank', 1);
+VALUES ('COD', 1),
+       ('MoMo', 1),
+       ('VNPay', 1);
 
 INSERT INTO belts (name, description, price, gender, releaseDate, isDeleted, discountRate, materialBelt)
 VALUES ('Classic Leather Belt', 'A premium leather belt for formal wear.', 29.99, 'Unisex', '2024-03-01', 0, 10.0,
@@ -379,19 +327,3 @@ VALUES (1, 1, 1, 100, '2025-04-01 09:00:00'),
        (3, 4, 8, 65, '2025-04-08 17:35:00'),
        (1, 2, 9, 55, '2025-04-09 08:25:00'),
        (2, 1, 10, 110, '2025-04-10 10:50:00');
-
-INSERT INTO stockTransactions (beltId, beltVariantId, transactionType, quantity)
-VALUES (1, 3, 'IMPORT', 20),  -- Classic Leather Belt - M - Black
-       (1, 4, 'IMPORT', 15),  -- Classic Leather Belt - L - Black
-       (2, 14, 'IMPORT', 10), -- Casual Canvas Belt - L - Beige
-       (3, 22, 'IMPORT', 8),  -- Luxury Gold Belt - S - Gold
-
--- Giao dịch xuất kho
-       (1, 3, 'EXPORT', 5),
-       (1, 4, 'EXPORT', 3),
-       (2, 14, 'EXPORT', 2),
-       (3, 22, 'EXPORT', 1),
-
--- Giao dịch điều chỉnh thủ công do kiểm kho
-       (1, 3, 'ADJUSTMENT', 2),
-       (2, 14, 'ADJUSTMENT', -1);

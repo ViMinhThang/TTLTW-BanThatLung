@@ -52,22 +52,7 @@ public class TransactionsController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String message = request.getParameter("message");
-        if (message.equals("create")) {
-            String name = request.getParameter("name").trim();
-            String productName = request.getParameter("productName").trim();
-            String[] parts = productName.split(" ");
-            String beltName = String.join(" ", Arrays.copyOfRange(parts, 0, parts.length - 2));
-            int quantity = Integer.parseInt(request.getParameter("quantity"));
-            LocalDateTime transactionDate = LocalDate.parse(request.getParameter("TransactionDate"), DateTimeFormatter.ISO_LOCAL_DATE).atStartOfDay();
-            int beltId = transactionService.findBeltId(beltName);
-            int variantId = transactionService.getVariantId(beltName, parts[parts.length - 1], parts[parts.length - 2]);
-            LocalDateTime createdAt = LocalDate.parse(request.getParameter("createdDate"), DateTimeFormatter.ISO_LOCAL_DATE).atStartOfDay();
-            Transactions transactions = new Transactions(variantId, "IMPORT - " + name + " - " + productName, quantity, transactionDate, createdAt, beltId);
-            boolean created = transactionService.addTransactions(transactions);
-            if (created) {
-                response.sendRedirect("/admin/inventory/purchases");
-            }
-        } else if (message.equals("delete")) {
+        if (message.equals("delete")) {
             Transactions transactions = new Transactions();
             transactions.setId(Integer.parseInt(request.getParameter("transactionId")));
             boolean deleted = transactionService.deleteTransactions(transactions);

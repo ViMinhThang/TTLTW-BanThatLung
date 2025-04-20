@@ -2,6 +2,7 @@ package com.thomas.controller.authentication;
 
 import com.thomas.dao.model.Token;
 import com.thomas.dao.model.User;
+import com.thomas.services.EmailService;
 import com.thomas.services.SignUpService;
 import com.thomas.services.TokenService;
 import com.thomas.services.UploadUserService;
@@ -9,9 +10,6 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -21,7 +19,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Properties;
 import java.util.Scanner;
 import java.util.UUID;
 import org.json.JSONObject;
@@ -31,6 +28,7 @@ public class signUpController extends HttpServlet {
     TokenService service = new TokenService();
     SignUpService signUpService = new SignUpService();
     UploadUserService uploadUserService = new UploadUserService();
+    EmailService emailService = new EmailService();
 
     // Add your reCAPTCHA secret key
     private static final String SECRET_KEY = "6LftTQgrAAAAAO6Q7m6jONYGCmgKOgVLQWE7AAg-";
@@ -58,46 +56,14 @@ public class signUpController extends HttpServlet {
         // Continue with sign-up process if CAPTCHA is valid
         String token = null;
         String toEmail = request.getParameter("email");
-        String host = "smtp.gmail.com";
-        String port = "587";
-        String from = "huynhminhthang246@gmail.com";
-        String passwordSender = "zhfz gtpx bkbp cuuo";
 
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", port);
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
-
-        Authenticator auth = new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(from, passwordSender);
-            }
-        };
-
-        Session session = Session.getInstance(props, auth);
-        String to = "huynhminhthang246@gmail.com";
-
-        MimeMessage message = new MimeMessage(session);
-        try {
-            token = UUID.randomUUID().toString();
-            String resetLink = "http://localhost:8080/verify?token=" + token;
-            String messageContent = "Vui lòng nhấn vào đường dẫn này để kích hoạt tài khoản.\n" +
-                    resetLink + "\n" +
-                    "Nếu bạn không yêu cầu điều này, vui lòng bỏ qua email này.";
-
-            message.addHeader("Content-type", "text/HTML; charset=UTF-8");
-            message.setFrom(from);
-            message.setRecipients(MimeMessage.RecipientType.TO, InternetAddress.parse(toEmail, false));
-            message.setSubject("Xác nhận email");
-            message.setText(messageContent, "UTF-8");
-            Transport.send(message);
-
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+        String subject = "Xác nhận email";
+        token = UUID.randomUUID().toString();
+        String resetLink = "http://localhost:8080/verify?token=" + token;
+        String messageContent = "Vui lòng nhấn vào đường dẫn này để kích hoạt tài khoản.\n" +
+                resetLink + "\n" +
+                "Nếu bạn không yêu cầu điều này, vui lòng bỏ qua email này.";
+        emailService.sendEmail(toEmail, subject, messageContent);
 
         String email = request.getParameter("email");
         String password = request.getParameter("password");

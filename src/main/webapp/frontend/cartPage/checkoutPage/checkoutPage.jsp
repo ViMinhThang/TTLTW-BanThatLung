@@ -16,6 +16,86 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/checkoutPage.css"/>
+    <script>
+        $(document).ready(function() {
+            $('input[name="paymentMethod"]').change(function() {
+                const selectedMethod = $(this).val();
+                $('.submitPaymentMethod').val(selectedMethod);
+                $('#openFormButtonPayment').text('Thanh toán với ' + selectedMethod);
+            });
+        });
+
+        $(document).ready(function() {
+            $('select[name="selectedAddress"]').change(function() {
+                const selectedAddress = $(this).val();
+                $('.submitDeliveryAddress').val(selectedAddress);
+            });
+        });
+
+        $(document).ready(function () {
+            loadProvinces();
+
+            $('#province').change(function () {
+                const provinceId = $(this).val();
+                $('#district').prop('disabled', false);
+                $.getJSON('/location?action=district&province_id=' + provinceId, function (data) {
+                    const districts = data.data;
+                    $('#district').empty().append('<option value="">Chọn quận/huyện</option>');
+                    districts.forEach(d => {
+                        $('#district').append('<option value="' + d.DistrictID + '">' + d.DistrictName + '</option>');
+                    });
+                });
+            });
+
+            $('#district').change(function () {
+                const districtId = $(this).val();
+                $('#ward').prop('disabled', false);
+                $.getJSON('/location?action=ward&district_id=' + districtId, function (data) {
+                    const wards = data.data;
+                    $('#ward').empty().append('<option value="">Chọn phường/xã</option>');
+                    wards.forEach(w => {
+                        $('#ward').append('<option value="' + w.WardCode + '">' + w.WardName + '</option>');
+                    });
+                });
+            });
+
+            $('#ward').change(function () {
+                const districtId = $('#district').val();
+                const wardCode = $(this).val();
+                calculateShipping(districtId, wardCode);
+            });
+
+            function loadProvinces() {
+                $.getJSON('/location?action=province', function (data) {
+                    const provinces = data.data;
+                    $('#province').empty().append('<option value="">Chọn tỉnh/thành phố</option>');
+                    provinces.forEach(p => {
+                        $('#province').append('<option value="' + p.ProvinceID + '">' + p.ProvinceName + '</option>');
+                    });
+                });
+            }
+
+            function calculateShipping(districtId, wardCode) {
+                $.ajax({
+                    url: '/shipping-fee',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        to_district_id: districtId,
+                        to_ward_code: wardCode
+                    }),
+                    success: function (response) {
+                        const fee = response.data.total;
+                        $('.shipmentPrice').text(fee + ' VNĐ');
+                        // Giả sử bạn có biến totalPrice là giá trị sản phẩm
+                        const productTotal = parseInt('${totalPrice}');
+                        const grandTotal = productTotal + fee;
+                        $('.totalCostDisplay').text(grandTotal + ' VNĐ');
+                    }
+                });
+            }
+        });
+    </script>
 </head>
 <body>
 <jsp:include page="/frontend/header_footer/header.jsp"/>
@@ -24,100 +104,54 @@
     <h2 class="fw-bold text-center">Vui lòng xác nhận và gửi đơn đặt hàng của bạn</h2>
     <div class="row my-5">
         <div class="col-lg-8 p-3">
-            <h3 class="fw-bold my-3">Thông tin giao hàng</h3>
+            <h3 class="fw-bold py-2 bg-light">Thông tin giao hàng</h3>
             <div class="border-top border-bottom py-3">
                 <div class="d-flex flex-column justify-content-between">
                     <p class="fs-4">Tên: ${sessionScope.auth.name}</p>
-                    <select class="form-select" name="selectedAddress" id="selectedAddress">
-                        <c:forEach var="address" items="${userAddresses}">
-                            <option value="${address.id}" ${address.isUse == 1 ? 'selected' : ''}>
-                                    ${address.addressStreet}, ${address.addressCity} - SĐT: ${sessionScope.auth.phoneNumber}
-                            </option>
-                        </c:forEach>
-                    </select>
+                    <p class="fs-4">SĐT: ${sessionScope.auth.phoneNumber}</p>
                 </div>
-<%--                <button class="btn btn-outline-dark" id="openFormButton">Thay đổi</button>--%>
             </div>
 
-            <div class="mt-3">
-                <h3 class="fw-bold my-3">Phương thức thanh toán</h3>
-                <div class="d-inline-flex flex-column" role="group">
-                    <c:forEach var="method" items="${paymentMethods}">
-                        <c:set var="counter" value="${counter + 1}"/>
-                        <div>
-                            <input type="radio" name="paymentMethod" id="paymentMethod${method.id}" value="${method.name}" autocomplete="off" ${counter == 1 ? 'checked' : ''} required>
-                            <label class="m-2" for="paymentMethod${method.id}">
-                                <img class="me-2" src="${pageContext.request.contextPath}/assets/icons/${method.name}.svg" alt="${method.name}"/>
-                                ${method.name}
-                            </label>
-                        </div>
-                    </c:forEach>
+            <h3 class="fw-bold py-2 bg-light">Địa chỉ giao hàng</h3>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Tỉnh / Thành phố</label>
+                    <select id="province" class="form-select" required></select>
                 </div>
-<%--                <div class="d-flex align-items-center">--%>
-<%--                    <img class="me-3" src="${pageContext.request.contextPath}/assets/icons/GooglePay.svg" alt="googlePay" style="max-width: 50px"/>--%>
-<%--                    <button class="btn btn-outline-dark" id="openFormButtonPay">Thay đổi</button>--%>
-<%--                </div>--%>
+                <div class="col-md-4">
+                    <label class="form-label">Quận / Huyện</label>
+                    <select id="district" class="form-select" required disabled></select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Phường / Xã</label>
+                    <select id="ward" class="form-select" required disabled></select>
+                </div>
+            </div>
+
+            <select class="form-select" name="selectedAddress" id="selectedAddress">
+                <c:forEach var="address" items="${userAddresses}">
+                    <option value="${address}" ${address.isUse == 1 ? 'selected' : ''}>
+                            ${address.addressStreet}, ${address.addressCity} - SĐT: ${sessionScope.auth.phoneNumber}
+                    </option>
+                </c:forEach>
+            </select>
+
+            <h3 class="fw-bold py-2 bg-light mt-3">Phương thức thanh toán</h3>
+            <div class="d-inline-flex flex-row" role="group">
+                <c:forEach var="method" items="${paymentMethods}">
+                    <div class="payment-option m-2">
+                        <label class="payment-label">
+                            <input type="radio" name="paymentMethod" value="${method.name}">
+                            <span class="custom-check"></span>
+                            <span class="payment-text">${method.name}</span>
+                            <img class="payment-icon"
+                                 src="${pageContext.request.contextPath}/assets/icons/${method.name}.svg"
+                                 alt="${method.name}"/>
+                        </label>
+                    </div>
+                </c:forEach>
             </div>
         </div>
-
-<%--        <div id="popupForm" class="popup">--%>
-<%--            <div class="popup-content">--%>
-<%--                <div class="popup-content--title">--%>
-<%--                    <p>Chọn địa chỉ giao hàng</p>--%>
-<%--                </div>--%>
-<%--                <c:if test="${userAddresses!=null}">--%>
-<%--                    <c:forEach var="address" items="${userAddresses}">--%>
-<%--                        <input type="hidden" name="userId" value="${sessionScope.auth.id}"/>--%>
-<%--                        <input type="hidden" name="addressId" value="${address.id}"/>--%>
-<%--                        <c:if test="${address.isUse ==0}">--%>
-<%--                            <div class="popup-content--desc">--%>
-<%--                                <div class="popup--content--userInfo--action">--%>
-<%--                                    <div class="popup--content--userdesc">--%>
-<%--                                        <span>Mặc định</span>--%>
-<%--                                        <p class="name__field1">${sessionScope.auth.name}</p>--%>
-<%--                                        <p class="address__field1">${address.addressStreet}</p>--%>
-<%--                                        <p class="city__field1">${address.addressCity}</p>--%>
-<%--                                        <p class="number__field1">${sessionScope.auth.phoneNumber}</p>--%>
-<%--                                    </div>--%>
-<%--                                    <div class="popup--content--right">--%>
-<%--                                        <div class="popup--content--button">--%>
-<%--                                            <button class="popup--content--submit custom__btn" id="submit1">Giao đến đây</button>--%>
-<%--                                        </div>--%>
-<%--                                    </div>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                        </c:if>--%>
-<%--                    </c:forEach>--%>
-<%--                </c:if>--%>
-<%--            </div>--%>
-<%--        </div>--%>
-
-<%--        <div id="popUpPayment" class="popup">--%>
-<%--            <div class="popup-content">--%>
-<%--                <c:forEach var="method" items="${paymentMethods}">--%>
-<%--                    <c:if test="${method.isActive==1}">--%>
-<%--                        <div class="popup-content--desc">--%>
-<%--                            <div class="popup--content--userInfo--action">--%>
-<%--                                <div class="popup--content--userdesc">--%>
-<%--                                    <span class="paymentMethod">--%>
-<%--                                        <c:choose>--%>
-<%--                                            <c:when test="${method.name=='Delivery'}">Thanh toán khi nhận hàng</c:when>--%>
-<%--                                            <c:otherwise>${method.name}</c:otherwise>--%>
-<%--                                        </c:choose>--%>
-<%--                                    </span>--%>
-<%--                                    <img src="${pageContext.request.contextPath}/assets/icons/${method.name}.svg" alt="${method.name}"/>--%>
-<%--                                </div>--%>
-<%--                                <div class="popup--content--right">--%>
-<%--                                    <div class="popup--content--button">--%>
-<%--                                        <button class="popup--content--submitPayment">Sử dụng</button>--%>
-<%--                                    </div>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                        </div>--%>
-<%--                    </c:if>--%>
-<%--                </c:forEach>--%>
-<%--            </div>--%>
-<%--        </div>--%>
 
         <div class="col-lg-4 bg-light p-4 rounded">
             <h3 class="fw-bold">Tóm tắt đơn hàng</h3>
@@ -127,7 +161,11 @@
             </div>
             <div class="d-flex justify-content-between mb-2">
                 <p class="mb-0">Vận chuyển</p>
-                <p class="mb-0">${shipmentPrice} VNĐ</p>
+                <p class="shipmentPrice mb-0">${shipmentPrice} VNĐ</p>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+                <p class="mb-0">Giảm giá</p>
+                <p class="mb-0">${discountAmount} VNĐ</p>
             </div>
             <div class="border-top pt-2">
                 <div class="d-flex justify-content-between fw-bold mb-2">
@@ -138,12 +176,14 @@
             </div>
             <c:choose>
                 <c:when test="${userAddresses == null || paymentMethods == null || paymentMethods.isEmpty()||sessionScope.auth==null}">
-                    <button class="btn btn-dark mt-4 fs-4 w-100" disabled id="openFormButtonPaymentDisabled">Thanh toán với Google</button>
+                    <button class="btn btn-dark mt-4 fs-4 w-100" disabled id="openFormButtonPaymentDisabled">Thanh toán với COD</button>
                 </c:when>
                 <c:otherwise>
                     <form method="POST" action="${request.context.path}/Order">
-                        <input class="submitPaymentMethod" type="hidden" name="paymentMethod" value="GooglePay">
-                        <button type="submit" class="btn btn-dark mt-4 fs-4 w-100" id="openFormButtonPayment">Thanh toán với Google</button>
+                        <input type="hidden" name="submitDeliveryAddress" value="Việt Nam"/>
+                        <input class="submitPaymentMethod" type="hidden" name="paymentMethod" value="COD">
+                        <input type="hidden" name="grandTotal" value="${grandTotal}"/>
+                        <button type="submit" class="btn btn-dark mt-4 fs-4 w-100" id="openFormButtonPayment">Thanh toán với COD</button>
                     </form>
                 </c:otherwise>
             </c:choose>
