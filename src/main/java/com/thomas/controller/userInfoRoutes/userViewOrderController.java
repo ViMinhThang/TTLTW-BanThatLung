@@ -36,10 +36,10 @@ public class userViewOrderController extends HttpServlet {
             Order order = uploadOrderService.getOrderById(Integer.parseInt(orderId));
             uploadOrderDetailService.setOrderDetails(order);
             for (OrderDetails od : order.getOrderDetails()) {
-                List<BeltVariant> beltVariants = productService.findVariants(od.getBeltId(), null, null, od.getVariantId());
+                BeltVariant beltVariants = productService.findVariant(od.getBeltId(), null, null, od.getVariantId());
 
-                if (!beltVariants.isEmpty()) {
-                    BeltVariant selectedVariant = beltVariants.get(0);
+                if (beltVariants != null) {
+                    BeltVariant selectedVariant = beltVariants;
                     od.setBeltVariant(selectedVariant);
                     od.setBeltImages(productService.getVariantImages(selectedVariant.getId()));
                     od.setCategories(productService.findCategory(od.getBeltId(), selectedVariant.getId()));
@@ -63,10 +63,10 @@ public class userViewOrderController extends HttpServlet {
             uploadOrderDetailService.setOrderDetails(order);
 
             for (OrderDetails od : order.getOrderDetails()) {
-                List<BeltVariant> beltVariants = productService.findVariants(od.getBeltId(), null, null, od.getVariantId());
+                BeltVariant beltVariants = productService.findVariant(od.getBeltId(), null, null, od.getVariantId());
 
-                if (!beltVariants.isEmpty()) {
-                    BeltVariant selectedVariant = beltVariants.get(0);
+                if (beltVariants != null) {
+                    BeltVariant selectedVariant = beltVariants;
                     od.setBeltVariant(selectedVariant);
                     od.setBeltImages(productService.getVariantImages(selectedVariant.getId()));
                     od.setCategories(productService.findCategory(od.getBeltId(), selectedVariant.getId()));

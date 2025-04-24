@@ -7,13 +7,15 @@ import java.util.List;
 public class BeltVariant implements java.io.Serializable {
     private int id;
     private int beltId;
+    private int sizeId;
+    private int colorId;
+    private long price;
+    private LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
     private String color;
     private String size;
-    private int stockQuantity;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private String description;
     private List<String> images;
-    private List<Category> categories;
 
     public BeltVariant() {
 
@@ -21,23 +23,19 @@ public class BeltVariant implements java.io.Serializable {
 
     public BeltVariant(BeltVariant other) {
         this.id = other.id;
-        this.color = other.color;
-        this.size = other.size;
-        this.stockQuantity = other.stockQuantity;
-
-        // Sao chép danh sách ảnh
-        this.images = new ArrayList<>(other.images);
+        this.colorId = other.colorId;
+        this.sizeId = other.sizeId;
+        this.price = other.price;
+        this.images = other.images != null ? new ArrayList<>(other.images) : null;
     }
 
-    public BeltVariant(int id, int beltId, String color, String size, int stockQuantity, LocalDateTime createdAt, LocalDateTime updatedAt, List<String> images) {
-        this.id = id;
+    public BeltVariant(int beltId, int sizeId, int colorId, long price, LocalDateTime updatedAt, LocalDateTime createdAt) {
         this.beltId = beltId;
-        this.color = color;
-        this.size = size;
-        this.stockQuantity = stockQuantity;
-        this.createdAt = createdAt;
+        this.sizeId = sizeId;
+        this.colorId = colorId;
+        this.price = price;
         this.updatedAt = updatedAt;
-        this.images = images;
+        this.createdAt = createdAt;
     }
 
     public int getId() {
@@ -56,36 +54,28 @@ public class BeltVariant implements java.io.Serializable {
         this.beltId = beltId;
     }
 
-    public String getColor() {
-        return this.color;
+    public int getSizeId() {
+        return this.sizeId;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setSizeId(int sizeId) {
+        this.sizeId = sizeId;
     }
 
-    public String getSize() {
-        return this.size;
+    public int getColorId() {
+        return this.colorId;
     }
 
-    public void setSize(String size) {
-        this.size = size;
+    public void setColorId(int colorId) {
+        this.colorId = colorId;
     }
 
-    public int getStockQuantity() {
-        return this.stockQuantity;
+    public long getPrice() {
+        return this.price;
     }
 
-    public void setStockQuantity(int stockQuantity) {
-        this.stockQuantity = stockQuantity;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return this.createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setPrice(long price) {
+        this.price = price;
     }
 
     public LocalDateTime getUpdatedAt() {
@@ -96,20 +86,44 @@ public class BeltVariant implements java.io.Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public List<String> getImages() {
-        return this.images;
+    public LocalDateTime getCreatedAt() {
+        return this.createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return this.description;
     }
 
     public void setImages(List<String> images) {
         this.images = images;
     }
 
-    public List<Category> getCategories() {
-        return this.categories;
+    public List<String> getImages() {
+        return this.images;
     }
 
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getColor() {
+        return this.color;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getSize() {
+        return this.size;
     }
 }
 

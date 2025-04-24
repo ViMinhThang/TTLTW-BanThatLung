@@ -120,6 +120,8 @@
                                     <th>ID</th>
                                     <th>Variant ID</th>
                                     <th>Tên sản phẩm</th>
+                                    <th>Màu</th>
+                                    <th>Size</th>
                                     <th>Ngày tạo</th>
                                     <th>Giá</th>
                                     <th>% Giảm giá</th>
@@ -133,6 +135,8 @@
                                     <th>ID</th>
                                     <th>Variant ID</th>
                                     <th>Tên sản phẩm</th>
+                                    <th>Màu</th>
+                                    <th>Size</th>
                                     <th>Ngày tạo</th>
                                     <th>Giá</th>
                                     <th>% Giảm giá</th>
@@ -146,10 +150,12 @@
                                 <c:forEach var="belt" items="${beltList}">
                                     <tr class="belt-row">
                                         <td class="productId">${belt.id}</td>
-                                        <td></td>
+                                        <td class="variantId">${belt.beltVariant.id}</td>
                                         <td><strong>${belt.name}</strong></td>
+                                        <td>${belt.beltVariant.color}</td>
+                                        <td>${belt.beltVariant.size}</td>
                                         <td>${belt.createdAt}</td>
-                                        <td><strong>${belt.price} vnđ</strong></td>
+                                        <td><strong>${belt.beltVariant.price} vnđ</strong></td>
                                         <td>${belt.discountRate}</td>
                                         <td>${belt.materialBelt}</td>
                                         <td>${belt.isDeleted == 0 ? "Chưa xóa" : "Xóa mềm"}</td>
@@ -160,37 +166,6 @@
                                                     data-bs-toggle="modal" data-bs-target="#removeModal"></button>
                                         </td>
                                     </tr>
-
-                                    <c:forEach var="variant" items="${belt.beltVariants}">
-                                        <tr class="variant-row">
-                                            <td></td> <!-- Cột ID trống -->
-                                            <td class="variantId">${variant.id}</td>
-                                            <td colspan="1"><i>Màu: ${variant.color}, Size: ${variant.size}</i></td>
-                                            <!-- Chỉ colspan="2" -->
-                                            <td>-</td> <!-- Ngày tạo (để trống) -->
-                                            <td>-</td> <!-- Giá (để trống) -->
-                                            <td>-</td> <!-- % Giảm giá (để trống) -->
-                                            <td>-</td> <!-- Chất liệu -->
-                                            <td>-</td> <!-- Xóa -->
-                                            <td class="text-center">
-                                                <c:choose>
-                                                    <c:when test="${permissionToWrite == true &&permissionToExecute == true }">
-                                                        <a href="${pageContext.request.contextPath}/admin/table/belts/createProduct?id=${belt.id}&message=update&variantId=${variant.id}"
-                                                           class="btn btn-dark fa-solid fa-pen-to-square"></a>
-                                                        <button class="btn btn-danger fa-solid fa-trash-can custom_action_hover"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#removeModal"></button>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        -
-                                                    </c:otherwise>
-                                                </c:choose>
-
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-
-
                                 </c:forEach>
                                 </tbody>
                             </table>

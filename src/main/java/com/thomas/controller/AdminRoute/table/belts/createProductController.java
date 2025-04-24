@@ -30,32 +30,18 @@ public class createProductController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String beltIdParam = request.getParameter("id");
-        String variantIdParam = request.getParameter("variantId");
-        if (beltIdParam != null && variantIdParam != null) {
+        int variantIdParam = Integer.parseInt(request.getParameter("variantId"));
+        int colorId = Integer.parseInt(request.getParameter("colorId"));
+        int sizeId = Integer.parseInt(request.getParameter("sizeId"));
+        if (beltIdParam != null) {
             int beltId = Integer.parseInt(beltIdParam);
             Belts belts = PRODUCT_SERVICE.find(beltId).get(0);
-            List<BeltVariant> variants = PRODUCT_SERVICE.findVariants(beltId, null, null, null);
-            BeltVariant bv = variants.stream()
-                    .filter(v -> v.getId() == Integer.parseInt(variantIdParam))
-                    .findFirst()
-                    .orElse(null);
-
-            bv.setImages(PRODUCT_SERVICE.getVariantImages(bv.getId()));
+            BeltVariant variants = PRODUCT_SERVICE.findVariant(beltId, variantIdParam, colorId, sizeId);
+            variants.setImages(PRODUCT_SERVICE.getVariantImages(variants.getId()));
+            belts.setBeltVariant(variants);
             String[] tagsArray = PRODUCT_SERVICE.getTags(beltId);
-            if (belts != null) {
-                request.setAttribute("product", belts);
-                request.setAttribute("variants", bv);
-                int count = 0;
-                for (String s : bv.getImages()) {
-                    request.setAttribute("image" + count, s);
-                    count++;
-                }
-                String tags = String.join(" ", tagsArray);
-                request.setAttribute("tags", tags);
-            } else {
-                response.sendRedirect(request.getContextPath() + "/admin/table/belts");
-                return;
-            }
+            request.setAttribute("product", belts);
+            request.setAttribute("tags", tagsArray);
         }
         request.getRequestDispatcher("/frontend/AdminPage/createProductPage/createProductPage.jsp").forward(request, response);
     }
@@ -80,7 +66,7 @@ public class createProductController extends HttpServlet {
         String[] tags = null;
         LocalDateTime releaseDate = null;
         String gender = null;
-        double price = 0;
+        long price = 0;
         double discountRate = 0;
         int isDeleted = 0;
         String material = null;
@@ -88,25 +74,21 @@ public class createProductController extends HttpServlet {
             tags = request.getParameter("tags").split(" ");
             releaseDate = LocalDate.parse(request.getParameter("releaseDate"), formatter).atStartOfDay();
             gender = request.getParameter("gender");
-            price = Double.parseDouble(request.getParameter("price"));
+            price = Long.parseLong(request.getParameter("price"));
             discountRate = Double.parseDouble(request.getParameter("discountRate"));
             isDeleted = Integer.parseInt(request.getParameter("isDeleted"));
             material = request.getParameter("material");
         }
         if (message.equals("create")) {
-            PRODUCT_SERVICE.saveProduct(productName, tags, discountRate, releaseDate, gender, price, stockQuantity, material, isDeleted, color, size, userId);
+            PRODUCT_SERVICE.saveProduct(productName, tags, discountRate, releaseDate, gender, price, material, isDeleted, color, size, userId);
         } else if (message.equals("update")) {
+            int colorId = Integer.parseInt(request.getParameter("colorId"));
+            int sizeId = Integer.parseInt(request.getParameter("sizeId"));
             productId = Integer.parseInt(request.getParameter("beltId"));
-            PRODUCT_SERVICE.updateProduct(productId, productName, tags, discountRate, releaseDate, gender, price, stockQuantity, material, isDeleted, color, size, variantId, userId);
+            PRODUCT_SERVICE.updateProduct(productId, productName, tags, discountRate, releaseDate, gender, price, material, isDeleted, color, size, variantId, userId, colorId, sizeId);
         } else if (message.equals("createVariant")) {
-            BeltVariant bv = new BeltVariant();
-            bv.setBeltId(productId);
-            bv.setColor(color);
-            bv.setSize(size);
-            bv.setStockQuantity(stockQuantity);
-            bv.setCreatedAt(LocalDateTime.now());
-            bv.setUpdatedAt(LocalDateTime.now());
-            PRODUCT_SERVICE.createVariant(bv);
+            LocalDateTime now = LocalDateTime.now();
+            PRODUCT_SERVICE.createVariant(productId, color, size, now, price);
         }
         String uploadPath = request.getServletContext().getRealPath("") + File.separator + ULOAD_DIR;
         File uploadDir = new File(uploadPath);

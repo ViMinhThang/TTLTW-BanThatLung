@@ -20,8 +20,10 @@ public class productDescController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("beltId"));
         int variantId = Integer.parseInt(request.getParameter("variantId"));
+        int colorId = Integer.parseInt(request.getParameter("colorId"));
+        int sizeId = Integer.parseInt(request.getParameter("sizeId"));
         String description = request.getParameter("desc");
-        productService.saveDesc(id, description, variantId);
+        productService.saveDesc(id, description, variantId, colorId, sizeId);
         response.sendRedirect("/admin/table/belts");
     }
 }

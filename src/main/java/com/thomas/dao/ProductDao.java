@@ -8,13 +8,15 @@ import org.jdbi.v3.core.statement.Query;
 
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProductDao implements UsageInterface {
     public boolean createProduct(Belts belts) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "INSERT INTO belts ( name, releaseDate,createdAt, gender, price ,materialBelt,isDeleted,discountRate) VALUES (:productName,:releaseDate,:createdAt,:gender,:price,:material,:isDeleted,:discountRate)";
-            return h.createUpdate(sql).bind("productName", belts.getName()).bind("releaseDate", belts.getReleaseDate()).bind("gender", belts.getGender()).bind("price", belts.getPrice()).bind("createdAt", belts.getCreatedAt()).bind("material", belts.getMaterialBelt()).bind("isDeleted", belts.getIsDeleted()).bind("discountRate", belts.getDiscountRate()).bind("createdAt", LocalDateTime.now()).execute() > 0;
+            String sql = "INSERT INTO belts ( name, releaseDate,createdAt, gender ,materialBelt,isDeleted,discountRate) VALUES (:productName,:releaseDate,:createdAt,:gender,:material,:isDeleted,:discountRate)";
+            return h.createUpdate(sql).bind("productName", belts.getName()).bind("releaseDate", belts.getReleaseDate()).bind("gender", belts.getGender()).bind("createdAt", belts.getCreatedAt()).bind("material", belts.getMaterialBelt()).bind("isDeleted", belts.getIsDeleted()).bind("discountRate", belts.getDiscountRate()).bind("createdAt", LocalDateTime.now()).execute() > 0;
         });
     }
 
@@ -43,10 +45,11 @@ public class ProductDao implements UsageInterface {
     }
 
 
-    public void saveDesc(int beltId, String desc, int variantId) {
-        JDBIConnect.get().withHandle(h -> {
-            String sql = "UPDATE belts SET description = :desc WHERE id = :beltId AND variantId = :variantId";
-            return h.createUpdate(sql).bind("variantId", variantId).bind("beltId", beltId).bind("desc", desc).execute() > 0;
+    public boolean saveDesc(int beltId, String desc, int variantId, int colorId, int sizeId) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "UPDATE beltVariants SET description = :desc WHERE id = :beltId AND variantId = :variantId AND sizeId = :sizeId AND colorId=:colorId";
+            return h.createUpdate(sql).bind("variantId", variantId).bind("beltId", beltId).bind("desc", desc)
+                    .bind("sizeId", sizeId).bind("colorId", colorId).execute() > 0;
         });
     }
 
@@ -67,7 +70,7 @@ public class ProductDao implements UsageInterface {
         return JDBIConnect.get().withHandle(h -> {
             String sql = "UPDATE belts SET name = :productName, " + "releaseDate = :releaseDate, " + "gender = :gender, " + "price = :price, " + "materialBelt = :material, " + "isDeleted = :isDeleted, " + "discountRate = :discountRate " + "WHERE id = :id";
 
-            return h.createUpdate(sql).bind("productName", belts.getName()).bind("releaseDate", belts.getReleaseDate()).bind("gender", belts.getGender()).bind("price", belts.getPrice()).bind("material", belts.getMaterialBelt()).bind("id", belts.getId()).bind("isDeleted", belts.getIsDeleted()).bind("discountRate", belts.getDiscountRate()).execute() > 0;
+            return h.createUpdate(sql).bind("productName", belts.getName()).bind("releaseDate", belts.getReleaseDate()).bind("gender", belts.getGender()).bind("material", belts.getMaterialBelt()).bind("id", belts.getId()).bind("isDeleted", belts.getIsDeleted()).bind("discountRate", belts.getDiscountRate()).execute() > 0;
         });
     }
 
@@ -159,39 +162,30 @@ public class ProductDao implements UsageInterface {
     }
 
 
-    public List<BeltVariant> findVariants(Integer beltId, String color, String size, Integer variantId) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM beltVariants WHERE 1=1");
-
-        if (beltId != null) {
-            sql.append(" AND beltId = :beltId");
-        }
-        if (color != null && !color.isEmpty()) {
-            sql.append(" AND color = :color");
-        }
-        if (size != null && !size.isEmpty()) {
-            sql.append(" AND size = :size");
-        }
-        if (variantId != null) {
-            sql.append(" AND id = :variantId");
-        }
-
+    public BeltVariant findVariants(int beltId, Integer color, Integer size, Integer variantId) {
         return JDBIConnect.get().withHandle(handle -> {
-            Query query = handle.createQuery(sql.toString());
+            StringBuilder sql = new StringBuilder("SELECT * FROM beltVariants WHERE beltId = :beltId");
+            Map<String, Object> params = new HashMap<>();
+            params.put("beltId", beltId);
 
-            if (beltId != null) {
-                query.bind("beltId", beltId);
-            }
-            if (color != null && !color.isEmpty()) {
-                query.bind("color", color);
-            }
-            if (size != null && !size.isEmpty()) {
-                query.bind("size", size);
-            }
             if (variantId != null) {
-                query.bind("variantId", variantId);
+                sql.append(" AND id = :variantId");
+                params.put("variantId", variantId);
+            }
+            if (color != null) {
+                sql.append(" AND colorId = :colorId");
+                params.put("colorId", color);
+            }
+            if (size != null) {
+                sql.append(" AND sizeId = :sizeId");
+                params.put("sizeId", size);
             }
 
-            return query.mapToBean(BeltVariant.class).list();
+            return handle.createQuery(sql.toString())
+                    .bindMap(params)
+                    .mapTo(BeltVariant.class)
+                    .findFirst()
+                    .orElse(null);
         });
     }
 
@@ -229,4 +223,16 @@ public class ProductDao implements UsageInterface {
             return h.createQuery(sql).bind("query", "%" + query + "%").mapTo(Belts.class).list();
         });
     }
+
+    public Integer[] getAllVariantId(int id) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "SELECT id FROM beltVariants WHERE beltId = :beltId";
+            List<Integer> list = h.createQuery(sql)
+                    .bind("beltId", id)
+                    .mapTo(Integer.class)
+                    .list();
+            return list.toArray(new Integer[0]);
+        });
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.thomas.controller;
 
+import com.thomas.dao.model.BeltVariant;
 import com.thomas.dao.model.Belts;
 import com.thomas.services.ProductService;
 import jakarta.servlet.*;
@@ -106,22 +107,13 @@ public class NavigateController extends HttpServlet {
         session.setAttribute("type", type);
         request.setAttribute("mainImage", mainImage);
         List<Belts> listBelt = productService.find(null);
-        listBelt.forEach(b -> b.setBeltVariants(productService.findVariants(b.getId(), null, null, null)));
-        listBelt.forEach(b -> b.getBeltVariants().forEach(v -> v.setImages(productService.getVariantImages(v.getId()))));
+        for (Belts belt : listBelt) {
+            BeltVariant beltVariant = belt.getBeltVariant();
+            beltVariant.setImages(productService.getVariantImages(beltVariant.getId()));
+            belt.setBeltVariant(beltVariant);
+        }
         if (minPrice != null && maxPrice != null) {
             listBelt = productService.filterProduct(listBelt, Double.parseDouble(minPrice), Double.parseDouble(maxPrice));
-        }
-        if (sort != null) {
-            sortedList = listBelt.stream()
-                    .map(Belts::new)
-                    .collect(Collectors.toList());
-            sortedList.sort(new Comparator<Belts>() {
-
-                @Override
-                public int compare(Belts o1, Belts o2) {
-                    return Double.compare(o2.getPrice(), o1.getPrice());
-                }
-            });
         }
         if (sortedList != null) {
             request.setAttribute("listBelt", sortedList);
@@ -139,6 +131,8 @@ public class NavigateController extends HttpServlet {
 
     public void pagingforPage(HttpServletRequest request, List<Belts> beltsList) {
         HttpSession session = request.getSession();
+
+        // Lấy tham số trang hiện tại từ request, mặc định là trang 1 nếu không có tham số "page"
         int currentPage = 1;
         String pageParam = request.getParameter("page");
         if (pageParam != null && !pageParam.trim().isEmpty()) {
@@ -149,22 +143,42 @@ public class NavigateController extends HttpServlet {
             }
         }
 
+        // Tính tổng số sản phẩm (totalProduct) với mỗi biến thể của belt được tính là một sản phẩm riêng biệt
         int totalProduct = beltsList.size();
+        // Số sản phẩm trên mỗi trang
         int itemPerPage = 12;
+
+        // Tính tổng số trang
         int totalPages = totalProduct / itemPerPage;
         if (totalProduct % itemPerPage != 0) {
             totalPages += 1;
         }
-        currentPage = Math.min(currentPage, totalPages);
-        int startIndex = (currentPage - 1) * itemPerPage; // lấy sản phẩm tiếp theo trong danh sách
-        int endIndex = Math.min(startIndex + itemPerPage, totalProduct);
-        List<Belts> beltsForPage = startIndex < totalProduct // tạo ra 1 list mới để chứa những sản phẩm kế tiếp trong trang hiện tại
-                ? beltsList.subList(startIndex, endIndex)
-                : new ArrayList<>();
 
+        // Đảm bảo currentPage không vượt quá tổng số trang
+        currentPage = Math.min(currentPage, totalPages);
+
+        // Xác định chỉ số bắt đầu và kết thúc của các sản phẩm trong trang hiện tại
+        int startIndex = (currentPage - 1) * itemPerPage;
+        int endIndex = Math.min(startIndex + itemPerPage, totalProduct);
+
+        // Danh sách chứa các sản phẩm (cả belt và các biến thể của nó) hiển thị trên trang
+        List<Belts> beltsForPage = new ArrayList<>();
+        int count = 0; // Dùng để đếm số lượng sản phẩm đã được đưa vào trang
+        for (Belts b : beltsList) {
+            // Sau đó là các biến thể (beltVariants)
+            if (count >= startIndex && count < endIndex) {
+                beltsForPage.add(b);
+                count++;
+            }
+        }
+
+        // Cập nhật các thông tin phân trang vào request
         request.setAttribute("totalProduct", totalProduct);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("currentPage", currentPage);
+
+        // Lưu danh sách các belt (bao gồm các biến thể) cho trang hiện tại vào session
         session.setAttribute("beltsList", beltsForPage);
     }
+
 }

@@ -1,5 +1,6 @@
 package com.thomas.controller.AdminRoute.table.belts;
 
+import com.thomas.dao.model.BeltVariant;
 import com.thomas.dao.model.Belts;
 import com.thomas.dao.model.User;
 import com.thomas.services.PermissionService;
@@ -9,6 +10,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "productAdminController", value = "/admin/table/belts")
@@ -30,7 +32,22 @@ public class productAdminController extends HttpServlet {
         boolean permissionToExecute = PERMISSION_SERVICE.checkPermission("ManageProducts", user.getId(), "execute");
 
         List<Belts> beltList = PRODUCT_SERVICE.find(null);
-        request.setAttribute("beltList", beltList);
+        List<Belts> display = new ArrayList<>();
+        for (Belts belt : beltList) {
+            Belts b = new Belts(belt);
+            Integer[] variantId = PRODUCT_SERVICE.getAllVariantId(belt.getId());
+            for (int i : variantId) {
+                BeltVariant beltVariant = PRODUCT_SERVICE.findVariant(belt.getId(), i, null, null);
+                beltVariant.setImages(PRODUCT_SERVICE.getVariantImages(beltVariant.getId()));
+                beltVariant.setColor(PRODUCT_SERVICE.findColorNameById(beltVariant.getId()));
+                beltVariant.setSize(PRODUCT_SERVICE.findSizeNameById(beltVariant.getId()));
+                b.setBeltVariant(beltVariant);
+                b.setTotalSold(PRODUCT_SERVICE.getTotalSold(belt.getId()));
+                display.add(b);
+
+            }
+        }
+        request.setAttribute("beltList", display);
         request.setAttribute("permissionToWrite", permissionToWrite);
         request.setAttribute("permissionToExecute", permissionToExecute);
         request.getRequestDispatcher("/frontend/AdminPage/allProduct/allProduct.jsp").forward(request, response);

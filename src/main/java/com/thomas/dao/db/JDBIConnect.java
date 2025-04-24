@@ -27,15 +27,15 @@ public class JDBIConnect {
             e.printStackTrace();
         }
         jdbi = Jdbi.create(ds);
-        jdbi.registerRowMapper(Coupon.class, new CouponMapper());
-        jdbi.registerRowMapper(Token.class, new TokenMapper());
-        jdbi.registerRowMapper(User.class, new UserMapper());
-        jdbi.registerRowMapper(Reviews.class, new ReviewMapper());
-        jdbi.registerRowMapper(UsersUsage.class, new UsersUsageMapper());
-        jdbi.registerRowMapper(Belts.class, new BeltMapper());
-        jdbi.registerRowMapper(BeltVariant.class, new BeltVariantsMapper());
-        jdbi.registerRowMapper(Purchases.class, new PuchasesMapper());
-        jdbi.registerRowMapper(Transactions.class, new TransactionMapper());
-        jdbi.registerRowMapper(CartItemMapper.class, new CartItemMapper());
+        jdbi.registerRowMapper(new CouponMapper());
+        jdbi.registerRowMapper(new TokenMapper());
+        jdbi.registerRowMapper(new UserMapper());
+        jdbi.registerRowMapper(new ReviewMapper());
+        jdbi.registerRowMapper(new UsersUsageMapper());
+        jdbi.registerRowMapper(new BeltMapper());
+        jdbi.registerRowMapper(new BeltVariantsMapper());
+        jdbi.registerRowMapper(new PuchasesMapper());
+        jdbi.registerRowMapper(new TransactionMapper());
+        jdbi.registerRowMapper(new CartItemMapper());
     }
 }

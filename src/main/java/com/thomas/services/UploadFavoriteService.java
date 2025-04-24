@@ -26,8 +26,12 @@ public class UploadFavoriteService {
         List<Belts> beltsList = favoriteDao.getAllFavoriteBelts(userId).stream()
                 .filter(b -> beltIds.add(b.getId()))
                 .collect(Collectors.toList());
-        beltsList.forEach(b -> b.setBeltVariants(getFavoritesBeltVariantByBeltId(b.getId(), userId)));
-        beltsList.forEach(b -> b.getBeltVariants().forEach(v -> v.setImages(productDao.getVariantImages(v.getId()))));
+        for (Belts belt : beltsList) {
+            BeltVariant beltVariant = belt.getBeltVariant();
+            beltVariant.setImages(productDao.getVariantImages(beltVariant.getId()));
+            belt.setBeltVariant(beltVariant);
+            belt.setTotalSold(productDao.getTotalSold(belt.getBeltVariant().getId()));
+        }
         return beltsList;
     }
 
@@ -38,12 +42,8 @@ public class UploadFavoriteService {
     public boolean addFavoriteByUserId(int userId, int beltId, int variantId) {
         List<Belts> favoriteBelts = getFavoritesBeltByUserId(userId);
         for (Belts belt : favoriteBelts) {
-            if (belt.getId() == beltId) {
-                for (BeltVariant variant : belt.getBeltVariants()) {
-                    if (variant.getId() == variantId) {
-                        return false;
-                    }
-                }
+            if (belt.getId() == beltId && belt.getBeltVariant().getId() == variantId) {
+                return false;
             }
         }
         boolean isAdded = favoriteDao.addFavoriteByUserId(userId, beltId, variantId);

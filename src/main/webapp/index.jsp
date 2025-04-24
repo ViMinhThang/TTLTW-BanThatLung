@@ -56,12 +56,12 @@
                         <div class="carousel-item active">
                             <div class="d-flex justify-content-center gap-3">
                                 <c:forEach var="belt" items="${discountProductList}" begin="0" end="3">
-                                    <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariants[0].id}"
+                                    <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariant.id}"
                                        class="text-decoration-none text-dark">
                                         <div class="text-center hover--black">
                                             <!-- Hiển thị ảnh của biến thể đầu tiên -->
-                                            <c:if test="${not empty belt.beltVariants}">
-                                                <c:set var="firstVariant" value="${belt.beltVariants[0]}"/>
+                                            <c:if test="${not empty belt.beltVariant}">
+                                                <c:set var="firstVariant" value="${belt.beltVariant}"/>
                                                 <c:if test="${not empty firstVariant.images}">
                                                     <img src="${pageContext.request.contextPath}${firstVariant.images[0]}"
                                                          class="img-fluid w-100 rounded shadow-sm"
@@ -72,7 +72,7 @@
 
                                             <!-- Thông tin sản phẩm -->
                                             <div class="mt-2 text-start ps-3">
-                                                <p class="fw-bold fs-5 mb-1">${belt.price} VNĐ</p>
+                                                <p class="fw-bold fs-5 mb-1">${belt.beltVariant.price} VNĐ</p>
                                                 <p class="text-muted mb-1">${belt.name}</p>
                                                 <span class="badge bg-secondary">${belt.discountRate}%</span>
                                             </div>
@@ -86,12 +86,12 @@
                         <div class="carousel-item">
                             <div class="d-flex justify-content-center gap-3">
                                 <c:forEach var="belt" items="${discountProductList}" begin="4" end="7">
-                                    <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariants[0].id}"
+                                    <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariant.id}"
                                        class="text-decoration-none text-dark">
                                         <div class="text-center hover--black">
                                             <!-- Hiển thị ảnh của biến thể đầu tiên -->
-                                            <c:if test="${not empty belt.beltVariants}">
-                                                <c:set var="firstVariant" value="${belt.beltVariants[0]}"/>
+                                            <c:if test="${not empty belt.beltVariant}">
+                                                <c:set var="firstVariant" value="${belt.beltVariant}"/>
                                                 <c:if test="${not empty firstVariant.images}">
                                                     <img src="${pageContext.request.contextPath}${firstVariant.images[0]}"
                                                          class="img-fluid w-100 rounded shadow-sm"
@@ -102,7 +102,7 @@
 
                                             <!-- Thông tin sản phẩm -->
                                             <div class="mt-2 text-start ps-3">
-                                                <p class="fw-bold fs-5 mb-1">${belt.price} VNĐ</p>
+                                                <p class="fw-bold fs-5 mb-1">${belt.beltVariant.price} VNĐ</p>
                                                 <p class="text-muted mb-1">${belt.name}</p>
                                                 <span class="badge bg-secondary">${belt.discountRate}%</span>
                                             </div>
@@ -116,12 +116,12 @@
                         <div class="carousel-item">
                             <div class="d-flex justify-content-center gap-3">
                                 <c:forEach var="belt" items="${discountProductList}" begin="8" end="11">
-                                    <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariants[0].id}"
+                                    <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariant.id}"
                                        class="text-decoration-none text-dark">
                                         <div class="text-center hover--black">
                                             <!-- Hiển thị ảnh của biến thể đầu tiên -->
-                                            <c:if test="${not empty belt.beltVariants}">
-                                                <c:set var="firstVariant" value="${belt.beltVariants[0]}"/>
+                                            <c:if test="${not empty belt.beltVariant}">
+                                                <c:set var="firstVariant" value="${belt.beltVariant}"/>
                                                 <c:if test="${not empty firstVariant.images}">
                                                     <img src="${pageContext.request.contextPath}${firstVariant.images[0]}"
                                                          class="img-fluid w-100 rounded shadow-sm"
@@ -132,7 +132,7 @@
 
                                             <!-- Thông tin sản phẩm -->
                                             <div class="mt-2 text-start ps-3">
-                                                <p class="fw-bold fs-5 mb-1">${belt.price} VNĐ</p>
+                                                <p class="fw-bold fs-5 mb-1">${belt.beltVariant.price} VNĐ</p>
                                                 <p class="text-muted mb-1">${belt.name}</p>
                                                 <span class="badge bg-secondary">${belt.discountRate}%</span>
                                             </div>
@@ -228,12 +228,12 @@
                                 <div class="d-flex justify-content-center gap-3 flex-wrap">
                                     <jsp:useBean id="newArrivalsList" scope="request" type="java.util.List"/>
                                     <c:forEach var="belt" items="${newArrivalsList}" end="7">
-                                        <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariants[0].id}"
+                                        <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariant.id}"
                                            class="text-decoration-none text-dark">
                                             <div class="text-center hover--black">
                                                 <!-- Hiển thị ảnh của biến thể đầu tiên -->
-                                                <c:if test="${not empty belt.beltVariants}">
-                                                    <c:set var="firstVariant" value="${belt.beltVariants[0]}"/>
+                                                <c:if test="${not empty belt.beltVariant}">
+                                                    <c:set var="firstVariant" value="${belt.beltVariant}"/>
                                                     <c:if test="${not empty firstVariant.images}">
                                                         <img src="${pageContext.request.contextPath}${firstVariant.images[0]}"
                                                              class="img-fluid w-100 rounded shadow-sm"
@@ -244,7 +244,7 @@
 
                                                 <!-- Thông tin sản phẩm -->
                                                 <div class="mt-2 text-start ps-3">
-                                                    <p class="fw-bold fs-5 mb-1">${belt.price} VNĐ</p>
+                                                    <p class="fw-bold fs-5 mb-1">${belt.beltVariant.price} VNĐ</p>
                                                     <p class="text-muted mb-1">${belt.name}</p>
                                                     <span class="badge bg-secondary">${belt.discountRate}%</span>
                                                 </div>
@@ -277,12 +277,12 @@
                                 <div class="carousel-item active">
                                     <div class="d-flex justify-content-center gap-3 ">
                                         <c:forEach var="belt" items="${mostPopularList}" end="7">
-                                            <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariants[0].id}"
+                                            <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariant.id}"
                                                class="text-decoration-none text-dark">
                                                 <div class="text-center hover--black">
                                                     <!-- Hiển thị ảnh của biến thể đầu tiên -->
-                                                    <c:if test="${not empty belt.beltVariants}">
-                                                        <c:set var="firstVariant" value="${belt.beltVariants[0]}"/>
+                                                    <c:if test="${not empty belt.beltVariant}">
+                                                        <c:set var="firstVariant" value="${belt.beltVariant}"/>
                                                         <c:if test="${not empty firstVariant.images}">
                                                             <img src="${pageContext.request.contextPath}${firstVariant.images[0]}"
                                                                  class="img-fluid w-100 rounded shadow-sm"
@@ -293,7 +293,7 @@
 
                                                     <!-- Thông tin sản phẩm -->
                                                     <div class="mt-2 text-start ps-3">
-                                                        <p class="fw-bold fs-5 mb-1">${belt.price} VNĐ</p>
+                                                        <p class="fw-bold fs-5 mb-1">${belt.beltVariant.price} VNĐ</p>
                                                         <p class="text-muted mb-1">${belt.name}</p>
                                                         <span class="badge bg-secondary">${belt.discountRate}%</span>
                                                     </div>
