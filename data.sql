@@ -10,6 +10,131 @@ VALUES ('John Doe', 'john.doe@example.com', '1990-05-15', '202cb962ac59075b964b0
        ('Test', 'titphong012@gmail.com', '2004-01-01', '098f6bcd4621d373cade4e832627b4f6', '/images/users/john.jpg', 0,
         'Male', 0123456789, 1, NULL, 1);
 
+INSERT INTO `Groups` (groupName)
+VALUES ('admin');
+INSERT INTO `Groups` (groupName)
+VALUES ('editor');
+INSERT INTO `Groups` (groupName)
+VALUES ('viewer');
+
+INSERT INTO UserGroups (userId, groupId)
+VALUES (1, 1);
+INSERT INTO UserGroups (userId, groupId)
+VALUES (2, 2);
+INSERT INTO UserGroups (userId, groupId)
+VALUES (3, 3);
+
+
+INSERT INTO Resources (resourceName)
+VALUES ('adminPage');
+INSERT INTO Resources (resourceName)
+VALUES ('manageUsers');
+INSERT INTO Resources (resourceName)
+VALUES ('manageProducts');
+INSERT INTO Resources (resourceName)
+VALUES ('manageCoupons');
+INSERT INTO Resources (resourceName)
+VALUES ('manageOrders');
+INSERT INTO Resources (resourceName)
+VALUES ('viewReports');
+
+INSERT INTO Permissions (permissionName)
+VALUES ('read');
+INSERT INTO Permissions (permissionName)
+VALUES ('write');
+INSERT INTO Permissions (permissionName)
+VALUES ('execute');
+INSERT INTO Permissions (permissionName)
+VALUES ('access');
+
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 1, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 1, 2);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 1, 3);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 1, 4);
+
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 2, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 2, 2);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 2, 3);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 2, 4);
+
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 3, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 3, 2);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 3, 3);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 3, 4);
+
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 4, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 4, 2);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 4, 3);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 4, 4);
+
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 5, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 5, 2);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 5, 3);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 5, 4);
+
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 6, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 6, 2);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 6, 3);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (1, 6, 4);
+
+
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (2, 1, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (2, 1, 2);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (2, 1, 3);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (2, 1, 4);
+
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (2, 5, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (2, 5, 2);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (2, 5, 3);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (2, 5, 4);
+
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (3, 1, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (3, 2, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (3, 3, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (3, 4, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (3, 5, 1);
+INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
+VALUES (3, 6, 1);
+
+
+
 INSERT INTO paymentMethods (name, isActive)
 VALUES ('COD', 1),
        ('MoMo', 1),
@@ -180,3 +305,25 @@ VALUES
      'https://assets.adidas.com/images/h_2000,f_auto,q_auto,fl_lossy,c_fill,g_auto/5bf861aca4ae494ca1924154d26d1c5b_9366/Players_Reversible_Belt_Brown_JJ3852_42_detail.jpg'),
     (5, 40, 'extra',
      'https://assets.adidas.com/images/h_2000,f_auto,q_auto,fl_lossy,c_fill,g_auto/5bf861aca4ae494ca1924154d26d1c5b_9366/Players_Reversible_Belt_Brown_JJ3852_42_detail.jpg');
+
+INSERT INTO suppliers (name, contactInfo)
+VALUES ('BeltPro Vietnam', 'SĐT: 0909090909, Email: contact@beltpro.vn, Địa chỉ: 123 Nguyễn Trãi, Q.5, TP.HCM'),
+       ('Thắt Lưng Da Cao Cấp Hà Nội',
+        'SĐT: 0911223344, Email: info@thatlunghanoi.vn, Địa chỉ: 56 Lê Duẩn, Hoàn Kiếm, Hà Nội'),
+       ('CTY TNHH Dây Nịt Nam Quốc',
+        'SĐT: 0988123456, Email: sales@namquocbelts.com, Địa chỉ: 22 Lý Thường Kiệt, Đà Nẵng'),
+       ('LeatherStyle Co., Ltd', 'SĐT: 0977665544, Email: support@leatherstyle.com, Địa chỉ: 77 Pasteur, Q.1, TP.HCM'),
+       ('Phụ Kiện Thời Trang Belto', 'SĐT: 0966998877, Email: belto@fashion.vn, Địa chỉ: 88 Trần Hưng Đạo, Cần Thơ');
+
+
+INSERT INTO purchases (supplierId, beltId, beltVariantId, quantity, purchaseDate)
+VALUES (1, 1, 1, 100, '2025-04-01 09:00:00'),
+       (1, 1, 2, 50, '2025-04-02 10:30:00'),
+       (2, 2, 3, 80, '2025-04-03 14:15:00'),
+       (2, 2, 4, 60, '2025-04-04 16:00:00'),
+       (3, 3, 5, 120, '2025-04-05 11:45:00'),
+       (1, 3, 6, 75, '2025-04-06 13:20:00'),
+       (2, 4, 7, 90, '2025-04-07 15:10:00'),
+       (3, 4, 8, 65, '2025-04-08 17:35:00'),
+       (1, 2, 9, 55, '2025-04-09 08:25:00'),
+       (2, 1, 10, 110, '2025-04-10 10:50:00');

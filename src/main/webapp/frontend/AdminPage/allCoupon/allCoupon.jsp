@@ -294,16 +294,24 @@
                                         <td>${coupon.endDate}</td>
                                         <td>${coupon.isActive == 0 ?"Không" : "Có"}</td>
                                         <td class="text-center">
-                                            <button
-                                                    class="btn btn-dark fa-solid fa-pen-to-square"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#createModal"
-                                            ></button>
-                                            <button
-                                                    class="btn btn-danger fa-solid fa-trash-can"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#removeModal"
-                                            ></button>
+                                            <c:choose>
+                                                <c:when test="${permissionToExecute==true && permissionToWrite=true }">
+                                                    <button
+                                                            class="btn btn-dark fa-solid fa-pen-to-square"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#createModal"
+                                                    ></button>
+                                                    <button
+                                                            class="btn btn-danger fa-solid fa-trash-can"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#removeModal"
+                                                    ></button>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    -
+                                                </c:otherwise>
+                                            </c:choose>
+
                                         </td>
                                     </tr>
                                 </c:forEach>

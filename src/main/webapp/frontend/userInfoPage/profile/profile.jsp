@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profile.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/userInfo.css"/>
 </head>
 <body>
 <jsp:include page="/frontend/header_footer/header.jsp"/>
@@ -49,60 +50,17 @@
     </nav>
 </div>
 <div class="container my-3">
-    <div class="row">
-        <h2 class="mt-5 mb-3">Tài khoản của tôi</h2>
-        <div
-                class="d-flex col-12"
-                style="white-space: nowrap;"
-        >
-            <div class="d-inline-block fw-bold mb-4" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userInfo"
-                >Tài khoản</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold custom_active" style="padding: 12px">
-                <a
-                        class="text-white custom_size--19"
-                        href="${pageContext.request.contextPath}/userProfile"
-                >Hồ sơ</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userAddress?userId=${sessionScope.auth.id}"
-                >Địa chỉ</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userPrivacy"
-                >Riêng tư</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/viewOrders"
-                >Đơn hàng</a
-                >
-            </div>
-        </div>
-
-    </div>
+    <jsp:include page="/frontend/components/userInfo/navigationBar/navBar.jsp"/>
     <form action="${pageContext.request.contextPath}/userProfile" method="post" enctype="multipart/form-data">
         <input type="hidden" name="message" value="update"/>
         <input type="hidden" name="userId" value="${sessionScope.auth.id}"/>
         <input type="hidden" name="userName" value="${sessionScope.auth.name}"/>
-        <div class="container container-sm border rounded">
+        <div class="container container-sm ps-0">
             <div class="d-flex mt-3">
-                <p>Ảnh đại diện</p>
+                <p class="fs-4">Ảnh đại diện</p>
                 <input type="file" name="uploadProfileImage" class="ms-3 uploadImage"/>
             </div>
-            <div class="d-flex flex-column border-bottom">
+            <div class="d-flex flex-column">
                 <img
                         src="${sessionScope.auth.image == null ? "/assets/images/sampleProfile1.jpg" : sessionScope.auth.image}"
                         alt="profile"
@@ -110,14 +68,15 @@
                         width="100"
                         height="100"
                 />
-                <p>Phải là file .png .jpg hoặc .jpeg và 400x400</p>
+                <p class="fs-4">Phải là file .png .jpg hoặc .jpeg và 400x400</p>
+            </div>
+            <hr/>
+            <div class="d-flex mt-3">
+                <p class="fs-4">Tên của bạn: </p>
+                <p class="fs-4"> ${sessionScope.auth.name}</p>
             </div>
             <div class="d-flex mt-3">
-                <p>Tên của bạn:</p>
-                <p class="ms-4">${sessionScope.auth.name}</p>
-            </div>
-            <div class="d-flex mt-3 border-bottom">
-                <p class="font-weight-bold">Giới tính:</p>
+                <p class="font-weight-bold fs-4">Giới tính:</p>
                 <div class="d-flex justify-content-center align-items-center ms-4">
                     <c:choose>
                         <c:when test="${sessionScope.auth.gender == 'M'}">
@@ -128,16 +87,16 @@
                         </c:when>
                         <c:otherwise>
                             <input class="mb-3 ms-3" type="radio" name="gender" value="M"/>
-                            <p class="mb-3 ms-2">Nam</p>
+                            <p class="mb-3 ms-2 fs-4">Nam</p>
                             <input class="mb-3 ms-2" type="radio" name="gender" value="F" checked/>
-                            <p class="mb-3 ms-2">Nữ</p>
+                            <p class="mb-3 ms-2 fs-4">Nữ</p>
                         </c:otherwise>
                     </c:choose>
                 </div>
             </div>
-            <div class="d-flex mt-3">
-                <p class="font-weight-bold mr-5">Ngày sinh:</p>
-                <div class="d-flex justify-content-center align-items-center ml-3">
+            <div class="d-flex  justify-content-start align-items-center mt-3">
+                <p class="font-weight-bold fs-4">Ngày sinh:</p>
+                <div class="d-flex justify-content-center align-items-center fs-4">
                     <input
                             value="${sessionScope.auth.dateOfBirth}"
                             class="mb-3 ms-4"
@@ -148,9 +107,9 @@
                     />
                 </div>
             </div>
-            <div class="d-flex mt-3">
-                <p class="font-weight-bold mr-5">Số điện thoại:</p>
-                <div class="d-flex justify-content-center align-items-center ml-3">
+            <div class="d-flex mt-3 justify-content-start align-items-center">
+                <p class="font-weight-bold fs-4">Số điện thoại:</p>
+                <div class="d-flex justify-content-center align-items-center">
                     <input
                             value="${sessionScope.auth.phoneNumber}"
                             class="mb-3 ms-4"
@@ -162,8 +121,8 @@
                 </div>
             </div>
         </div>
-        <div class="d-flex mt-3 mb-5 ml-2">
-            <button type="submit" class="btn btn-dark px-4 py-2 custom__btn">Lưu</button>
+        <div class="d-flex mt-3 mb-5">
+            <button type="submit" class="btn btn-dark px-4 py-2 custom__btn fs-4">Lưu</button>
         </div>
     </form>
 

@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/address.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/userInfo.css"/>
 </head>
 <body>
 <jsp:include page="/frontend/header_footer/header.jsp"/>
@@ -48,53 +49,10 @@
     </nav>
 </div>
 <div class="container my-3">
-    <div class="row">
-        <h2 class="mt-5 mb-3">Tài khoản của tôi</h2>
-        <div
-                class="d-flex col-12"
-                style="white-space: nowrap;"
-        >
-            <div class="d-inline-block fw-bold mb-4" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userInfo"
-                >Tài khoản</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userProfile"
-                >Hồ sơ</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold custom_active" style="padding: 12px">
-                <a
-                        class="text-white custom_size--19"
-                        href="${pageContext.request.contextPath}/userAddress?userId=${sessionScope.auth.id}"
-                >Địa chỉ</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userPrivacy"
-                >Riêng tư</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/viewOrders"
-                >Đơn hàng</a
-                >
-            </div>
-        </div>
-
-    </div>
+    <jsp:include page="/frontend/components/userInfo/navigationBar/navBar.jsp"/>
 
     <p class="address-title">Địa chỉ giao hàng của bạn</p>
-    <div class="container container-sm border rounded col-12">
+    <div class="container container-sm border border-dark col-12">
         <div class="userInfo--address--display mb-3">
             <button
                     class="btn mt-4 border border-3 border-dark custom_add_address"
@@ -214,7 +172,7 @@
             </div>
         </div>
 
-        <div class="d-flex">
+        <div class="d-flex gap-3">
             <jsp:useBean id="userAddressList" scope="request" type="java.util.List"/>
             <c:forEach var="address" items="${userAddressList}">
                 <div

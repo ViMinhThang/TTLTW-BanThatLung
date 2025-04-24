@@ -50,26 +50,40 @@
                 data-parent="#accordionSidebar"
         >
             <div class="py-2 collapse-inner rounded" style="background-color:#dddddd;">
-                <a class="collapse-item <%=request.getHeader("referer").endsWith("users") ? "active" : "" %>"
-                   href="${pageContext.request.contextPath}/admin/table/users">
-                    Người dùng
-                </a>
-                <a class="collapse-item <%= request.getHeader("referer").endsWith("belts") ? "active" : "" %>"
-                   href="${pageContext.request.contextPath}/admin/table/belts">
-                    Sản phẩm
-                </a>
+                <c:if test="${permissionToViewManageUsers == true}">
+                    <a class="collapse-item <%=request.getHeader("referer").endsWith("users") ? "active" : "" %>"
+                       href="${pageContext.request.contextPath}/admin/table/users">
+                        Người dùng
+                    </a>
+                </c:if>
+                <c:if test="${permissionToViewManageProducts == true}">
+                    <a class="collapse-item <%= request.getHeader("referer").endsWith("belts") ? "active" : "" %>"
+                       href="${pageContext.request.contextPath}/admin/table/belts">
+                        Sản phẩm
+                    </a>
+                </c:if>
                 <a class="collapse-item <%= request.getHeader("referer").endsWith("reviews") ? "active" : "" %>"
                    href="${pageContext.request.contextPath}/admin/table/reviews">
                     Đánh giá
                 </a>
-                <a class="collapse-item <%= request.getHeader("referer").endsWith("coupons") ? "active" : "" %>"
-                   href="${pageContext.request.contextPath}/admin/table/coupons">
-                    Coupon
-                </a>
-                <a class="collapse-item <%= request.getHeader("referer").endsWith("orders") ? "active" : "" %>"
-                   href="${pageContext.request.contextPath}/admin/table/orders">
-                    Đơn hàng
-                </a>
+                <c:if test="${permissionToViewManageCoupons==true}">
+                    <a class="collapse-item <%= request.getHeader("referer").endsWith("coupons") ? "active" : "" %>"
+                       href="${pageContext.request.contextPath}/admin/table/coupons">
+                        Coupon
+                    </a>
+                </c:if>
+                <c:if test="${permissionToViewManageOrders==true}">
+                    <a class="collapse-item <%= request.getHeader("referer").endsWith("orders") ? "active" : "" %>"
+                       href="${pageContext.request.contextPath}/admin/table/orders">
+                        Đơn hàng
+                    </a>
+                </c:if>
+                <c:if test="${permissionToViewManagePermission==true}">
+                    <a class="collapse-item <%= request.getHeader("referer").endsWith("orders") ? "active" : "" %>"
+                       href="${pageContext.request.contextPath}/admin/table/permission">
+                        Phân quyền
+                    </a>
+                </c:if>
                 <a class="collapse-item <%= request.getHeader("referer").endsWith("collections") ? "active" : "" %>"
                    href="${pageContext.request.contextPath}/admin/table/collections">
                     Bộ sưu tập
@@ -141,7 +155,61 @@
     <%
         }
     %>
+    <li class="nav-item active">
+        <a
+                class="nav-link collapsed"
+                href="#"
+                data-toggle="collapse"
+                data-target="#collapseUtilitiesInventory"
+                aria-expanded="true"
+                aria-controls="collapseUtilities"
+        >
+            <i class="fas fa-fw fa-table"></i>
+            <span>Kho hàng</span>
+        </a>
+        <div
+                id="collapseUtilitiesInventory"
+                class="collapse"
+                aria-labelledby="headingUtilities"
+                data-parent="#accordionSidebar"
+        >
+            <div class="py-2 collapse-inner rounded" style="background-color:#dddddd;">
+                <a class="collapse-item <%=request.getHeader("referer").endsWith("suppliers") ? "active" : "" %>"
+                   href="${pageContext.request.contextPath}/admin/inventory/suppliers">
+                    Nhà cung cấp
+                </a>
+                <a class="collapse-item <%= request.getHeader("referer").endsWith("belts") ? "active" : "" %>"
+                   href="${pageContext.request.contextPath}/admin/inventory/purchases">
+                    Phiếu mua
+                </a>
+                <a class="collapse-item <%= request.getHeader("referer").endsWith("transactions") ? "active" : "" %>"
+                   href="${pageContext.request.contextPath}/admin/inventory/transactions">
+                    Giao dịch
+                </a>
+                <a class="collapse-item <%= request.getHeader("referer").endsWith("coupons") ? "active" : "" %>"
+                   href="${pageContext.request.contextPath}/admin/monitors/coupons">
+                    Coupon
+                </a>
+                <a class="collapse-item <%= request.getHeader("referer").endsWith("orders") ? "active" : "" %>"
+                   href="${pageContext.request.contextPath}/admin/monitors/orders">
+                    Đơn hàng
+                </a>
+                <a class="collapse-item <%= request.getHeader("referer").endsWith("collections") ? "active" : "" %>"
+                   href="${pageContext.request.contextPath}/admin/monitors/collections">
+                    Bộ sưu tập
+                </a>
 
+            </div>
+        </div>
+    </li>
+
+    <%
+        if (referer != null && referer.contains("/inventory")) {
+    %>
+    <hr class="sidebar-divider"/>
+    <%
+        }
+    %>
     <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>
