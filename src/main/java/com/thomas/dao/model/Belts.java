@@ -29,8 +29,12 @@ public class Belts implements Serializable {
         this.name = other.name;
         this.gender = other.gender;
         this.releaseDate = other.releaseDate != null ? other.releaseDate : null;
+        this.createdAt = other.createdAt != null ? other.createdAt : null;
+        this.updatedAt = other.updatedAt != null ? other.updatedAt : null;
+        this.isDeleted = other.isDeleted;
+        this.discountRate = other.discountRate;
+        this.materialBelt = other.materialBelt;
         this.beltVariant = other.beltVariant != null ? new BeltVariant(other.beltVariant) : null;
-        // copy các field còn lại
     }
 
     public Belts(int id, String name, String gender, LocalDateTime releaseDate, LocalDateTime createdDate, LocalDateTime updatedDate, int isDeleted, double discountRate, String materialBelt, BeltVariant beltVariant) {

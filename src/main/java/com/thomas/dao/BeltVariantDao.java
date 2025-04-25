@@ -12,8 +12,8 @@ public class BeltVariantDao implements UsageInterface {
 
     public boolean createVariant(BeltVariant beltVariant) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "insert into beltvariants (beltId,colorId,sizeId,createdAt,updatedAt) values (:beltId,:colorId,:sizeId,:createdAt,:updatedAt)";
-            return h.createUpdate(sql).bind("beltId", beltVariant.getBeltId()).bind("color", beltVariant.getColorId()).bind("size", beltVariant.getSizeId()).bind("createdAt", beltVariant.getCreatedAt()).bind("updatedAt", beltVariant.getUpdatedAt()).execute() > 0;
+            String sql = "insert into beltvariants (beltId,colorId,sizeId,price,createdAt,updatedAt) values (:beltId,:colorId,:sizeId,:price,:createdAt,:updatedAt)";
+            return h.createUpdate(sql).bind("beltId", beltVariant.getBeltId()).bind("colorId", beltVariant.getColorId()).bind("sizeId", beltVariant.getSizeId()).bind("createdAt", beltVariant.getCreatedAt()).bind("updatedAt", beltVariant.getUpdatedAt()).bind("price", beltVariant.getPrice()).execute() > 0;
         });
     }
 
@@ -83,10 +83,10 @@ public class BeltVariantDao implements UsageInterface {
         }
     }
 
-    public void saveVariants(BeltVariant beltVariant) {
-        String sql = "UPDATE beltVariants SET colorId = :colorId, sizeId = :sizeId,createdAt = :createdAt, updatedAt = :updatedAt WHERE id = :variantId";
-        JDBIConnect.get().withHandle(h -> {
-            return h.createUpdate(sql).bind("variantId", beltVariant.getId()).bind("colorId", beltVariant.getColorId()).bind("sizeId", beltVariant.getSizeId()).bind("createdAt", beltVariant.getCreatedAt()).bind("updatedAt", beltVariant.getUpdatedAt()).execute();
+    public boolean saveVariants(BeltVariant beltVariant) {
+        String sql = "UPDATE beltVariants SET colorId = :colorId,price= :price, sizeId = :sizeId,createdAt = :createdAt, updatedAt = :updatedAt WHERE id = :variantId AND beltId = :beltId";
+        return JDBIConnect.get().withHandle(h -> {
+            return h.createUpdate(sql).bind("variantId", beltVariant.getId()).bind("colorId", beltVariant.getColorId()).bind("sizeId", beltVariant.getSizeId()).bind("createdAt", beltVariant.getCreatedAt()).bind("updatedAt", beltVariant.getUpdatedAt()).bind("beltId", beltVariant.getBeltId()).bind("price", beltVariant.getPrice()).execute() > 0;
         });
     }
 
@@ -113,14 +113,14 @@ public class BeltVariantDao implements UsageInterface {
 
     public String findColorNameById(int id) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "SELECT name FROM colors c JOIN beltVariants bv ON bv.colorId=c.id WHERE colorId = :id";
+            String sql = "SELECT name FROM colors c JOIN beltVariants bv ON bv.colorId=c.id WHERE bv.id = :id";
             return h.createQuery(sql).bind("id", id).mapTo(String.class).findFirst().orElse(null);
         });
     }
 
     public String findSizeNameById(int id) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "SELECT name FROM sizes s JOIN beltVariants bv ON bv.sizeId=s.id WHERE sizeId = :id";
+            String sql = "SELECT name FROM sizes s JOIN beltVariants bv ON bv.sizeId=s.id WHERE bv.id = :id";
             return h.createQuery(sql).bind("id", id).mapTo(String.class).findFirst().orElse(null);
         });
     }

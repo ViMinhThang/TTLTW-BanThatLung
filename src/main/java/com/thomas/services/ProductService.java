@@ -51,114 +51,6 @@ public class ProductService {
         productDao.saveDesc(beltId, description, variantId, colorId, sizeId);
     }
 
-
-    private int getLatestVariantIdId() {
-        return productDao.getLatestVariantId();
-    }
-
-    public void saveProduct(String productName, String[] tags, double discountRate,
-                            LocalDateTime releaseDate, String gender, long price,
-                            String material, int isDeleted, String color, String size, int userId) {
-        Belts belt = new Belts();
-        belt.setName(productName);
-        belt.setReleaseDate(releaseDate);
-        belt.setGender(gender);
-        belt.setMaterialBelt(material);
-        belt.setIsDeleted(isDeleted);
-
-        productDao.createAndSaveLog(belt, userId);
-
-        int beltId = getLatestProductId();
-        int colorId = beltVariantDao.findColorByName(color);
-        int sizeId = beltVariantDao.findSizeByName(size);
-        BeltVariant variant = createBeltVariant(beltId, sizeId, colorId);
-        variant.setPrice(price);
-        beltVariantDao.createVariantAndLog(variant, userId);
-        int variantId = getLatestVariantId();
-
-        saveOrUpdateBeltCategory(tags, beltId, variantId);
-    }
-
-    public void updateProduct(int id, String productName, String[] tags, double discountRate,
-                              LocalDateTime releaseDate, String gender, long price,
-                              String material, int isDeleted, String color, String size, Integer variant, int userId, int colorId, int sizeId) {
-        Belts belt = productDao.find(id).get(0);
-        belt.setName(productName);
-        belt.setReleaseDate(releaseDate);
-        belt.setGender(gender);
-        belt.setMaterialBelt(material);
-        belt.setIsDeleted(isDeleted);
-        belt.setDiscountRate(discountRate);
-
-        productDao.updateProductAndLog(belt, userId);
-        BeltVariant beltVariant = findVariant(id, variant, colorId, sizeId);
-        int updatedColorId = beltVariantDao.findColorByName(color);
-        int updatedSizeId = beltVariantDao.findSizeByName(size);
-        updateBeltVariant(beltVariant, updatedColorId, updatedSizeId);
-
-        saveOrUpdateBeltCategory(tags, id, variant);
-    }
-
-    private BeltVariant createBeltVariant(int beltId, int size, int color) {
-        BeltVariant variant = new BeltVariant();
-        variant.setBeltId(beltId);
-        variant.setCreatedAt(LocalDateTime.now());
-        variant.setUpdatedAt(LocalDateTime.now());
-        variant.setSizeId(size);
-        variant.setColorId(color);
-        return variant;
-    }
-
-    private void updateBeltVariant(BeltVariant variant, int size, int color) {
-        variant.setColorId(color);
-        variant.setColorId(size);
-        variant.setUpdatedAt(LocalDateTime.now());
-        beltVariantDao.saveVariants(variant);
-    }
-
-    private void saveOrUpdateBeltCategory(String[] tags, int beltId, int variantId) {
-        for (String tag : tags) {
-            Category category = getOrCreateCategory(tag);
-            if (category != null) {
-                getOrCreateBeltCategory(beltId, category.getId(), variantId);
-            }
-        }
-    }
-
-
-    public void saveVariant(BeltVariant beltVariant) {
-        beltVariantDao.saveVariants(beltVariant);
-    }
-
-    public void createVariant(int productId, String color, String size, LocalDateTime createdAt, long price) {
-        int colorId = beltVariantDao.findColorByName(color);
-        int sizeId = beltVariantDao.findSizeByName(size);
-        BeltVariant variant = new BeltVariant(productId, sizeId, colorId, price, createdAt, createdAt);
-        beltVariantDao.createVariant(variant);
-    }
-
-    public Category getOrCreateCategory(String tag) {
-        Category category = categoryDao.getCategory(tag);
-        if (category == null) {
-            if (!categoryDao.createCategory(tag)) {
-                throw new RuntimeException("Failed to create or retrieve category: " + tag);
-            }
-            category = categoryDao.getCategory(tag);
-        }
-        return category;
-    }
-
-    public BeltCategory getOrCreateBeltCategory(int beltId, int categoryId, int variantId) {
-        BeltCategory bc = beltCategoryDao.getBeltCategory(beltId, categoryId);
-        if (bc == null) {
-            if (!beltCategoryDao.createBeltCategory(beltId, categoryId, variantId)) {
-                throw new RuntimeException("Failed to create or retrieve category: " + beltId + " " + categoryId);
-            }
-            bc = beltCategoryDao.getBeltCategory(beltId, categoryId);
-        }
-        return bc;
-    }
-
     public boolean deleteProductVariant(int productId, int variantId, int userId) {
         return beltVariantDao.deleteVariantAndLog(productId, variantId, userId);
     }
@@ -395,5 +287,30 @@ public class ProductService {
 
     public String findSizeNameById(int id) {
         return beltVariantDao.findSizeNameById(id);
+    }
+
+    public boolean updateProduct(Belts belt) {
+        return productDao.updateProduct(belt);
+    }
+
+    public boolean updateVariant(BeltVariant variant) {
+        return beltVariantDao.saveVariants(variant);
+    }
+
+    public void saveTags(String tags, int beltId, int variantId) {
+        String[] tagList = tags.split(",");
+        for (String tag : tagList) {
+            categoryDao.createCategory(tag);
+            int categoryId = categoryDao.getLatestCategoryId();
+            beltCategoryDao.createBeltCategory(beltId, categoryId, variantId);
+        }
+    }
+
+    public boolean createBelt(Belts b) {
+        return productDao.createProduct(b);
+    }
+
+    public boolean createVariant(BeltVariant v) {
+        return beltVariantDao.createVariant(v);
     }
 }

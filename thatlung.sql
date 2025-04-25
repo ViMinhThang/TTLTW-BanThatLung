@@ -178,7 +178,7 @@ CREATE TABLE beltVariants
     sizeId      INT    NOT NULL,
     colorId     INT    NOT NULL,
     createdAt   DATETIME DEFAULT CURRENT_TIMESTAMP,
-    description text   NOT NULL,
+    description text,
     price       BIGINT NOT NULL,
     updatedAt   DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (beltId) REFERENCES belts (id) ON DELETE CASCADE

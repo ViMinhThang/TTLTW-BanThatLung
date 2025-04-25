@@ -27,7 +27,7 @@
             <nav
                     class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
             >
-                <a href="/admin/table/belts/createProduct">
+                <a href="/admin/table/belts/createProduct?message=create">
                     <button
                             type="submit"
                             class="btn btn-white border border-dark custom_input--btn-group__input"
@@ -37,7 +37,6 @@
                     >
                         Tạo 1 sản phẩm mới
                     </button>
-                    <input type="hidden" name="message" value="create">
                 </a>
 
                 <input name="productId" id="productId" type="hidden"/>
@@ -160,7 +159,7 @@
                                         <td>${belt.materialBelt}</td>
                                         <td>${belt.isDeleted == 0 ? "Chưa xóa" : "Xóa mềm"}</td>
                                         <td class="text-center">
-                                            <a href="${pageContext.request.contextPath}/admin/table/belts/createProduct?id=${belt.id}&message=createVariant"
+                                            <a href="${pageContext.request.contextPath}/admin/table/belts/createProduct?id=${belt.id}&message=edit&variantId=${belt.beltVariant.id}&colorId=${belt.beltVariant.colorId}&sizeId=${belt.beltVariant.sizeId}"
                                                class="btn btn-dark fa-solid fa-pen-to-square"></a>
                                             <button class="btn btn-danger fa-solid fa-trash-can custom_action_hover"
                                                     data-bs-toggle="modal" data-bs-target="#removeModal"></button>

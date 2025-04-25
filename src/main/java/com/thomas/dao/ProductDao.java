@@ -68,7 +68,7 @@ public class ProductDao implements UsageInterface {
 
     public boolean updateProduct(Belts belts) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "UPDATE belts SET name = :productName, " + "releaseDate = :releaseDate, " + "gender = :gender, " + "price = :price, " + "materialBelt = :material, " + "isDeleted = :isDeleted, " + "discountRate = :discountRate " + "WHERE id = :id";
+            String sql = "UPDATE belts SET name = :productName, " + "releaseDate = :releaseDate, " + "gender = :gender, " + "materialBelt = :material, " + "isDeleted = :isDeleted, " + "discountRate = :discountRate " + "WHERE id = :id";
 
             return h.createUpdate(sql).bind("productName", belts.getName()).bind("releaseDate", belts.getReleaseDate()).bind("gender", belts.getGender()).bind("material", belts.getMaterialBelt()).bind("id", belts.getId()).bind("isDeleted", belts.getIsDeleted()).bind("discountRate", belts.getDiscountRate()).execute() > 0;
         });
