@@ -124,4 +124,11 @@ public class BeltVariantDao implements UsageInterface {
             return h.createQuery(sql).bind("id", id).mapTo(String.class).findFirst().orElse(null);
         });
     }
+
+    public List<BeltVariant> similarVariants(int id) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "SELECT * FROM beltVariants WHERE beltId=:id";
+            return h.createQuery(sql).bind("id", id).mapTo(BeltVariant.class).list();
+        });
+    }
 }

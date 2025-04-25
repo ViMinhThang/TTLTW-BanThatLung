@@ -71,6 +71,8 @@ public class createProductController extends HttpServlet {
         String material = request.getParameter("material");
         String releaseDateRaw = request.getParameter("releaseDate");
         LocalDateTime releaseDate;
+        int beltId = 0;
+        int variantId = 0;
         try {
             releaseDate = LocalDate.parse(releaseDateRaw, formatter).atStartOfDay();
         } catch (DateTimeParseException e) {
@@ -81,8 +83,8 @@ public class createProductController extends HttpServlet {
         double discountRate = Double.parseDouble(request.getParameter("discountRate"));
         switch (message) {
             case "edit":
-                int beltId = Integer.parseInt(request.getParameter("beltId"));
-                int variantId = Integer.parseInt(request.getParameter("variantId"));
+                beltId = Integer.parseInt(request.getParameter("beltId"));
+                variantId = Integer.parseInt(request.getParameter("variantId"));
                 int oldColorId = Integer.parseInt(request.getParameter("colorId"));
                 int oldSizeId = Integer.parseInt(request.getParameter("sizeId"));
                 int newColorId = Integer.parseInt(request.getParameter("color"));
@@ -150,19 +152,18 @@ public class createProductController extends HttpServlet {
         }
 
 
-//        String uploadPath = request.getServletContext().getRealPath("") + File.separator + ULOAD_DIR;
-//        File uploadDir = new File(uploadPath);
-//        if (!uploadDir.exists()) {
-//            uploadDir.mkdirs();
-//        }
-//        handleFileUpload(request, productName, uploadPath, message, PRODUCT_SERVICE, productId, variantId);
+        String uploadPath = request.getServletContext().getRealPath("") + File.separator + ULOAD_DIR;
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+        handleFileUpload(request, beltName, uploadPath, message, PRODUCT_SERVICE, beltId, variantId);
     }
 
     private void handleFileUpload(HttpServletRequest request, String productName, String uploadPath, String message, ProductService productService, int productId, int variantId) throws ServletException, IOException {
         try {
             int count = 0;
             List<String> extraImages = new ArrayList<>();
-            List<String> descImages = new ArrayList<>();
             String mainImage = null;
 
             File productDirectory = new File(uploadPath + File.separator + productName);
@@ -174,7 +175,6 @@ public class createProductController extends HttpServlet {
                 serverDirectory.mkdirs();
             }
             for (Part part : request.getParts()) {
-                String fieldName = part.getName();
                 String fileName = extractedFile(part);
 
                 if (fileName != null && !fileName.isEmpty() && part.getSize() > 0) {
@@ -199,12 +199,6 @@ public class createProductController extends HttpServlet {
                     productService.saveOrUpdateImagePath(beltId, mainImage, extraImages, varId, false);
                 } else if ("update".equals(message)) {
                     productService.saveOrUpdateImagePath(productId, mainImage, extraImages, variantId, true);
-                } else if ("createVariant".equals(message)) {
-                    if (variantId == 0) {
-                        variantId = productService.getLatestVariantId();
-                    }
-                    productService.saveOrUpdateImagePath(productId, mainImage, extraImages, variantId, true);
-
                 }
             }
         } catch (Exception e) {
