@@ -1,5 +1,6 @@
 package com.thomas.controller.productDetails;
 
+import com.thomas.dao.BeltVariantDao;
 import com.thomas.dao.model.Belts;
 import com.thomas.dao.model.CartItem;
 import com.thomas.services.ProductService;
@@ -14,6 +15,7 @@ import java.util.Map;
 @WebServlet(name = "buyNowController", value = "/buyNow")
 public class buyNowController extends HttpServlet {
     ProductService productService = new ProductService();
+    BeltVariantDao dao = new BeltVariantDao();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -33,8 +35,10 @@ public class buyNowController extends HttpServlet {
             cart = new HashMap<>();
         }
         Belts belt = productService.find(beltId).get(0);
-        belt.setBeltVariants(productService.findVariants(beltId, color, size, variantId));
-        CartItem item = new CartItem(belt, 1, price, belt.getBeltVariants().get(0));
+        int colorId = dao.findColorByName(color);
+        int sizeId = dao.findSizeByName(size);
+        belt.setBeltVariant(productService.findVariant(beltId, colorId, sizeId, variantId));
+        CartItem item = new CartItem(belt, 1, price, belt.getBeltVariant());
         cart.put(beltId, item);
         session.setAttribute("cart", cart);
         response.sendRedirect("/checkout");

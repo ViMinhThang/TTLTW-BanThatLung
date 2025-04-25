@@ -30,13 +30,13 @@ public class adminController extends HttpServlet {
         int totalOrder = uploadOrderService.getOrderCount();
         double totalOrderMoney = uploadOrderService.getTotalOrderMoney();
         int reviewTotal = uploadReviewService.getReviews().size();
-        int outofStockNumber = productService.outOfStockBelt().size();
+//        int outofStockNumber = productService.outOfStockBelt().size();
         String formattedTotalOrderMoney = formatter.format(totalOrderMoney).replace(",", ".");
 
         request.setAttribute("totalOrder", totalOrder);
         request.setAttribute("totalOrderMoney", formattedTotalOrderMoney);
         request.setAttribute("reviewTotal", reviewTotal);
-        request.setAttribute("outofStockNumber", outofStockNumber);
+//        request.setAttribute("outofStockNumber", outofStockNumber);
         request.getRequestDispatcher("/frontend/AdminPage/admin.jsp").forward(request, response);
     }
 

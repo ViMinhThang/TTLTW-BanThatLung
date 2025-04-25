@@ -10,8 +10,6 @@ import java.util.stream.Collectors;
 public class Belts implements Serializable {
     private int id;
     private String name;
-    private String description;
-    private double price;
     private String gender;
     private LocalDateTime releaseDate;
     private LocalDateTime createdAt;
@@ -19,7 +17,7 @@ public class Belts implements Serializable {
     private int isDeleted;
     private double discountRate;
     private String materialBelt;
-    private List<BeltVariant> beltVariants;
+    private BeltVariant beltVariant;
     private int totalSold;
 
     public Belts() {
@@ -29,23 +27,19 @@ public class Belts implements Serializable {
     public Belts(Belts other) {
         this.id = other.id;
         this.name = other.name;
-        this.price = other.price;
-
-        // Sao chép danh sách beltVariants (nếu có)
-        if (other.beltVariants != null) {
-            this.beltVariants = other.beltVariants.stream()
-                    .map(BeltVariant::new)
-                    .collect(Collectors.toList());
-        } else {
-            this.beltVariants = new ArrayList<>();
-        }
+        this.gender = other.gender;
+        this.releaseDate = other.releaseDate != null ? other.releaseDate : null;
+        this.createdAt = other.createdAt != null ? other.createdAt : null;
+        this.updatedAt = other.updatedAt != null ? other.updatedAt : null;
+        this.isDeleted = other.isDeleted;
+        this.discountRate = other.discountRate;
+        this.materialBelt = other.materialBelt;
+        this.beltVariant = other.beltVariant != null ? new BeltVariant(other.beltVariant) : null;
     }
 
-    public Belts(int id, String name, String description, double price, String gender, LocalDateTime releaseDate, LocalDateTime createdDate, LocalDateTime updatedDate, int isDeleted, double discountRate, String materialBelt, List<BeltVariant> beltVariants) {
+    public Belts(int id, String name, String gender, LocalDateTime releaseDate, LocalDateTime createdDate, LocalDateTime updatedDate, int isDeleted, double discountRate, String materialBelt, BeltVariant beltVariant) {
         this.id = id;
         this.name = name;
-        this.description = description;
-        this.price = price;
         this.gender = gender;
         this.releaseDate = releaseDate;
         this.createdAt = createdDate;
@@ -53,7 +47,7 @@ public class Belts implements Serializable {
         this.isDeleted = isDeleted;
         this.discountRate = discountRate;
         this.materialBelt = materialBelt;
-        this.beltVariants = beltVariants;
+        this.beltVariant = beltVariant;
 
     }
 
@@ -72,22 +66,6 @@ public class Belts implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 
     public String getGender() {
@@ -160,12 +138,12 @@ public class Belts implements Serializable {
         this.discountRate = discountRate;
     }
 
-    public void setBeltVariants(List<BeltVariant> beltVariants) {
-        this.beltVariants = beltVariants;
+    public void setBeltVariant(BeltVariant beltVariant) {
+        this.beltVariant = beltVariant;
     }
 
-    public List<BeltVariant> getBeltVariants() {
-        return beltVariants;
+    public BeltVariant getBeltVariant() {
+        return beltVariant;
     }
 
     public void setTotalSold(int totalSold) {

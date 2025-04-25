@@ -40,7 +40,6 @@ public class PurchaseService {
         transactions.setBeltVariantId(purchases.getBeltVariantId());
         transactionsDao.addTransactions(transactions);
         BeltVariant v = beltVariantDao.findVariants(purchases.getBeltId(), null, null, purchases.getBeltVariantId()).get(0);
-        v.setStockQuantity(purchases.getQuantity() + v.getStockQuantity());
         beltVariantDao.saveVariants(v);
         return dao.createPurchases(purchases);
     }

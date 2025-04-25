@@ -31,10 +31,10 @@ public class confirmActiveController extends HttpServlet {
             }
             if (userId != 0 && active) {
                 request.setAttribute("active", 1);
-                request.setAttribute("messageRedirect", "Kích hoạt tài khoản thành công");
+                request.setAttribute("messageRedirect", "Kích ho?t tài kho?n thành công");
             } else {
                 request.setAttribute("active", 1);
-                request.setAttribute("messageRedirect", "Kích hoạt thất bại vui lòng đăng ký lại");
+                request.setAttribute("messageRedirect", "Kích ho?t th?t b?i vui lòng ??ng ký l?i");
             }
             if (message != null) {
                 request.setAttribute("messageRedirect", message);

@@ -25,16 +25,17 @@ public class newArrivalController extends HttpServlet {
         if (descPrice != null && !descPrice.trim().isEmpty()) {
             switch (descPrice.trim()) {
                 case "increase":
-                    newArrivalBelts.sort(Comparator.comparing(Belts::getPrice));
+                    newArrivalBelts.sort(Comparator.comparing(belt -> belt.getBeltVariant().getPrice()));
                     break;
                 case "decrease":
-                    newArrivalBelts.sort(Comparator.comparing(Belts::getPrice).reversed());
+                    newArrivalBelts.sort(Comparator.comparing((Belts belt) -> belt.getBeltVariant().getPrice()).reversed());
                     break;
                 case "hotSelling":
                     newArrivalBelts = productService.getNewArrivals();
                     break;
             }
         }
+
         if (minPrice != null && maxPrice != null) {
             newArrivalBelts = productService.filterProduct(newArrivalBelts, Double.parseDouble(minPrice), Double.parseDouble(maxPrice));
         }

@@ -163,10 +163,17 @@
                             Sắp Xếp
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item active" href="#">Mặc Định</a></li>
-                            <li><a class="dropdown-item" href="#">Giá Tăng Dần</a></li>
-                            <li><a class="dropdown-item" href="#">Giá Giảm Dần</a></li>
-                            <li><a class="dropdown-item" href="#">Bán Chạy Nhất</a></li>
+                            <li><a class="dropdown-item active"
+                                   href="/navigate?type=${param.type}&page=${page}&descPrice=default">Mặc Định</a></li>
+                            <li><a class="dropdown-item"
+                                   href="/navigate?type=${param.type}&page=${page}&descPrice=default">Giá Tăng Dần</a>
+                            </li>
+                            <li><a class="dropdown-item"
+                                   href="/navigate?type=${param.type}&page=${page}&descPrice=decrease">Giá Giảm Dần</a>
+                            </li>
+                            <li><a class="dropdown-item"
+                                   href="/navigate?type=${param.type}&page=${page}&descPrice=hotSelling">Bán Chạy
+                                Nhất</a></li>
                         </ul>
                     </div>
                 </div>
@@ -176,35 +183,30 @@
 </div>
 
 <div class="list__product ms-2">
-    <div class="row" id="list__product__row">
-        <div class="list__product__element">
-                <div class="d-flex gap-3 align-items-center flex-wrap">
-                    <c:forEach var="belt" items="${beltsList}">
-                        <c:forEach var="variant" items="${belt.beltVariants}">
-                            <a href="productDetails?beltId=${belt.id}&variantId=${variant.id}"
-                               class="text-decoration-none text-dark">
-                                <div class="text-center hover--black">
-                                    <!-- Hiển thị ảnh của từng biến thể -->
-                                    <c:if test="${not empty variant.images}">
-                                        <img src="${pageContext.request.contextPath}${variant.images[0]}"
-                                             class="img-fluid w-100 rounded shadow-sm"
-                                             alt="${belt.name} - ${variant.color} (${variant.size})"
-                                             style="height: 25rem; object-fit: cover;">
-                                    </c:if>
+    <div class="d-flex gap-3 align-items-center flex-wrap">
+        <c:forEach var="belt" items="${beltsList}">
+            <c:forEach var="variant" items="${belt.beltVariants}">
+                <a href="productDetails?beltId=${belt.id}&variantId=${variant.id}"
+                   class="text-decoration-none text-dark">
+                    <div class="text-center hover--black">
+                        <!-- Hiển thị ảnh của từng biến thể -->
+                        <c:if test="${not empty variant.images}">
+                            <img src="${pageContext.request.contextPath}${variant.images[0]}"
+                                 class="img-fluid w-100 rounded shadow-sm"
+                                 alt="${belt.name} - ${variant.color} (${variant.size})"
+                                 style="height: 25rem; object-fit: cover;">
+                        </c:if>
 
-                                    <!-- Thông tin sản phẩm -->
-                                    <div class="mt-2 text-start ps-3">
-                                        <p class="fw-bold fs-5 mb-1">${belt.price} VNĐ</p>
-                                        <p class="text-muted mb-1">${belt.name} - ${variant.color} (${variant.size})</p>
-                                        <span class="badge bg-secondary">${belt.discountRate}%</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </c:forEach>
-                    </c:forEach>
-                </div>
-
-        </div>
+                        <!-- Thông tin sản phẩm -->
+                        <div class="mt-2 text-start ps-3">
+                            <p class="fw-bold fs-5 mb-1">${belt.price} VNĐ</p>
+                            <p class="text-muted mb-1">${belt.name} - ${variant.color} (${variant.size})</p>
+                            <span class="badge bg-secondary">${belt.discountRate}%</span>
+                        </div>
+                    </div>
+                </a>
+            </c:forEach>
+        </c:forEach>
     </div>
 </div>
 

@@ -45,11 +45,11 @@ public class CartController extends HttpServlet {
         }
         for (CartItem cartItem : cartItemList) {
             cartItem.setBelt(productService.find(cartItem.getBeltId()).get(0));
-            cartItem.setVariant(productService.findVariants(cartItem.getBeltId(), null, null, cartItem.getVariantId()).get(0));
+            cartItem.setVariant(productService.findVariant(cartItem.getBeltId(), cartItem.getVariantId(), null, null));
         }
         List<Belts> suggestionBelts = productService.getRandomBelts();
         for (Belts b : suggestionBelts) {
-            b.setBeltVariants(productService.findVariants(b.getId(), null, null, null));
+            b.setBeltVariant(productService.findVariant(b.getId(), null, null, null));
         }
         double totalPrice = 0;
         for (CartItem cartItem : cartItemList) {
@@ -121,7 +121,7 @@ public class CartController extends HttpServlet {
             cartItemList = cartService.getCart(userId);
             for (CartItem item : cartItemList) {
                 item.setBelt(productService.find(item.getBeltId()).get(0));
-                item.setVariant(productService.findVariants(item.getBeltId(), null, null, item.getVariantId()).get(0));
+                item.setVariant(productService.findVariant(item.getBeltId(), item.getVariantId(), null, null));
             }
 
             String json = gson.toJson(cartItemList.size(), Integer.class);
@@ -137,7 +137,7 @@ public class CartController extends HttpServlet {
             List<CartItem> cartItemList = cartService.getCart(userId);
             for (CartItem cartItem : cartItemList) {
                 cartItem.setBelt(productService.find(cartItem.getBeltId()).get(0));
-                cartItem.setVariant(productService.findVariants(cartItem.getBeltId(), null, null, cartItem.getVariantId()).get(0));
+                cartItem.setVariant(productService.findVariant(cartItem.getBeltId(), cartItem.getVariantId(), null, null));
             }
             gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
             String json = gson.toJson(cartItemList.toArray(), CartItem[].class);
@@ -155,7 +155,7 @@ public class CartController extends HttpServlet {
             List<CartItem> cartItemList = cartService.getCart(userId);
             for (CartItem cartItem : cartItemList) {
                 cartItem.setBelt(productService.find(cartItem.getBeltId()).get(0));
-                cartItem.setVariant(productService.findVariants(cartItem.getBeltId(), null, null, cartItem.getVariantId()).get(0));
+                cartItem.setVariant(productService.findVariant(cartItem.getBeltId(), cartItem.getVariantId(), null, null));
             }
             gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
             String json = gson.toJson(cartItemList.toArray(), CartItem[].class);
