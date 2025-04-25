@@ -313,4 +313,8 @@ public class ProductService {
     public boolean createVariant(BeltVariant v) {
         return beltVariantDao.createVariant(v);
     }
+
+    public List<BeltVariant> similarVariants(int id) {
+        return beltVariantDao.similarVariants(id);
+    }
 }
