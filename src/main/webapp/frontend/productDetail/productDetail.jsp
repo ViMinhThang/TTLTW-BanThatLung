@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,18 +50,19 @@
 <div class="mb-5 bg-white rounded mb-0">
     <div class="d-flex">
         <div class="col-7 border-end" style="margin-right: 120px">
-            <div class="row">
+            <div class="row d-grid gap-3" style="grid-template-columns: repeat(2, 1fr);">
                 <c:set var="thumbIndex" value="0" scope="page"/>
                 <c:forEach var="image" items="${belt.beltVariant.images}">
                     <c:if test="${not empty image}">
-                        <div class="col-3 mb-3">
-                            <img src="${pageContext.request.contextPath}${image}" style="width: 450px"
+                        <div class="col mb-3">
+                            <img src="${pageContext.request.contextPath}${image}" style="width: 100%; height: auto;"
                                  alt="Product Image ${thumbIndex}"/>
                         </div>
                         <c:set var="thumbIndex" value="${thumbIndex + 1}" scope="page"/>
                     </c:if>
                 </c:forEach>
             </div>
+
             <section class="content-item ps-2">
                 <div id="navigation-target-description">
                     <div data-testid="accordion" class="accordion">
@@ -223,23 +225,7 @@
                 <div class="d-flex justify-content-between">
                     <div class="card-wrapper cardWrapper">
                         <c:forEach var="belt" items="${randomBelts}">
-                            <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariant.id}"
-                               class="text-decoration-none text-dark">
-                                <div class="text-center hover--black">
-                                    <c:if test="${not empty belt.beltVariant.images}">
-                                        <img src="${pageContext.request.contextPath}${belt.beltVariant.images[0]}"
-                                             class="img-fluid w-100 rounded shadow-sm"
-                                             alt="${belt.name}"
-                                             style="height: 16rem; object-fit: cover;">
-                                    </c:if>
-                                    <!-- Thông tin sản phẩm -->
-                                    <div class="mt-2 text-start ps-3">
-                                        <p class="fw-bold fs-5 mb-1">${belt.beltVariant.price} VNĐ</p>
-                                        <p class="text-muted mb-1">${belt.name}</p>
-                                        <span class="badge bg-secondary">${belt.discountRate}%</span>
-                                    </div>
-                                </div>
-                            </a>
+                            <t:beltCard belt="${belt}"/>
                         </c:forEach>
                     </div>
                 </div>
@@ -247,28 +233,10 @@
 
             <div class="viewed__component ps-5 pt-3 youmightlike__component mb-5 pe-5 pb-5">
                 <p class="viewed__title ms-0 fs-2">Sản phẩm xem nhiều nhất</p>
-                <div class="d-flex justify-content-between">
-                    <div class="card-wrapper cardWrapper">
-                        <c:forEach var="belt" items="${randomBelts}">
-                            <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariant.id}"
-                               class="text-decoration-none text-dark">
-                                <div class="text-center hover--black">
-                                    <c:if test="${not empty belt.beltVariant.images}">
-                                        <img src="${pageContext.request.contextPath}${belt.beltVariant.images[0]}"
-                                             class="img-fluid w-100 rounded shadow-sm"
-                                             alt="${belt.name}"
-                                             style="height: 16rem; object-fit: cover;">
-                                    </c:if>
-                                    <!-- Thông tin sản phẩm -->
-                                    <div class="mt-2 text-start ps-3">
-                                        <p class="fw-bold fs-5 mb-1">${belt.beltVariant.price} VNĐ</p>
-                                        <p class="text-muted mb-1">${belt.name}</p>
-                                        <span class="badge bg-secondary">${belt.discountRate}%</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </c:forEach>
-                    </div>
+                <div class="d-flex justify-content-center gap-3">
+                    <c:forEach var="belt" items="${beltViewCount}">
+                        <t:beltCard belt="${belt}"/>
+                    </c:forEach>
                 </div>
             </div>
         </div>

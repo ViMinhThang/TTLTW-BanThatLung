@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "IndexServlet", value = "/homePageController")
@@ -21,6 +22,14 @@ public class IndexServlet extends HttpServlet {
         List<Belts> newArrivalsList = productService.getNewArrivals();
         List<Belts> mostPopular = productService.mostPopular();
         List<Belts> discountProduct = productService.getDiscountBelts();
+        int chunkSize = 4;
+        List<List<Belts>> chunkedProductList = new ArrayList<>();
+
+        for (int i = 0; i < discountProduct.size(); i += chunkSize) {
+            chunkedProductList.add(discountProduct.subList(i, Math.min(i + chunkSize, discountProduct.size())));
+        }
+
+        request.setAttribute("chunkedProductList", chunkedProductList);
         request.setAttribute("newArrivalsList", newArrivalsList);
         request.setAttribute("mostPopularList", mostPopular);
         request.setAttribute("discountProductList", discountProduct);

@@ -53,8 +53,8 @@ public class productDetailsController extends HttpServlet {
         request.setAttribute("similarVariants", similarVariants);
         request.setAttribute("belt", belt);
         request.setAttribute("isPurchasedBelt", isPurchasedBelt);
-        request.setAttribute("beltViewCount", displayBeltViewCount);
-        request.setAttribute("randomBelts", displayRandom);
+        request.setAttribute("beltViewCount", displayBeltViewCount.subList(0, 4));
+        request.setAttribute("randomBelts", displayRandom.subList(0, 4));
         request.setAttribute("totalReview", totalReview);
         request.setAttribute("beltCategory", beltCategory);
         request.getRequestDispatcher("/frontend/productDetail/productDetail.jsp").forward(request, response);

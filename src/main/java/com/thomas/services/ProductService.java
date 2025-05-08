@@ -35,7 +35,7 @@ public class ProductService {
 
     public BeltVariant findVariant(Integer beltId, Integer variantId, Integer colorId, Integer sizeId) {
         BeltVariant beltVariant = productDao.findVariants(beltId, colorId, sizeId, variantId);
-        beltVariant.setImages(productDao.getProductImages(beltId));
+        beltVariant.setImages(productDao.getProductImages(beltId, variantId));
         return beltVariant;
     }
 
