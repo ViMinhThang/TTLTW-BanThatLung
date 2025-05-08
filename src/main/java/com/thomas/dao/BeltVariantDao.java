@@ -99,14 +99,14 @@ public class BeltVariantDao implements UsageInterface {
 
     public int findColorByName(String color) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "SELECT colorId FROM colors WHERE name = :color";
+            String sql = "SELECT id FROM colors WHERE name = :color";
             return h.createQuery(sql).bind("color", color).mapTo(Integer.class).findFirst().orElse(null);
         });
     }
 
     public int findSizeByName(String size) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "SELECT sizeId FROM colors WHERE name = :size";
+            String sql = "SELECT id FROM sizes WHERE name = :size";
             return h.createQuery(sql).bind("size", size).mapTo(Integer.class).findFirst().orElse(null);
         });
     }

@@ -67,7 +67,7 @@ public class PurchasesController extends HttpServlet {
             LocalDateTime createdAt = LocalDate.parse(request.getParameter("createdDate"), DateTimeFormatter.ISO_LOCAL_DATE).atStartOfDay();
             Purchases purchases = new Purchases(supplierId, variantId, quantity, purchaseDate, createdAt, beltId);
             purchases.setSupplierName(name);
-            boolean created = purchaseService.createPurchase(purchases);
+            boolean created = purchaseService.createPurchase(purchases) && purchaseService.addInventory(beltId, variantId, quantity);
             if (created) {
                 response.sendRedirect("/admin/inventory/purchases");
             }
@@ -91,7 +91,7 @@ public class PurchasesController extends HttpServlet {
             LocalDateTime createdAt = LocalDate.parse(request.getParameter("createdDate"), DateTimeFormatter.ISO_LOCAL_DATE).atStartOfDay();
             Purchases purchases = new Purchases(supplierId, variantId, quantity, purchaseDate, createdAt, beltId);
             purchases.setId(Integer.parseInt(request.getParameter("purchaseId")));
-            boolean updated = purchaseService.updatePurchase(purchases);
+            boolean updated = purchaseService.updatePurchase(purchases) && purchaseService.addInventory(beltId, variantId, quantity);
             if (updated) {
                 response.sendRedirect("/admin/inventory/purchases");
             }

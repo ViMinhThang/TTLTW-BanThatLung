@@ -353,7 +353,7 @@ CREATE TABLE inventory
     stockQuantity INT NOT NULL,
     FOREIGN KEY (beltId) REFERENCES belts (id),
     FOREIGN KEY (variantId) REFERENCES beltVariants (id) ON DELETE CASCADE
-)
+);
 CREATE TABLE cartItems
 (
     id         INT AUTO_INCREMENT PRIMARY KEY,

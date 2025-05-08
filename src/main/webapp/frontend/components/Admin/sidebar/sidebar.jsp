@@ -186,9 +186,9 @@
                    href="${pageContext.request.contextPath}/admin/inventory/transactions">
                     Giao dịch
                 </a>
-                <a class="collapse-item <%= request.getHeader("referer").endsWith("coupons") ? "active" : "" %>"
-                   href="${pageContext.request.contextPath}/admin/monitors/coupons">
-                    Coupon
+                <a class="collapse-item <%= request.getHeader("referer").endsWith("inventories") ? "active" : "" %>"
+                   href="${pageContext.request.contextPath}/admin/inventory/inventories">
+                    Kho hàng
                 </a>
                 <a class="collapse-item <%= request.getHeader("referer").endsWith("orders") ? "active" : "" %>"
                    href="${pageContext.request.contextPath}/admin/monitors/orders">
