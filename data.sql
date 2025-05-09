@@ -269,3 +269,15 @@ VALUES ('S'),
        ('L'),
        ('XL'),
        ('XXL');
+
+INSERT INTO inventory(beltId, variantId, stockQuantity)
+VALUES (1, 1, 50),
+       (1, 2, 56),
+       (2, 3, 120),
+       (2, 4, 56),
+       (3, 5, 23),
+       (3, 6, 12),
+       (4, 7, 23),
+       (4, 8, 23),
+       (5, 9, 23),
+       (5, 10, 23);

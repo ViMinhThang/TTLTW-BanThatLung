@@ -47,6 +47,7 @@ public class productDetailsController extends HttpServlet {
         for (BeltVariant beltVariant : similarVariants) {
             beltVariant.setColor(productService.findColorNameById(beltVariant.getColorId()));
             beltVariant.setSize(productService.findSizeNameById(beltVariant.getSizeId()));
+            beltVariant.setImages(productService.getVariantImages(beltVariant.getId()));
         }
 
 

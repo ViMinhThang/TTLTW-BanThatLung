@@ -81,6 +81,23 @@ $(document).ready(function () {
         $('#pagination__bar .pagination').html(paginationHtml);
     }
 
+    window.toggleImage = function (index) {
+        const wrapper = $(`.image-wrapper[data-index='2']`);
+
+
+        const button = $(`.see-more-btn[data-index='${index}']`);
+
+
+        const expanded = wrapper.toggleClass("expanded").hasClass("expanded");
+        wrapper.css("max-height", expanded ? "1000px" : "300px");
+
+        button.text(expanded ? "See Less" : "See More");
+    };
+
+    $(".see-more-btn").on("click", function () {
+        const index = $(this).data("index");
+        window.toggleImage(index);
+    });
     loadReviews(currentPage)
 
 });

@@ -12,8 +12,8 @@ public class CartService {
         cartDao = new CartDao();
     }
 
-    public boolean addToCart(CartItem item) {
-        return cartDao.addToCart(item);
+    public boolean addToCart(CartItem item, boolean isBuyNow) {
+        return cartDao.addToCart(item, isBuyNow);
     }
 
     public boolean removeFromCart(int userId, int variantId, int beltId) {
@@ -28,4 +28,7 @@ public class CartService {
         return cartDao.getCartItems(userId);
     }
 
+    public boolean deleteBuyNow(int userId) {
+        return cartDao.deleteCartBuyNow(userId);
+    }
 }

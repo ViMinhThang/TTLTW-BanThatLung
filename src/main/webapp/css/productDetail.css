@@ -158,14 +158,6 @@
     width: 33%;
 }
 
-.favorite_button {
-    transition: background-color 0.2s ease-in-out;
-}
-
-.favorite_button:hover {
-    background-color: #0e0e0e17;
-}
-
 .accordion-button:not(.collapsed) {
     background-color: #000000;
     color: #ffffff;
@@ -174,14 +166,6 @@
 
 .accordion {
     width: 100%;
-}
-
-.favorite_button {
-    transition: background-color 0.2s ease-in-out;
-}
-
-.favorite_button:hover {
-    background-color: #0e0e0e17;
 }
 
 .paginationWrapper {
@@ -438,7 +422,6 @@ a {
     margin-bottom: 10px;
 }
 
-/* Phần hình ảnh */
 .media img {
     width: 100%;
     height: auto;
@@ -446,9 +429,60 @@ a {
 }
 
 .hover--black {
-    border: 2px solid transparent !important; /* Mặc định không có viền */
+    border: 2px solid transparent !important;
 }
 
 .hover--black:hover {
-    border: 2px solid black !important; /* Khi hover vào sẽ có viền đen */
+    border: 2px solid black !important;
+}
+
+.image-container {
+    position: relative;
+}
+
+.image-wrapper {
+    position: relative;
+    overflow: hidden;
+    max-height: 300px;
+    opacity: 1;
+}
+
+.image-wrapper.expanded {
+    max-height: none;
+}
+
+.image-wrapper.expanded .fade-overlay {
+    display: none;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.flex-70 {
+    flex: 0 0 80%;
+}
+
+.flex-30 {
+    flex: 0 0 20%;
+}
+
+.see-more-btn {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    border: 2px solid black;
+    color: black;
+    padding: 5px 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.see-more-btn:hover {
+    background-color: #f8f9fa;
 }

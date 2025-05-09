@@ -54,13 +54,22 @@
         <div class="row">
 
             <div class="col-12">
+                <div class="d-flex justify-content-start align-items-center gap-2"
+                     style="margin-right: 108px;margin-left: 124px;">
+                    <c:forEach var="color" items="${colors}">
+                        <a class="text-black border-tag d-flex justify-content-center align-items-center">
+                                ${color}
+                        </a>
+                    </c:forEach>
+
+                </div>
                 <div id="carouselExampleControls2" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
 
                         <c:forEach var="chunk" items="${chunkedProductList}" varStatus="i">
                             <div class="carousel-item ${i.index == 0 ? 'active' : ''}">
                                 <div class="py-4" style="margin-right: 108px;margin-left: 108px;">
-                                    <div class="d-flex justify-content-center gap-3">
+                                    <div class="d-flex justify-content-center gap-2">
                                         <c:forEach var="belt" items="${chunk}">
                                             <t:beltCard belt="${belt}"/>
                                         </c:forEach>
@@ -70,7 +79,15 @@
                         </c:forEach>
 
                     </div>
-
+                    <div class="carousel-indicators-line d-flex justify-content-center mt-3 mb-5">
+                        <c:forEach var="chunk" items="${chunkedProductList}" varStatus="i">
+                            <div
+                                    data-bs-target="#carouselExampleControls2"
+                                    data-bs-slide-to="${i.index}"
+                                    class="indicator-segment ${i.index == 0 ? 'active' : ''}">
+                            </div>
+                        </c:forEach>
+                    </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls2"
                             data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -231,6 +248,15 @@
 </c:if>
 
 <jsp:include page="/frontend/header_footer/footer.jsp"/>
+<script>
+    const carousel = document.querySelector('#carouselExampleControls2');
+    const indicators = document.querySelectorAll('.indicator-segment');
 
+    carousel.addEventListener('slid.bs.carousel', function (e) {
+        indicators.forEach((el, idx) => {
+            el.classList.toggle('active', idx === e.to);
+        });
+    });
+</script>
 </body>
 </html>

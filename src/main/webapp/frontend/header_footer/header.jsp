@@ -4,7 +4,7 @@
 <div id="dimmer" class="dimmer"></div>
 <nav class="p-12 bg-white rounded justify-content-center pb-0 d-flex mt-2 border-bottom" id="navbar">
     <a
-            href=""
+            href="/"
             class=" col-3 d-sm-none d-md-none d-lg-block"
             id="logo"
     >

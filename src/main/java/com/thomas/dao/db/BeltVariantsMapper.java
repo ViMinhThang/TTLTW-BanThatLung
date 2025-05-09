@@ -16,6 +16,7 @@ public class BeltVariantsMapper implements RowMapper<BeltVariant> {
         beltVariant.setColorId(rs.getInt("colorId"));
         beltVariant.setSizeId(rs.getInt("sizeId"));
         beltVariant.setPrice(rs.getLong("price"));
+        beltVariant.setDescription(rs.getString("description"));
         beltVariant.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
         beltVariant.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
         return beltVariant;

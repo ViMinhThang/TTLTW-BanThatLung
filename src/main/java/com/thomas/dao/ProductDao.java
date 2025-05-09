@@ -235,4 +235,21 @@ public class ProductDao implements UsageInterface {
         });
     }
 
+    public int getStockQuantity(Integer beltId, Integer variantId, Integer colorId, Integer sizeId) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "SELECT i.stockQuantity " +
+                    "FROM inventory i " +
+                    "JOIN belts b ON b.id = i.beltId " +
+                    "JOIN beltVariants bv ON bv.id = i.variantId " +
+                    "WHERE i.beltId = :beltId " +
+                    "AND i.variantId = :variantId";
+            return h.createQuery(sql)
+                    .bind("beltId", beltId)
+                    .bind("variantId", variantId)
+                    .mapTo(Integer.class)
+                    .findFirst()
+                    .orElse(0);
+        });
+    }
+
 }

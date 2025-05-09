@@ -3,6 +3,8 @@ package com.thomas.controller.productDetails;
 import com.thomas.dao.BeltVariantDao;
 import com.thomas.dao.model.Belts;
 import com.thomas.dao.model.CartItem;
+import com.thomas.dao.model.User;
+import com.thomas.services.CartService;
 import com.thomas.services.ProductService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -10,12 +12,14 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @WebServlet(name = "buyNowController", value = "/buyNow")
 public class buyNowController extends HttpServlet {
     ProductService productService = new ProductService();
     BeltVariantDao dao = new BeltVariantDao();
+    CartService cartService = new CartService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,18 +33,17 @@ public class buyNowController extends HttpServlet {
         String color = request.getParameter("color");
         String size = request.getParameter("size");
         double price = Double.parseDouble(request.getParameter("price"));
+        long longPrice = (long) price;
         HttpSession session = request.getSession();
-        Map<Integer, CartItem> cart = (Map<Integer, CartItem>) session.getAttribute("cart");
-        if (cart == null) {
-            cart = new HashMap<>();
-        }
-        Belts belt = productService.find(beltId).get(0);
-        int colorId = dao.findColorByName(color);
-        int sizeId = dao.findSizeByName(size);
-        belt.setBeltVariant(productService.findVariant(beltId, colorId, sizeId, variantId));
-        CartItem item = new CartItem(belt, 1, price, belt.getBeltVariant());
-        cart.put(beltId, item);
-        session.setAttribute("cart", cart);
+        User user = (User) session.getAttribute("auth");
+        cartService.deleteBuyNow(user.getId());
+        CartItem newItem = new CartItem();
+        newItem.setUserId(user.getId());
+        newItem.setBeltId(beltId);
+        newItem.setVariantId(variantId);
+        newItem.setQuantity(1);
+        newItem.setPrice(longPrice);
+        cartService.addToCart(newItem, true);
         response.sendRedirect("/checkout");
     }
 }

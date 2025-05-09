@@ -131,4 +131,11 @@ public class BeltVariantDao implements UsageInterface {
             return h.createQuery(sql).bind("id", id).mapTo(BeltVariant.class).list();
         });
     }
+
+    public List<String> getAllColors() {
+        String sql = "SELECT name FROM colors";
+        return JDBIConnect.get().withHandle(h -> {
+            return h.createQuery(sql).mapTo(String.class).list();
+        });
+    }
 }

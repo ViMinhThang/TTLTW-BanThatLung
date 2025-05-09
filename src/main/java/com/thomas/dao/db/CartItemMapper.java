@@ -13,7 +13,7 @@ public class CartItemMapper implements RowMapper<CartItem> {
         cartItem.setId(rs.getInt("id"));
         cartItem.setVariantId(rs.getInt("variantId"));
         cartItem.setQuantity(rs.getInt("quantity"));
-        cartItem.setPrice(rs.getDouble("price"));
+        cartItem.setPrice(rs.getLong("price"));
         cartItem.setBeltId(rs.getInt("beltId"));
         cartItem.setUserId(rs.getInt("userId"));
         cartItem.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
