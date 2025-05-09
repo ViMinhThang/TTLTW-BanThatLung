@@ -1,6 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -51,127 +54,53 @@
         <div class="row">
 
             <div class="col-12">
-                <div id="carouselExampleControls2" class="carousel slide">
-                    <div class="carousel-inner carouselInner">
-                        <div class="carousel-item active">
-                            <div class="d-flex justify-content-center gap-3">
-                                <c:forEach var="belt" items="${discountProductList}" begin="0" end="3">
-                                    <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariant.id}"
-                                       class="text-decoration-none text-dark">
-                                        <div class="text-center hover--black">
-                                            <!-- Hiển thị ảnh của biến thể đầu tiên -->
-                                            <c:if test="${not empty belt.beltVariant}">
-                                                <c:set var="firstVariant" value="${belt.beltVariant}"/>
-                                                <c:if test="${not empty firstVariant.images}">
-                                                    <img src="${pageContext.request.contextPath}${firstVariant.images[0]}"
-                                                         class="img-fluid w-100 rounded shadow-sm"
-                                                         alt="${belt.name}"
-                                                         style="height: 25rem; object-fit: cover;">
-                                                </c:if>
-                                            </c:if>
+                <div class="d-flex justify-content-start align-items-center gap-2"
+                     style="margin-right: 108px;margin-left: 124px;">
+                    <c:forEach var="color" items="${colors}">
+                        <a class="text-black border-tag d-flex justify-content-center align-items-center">
+                                ${color}
+                        </a>
+                    </c:forEach>
 
-                                            <!-- Thông tin sản phẩm -->
-                                            <div class="mt-2 text-start ps-3">
-                                                <p class="fw-bold fs-5 mb-1">${belt.beltVariant.price} VNĐ</p>
-                                                <p class="text-muted mb-1">${belt.name}</p>
-                                                <span class="badge bg-secondary">${belt.discountRate}%</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </c:forEach>
+                </div>
+                <div id="carouselExampleControls2" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
 
+                        <c:forEach var="chunk" items="${chunkedProductList}" varStatus="i">
+                            <div class="carousel-item ${i.index == 0 ? 'active' : ''}">
+                                <div class="py-4" style="margin-right: 108px;margin-left: 108px;">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <c:forEach var="belt" items="${chunk}">
+                                            <t:beltCard belt="${belt}"/>
+                                        </c:forEach>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </c:forEach>
 
-                        <div class="carousel-item">
-                            <div class="d-flex justify-content-center gap-3">
-                                <c:forEach var="belt" items="${discountProductList}" begin="4" end="7">
-                                    <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariant.id}"
-                                       class="text-decoration-none text-dark">
-                                        <div class="text-center hover--black">
-                                            <!-- Hiển thị ảnh của biến thể đầu tiên -->
-                                            <c:if test="${not empty belt.beltVariant}">
-                                                <c:set var="firstVariant" value="${belt.beltVariant}"/>
-                                                <c:if test="${not empty firstVariant.images}">
-                                                    <img src="${pageContext.request.contextPath}${firstVariant.images[0]}"
-                                                         class="img-fluid w-100 rounded shadow-sm"
-                                                         alt="${belt.name}"
-                                                         style="height: 25rem; object-fit: cover;">
-                                                </c:if>
-                                            </c:if>
-
-                                            <!-- Thông tin sản phẩm -->
-                                            <div class="mt-2 text-start ps-3">
-                                                <p class="fw-bold fs-5 mb-1">${belt.beltVariant.price} VNĐ</p>
-                                                <p class="text-muted mb-1">${belt.name}</p>
-                                                <span class="badge bg-secondary">${belt.discountRate}%</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </c:forEach>
-
-                            </div>
-                        </div>
-
-                        <div class="carousel-item">
-                            <div class="d-flex justify-content-center gap-3">
-                                <c:forEach var="belt" items="${discountProductList}" begin="8" end="11">
-                                    <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariant.id}"
-                                       class="text-decoration-none text-dark">
-                                        <div class="text-center hover--black">
-                                            <!-- Hiển thị ảnh của biến thể đầu tiên -->
-                                            <c:if test="${not empty belt.beltVariant}">
-                                                <c:set var="firstVariant" value="${belt.beltVariant}"/>
-                                                <c:if test="${not empty firstVariant.images}">
-                                                    <img src="${pageContext.request.contextPath}${firstVariant.images[0]}"
-                                                         class="img-fluid w-100 rounded shadow-sm"
-                                                         alt="${belt.name}"
-                                                         style="height: 25rem; object-fit: cover;">
-                                                </c:if>
-                                            </c:if>
-
-                                            <!-- Thông tin sản phẩm -->
-                                            <div class="mt-2 text-start ps-3">
-                                                <p class="fw-bold fs-5 mb-1">${belt.beltVariant.price} VNĐ</p>
-                                                <p class="text-muted mb-1">${belt.name}</p>
-                                                <span class="badge bg-secondary">${belt.discountRate}%</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </c:forEach>
-                            </div>
-                        </div>
                     </div>
-
-                    <button
-                            class="carousel-control-prev"
-                            type="button"
-                            data-bs-target="#carouselExampleControls2"
-                            data-bs-slide="prev"
-                            style="width: 5%;left:10rem"
-                    >
-                <span
-                        class="carousel-control-prev-icon"
-                        aria-hidden="true"
-                ></span>
+                    <div class="carousel-indicators-line d-flex justify-content-center mt-3 mb-5">
+                        <c:forEach var="chunk" items="${chunkedProductList}" varStatus="i">
+                            <div
+                                    data-bs-target="#carouselExampleControls2"
+                                    data-bs-slide-to="${i.index}"
+                                    class="indicator-segment ${i.index == 0 ? 'active' : ''}">
+                            </div>
+                        </c:forEach>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls2"
+                            data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Previous</span>
                     </button>
-                    <button
-                            class="carousel-control-next"
-                            type="button"
-                            data-bs-target="#carouselExampleControls2"
-                            data-bs-slide="next"
-                            style="width: 5%;right:10rem"
-
-                    >
-                <span
-                        class="carousel-control-next-icon"
-                        aria-hidden="true"
-                ></span>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls2"
+                            data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Next</span>
                     </button>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -225,33 +154,11 @@
                     <div class="row" id="list__product__row">
                         <div class="list__product__element">
                             <div class="carousel-item active">
+
                                 <div class="d-flex justify-content-center gap-3 flex-wrap">
-                                    <jsp:useBean id="newArrivalsList" scope="request" type="java.util.List"/>
-                                    <c:forEach var="belt" items="${newArrivalsList}" end="7">
-                                        <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariant.id}"
-                                           class="text-decoration-none text-dark">
-                                            <div class="text-center hover--black">
-                                                <!-- Hiển thị ảnh của biến thể đầu tiên -->
-                                                <c:if test="${not empty belt.beltVariant}">
-                                                    <c:set var="firstVariant" value="${belt.beltVariant}"/>
-                                                    <c:if test="${not empty firstVariant.images}">
-                                                        <img src="${pageContext.request.contextPath}${firstVariant.images[0]}"
-                                                             class="img-fluid w-100 rounded shadow-sm"
-                                                             alt="${belt.name}"
-                                                             style="height: 25rem; object-fit: cover;">
-                                                    </c:if>
-                                                </c:if>
-
-                                                <!-- Thông tin sản phẩm -->
-                                                <div class="mt-2 text-start ps-3">
-                                                    <p class="fw-bold fs-5 mb-1">${belt.beltVariant.price} VNĐ</p>
-                                                    <p class="text-muted mb-1">${belt.name}</p>
-                                                    <span class="badge bg-secondary">${belt.discountRate}%</span>
-                                                </div>
-                                            </div>
-                                        </a>
+                                    <c:forEach var="belt" items="${newArrivalsList}">
+                                        <t:beltCard belt="${belt}"/>
                                     </c:forEach>
-
                                 </div>
                             </div>
                         </div>
@@ -276,31 +183,9 @@
                             <div class="list__product__element">
                                 <div class="carousel-item active">
                                     <div class="d-flex justify-content-center gap-3 ">
-                                        <c:forEach var="belt" items="${mostPopularList}" end="7">
-                                            <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariant.id}"
-                                               class="text-decoration-none text-dark">
-                                                <div class="text-center hover--black">
-                                                    <!-- Hiển thị ảnh của biến thể đầu tiên -->
-                                                    <c:if test="${not empty belt.beltVariant}">
-                                                        <c:set var="firstVariant" value="${belt.beltVariant}"/>
-                                                        <c:if test="${not empty firstVariant.images}">
-                                                            <img src="${pageContext.request.contextPath}${firstVariant.images[0]}"
-                                                                 class="img-fluid w-100 rounded shadow-sm"
-                                                                 alt="${belt.name}"
-                                                                 style="height: 25rem; object-fit: cover;">
-                                                        </c:if>
-                                                    </c:if>
-
-                                                    <!-- Thông tin sản phẩm -->
-                                                    <div class="mt-2 text-start ps-3">
-                                                        <p class="fw-bold fs-5 mb-1">${belt.beltVariant.price} VNĐ</p>
-                                                        <p class="text-muted mb-1">${belt.name}</p>
-                                                        <span class="badge bg-secondary">${belt.discountRate}%</span>
-                                                    </div>
-                                                </div>
-                                            </a>
+                                        <c:forEach var="belt" items="${mostPopularList}">
+                                            <t:beltCard belt="${belt}"/>
                                         </c:forEach>
-
                                     </div>
                                 </div>
                             </div>
@@ -363,6 +248,15 @@
 </c:if>
 
 <jsp:include page="/frontend/header_footer/footer.jsp"/>
+<script>
+    const carousel = document.querySelector('#carouselExampleControls2');
+    const indicators = document.querySelectorAll('.indicator-segment');
 
+    carousel.addEventListener('slid.bs.carousel', function (e) {
+        indicators.forEach((el, idx) => {
+            el.classList.toggle('active', idx === e.to);
+        });
+    });
+</script>
 </body>
 </html>

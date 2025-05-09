@@ -99,14 +99,14 @@ public class BeltVariantDao implements UsageInterface {
 
     public int findColorByName(String color) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "SELECT colorId FROM colors WHERE name = :color";
+            String sql = "SELECT id FROM colors WHERE name = :color";
             return h.createQuery(sql).bind("color", color).mapTo(Integer.class).findFirst().orElse(null);
         });
     }
 
     public int findSizeByName(String size) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "SELECT sizeId FROM colors WHERE name = :size";
+            String sql = "SELECT id FROM sizes WHERE name = :size";
             return h.createQuery(sql).bind("size", size).mapTo(Integer.class).findFirst().orElse(null);
         });
     }
@@ -129,6 +129,13 @@ public class BeltVariantDao implements UsageInterface {
         return JDBIConnect.get().withHandle(h -> {
             String sql = "SELECT * FROM beltVariants WHERE beltId=:id";
             return h.createQuery(sql).bind("id", id).mapTo(BeltVariant.class).list();
+        });
+    }
+
+    public List<String> getAllColors() {
+        String sql = "SELECT name FROM colors";
+        return JDBIConnect.get().withHandle(h -> {
+            return h.createQuery(sql).mapTo(String.class).list();
         });
     }
 }

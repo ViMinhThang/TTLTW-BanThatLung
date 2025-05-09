@@ -4,6 +4,7 @@ import com.thomas.dao.BeltVariantDao;
 import com.thomas.dao.PurchasesDao;
 import com.thomas.dao.TransactionsDao;
 import com.thomas.dao.model.BeltVariant;
+import com.thomas.dao.model.Inventory;
 import com.thomas.dao.model.Purchases;
 import com.thomas.dao.SupplierDao;
 import com.thomas.dao.model.Transactions;
@@ -69,6 +70,40 @@ public class PurchaseService {
     }
 
     public int getVariantId(String beltName, String size, String color) {
-        return dao.findVariantId(beltName, color, size);
+        int colorId = beltVariantDao.findColorByName(color);
+        int sizeId = beltVariantDao.findSizeByName(size);
+        return dao.findVariantId(beltName, colorId, sizeId);
     }
+
+    public boolean addInventory(int beltId, int variantId, int stockQuantity) {
+        Inventory inventory = dao.checkInventory(beltId, variantId);
+        if (inventory != null) {
+            inventory.setStockQuantity(inventory.getStockQuantity() + stockQuantity);
+            return dao.updateInventory(inventory);
+        } else {
+            return dao.addInventory(new Inventory(beltId, variantId, stockQuantity));
+        }
+    }
+
+    public List<Inventory> getInventory(Integer beltId, Integer variantId) {
+        return dao.getInventory(beltId, variantId);
+    }
+
+    public void setInventoryNames(Inventory inventory) {
+        String beltName = dao.findInventoryBelt(inventory.getBeltId(), inventory.getVariantId());
+        inventory.setBeltName(beltName != null ? beltName : "N/A");
+
+        int[] variantData = dao.findInventoryVariant(inventory.getBeltId(), inventory.getVariantId());
+        if (variantData != null && variantData.length >= 2) {
+            String size = dao.getSizeName(variantData[0]);
+            String color = dao.getColorName(variantData[1]);
+            inventory.setVariantName(List.of(
+                    size != null ? size : "Unknown",
+                    color != null ? color : "Unknown"
+            ));
+        } else {
+            inventory.setVariantName(List.of("Unknown", "Unknown"));
+        }
+    }
+
 }

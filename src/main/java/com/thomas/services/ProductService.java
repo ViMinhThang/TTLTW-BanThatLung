@@ -35,7 +35,8 @@ public class ProductService {
 
     public BeltVariant findVariant(Integer beltId, Integer variantId, Integer colorId, Integer sizeId) {
         BeltVariant beltVariant = productDao.findVariants(beltId, colorId, sizeId, variantId);
-        beltVariant.setImages(productDao.getProductImages(beltId));
+        beltVariant.setImages(productDao.getProductImages(beltId, variantId));
+        beltVariant.setStockQuantity(productDao.getStockQuantity(beltId, variantId, colorId, sizeId));
         return beltVariant;
     }
 
@@ -102,7 +103,22 @@ public class ProductService {
     }
 
     public List<Belts> getRandomBelts() {
-        return productDao.getRandomBelts();
+        List<Belts> beltsList = productDao.getRandomBelts();
+        List<Belts> display = new ArrayList<>();
+        for (Belts belt : beltsList) {
+            Integer[] variantId = productDao.getAllVariantId(belt.getId());
+            for (int i : variantId) {
+                Belts b = new Belts(belt);
+                BeltVariant beltVariant = findVariant(belt.getId(), i, null, null);
+                beltVariant.setColor(beltVariantDao.findColorNameById(beltVariant.getColorId()));
+                beltVariant.setSize(beltVariantDao.findSizeNameById(beltVariant.getSizeId()));
+                beltVariant.setImages(getVariantImages(beltVariant.getId()));
+                b.setBeltVariant(beltVariant);
+                display.add(b);
+            }
+        }
+        Collections.shuffle(display);
+        return display;
     }
 
     public void saveBeltView(int beltId) {
@@ -129,16 +145,17 @@ public class ProductService {
         List<Belts> beltsList = productDao.find(null);
         List<Belts> display = new ArrayList<>();
         for (Belts belt : beltsList) {
-            Belts b = new Belts(belt);
             Integer[] variantId = productDao.getAllVariantId(belt.getId());
             for (int i : variantId) {
+                Belts b = new Belts(belt);
                 BeltVariant beltVariant = findVariant(belt.getId(), i, null, null);
+                beltVariant.setColor(beltVariantDao.findColorNameById(beltVariant.getColorId()));
+                beltVariant.setSize(beltVariantDao.findSizeNameById(beltVariant.getSizeId()));
                 beltVariant.setImages(getVariantImages(beltVariant.getId()));
                 b.setBeltVariant(beltVariant);
                 display.add(b);
             }
         }
-        Collections.shuffle(display);
         display.sort(new Comparator<Belts>() {
             @Override
             public int compare(Belts o1, Belts o2) {
@@ -158,10 +175,12 @@ public class ProductService {
         List<Belts> beltsList = productDao.find(null);
         List<Belts> display = new ArrayList<>();
         for (Belts belt : beltsList) {
-            Belts b = new Belts(belt);
             Integer[] variantId = productDao.getAllVariantId(belt.getId());
             for (int i : variantId) {
+                Belts b = new Belts(belt);
                 BeltVariant beltVariant = findVariant(belt.getId(), i, null, null);
+                beltVariant.setColor(beltVariantDao.findColorNameById(beltVariant.getColorId()));
+                beltVariant.setSize(beltVariantDao.findSizeNameById(beltVariant.getSizeId()));
                 beltVariant.setImages(getVariantImages(beltVariant.getId()));
                 b.setBeltVariant(beltVariant);
                 display.add(b);
@@ -182,10 +201,12 @@ public class ProductService {
         List<Belts> display = new ArrayList<>();
         for (Belts belt : beltsList) {
             if (belt.getDiscountRate() > 0) {
-                Belts b = new Belts(belt);
                 Integer[] variantId = productDao.getAllVariantId(belt.getId());
                 for (int i : variantId) {
+                    Belts b = new Belts(belt);
                     BeltVariant beltVariant = findVariant(belt.getId(), i, null, null);
+                    beltVariant.setColor(beltVariantDao.findColorNameById(beltVariant.getColorId()));
+                    beltVariant.setSize(beltVariantDao.findSizeNameById(beltVariant.getSizeId()));
                     beltVariant.setImages(getVariantImages(beltVariant.getId()));
                     b.setBeltVariant(beltVariant);
                     display.add(b);
@@ -214,9 +235,9 @@ public class ProductService {
         List<Belts> beltsList = productDao.find(null);
         List<Belts> display = new ArrayList<>();
         for (Belts belt : beltsList) {
-            Belts b = new Belts(belt);
             Integer[] variantId = productDao.getAllVariantId(belt.getId());
             for (int i : variantId) {
+                Belts b = new Belts(belt);
                 BeltVariant beltVariant = findVariant(belt.getId(), i, null, null);
                 beltVariant.setImages(getVariantImages(beltVariant.getId()));
                 b.setBeltVariant(beltVariant);
@@ -254,9 +275,9 @@ public class ProductService {
         List<Belts> beltsList = productDao.search(query);
         List<Belts> display = new ArrayList<>();
         for (Belts belt : beltsList) {
-            Belts b = new Belts(belt);
             Integer[] variantId = productDao.getAllVariantId(belt.getId());
             for (int i : variantId) {
+                Belts b = new Belts(belt);
                 BeltVariant beltVariant = findVariant(belt.getId(), i, null, null);
                 beltVariant.setImages(getVariantImages(beltVariant.getId()));
                 b.setBeltVariant(beltVariant);

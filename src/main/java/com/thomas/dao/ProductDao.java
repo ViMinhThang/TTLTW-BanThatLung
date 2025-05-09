@@ -40,8 +40,8 @@ public class ProductDao implements UsageInterface {
     }
 
 
-    public List<String> getProductImages(int beltId) {
-        return JDBIConnect.get().withHandle(handle -> handle.createQuery("SELECT imagePath FROM imageEntry WHERE beltId = :beltId AND imageType IN ('main', 'extra')").bind("beltId", beltId).mapTo(String.class).list());
+    public List<String> getProductImages(int beltId, int variantId) {
+        return JDBIConnect.get().withHandle(handle -> handle.createQuery("SELECT imagePath FROM imageEntry WHERE beltId = :beltId AND variantId=:variantId AND imageType IN ('main', 'sub')").bind("beltId", beltId).bind("variantId", variantId).mapTo(String.class).list());
     }
 
 
@@ -232,6 +232,23 @@ public class ProductDao implements UsageInterface {
                     .mapTo(Integer.class)
                     .list();
             return list.toArray(new Integer[0]);
+        });
+    }
+
+    public int getStockQuantity(Integer beltId, Integer variantId, Integer colorId, Integer sizeId) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "SELECT i.stockQuantity " +
+                    "FROM inventory i " +
+                    "JOIN belts b ON b.id = i.beltId " +
+                    "JOIN beltVariants bv ON bv.id = i.variantId " +
+                    "WHERE i.beltId = :beltId " +
+                    "AND i.variantId = :variantId";
+            return h.createQuery(sql)
+                    .bind("beltId", beltId)
+                    .bind("variantId", variantId)
+                    .mapTo(Integer.class)
+                    .findFirst()
+                    .orElse(0);
         });
     }
 

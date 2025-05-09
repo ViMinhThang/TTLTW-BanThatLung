@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,18 +50,42 @@
 <div class="mb-5 bg-white rounded mb-0">
     <div class="d-flex">
         <div class="col-7 border-end" style="margin-right: 120px">
-            <div class="row">
+            <div class="row d-grid gap-3" style="grid-template-columns: repeat(2, 1fr); position: relative">
                 <c:set var="thumbIndex" value="0" scope="page"/>
                 <c:forEach var="image" items="${belt.beltVariant.images}">
                     <c:if test="${not empty image}">
-                        <div class="col-3 mb-3">
-                            <img src="${pageContext.request.contextPath}${image}" style="width: 450px"
-                                 alt="Product Image ${thumbIndex}"/>
-                        </div>
+                        <c:choose>
+                            <c:when test="${thumbIndex lt 2}">
+                                <!-- First two images take up one column (default) -->
+                                <div class="col mb-3">
+                                    <img src="${pageContext.request.contextPath}${image}"
+                                         style="width: 100%; height: auto;" alt="Product Image ${thumbIndex}"/>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <!-- For the third image, make it span across 2 columns (col-12 for large image) -->
+                                <div class="col-12 mb-3 image-wrapper" data-index="${thumbIndex}"
+                                     style="max-height: 300px; overflow: hidden; position: relative; transition: max-height 0.5s ease;">
+                                    <img src="${pageContext.request.contextPath}${image}"
+                                         style="width: 100%; height: auto;" alt="Product Image ${thumbIndex}"/>
+                                    <div class="fade-overlay"
+                                         style="position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: linear-gradient(to top, white, transparent);"></div>
+                                </div>
+                                <div class="col-12 d-flex justify-content-center"
+                                     style="position: absolute; bottom: -4%">
+                                    <button class="see-more-btn btn border border-dark bg-white mt-2"
+                                            style="border-radius: 0; height: 87px; width: 240px"
+                                            data-index="${thumbIndex}">
+                                        See More
+                                    </button>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
                         <c:set var="thumbIndex" value="${thumbIndex + 1}" scope="page"/>
                     </c:if>
                 </c:forEach>
             </div>
+
             <section class="content-item ps-2">
                 <div id="navigation-target-description">
                     <div data-testid="accordion" class="accordion">
@@ -223,23 +248,7 @@
                 <div class="d-flex justify-content-between">
                     <div class="card-wrapper cardWrapper">
                         <c:forEach var="belt" items="${randomBelts}">
-                            <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariant.id}"
-                               class="text-decoration-none text-dark">
-                                <div class="text-center hover--black">
-                                    <c:if test="${not empty belt.beltVariant.images}">
-                                        <img src="${pageContext.request.contextPath}${belt.beltVariant.images[0]}"
-                                             class="img-fluid w-100 rounded shadow-sm"
-                                             alt="${belt.name}"
-                                             style="height: 16rem; object-fit: cover;">
-                                    </c:if>
-                                    <!-- Thông tin sản phẩm -->
-                                    <div class="mt-2 text-start ps-3">
-                                        <p class="fw-bold fs-5 mb-1">${belt.beltVariant.price} VNĐ</p>
-                                        <p class="text-muted mb-1">${belt.name}</p>
-                                        <span class="badge bg-secondary">${belt.discountRate}%</span>
-                                    </div>
-                                </div>
-                            </a>
+                            <t:beltCard belt="${belt}" height="234.25px"/>
                         </c:forEach>
                     </div>
                 </div>
@@ -247,33 +256,15 @@
 
             <div class="viewed__component ps-5 pt-3 youmightlike__component mb-5 pe-5 pb-5">
                 <p class="viewed__title ms-0 fs-2">Sản phẩm xem nhiều nhất</p>
-                <div class="d-flex justify-content-between">
-                    <div class="card-wrapper cardWrapper">
-                        <c:forEach var="belt" items="${randomBelts}">
-                            <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariant.id}"
-                               class="text-decoration-none text-dark">
-                                <div class="text-center hover--black">
-                                    <c:if test="${not empty belt.beltVariant.images}">
-                                        <img src="${pageContext.request.contextPath}${belt.beltVariant.images[0]}"
-                                             class="img-fluid w-100 rounded shadow-sm"
-                                             alt="${belt.name}"
-                                             style="height: 16rem; object-fit: cover;">
-                                    </c:if>
-                                    <!-- Thông tin sản phẩm -->
-                                    <div class="mt-2 text-start ps-3">
-                                        <p class="fw-bold fs-5 mb-1">${belt.beltVariant.price} VNĐ</p>
-                                        <p class="text-muted mb-1">${belt.name}</p>
-                                        <span class="badge bg-secondary">${belt.discountRate}%</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </c:forEach>
-                    </div>
+                <div class="d-flex justify-content-center gap-3">
+                    <c:forEach var="belt" items="${beltViewCount}">
+                        <t:beltCard belt="${belt}" height="234.25px"/>
+                    </c:forEach>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4 beltProp" style="position: sticky">
+        <div class="col-md-3 beltProp" style="position: sticky">
             <input type="hidden" class="beltId" value="${belt.id}">
             <input type="hidden" class="variantId" value="${belt.beltVariant.id}">
             <input type="hidden" class="userId" value="${sessionScope.auth.id}">
@@ -305,21 +296,24 @@
             </div>
 
             <!-- Quantity -->
-            <div class="mb-3 mt-3">
+            <div class="mb-1 mt-3">
                 <label for="quantity" class="form-label fw-5"><strong>Số Lượng:</strong></label>
                 <div class="quantity__control input-group quantity-controls">
                     <button class="btn btn-outline-secondary rounded-0 p-4 border-end-0 py-2 px-3" type="button"
-                            id="decrement">-
+                            id="decrement"
+                            style="border-bottom-width: 2px;border-top-width: 2px;border-left-width: 2px">-
                     </button>
-                    <input type="text" class="px-1 py-2 border-start-0 border-end-0 w-25" id="quantity" value="1">
+                    <input type="text" class="px-1 py-2 border-start-0 border-end-0 w-25" id="quantity" value="1"
+                           style="border-top-width: 2px;border-bottom-width: 2px">
                     <button class="btn btn-outline-secondary rounded-0 p-4 border-start-0 py-2 px-3" type="button"
-                            id="increment">+
+                            id="increment"
+                            style="border-bottom-width: 2px;border-top-width: 2px;border-right-width: 2px">+
                     </button>
+                    <strong class="mt-2 font-weight-bold">Còn lại: ${belt.beltVariant.stockQuantity}</strong>
                 </div>
             </div>
 
-            <!-- Color + Variant preview -->
-            <div class="mb-3 mt-3">
+            <div class="mb-3">
                 <label class="form-label fw-5"><strong>Màu sắc:</strong></label>
                 <div class="d-flex flex-wrap gap-2">
                     <c:forEach var="variant" items="${similarVariants}">
@@ -381,18 +375,21 @@
                         </c:otherwise>
                     </c:choose>
                 </form>
+                <div class="d-flex gap-1">
+                    <button class="addToCart__button btn-white me-2 w-100 mb-3 flex-70" id="addToCartBtn" type="button">
+                        Thêm vào giỏ hàng
+                    </button>
+                    <button type="button" class="favorite_button btn me-2 w-100 mb-3 flex-30"
+                            id="addToFavoriteBtn"
+                            style="border: 2px solid black;background-color: white;border-radius: 0px">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                             fill="#000000">
+                            <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/>
+                        </svg>
+                    </button>
+                </div>
 
-                <button class="addToCart__button btn-white me-2 w-100 mb-3" id="addToCartBtn" type="button">
-                    Thêm vào giỏ hàng
-                </button>
 
-                <button type="button" class="favorite_button btn me-2 w-100 mb-3 rounded" id="addToFavoriteBtn">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                         fill="#000000">
-                        <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/>
-                    </svg>
-                    Thêm vào yêu thích
-                </button>
             </div>
         </div>
 
@@ -408,6 +405,7 @@
             </div>
         </div>
     </div>
+    <
     <script>
         document.querySelectorAll('.star-rating:not(.readonly) label').forEach(star => {
             star.addEventListener('click', function () {
@@ -417,8 +415,6 @@
                 }, 200);
             });
         });
-    </script>
-    <script>
         document.querySelector("#increment").addEventListener("click", () => {
             const stockQuantity = $(".quantity_belt").val();
             let quantity = document.querySelector("#quantity");

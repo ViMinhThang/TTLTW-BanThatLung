@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,26 +8,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Thanh toán đơn hàng</title>
     <link rel="icon" href="${pageContext.request.contextPath}/assets/icons/favicon.svg" type="image/x-icon"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"/>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/fontawesome-free-6.6.0-web/fontawesome-free-6.6.0-web/css/all.css"/>
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/css/fontawesome-free-6.6.0-web/fontawesome-free-6.6.0-web/css/all.css"/>
     <script src="${pageContext.request.contextPath}/js/checkout.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/checkoutPage.css"/>
     <script>
-        $(document).ready(function() {
-            $('input[name="paymentMethod"]').change(function() {
+        $(document).ready(function () {
+            $('input[name="paymentMethod"]').change(function () {
                 const selectedMethod = $(this).val();
                 $('.submitPaymentMethod').val(selectedMethod);
                 $('#openFormButtonPayment').text('Thanh toán với ' + selectedMethod);
             });
         });
 
-        $(document).ready(function() {
-            $('select[name="selectedAddress"]').change(function() {
+        $(document).ready(function () {
+            $('select[name="selectedAddress"]').change(function () {
                 const selectedAddress = $(this).val();
                 $('.submitDeliveryAddress').val(selectedAddress);
             });
@@ -86,11 +91,10 @@
                     }),
                     success: function (response) {
                         const fee = response.data.total;
-                        $('.shipmentPrice').text(fee + ' VNĐ');
-                        // Giả sử bạn có biến totalPrice là giá trị sản phẩm
+                        $('.shipmentPrice').text(fee.toLocaleString("vi-VN") + ' VNĐ');
                         const productTotal = parseInt('${totalPrice}');
                         const grandTotal = productTotal + fee;
-                        $('.totalCostDisplay').text(grandTotal + ' VNĐ');
+                        $('.grandTotal').text(grandTotal.toLocaleString("vi-VN") + ' VNĐ');
                     }
                 });
             }
@@ -157,33 +161,42 @@
             <h3 class="fw-bold">Tóm tắt đơn hàng</h3>
             <div class="d-flex justify-content-between mb-2 border-top pt-2">
                 <p class="mb-0">${cartSize} sản phẩm</p>
-                <p class="mb-0">${totalPrice} VNĐ</p>
+
+                <p class="mb-0"><fmt:formatNumber value="${totalPrice}" type="number" groupingUsed="true"/> VNĐ</p>
             </div>
             <div class="d-flex justify-content-between mb-2">
                 <p class="mb-0">Vận chuyển</p>
-                <p class="shipmentPrice mb-0">${shipmentPrice} VNĐ</p>
+                <p class="shipmentPrice mb-0"> VNĐ</p>
             </div>
             <div class="d-flex justify-content-between mb-2">
                 <p class="mb-0">Giảm giá</p>
-                <p class="mb-0">${discountAmount} VNĐ</p>
+                <p class="mb-0"><fmt:formatNumber value="${discountAmount}" type="number" groupingUsed="true"/> VNĐ
+                </p>
             </div>
             <div class="border-top pt-2">
                 <div class="d-flex justify-content-between fw-bold mb-2">
                     <p class="mb-0">Tổng cộng</p>
-                    <p class="mb-0 totalCostDisplay">${grandTotal} VNĐ</p>
+                    <p class="mb-0 grandTotal" data-base="${grandTotal}"><fmt:formatNumber value="${grandTotal}"
+                                                                                           type="number"
+                                                                                           groupingUsed="true"/> VNĐ
+                    </p>
                 </div>
                 <p class="text-muted small mb-0">(bao gồm cả thuế)</p>
             </div>
             <c:choose>
                 <c:when test="${userAddresses == null || paymentMethods == null || paymentMethods.isEmpty()||sessionScope.auth==null}">
-                    <button class="btn btn-dark mt-4 fs-4 w-100" disabled id="openFormButtonPaymentDisabled">Thanh toán với COD</button>
+                    <button class="btn btn-dark mt-4 fs-4 w-100" disabled id="openFormButtonPaymentDisabled">Thanh toán
+                        với COD
+                    </button>
                 </c:when>
                 <c:otherwise>
                     <form method="POST" action="${request.context.path}/Order">
                         <input type="hidden" name="submitDeliveryAddress" value="Việt Nam"/>
                         <input class="submitPaymentMethod" type="hidden" name="paymentMethod" value="COD">
                         <input type="hidden" name="grandTotal" value="${grandTotal}"/>
-                        <button type="submit" class="btn btn-dark mt-4 fs-4 w-100" id="openFormButtonPayment">Thanh toán với COD</button>
+                        <button type="submit" class="btn btn-dark mt-4 fs-4 w-100" id="openFormButtonPayment">Thanh toán
+                            với COD
+                        </button>
                     </form>
                 </c:otherwise>
             </c:choose>

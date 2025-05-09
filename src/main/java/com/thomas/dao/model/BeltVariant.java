@@ -16,6 +16,8 @@ public class BeltVariant implements java.io.Serializable {
     private String size;
     private String description;
     private List<String> images;
+    private int StockQuantity;
+    private List<Category> categoryList;
 
     public BeltVariant() {
 
@@ -124,6 +126,22 @@ public class BeltVariant implements java.io.Serializable {
 
     public String getSize() {
         return this.size;
+    }
+
+    public void setStockQuantity(int stockQuantity) {
+        StockQuantity = stockQuantity;
+    }
+
+    public int getStockQuantity() {
+        return this.StockQuantity;
+    }
+
+    public void setCategoryList(List<Category> categoryList) {
+        this.categoryList = categoryList;
+    }
+
+    public List<Category> getCategoryList() {
+        return this.categoryList;
     }
 }
 

@@ -7,7 +7,7 @@ public class CartItem {
     private int userId;
     private int beltId;
     private int variantId;
-    private double price;
+    private long price;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
     private Belts belt;
@@ -18,7 +18,7 @@ public class CartItem {
 
     }
 
-    public CartItem(Belts belt, int quantity, double price, BeltVariant variant) {
+    public CartItem(Belts belt, int quantity, long price, BeltVariant variant) {
         this.belt = belt;
         this.quantity = quantity;
         this.price = price;
@@ -41,11 +41,11 @@ public class CartItem {
         this.quantity = quantity;
     }
 
-    public double getPrice() {
+    public long getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(long price) {
         this.price = price;
     }
 

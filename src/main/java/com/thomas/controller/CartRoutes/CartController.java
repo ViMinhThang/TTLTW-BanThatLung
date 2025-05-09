@@ -46,11 +46,12 @@ public class CartController extends HttpServlet {
         for (CartItem cartItem : cartItemList) {
             cartItem.setBelt(productService.find(cartItem.getBeltId()).get(0));
             cartItem.setVariant(productService.findVariant(cartItem.getBeltId(), cartItem.getVariantId(), null, null));
+            cartItem.getVariant().setCategoryList(productService.findCategory(cartItem.getBeltId(), cartItem.getVariantId()));
+            cartItem.getVariant().setColor(productService.findColorNameById(cartItem.getVariant().getColorId()));
+            cartItem.getVariant().setSize(productService.findSizeNameById(cartItem.getVariant().getSizeId()));
         }
         List<Belts> suggestionBelts = productService.getRandomBelts();
-        for (Belts b : suggestionBelts) {
-            b.setBeltVariant(productService.findVariant(b.getId(), null, null, null));
-        }
+
         double totalPrice = 0;
         for (CartItem cartItem : cartItemList) {
             totalPrice += cartItem.getPrice() * cartItem.getQuantity();
@@ -87,15 +88,13 @@ public class CartController extends HttpServlet {
         int userId = user.getId();
 
         if ("add".equals(message)) {
-            double price = Double.parseDouble(request.getParameter("price"));
+            double price = Double.parseDouble(request.getParameter("price").replaceAll(",", ""));
             int quantity = Integer.parseInt(request.getParameter("quantity"));
             String color = request.getParameter("color");
             String size = request.getParameter("size");
             int beltId = Integer.parseInt(request.getParameter("beltId"));
             int variantId = Integer.parseInt(request.getParameter("variantId"));
-
             List<CartItem> cartItemList = cartService.getCart(userId);
-
             CartItem existingItem = null;
             for (CartItem item : cartItemList) {
                 if (item.getBeltId() == beltId && item.getVariantId() == variantId) {
@@ -113,11 +112,10 @@ public class CartController extends HttpServlet {
                 newItem.setBeltId(beltId);
                 newItem.setVariantId(variantId);
                 newItem.setQuantity(quantity);
-                newItem.setPrice(price);
-                cartService.addToCart(newItem);
+                newItem.setPrice((long) price);
+                cartService.addToCart(newItem, false);
             }
 
-            // Gửi lại số lượng item trong cart
             cartItemList = cartService.getCart(userId);
             for (CartItem item : cartItemList) {
                 item.setBelt(productService.find(item.getBeltId()).get(0));

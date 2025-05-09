@@ -1,5 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,25 +73,24 @@
                                  style="width: 200px; height: 200px; object-fit: cover;">
                         </div>
 
-                        <!-- Thông tin sản phẩm -->
                         <div class="d-flex flex-column flex-grow-1 p-2">
                             <div class="d-flex justify-content-between align-items-center">
-                                <p class="fw-bold fs-5 beltName">${cartItem.belt.name}
-                                    - ${cartItem.variant.color}, ${cartItem.variant.size}</p>
+                                <p class="fw-bold fs-5 beltName mb-1">${cartItem.belt.name}</p>
                                 <p class="fw-bold fs-5">${cartItem.price} VNĐ</p>
                                 <div class="asd">
                                     <p class="remove_button fs-5">&times;</p>
                                 </div>
                             </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                    ${cartItem.variant.color}, ${cartItem.variant.size}
+                            </div>
 
-                            <!-- Danh mục (Categories) của Variant -->
                             <div class="d-flex mt-2">
-                                <c:forEach var="category" items="${cartItem.variant.categories}">
-                                    <span class="badge bg-secondary me-2">${category}</span>
+                                <c:forEach var="category" items="${cartItem.variant.categoryList}">
+                                    <span class="badge bg-secondary me-2">${category.name}</span>
                                 </c:forEach>
                             </div>
 
-                            <!-- Chọn số lượng -->
                             <div class="mt-2">
                                 <label for="quantity-${cartItem.variant.id}" class="fw-bold">Số lượng:</label>
                                 <select id="quantity-${cartItem.variant.id}"
@@ -206,28 +207,7 @@
                             class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-between"
                     >
                         <c:forEach var="belt" items="${suggestionBelts}">
-                            <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariants[0].id}"
-                               class="text-decoration-none text-dark">
-                                <div class="text-center hover--black">
-                                    <!-- Hiển thị ảnh của biến thể đầu tiên -->
-                                    <c:if test="${not empty belt.beltVariants}">
-                                        <c:set var="firstVariant" value="${belt.beltVariants[0]}"/>
-                                        <c:if test="${not empty firstVariant.images}">
-                                            <img src="${pageContext.request.contextPath}${firstVariant.images[0]}"
-                                                 class="img-fluid w-100 shadow-sm"
-                                                 alt="${belt.name}"
-                                                 style="object-fit: cover;">
-                                        </c:if>
-                                    </c:if>
-
-                                    <!-- Thông tin sản phẩm -->
-                                    <div class="mt-2 text-start ps-3">
-                                        <p class="fw-bold fs-5 mb-1">${belt.price} VNĐ</p>
-                                        <p class="text-muted mb-1">${belt.name}</p>
-                                        <span class="badge bg-secondary">${belt.discountRate}%</span>
-                                    </div>
-                                </div>
-                            </a>
+                            <t:beltCard belt="${belt}" height="234.25px" padding="p-0"/>
                         </c:forEach>
                     </div>
                 </div>

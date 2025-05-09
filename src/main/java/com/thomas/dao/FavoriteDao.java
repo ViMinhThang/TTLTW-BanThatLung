@@ -1,11 +1,11 @@
 package com.thomas.dao;
 
+import java.util.List;
+
 import com.thomas.dao.db.JDBIConnect;
 import com.thomas.dao.model.BeltVariant;
-import com.thomas.dao.model.Favorite;
 import com.thomas.dao.model.Belts;
-
-import java.util.List;
+import com.thomas.dao.model.Favorite;
 
 public class FavoriteDao {
 

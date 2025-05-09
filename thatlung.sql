@@ -353,17 +353,18 @@ CREATE TABLE inventory
     stockQuantity INT NOT NULL,
     FOREIGN KEY (beltId) REFERENCES belts (id),
     FOREIGN KEY (variantId) REFERENCES beltVariants (id) ON DELETE CASCADE
-)
+);
 CREATE TABLE cartItems
 (
     id         INT AUTO_INCREMENT PRIMARY KEY,
-    userId     INT NOT NULL,
-    beltId     INT NOT NULL,
-    variantId  INT NOT NULL,
-    quantity   INT NOT NULL,
-    price DOUBLE NOT NULL,
+    userId     INT    NOT NULL,
+    beltId     INT    NOT NULL,
+    variantId  INT    NOT NULL,
+    quantity   INT    NOT NULL,
+    price      BIGINT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    buyNow     INT NULL,
     FOREIGN KEY (userId) REFERENCES users (id),
     FOREIGN KEY (beltId) REFERENCES belts (id),
     FOREIGN KEY (variantId) REFERENCES beltVariants (id)
