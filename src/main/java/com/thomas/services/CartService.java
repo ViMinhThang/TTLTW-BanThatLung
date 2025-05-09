@@ -31,4 +31,10 @@ public class CartService {
     public boolean deleteBuyNow(int userId) {
         return cartDao.deleteCartBuyNow(userId);
     }
+
+    public int checkInventory(int beltId, int variantId) {
+        int cartState = cartDao.checkCartQuantity(beltId, variantId);
+        int inventoryState = cartDao.checkInventoryQuantity(beltId, variantId);
+        return inventoryState - cartState;
+    }
 }

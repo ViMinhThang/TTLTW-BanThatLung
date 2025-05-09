@@ -3,6 +3,7 @@ package com.thomas.services;
 import com.thomas.dao.BeltVariantDao;
 import com.thomas.dao.PurchasesDao;
 import com.thomas.dao.TransactionsDao;
+import com.thomas.dao.db.JDBIConnect;
 import com.thomas.dao.model.BeltVariant;
 import com.thomas.dao.model.Inventory;
 import com.thomas.dao.model.Purchases;
@@ -105,5 +106,4 @@ public class PurchaseService {
             inventory.setVariantName(List.of("Unknown", "Unknown"));
         }
     }
-
 }

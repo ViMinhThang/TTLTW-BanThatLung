@@ -405,7 +405,18 @@
             </div>
         </div>
     </div>
-    <
+    <c:if test="${not empty sessionScope.toastMessage}">
+    <script>
+        window.addEventListener("DOMContentLoaded", function () {
+            const toastBox = document.getElementById("liveToast");
+            const toastText = document.querySelector(".custom_toast_text");
+            toastText.innerText = "${sessionScope.toastMessage}";
+            toastBox.classList.remove("hide");
+            toastBox.classList.add("show");
+        });
+    </script>
+        <c:remove var="toastMessage" scope="session"/>
+    </c:if>
     <script>
         document.querySelectorAll('.star-rating:not(.readonly) label').forEach(star => {
             star.addEventListener('click', function () {

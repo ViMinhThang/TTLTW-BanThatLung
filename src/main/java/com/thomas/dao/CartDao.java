@@ -62,4 +62,18 @@ public class CartDao {
             return h.createUpdate(sql).bind("userId", userId).execute() > 0;
         });
     }
+
+    public int checkCartQuantity(int beltId, int variantId) {
+        String sql = "SELECT quantity from cartItems WHERE beltId=:beltId AND variantId=:variantId";
+        return JDBIConnect.get().withHandle(h -> {
+            return h.createQuery(sql).bind("beltId", beltId).bind("variantId", variantId).mapTo(Integer.class).findFirst().orElse(0);
+        });
+    }
+
+    public int checkInventoryQuantity(int beltId, int variantId) {
+        String sql = "SELECT stockQuantity from inventory WHERE beltId=:beltId AND variantId=:variantId";
+        return JDBIConnect.get().withHandle(h -> {
+            return h.createQuery(sql).bind("beltId", beltId).bind("variantId", variantId).mapTo(Integer.class).findFirst().orElse(0);
+        });
+    }
 }
