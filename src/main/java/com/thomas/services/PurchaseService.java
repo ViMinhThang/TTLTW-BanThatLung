@@ -3,14 +3,12 @@ package com.thomas.services;
 import com.thomas.dao.BeltVariantDao;
 import com.thomas.dao.PurchasesDao;
 import com.thomas.dao.TransactionsDao;
-import com.thomas.dao.db.JDBIConnect;
 import com.thomas.dao.model.BeltVariant;
 import com.thomas.dao.model.Inventory;
 import com.thomas.dao.model.Purchases;
 import com.thomas.dao.SupplierDao;
 import com.thomas.dao.model.Transactions;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -105,5 +103,15 @@ public class PurchaseService {
         } else {
             inventory.setVariantName(List.of("Unknown", "Unknown"));
         }
+    }
+
+    public boolean updateInventory(String name, int quantity, String color, String size) {
+        int beltId = dao.findBeltId(name);
+        int colorId = beltVariantDao.findColorByName(color);
+        int sizeId = beltVariantDao.findSizeByName(size);
+        BeltVariant v = beltVariantDao.findVariants(beltId, colorId, sizeId, null).get(0);
+        Inventory i = new Inventory(beltId, v.getId(), quantity);
+        i.setId(dao.findIventoryId(beltId, v.getId()));
+        return dao.updateInventory(i);
     }
 }

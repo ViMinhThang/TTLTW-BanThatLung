@@ -15,7 +15,30 @@
 
     <title>THOMAS - Admin</title>
     <jsp:include page="/frontend/components/Admin/adminLink/adminLink.jsp"/>
+    <style>
+        .autocomplete-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: white;
+            border: 1px solid #ccc;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
 
+        .autocomplete-list div {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .autocomplete-list div:hover {
+            background-color: #f0f0f0;
+        }
+
+    </style>
 </head>
 
 <body id="page-top">
@@ -27,17 +50,17 @@
             <nav
                     class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
             >
-                <a href="/admin/table/belts/createProduct?message=create">
-                    <button
-                            type="submit"
-                            class="btn btn-white border border-dark custom_input--btn-group__input"
-                            id="createButton"
-                            style="color: black"
 
-                    >
-                        Tạo 1 sản phẩm mới
-                    </button>
-                </a>
+                <button
+                        type="submit"
+                        class="btn btn-white border border-dark custom_input--btn-group__input"
+                        style="color: black"
+                        data-bs-toggle="modal"
+                        data-bs-target="#createModal"
+                >
+                    Thêm hàng
+                </button>
+
 
                 <input name="productId" id="productId" type="hidden"/>
                 <ul class="navbar-nav ml-auto">
@@ -190,10 +213,103 @@
             </div>
         </div>
     </div>
+    <div
+            class="modal fade"
+            id="createModal"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3
+                            class="modal-title"
+                            id="exampleModalLabel"
+                            style="color: black"
+                    >
+                        Tạo nhà cung cấp
+                    </h3>
+                    <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                    >&times;
+                    </button>
+                </div>
+                <form method="POST" action="${pageContext.request.contextPath}/admin/inventory/inventories">
+                    <input type="hidden" name="message" value="updateQuantity">
+                    <div class="modal-body">
+
+                        <div class="d-flex flex-column mt-3">
+                            <label
+                                    class="fomr-label"
+                                    style="color: black"
+                            >Tên hàng hóa</label
+                            >
+                            <div style="position: relative;">
+                                <input type="hidden" name="name" class="form-control" autocomplete="off"/>
+                                <div id="beltSuggestions" class="autocomplete-list"></div>
+                            </div>
+
+                            <input class="form-control custom_input--btn-group__input" name="name" type="text"
+                                   required/>
+                        </div>
+                        <div class="d-flex flex-column mt-3">
+                            <label class="fomr-label" style="color: black"
+                            >Màu sắc</label
+                            >
+                            <select class="form-control custom_input--btn-group__input" name="coloSelect"
+                                    required>
+
+                            </select>
+                        </div>
+                        <div class="d-flex flex-column mt-3">
+                            <label class="fomr-label" style="color: black"
+                            >Size</label
+                            >
+                            <select class="form-control custom_input--btn-group__input" name="sizeSelect"
+                                    required>
+
+                            </select>
+                        </div>
+                        <div class="d-flex flex-column mt-3">
+                            <label class="fomr-label" style="color: black"
+                            >Số lượng</label
+                            >
+                            <input class="form-control custom_input--btn-group__input" name="quantity"
+                                   type="number" required/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                                type="button"
+                                class="btn btn-white border border-dark custom_input--btn-group__input"
+                                data-bs-dismiss="modal"
+                                style="color: black"
+                        >
+                            Hủy
+                        </button>
+
+                        <button
+                                type="submit"
+                                class="btn createOrUpdate custom_input--btn-group__input"
+                                style="color: white; background-color: black"
+                        >
+                            Thêm
+                        </button>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
 
     <jsp:include page="/frontend/components/Admin/scripts/adminScripts/datatable.jsp"/>
 
-    <script src="${pageContext.request.contextPath}/js/allProduct.js"></script>
+    <script src="${pageContext.request.contextPath}/js/allInventory.js"></script>
 
 </div>
 </body>
