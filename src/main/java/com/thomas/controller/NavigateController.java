@@ -106,16 +106,12 @@ public class NavigateController extends HttpServlet {
         request.setAttribute("bigTitle", bigTitle);
         session.setAttribute("type", type);
         request.setAttribute("mainImage", mainImage);
-        List<Belts> listBelt = productService.find(null);
-        for (Belts belt : listBelt) {
-            BeltVariant beltVariant = belt.getBeltVariant();
-            beltVariant.setImages(productService.getVariantImages(beltVariant.getId()));
-            belt.setBeltVariant(beltVariant);
-        }
+        List<Belts> listBelt = productService.hotSelling();
         if (minPrice != null && maxPrice != null) {
             listBelt = productService.filterProduct(listBelt, Double.parseDouble(minPrice), Double.parseDouble(maxPrice));
         }
-        if (sortedList != null) {
+        if (sort != null && !sort.isEmpty()) {
+            listBelt = productService.sort(sort, listBelt);
             request.setAttribute("listBelt", sortedList);
 
         } else {
@@ -132,7 +128,6 @@ public class NavigateController extends HttpServlet {
     public void pagingforPage(HttpServletRequest request, List<Belts> beltsList) {
         HttpSession session = request.getSession();
 
-        // Lấy tham số trang hiện tại từ request, mặc định là trang 1 nếu không có tham số "page"
         int currentPage = 1;
         String pageParam = request.getParameter("page");
         if (pageParam != null && !pageParam.trim().isEmpty()) {

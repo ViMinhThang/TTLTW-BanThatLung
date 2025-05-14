@@ -240,6 +240,9 @@ public class ProductService {
                 Belts b = new Belts(belt);
                 BeltVariant beltVariant = findVariant(belt.getId(), i, null, null);
                 beltVariant.setImages(getVariantImages(beltVariant.getId()));
+                beltVariant.setColor(beltVariantDao.findColorNameById(beltVariant.getColorId()));
+                beltVariant.setSize(beltVariantDao.findSizeNameById(beltVariant.getSizeId()));
+                beltVariant.setStockQuantity(productDao.getStockQuantity(b.getId(), i, null, null));
                 b.setBeltVariant(beltVariant);
                 b.setTotalSold(productDao.getTotalSold(belt.getId()));
                 display.add(b);
@@ -337,5 +340,21 @@ public class ProductService {
 
     public List<BeltVariant> similarVariants(int id) {
         return beltVariantDao.similarVariants(id);
+    }
+
+    public List<Belts> sort(String sort, List<Belts> listBelt) {
+        switch (sort) {
+            case "desc":
+                return listBelt.stream()
+                        .sorted(Comparator.comparing(b -> b.getBeltVariant().getPrice(), Comparator.reverseOrder()))
+                        .collect(Collectors.toList());
+
+            case "asc":
+                return listBelt.stream()
+                        .sorted(Comparator.comparing(b -> b.getBeltVariant().getPrice()))
+                        .collect(Collectors.toList());
+            default:
+                return listBelt;
+        }
     }
 }

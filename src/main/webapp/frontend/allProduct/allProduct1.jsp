@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 
 <!DOCTYPE html>
@@ -39,7 +40,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/allProduct.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/HomePage.css"/>
-    <script src="${pageContext.request.contextPath}/js/allProduct.js"></script>
 </head>
 
 <body>
@@ -59,57 +59,15 @@
                 <c:if test="${param.descPrice != null}">
                     <c:set var="filterUrlBase" value="${filterUrlBase}&descPrice=${param.descPrice}"/>
                 </c:if>
-
-                <div class="accordion border-top-0 w-100" id="filterAccordion">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingPrice">
-                            <button
-                                    class="accordion-button collapsed"
-                                    type="button"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#collapsePrice"
-                                    aria-expanded="false"
-                                    aria-controls="collapsePrice"
-                            >
-                                Giá
-                            </button>
-                        </h2>
-                        <div
-                                id="collapsePrice"
-                                class="accordion-collapse collapse"
-                                aria-labelledby="headingPrice"
-                                data-bs-parent="#filterAccordion"
-                        >
-                            <div class="accordion-body">
-                                <div class="dropdown-item d-flex align-items-center">
-                                    <c:choose>
-                                        <c:when test="${param.minPrice != null || param.maxPrice != null}">
-                                            <a href="${filterUrlBase}&minPrice=100&maxPrice=500"
-                                               class="filter-item text-decoration-none">
-                                                Giá từ 100.000 VNĐ đến 500.000 VNĐ
-                                            </a>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <a href="${filterUrlBase}"
-                                               class="filter-item text-decoration-none">
-                                                Giá mặc định
-                                            </a>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 `
                 <div class="apply__container mt-3 d-flex flex-column">
                     <!-- Các liên kết áp dụng -->
-                    <c:forEach var="priceRange" items="${['100-500', '500-900']}">
+                    <c:forEach var="priceRange" items="${['100000-500000', '500000-900000']}">
                         <c:set var="minPrice" value="${fn:split(priceRange, '-')[0]}"/>
                         <c:set var="maxPrice" value="${fn:split(priceRange, '-')[1]}"/>
                         <a href="${filterUrlBase}&minPrice=${minPrice}&maxPrice=${maxPrice}"
                            class="apply__button text-decoration-none d-block mt-2 p-2">
-                            Giá từ ${minPrice}.000 VNĐ đến ${maxPrice}.000 VNĐ
+                            Giá từ ${minPrice} VNĐ đến ${maxPrice} VNĐ
                         </a>
                     </c:forEach>
                 </div>
@@ -143,7 +101,7 @@
             </div>
 
             <!-- Breadcrumb Column -->
-            <div class="col-3 quantity__column">
+            <div class="col-3 quantity__column justify-content-center">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item "><a href="#">Trang chủ</a></li>
@@ -166,10 +124,10 @@
                             <li><a class="dropdown-item active"
                                    href="/navigate?type=${param.type}&page=${page}&descPrice=default">Mặc Định</a></li>
                             <li><a class="dropdown-item"
-                                   href="/navigate?type=${param.type}&page=${page}&descPrice=default">Giá Tăng Dần</a>
+                                   href="/navigate?type=${param.type}&page=${page}&descPrice=asc">Giá Tăng Dần</a>
                             </li>
                             <li><a class="dropdown-item"
-                                   href="/navigate?type=${param.type}&page=${page}&descPrice=decrease">Giá Giảm Dần</a>
+                                   href="/navigate?type=${param.type}&page=${page}&descPrice=desc">Giá Giảm Dần</a>
                             </li>
                             <li><a class="dropdown-item"
                                    href="/navigate?type=${param.type}&page=${page}&descPrice=hotSelling">Bán Chạy
@@ -183,29 +141,9 @@
 </div>
 
 <div class="list__product ms-2">
-    <div class="d-flex gap-3 align-items-center flex-wrap">
+    <div class="d-flex gap-3 align-items-center flex-wrap justify-content-center">
         <c:forEach var="belt" items="${beltsList}">
-            <c:forEach var="variant" items="${belt.beltVariants}">
-                <a href="productDetails?beltId=${belt.id}&variantId=${variant.id}"
-                   class="text-decoration-none text-dark">
-                    <div class="text-center hover--black">
-                        <!-- Hiển thị ảnh của từng biến thể -->
-                        <c:if test="${not empty variant.images}">
-                            <img src="${pageContext.request.contextPath}${variant.images[0]}"
-                                 class="img-fluid w-100 rounded shadow-sm"
-                                 alt="${belt.name} - ${variant.color} (${variant.size})"
-                                 style="height: 25rem; object-fit: cover;">
-                        </c:if>
-
-                        <!-- Thông tin sản phẩm -->
-                        <div class="mt-2 text-start ps-3">
-                            <p class="fw-bold fs-5 mb-1">${belt.price} VNĐ</p>
-                            <p class="text-muted mb-1">${belt.name} - ${variant.color} (${variant.size})</p>
-                            <span class="badge bg-secondary">${belt.discountRate}%</span>
-                        </div>
-                    </div>
-                </a>
-            </c:forEach>
+            <t:beltCard belt="${belt}" height="474.25"/>
         </c:forEach>
     </div>
 </div>
@@ -236,26 +174,35 @@
                         </c:choose>
                     </li>
                 </c:forEach>
-                <%--                <li class="page-item pageNumber">--%>
-                <%--                    <a class="page-link" href="./allProduct1.html">2</a>--%>
-                <%--                </li>--%>
-                <%--                <li class="page-item pageNumber">--%>
-                <%--                    <a class="page-link" href="./allProduct1.html">3</a>--%>
-                <%--                </li>--%>
-                <%--                <li class="page-item pageNumber">--%>
-                <%--                    <a class="page-link" href="./allProduct1.html">...</a>--%>
-                <%--                </li>--%>
-                <%--                <li class="page-item pageNumber">--%>
-                <%--                    <a class="page-link" href="./allProduct1.html">10</a>--%>
-                <%--                </li>--%>
-                <%--                <li class="page-item pageNumber">--%>
-                <%--                    <a class="page-link" href="./allProduct1.html">11</a>--%>
-                <%--                </li>--%>
             </ul>
         </div>
     </nav>
 </section>
 <jsp:include page="/frontend/header_footer/footer.jsp"/>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const filterToggle = document.getElementById("filterToggle");
+        const overlay = document.getElementById("overlay3");
+        const dimmer = document.getElementById("dimmer3");
+        const closeButton = document.getElementById("closeButton");
+
+        function openOverlay() {
+            overlay.style.display = "flex";
+            overlay.style.left = "0px"
+            dimmer.style.display = "block";
+        }
+
+        function closeOverlay() {
+            overlay.style.display = "none";
+            overlay.style.left = "-100%"
+            dimmer.style.display = "none";
+        }
+
+        filterToggle.addEventListener("click", openOverlay);
+        closeButton.addEventListener("click", closeOverlay);
+        dimmer.addEventListener("click", closeOverlay);
+    });
+</script>
 
 </body>
 </html>
