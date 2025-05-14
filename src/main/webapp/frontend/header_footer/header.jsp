@@ -130,7 +130,7 @@
                     >
                         <c:choose>
                             <c:when test="${sessionScope.auth.image == null}">
-                                <img src="${pageContext.request.contextPath}/assets/icons/default_profile.svg"
+                                <img src="https://cdn-web-servlet.vercel.app/images/default_profile.svg"
                                      alt="User Avatar"
                                      width="35"
                                      height="35"
@@ -175,7 +175,7 @@
                             id="dropdownUser"
                     >
                         <img
-                                src="${pageContext.request.contextPath}/assets/icons/user.svg"
+                                src="https://cdn-web-servlet.vercel.app/images/user.svg"
                                 alt="User Avatar"
                                 width="35"
                                 height="35"
@@ -206,7 +206,7 @@
             <input type="hidden" class="userId" value="${sessionScope.auth.id}">
             <img
                     class="nav-icon"
-                    src="${pageContext.request.contextPath}/assets/icons/cart.svg"
+                    src="https://cdn-web-servlet.vercel.app/images/cart.svg"
                     alt=""
             />
             <span id="cart_received" class="nav-item favorite__count">${cartSize!=null ?cartSize:0}</span>
