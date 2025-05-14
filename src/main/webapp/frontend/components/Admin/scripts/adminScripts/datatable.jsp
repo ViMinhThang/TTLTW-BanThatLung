@@ -8,7 +8,6 @@
         crossorigin="anonymous"
 ></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
 
 <!-- Core plugin JavaScript-->
 <script src="${pageContext.request.contextPath}/js/jquery.easing.min.js"></script>

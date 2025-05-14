@@ -10,7 +10,7 @@
 
 <!-- Custom fonts for this template-->
 <link
-        href="${pageContext.request.contextPath}/css/fontawesome-free-6.6.0-web/fontawesome-free-6.6.0-web/css/all.min.css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         rel="stylesheet"
         type="text/css"
 />

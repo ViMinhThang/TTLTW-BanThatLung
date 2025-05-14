@@ -142,7 +142,7 @@
 
 <div class="list__product ms-2">
     <div class="d-flex gap-3 align-items-center flex-wrap justify-content-center">
-        <c:forEach var="belt" items="${beltsList}">
+        <c:forEach var="belt" items="${listBelt}">
             <t:beltCard belt="${belt}" height="474.25"/>
         </c:forEach>
     </div>

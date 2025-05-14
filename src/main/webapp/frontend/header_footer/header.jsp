@@ -32,11 +32,6 @@
     </a>
 
     <ul class="navbar-nav col-4 navitem__group d-sm-none d-md-none d-lg-flex justify-content-center align-items-end">
-        <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/navigate?type=collection" class="nav-link"
-            >Bộ Sưu Tập</a
-            >
-        </li>
         <li class="nav-item dropdown">
             <a
                     class="nav-link dropdown-toggle"
@@ -49,17 +44,17 @@
             </a>
             <ul class="dropdown-menu">
                 <li>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=men&page=1"
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=Male&page=1"
                     >Tất cả thắt lưng nam</a
                     >
                 </li>
                 <li>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=menLeather&page=1"
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=Male-Leather&page=1"
                     >Thắt Lưng Da Nam</a
                     >
                 </li>
                 <li>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=menCanvas&page=1"
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=Male-Canvas&page=1"
                     >Thắt Lưng Vải Canvas Nam</a
                     >
                 </li>
@@ -77,19 +72,19 @@
             </a>
             <ul class="dropdown-menu">
                 <li>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=women&page=1"
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=Female&page=1"
                     >Tất cả thắt lưng nữ</a
                     >
                 </li>
                 <li>
                     <a class="dropdown-item"
-                       href="${pageContext.request.contextPath}/navigate?type=womenLeather&page=1"
+                       href="${pageContext.request.contextPath}/navigate?type=FemaleL-eather&page=1"
                     >Thắt Lưng Da Nữ
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item"
-                       href="${pageContext.request.contextPath}/navigate?type=womenCanvas&page=1"
+                       href="${pageContext.request.contextPath}/navigate?type=Female-Canvas&page=1"
                     >Thắt Lưng Vải Canvas Nữ</a
                     >
                 </li>

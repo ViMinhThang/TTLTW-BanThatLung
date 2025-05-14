@@ -35,78 +35,58 @@ public class NavigateController extends HttpServlet {
             String mainImage = "/assets/images/allProduct.png";
             handleRoute(type, title, bigTitle, mainImage, minPrice, maxPrice, request, response, session, sort, sortedList);
         }
-        if (type.equals("men")) {
+        if (type.equals("Male")) {
             String title = "Nam";
             String bigTitle = "Thắt Lưng Nam";
             String mainImage = "/assets/images/banner/z6088271164003_2200fec21842ecda09fe85ab32825a86.jpg";
             handleRoute(type, title, bigTitle, mainImage, minPrice, maxPrice, request, response, session, sort, sortedList);
 
         }
-        if (type.equals("women")) {
+        if (type.equals("Female")) {
             String title = "Nữ";
             String bigTitle = "Thắt Lưng Nữ";
             String mainImage = "/assets/images/banner/z6088271164002_95c694291ffaeb61697b3ab7fdaf8065.png";
             handleRoute(type, title, bigTitle, mainImage, minPrice, maxPrice, request, response, session, sort, sortedList);
         }
-        if (type.equals("menLeather")) {
+        if (type.equals("Male-Leather")) {
             String title = "Nam";
             String bigTitle = "Thắt Lưng Da Nam";
             String mainImage = "assets/images/banner/z6088271164003_2200fec21842ecda09fe85ab32825a86.jpg";
             handleRoute(type, title, bigTitle, mainImage, minPrice, maxPrice, request, response, session, sort, sortedList);
         }
-        if (type.equals("menCanvas")) {
+        if (type.equals("Male-Canvas")) {
             String title = "Nam Canvas";
             String bigTitle = "Thắt lưng Canvas Nam";
             String mainImage = "assets/images/banner/z6088271164003_2200fec21842ecda09fe85ab32825a86.jpg";
             handleRoute(type, title, bigTitle, mainImage, minPrice, maxPrice, request, response, session, sort, sortedList);
 
         }
-        if (type.equals("womenLeather")) {
+        if (type.equals("Female-Leather")) {
             String title = "Nữ Leather";
             String bigTitle = "Thắt lưng Da Nữ";
             String mainImage = "assets/images/banner/z6088271164002_95c694291ffaeb61697b3ab7fdaf8065.png";
             handleRoute(type, title, bigTitle, mainImage, minPrice, maxPrice, request, response, session, sort, sortedList);
 
         }
-        if (type.equals("womenCanvas")) {
+        if (type.equals("Female-Canvas")) {
             String title = "Nữ Canvas";
             String bigTitle = "Thắt lưng Canvas Nữ";
             String mainImage = "assets/images/banner/z6088271164002_95c694291ffaeb61697b3ab7fdaf8065.png";
             handleRoute(type, title, bigTitle, mainImage, minPrice, maxPrice, request, response, session, sort, sortedList);
 
         }
-//        if (type.equals("collection")) {
-//            beltsList = productService.getCollection();
-//            request.setAttribute("beltsList", beltsList);
-//            request.getRequestDispatcher("/frontend/collectionPage/collectionsPage.jsp").forward(request, response);
-//        }
-//        if (type.equals("collectionSection")) {
-//            String collectionName = request.getParameter("collectionName");
-//            beltsList = productService.getProductInCollection(collectionName);
-//            request.setAttribute("collectionList", beltsList);
-//            if (collectionName.equalsIgnoreCase("VICTOR")) {
-//                request.getRequestDispatcher("frontend/collectionPage/collectionSection/VICTOR.jsp").forward(request, response);
-//            }
-//            if (collectionName.equalsIgnoreCase("EMO")) {
-//                request.getRequestDispatcher("frontend/collectionPage/collectionSection/EMO.jsp").forward(request, response);
-//            }
-//        }
-        if (type.equals("onsale")) {
-            String title = "Nữ Canvas";
-            String bigTitle = "Sản Phẩm Giảm Giá";
-            String mainImage = "assets/images/homepage/z6088271163993_ca5603db38e0ae9d411375a3aeb3ef65.jpg";
-            handleRoute(type, title, bigTitle, mainImage, minPrice, maxPrice, request, response, session, sort, sortedList);
-        }
-
-
     }
 
     public void handleRoute(String type, String title, String bigTitle, String mainImage, String minPrice, String maxPrice, HttpServletRequest request, HttpServletResponse response, HttpSession session, String sort, List<Belts> sortedList) throws ServletException, IOException {
         request.setAttribute("title", title);
         request.setAttribute("bigTitle", bigTitle);
-        session.setAttribute("type", type);
         request.setAttribute("mainImage", mainImage);
         List<Belts> listBelt = productService.hotSelling();
+        String[] split = type.split("-");
+        listBelt = listBelt.stream().filter(b -> b.getGender().equals(split[0])).collect(Collectors.toList());
+        if (split.length == 2) {
+            listBelt = listBelt.stream().filter(b -> b.getMaterialBelt().equals(split[1])).collect(Collectors.toList());
+        }
         if (minPrice != null && maxPrice != null) {
             listBelt = productService.filterProduct(listBelt, Double.parseDouble(minPrice), Double.parseDouble(maxPrice));
         }
@@ -126,7 +106,6 @@ public class NavigateController extends HttpServlet {
     }
 
     public void pagingforPage(HttpServletRequest request, List<Belts> beltsList) {
-        HttpSession session = request.getSession();
 
         int currentPage = 1;
         String pageParam = request.getParameter("page");
@@ -172,8 +151,6 @@ public class NavigateController extends HttpServlet {
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("currentPage", currentPage);
 
-        // Lưu danh sách các belt (bao gồm các biến thể) cho trang hiện tại vào session
-        session.setAttribute("beltsList", beltsForPage);
     }
 
 }

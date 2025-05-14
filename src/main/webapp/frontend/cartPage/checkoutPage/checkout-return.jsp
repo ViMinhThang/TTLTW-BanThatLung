@@ -24,7 +24,7 @@
 
     <link
             rel="stylesheet"
-            href="${pageContext.request.contextPath}/css/fontawesome-free-6.6.0-web/fontawesome-free-6.6.0-web/css/all.css"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
 
