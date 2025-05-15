@@ -22,8 +22,8 @@
     <!-- Thêm script reCAPTCHA v3 -->
     <script src="https://www.google.com/recaptcha/api.js?render=6Ld-QAgrAAAAAJTKPkDgBUW7_qoOrzAMiDOocwfR"></script>
     <script>
-        grecaptcha.ready(function() {
-            grecaptcha.execute('6Ld-QAgrAAAAAJTKPkDgBUW7_qoOrzAMiDOocwfR', {action: 'login'}).then(function(token) {
+        grecaptcha.ready(function () {
+            grecaptcha.execute('6Ld-QAgrAAAAAJTKPkDgBUW7_qoOrzAMiDOocwfR', {action: 'login'}).then(function (token) {
                 document.getElementById('g-recaptcha-response').value = token;
             });
         });
@@ -101,7 +101,7 @@
                 <!-- Nút Đăng nhập (không bo viền) -->
                 <div class="d-flex justify-content-end">
                     <button type="submit"
-                            class="btn btn-dark py-3 px-5 custom__btn custom-login-btn w-100 w-lg-50">
+                            class="btn-dark py-3 px-5 custom__btn custom-login-btn w-100 w-lg-50">
                         Đăng nhập
                     </button>
                 </div>
@@ -113,19 +113,24 @@
                         <span class="px-3 custom_size--14 text-muted">Hoặc đăng nhập bằng</span>
                         <hr class="flex-grow-1">
                     </div>
+                    <div class="d-flex justify-content-end gap-3">
+                        <div class="d-flex justify-content-center gap-3 ">
+                            <%
+                                String redirectURI = java.net.URLEncoder.encode(Iconstant.GOOGLE_REDIRECT_URI, "UTF-8");
+                            %>
+                            <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=<%=Iconstant.GOOGLE_CLIENT_ID%>&redirect_uri=<%=redirectURI%>&response_type=code&scope=email%20profile"
+                               class="btn-floating btn-lg hover-lift custom-google-btn border border-dark rounded-0">
+                                <i class="fab fa-google"></i>
+                            </a>
+                        </div>
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="https://www.facebook.com/v13.0/dialog/oauth?client_id=<%=Iconstant.FACEBOOK_CLIENT_ID%>&redirect_uri=<%=Iconstant.FACEBOOK_REDIRECT_URI%>&scope=email"
+                               class="btn btn-outline-primary btn-floating btn-lg border border-dark rounded-0">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        </div>
+                    </div>
 
-                    <div class="d-flex justify-content-center gap-3">
-                        <a href="https://accounts.google.com/o/oauth2/auth?client_id=<%=Iconstant.GOOGLE_CLIENT_ID%>&redirect_uri=<%=Iconstant.GOOGLE_REDIRECT_URI%>&response_type=code&scope=email profile"
-                           class="btn btn-floating btn-lg hover-lift custom-google-btn">
-                            <i class="fab fa-google"></i>
-                        </a>
-                    </div>
-                    <div class="d-flex justify-content-center gap-3">
-                        <a href="https://www.facebook.com/v13.0/dialog/oauth?client_id=<%=Iconstant.FACEBOOK_CLIENT_ID%>&redirect_uri=<%=Iconstant.FACEBOOK_REDIRECT_URI%>&scope=email"
-                           class="btn btn-outline-primary btn-floating btn-lg">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>
