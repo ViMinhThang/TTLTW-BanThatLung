@@ -8,12 +8,14 @@
         crossorigin="anonymous"
 ></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn-web-servlet.vercel.app/js/bootstrap.bundle.min.js"></script>
 
 <!-- Core plugin JavaScript-->
 <script src="${pageContext.request.contextPath}/js/jquery.easing.min.js"></script>
 
 <!-- Custom scripts for all pages-->
 <script src="https://cdn-web-servlet.vercel.app/js/sb-admin-2.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 
 <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/buttons/3.2.2/js/dataTables.buttons.js"></script>

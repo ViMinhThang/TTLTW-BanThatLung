@@ -6,6 +6,7 @@ import com.thomas.dao.CategoryDao;
 import com.thomas.dao.ProductDao;
 import com.thomas.dao.db.JDBIConnect;
 import com.thomas.dao.model.*;
+import org.eclipse.tags.shaded.org.apache.xalan.templates.KeyDeclaration;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -52,7 +53,7 @@ public class ProductService {
         productDao.saveDesc(beltId, description, variantId, colorId, sizeId);
     }
 
-    public boolean deleteProductVariant(int productId, int variantId, int userId) {
+    public boolean deleteProductVariant(Integer productId, int variantId, int userId) {
         return beltVariantDao.deleteVariantAndLog(productId, variantId, userId);
     }
 
@@ -274,6 +275,10 @@ public class ProductService {
         return productDao.deleteProductAndLog(beltId, userId) && beltVariantDao.deleteVariantAndLog(beltId, null, userId);
     }
 
+    public boolean deleteProduct(int beltId) {
+        return productDao.deleteProductById(beltId);
+    }
+
     public List<Belts> searchProduct(String query) {
         List<Belts> beltsList = productDao.search(query);
         List<Belts> display = new ArrayList<>();
@@ -356,5 +361,13 @@ public class ProductService {
             default:
                 return listBelt;
         }
+    }
+
+    public BeltVariant getLatestVariant() {
+        return beltVariantDao.findLatestVariant();
+    }
+
+    public boolean addDescription(BeltVariant v, String description) {
+        return beltVariantDao.addDescription(v, description);
     }
 }

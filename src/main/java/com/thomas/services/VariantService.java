@@ -32,6 +32,10 @@ public class VariantService {
 
     }
 
+    public boolean deleteVariant(int variantId) {
+        return beltVariantDao.deleteVariant(null, variantId);
+    }
+
     public List<String> getBeltNames(String keyword) {
         return beltVariantDao.getBeltNameAlike(keyword);
     }

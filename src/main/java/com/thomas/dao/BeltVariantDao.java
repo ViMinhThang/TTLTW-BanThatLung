@@ -62,16 +62,30 @@ public class BeltVariantDao implements UsageInterface {
     public boolean deleteVariant(Integer beltId, Integer variantId) {
         return JDBIConnect.get().withHandle(h -> {
             String sql;
-
-            if (variantId != null) {
+            if (beltId != null && variantId != null) {
                 sql = "DELETE FROM beltVariants WHERE id = :id AND beltId = :beltId";
-                return h.createUpdate(sql).bind("id", variantId).bind("beltId", beltId).execute() > 0;
-            } else {
+                return h.createUpdate(sql)
+                        .bind("id", variantId)
+                        .bind("beltId", beltId)
+                        .execute() > 0;
+
+            } else if (beltId != null) {
                 sql = "DELETE FROM belts WHERE id = :beltId";
-                return h.createUpdate(sql).bind("beltId", beltId).execute() > 0;
+                return h.createUpdate(sql)
+                        .bind("beltId", beltId)
+                        .execute() > 0;
+
+            } else if (variantId != null) {
+                sql = "DELETE FROM beltVariants WHERE id = :id";
+                return h.createUpdate(sql)
+                        .bind("id", variantId)
+                        .execute() > 0;
             }
+
+            return false;
         });
     }
+
 
     public boolean deleteVariantAndLog(Integer beltId, Integer variantId, int userId) {
         boolean result = deleteVariant(beltId, variantId);
@@ -207,4 +221,19 @@ public class BeltVariantDao implements UsageInterface {
         );
     }
 
+    public BeltVariant findLatestVariant() {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "SELECT * FROM beltVariants ORDER BY id DESC LIMIT 1 ";
+            return h.createQuery(sql).mapToBean(BeltVariant.class).findFirst().orElse(null);
+        });
+    }
+
+    public boolean addDescription(BeltVariant v, String description) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "UPDATE beltVariants SET description = :description WHERE id = :id";
+            return h.createUpdate(sql)
+                    .bind("description", description)
+                    .bind("id", v.getId()).execute() > 0;
+        });
+    }
 }

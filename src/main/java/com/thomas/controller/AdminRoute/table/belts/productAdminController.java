@@ -10,6 +10,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,22 +33,8 @@ public class productAdminController extends HttpServlet {
         boolean permissionToExecute = PERMISSION_SERVICE.checkPermission("ManageProducts", user.getId(), "execute");
 
         List<Belts> beltList = PRODUCT_SERVICE.find(null);
-        List<Belts> display = new ArrayList<>();
-        for (Belts belt : beltList) {
-            Belts b = new Belts(belt);
-            Integer[] variantId = PRODUCT_SERVICE.getAllVariantId(belt.getId());
-            for (int i : variantId) {
-                BeltVariant beltVariant = PRODUCT_SERVICE.findVariant(belt.getId(), i, null, null);
-                beltVariant.setImages(PRODUCT_SERVICE.getVariantImages(beltVariant.getId()));
-                beltVariant.setColor(PRODUCT_SERVICE.findColorNameById(beltVariant.getId()));
-                beltVariant.setSize(PRODUCT_SERVICE.findSizeNameById(beltVariant.getId()));
-                b.setBeltVariant(beltVariant);
-                b.setTotalSold(PRODUCT_SERVICE.getTotalSold(belt.getId()));
-                display.add(b);
 
-            }
-        }
-        request.setAttribute("beltList", display);
+        request.setAttribute("beltList", beltList);
         request.setAttribute("permissionToWrite", permissionToWrite);
         request.setAttribute("permissionToExecute", permissionToExecute);
         request.getRequestDispatcher("/frontend/AdminPage/allProduct/allProduct.jsp").forward(request, response);
@@ -57,14 +44,27 @@ public class productAdminController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String message = request.getParameter("message");
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("auth");
+        if (message.equals("create")) {
+            String name = request.getParameter("productName");
+            String gender = request.getParameter("gender");
+            int isDeleted = Integer.parseInt(request.getParameter("isDeleted"));
+            double discountRate = Double.parseDouble(request.getParameter("discountRate"));
+            String material = request.getParameter("material");
+            Belts belt = new Belts();
+            belt.setName(name);
+            belt.setGender(gender);
+            belt.setIsDeleted(isDeleted);
+            belt.setDiscountRate(discountRate);
+            belt.setIsDeleted(isDeleted);
+            belt.setMaterialBelt(material);
+            belt.setReleaseDate(LocalDateTime.now());
+            belt.setCreatedAt(LocalDateTime.now());
+            belt.setUpdatedAt(LocalDateTime.now());
+            PRODUCT_SERVICE.createBelt(belt);
+        }
         if (message.equals("delete")) {
-            int variantId = Integer.parseInt(request.getParameter("variantId"));
-            int beltId = Integer.parseInt(request.getParameter("productId"));
-            PRODUCT_SERVICE.deleteProductVariant(beltId, variantId, user.getId());
-        } else if (message.equals("deleteRealVariant")) {
-            int beltId = Integer.parseInt(request.getParameter("productId"));
-            PRODUCT_SERVICE.deleteProduct(beltId, null, user.getId());
+            int beltId = Integer.parseInt(request.getParameter("beltId"));
+            PRODUCT_SERVICE.deleteProduct(beltId);
         }
         response.sendRedirect("/admin/table/belts");
     }
