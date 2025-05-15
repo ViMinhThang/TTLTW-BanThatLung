@@ -27,7 +27,6 @@ public class NavigateController extends HttpServlet {
         String minPrice = request.getParameter("minPrice");
         String maxPrice = request.getParameter("maxPrice");
         String sort = request.getParameter("descPrice");
-        List<Belts> beltsList;
         List<Belts> sortedList = null;
         if (type.equals("all")) {
             String title = "Sản Phẩm";
@@ -82,10 +81,13 @@ public class NavigateController extends HttpServlet {
         request.setAttribute("bigTitle", bigTitle);
         request.setAttribute("mainImage", mainImage);
         List<Belts> listBelt = productService.hotSelling();
-        String[] split = type.split("-");
-        listBelt = listBelt.stream().filter(b -> b.getGender().equals(split[0])).collect(Collectors.toList());
-        if (split.length == 2) {
-            listBelt = listBelt.stream().filter(b -> b.getMaterialBelt().equals(split[1])).collect(Collectors.toList());
+        if (!type.equals("all")) {
+            String[] split = type.split("-");
+            listBelt = listBelt.stream().filter(b -> b.getGender().equals(split[0])).collect(Collectors.toList());
+            if (split.length == 2) {
+                listBelt = listBelt.stream().filter(b -> b.getMaterialBelt().equals(split[1])).collect(Collectors.toList());
+            }
+
         }
         if (minPrice != null && maxPrice != null) {
             listBelt = productService.filterProduct(listBelt, Double.parseDouble(minPrice), Double.parseDouble(maxPrice));

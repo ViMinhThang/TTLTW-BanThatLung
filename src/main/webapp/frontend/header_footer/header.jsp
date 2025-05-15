@@ -78,7 +78,7 @@
                 </li>
                 <li>
                     <a class="dropdown-item"
-                       href="${pageContext.request.contextPath}/navigate?type=FemaleL-eather&page=1"
+                       href="${pageContext.request.contextPath}/navigate?type=Female-Leather&page=1"
                     >Thắt Lưng Da Nữ
                     </a>
                 </li>

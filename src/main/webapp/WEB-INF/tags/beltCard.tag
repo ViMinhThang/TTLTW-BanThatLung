@@ -41,7 +41,7 @@
 
     </c:when>
     <c:otherwise>
-        <a href="productDetails?beltId=${belt.id}&variantId=${belt.beltVariant.id}"
+        <a href="${pageContext.request.contextPath}/belt/${belt.id}/variant/${belt.beltVariant.id}"
            class="text-center hover--black text-decoration-none ${padding!=null? padding:""}">
             <img src="${belt.beltVariant.images[0]}"
                  class="img-fluid w-100 shadow-sm" alt="${belt.name}"

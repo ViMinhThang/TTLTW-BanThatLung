@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="icon" href="${pageContext.request.contextPath}/assets/icons/favicon.svg" type="image/x-icon"/>
+<link rel="icon" href="https://cdn-web-servlet.vercel.app/images/favicon.svg" type="image/x-icon"/>
 
 <!-- Custom fonts for this template-->
 <link
@@ -20,7 +20,7 @@
 />
 
 <!-- Custom styles for this template-->
-<link href="${pageContext.request.contextPath}/css/favorite.css" rel="stylesheet"/>
+<link href="https://cdn-web-servlet.vercel.app/css/favorite.css" rel="stylesheet"/>
 <link href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" rel="stylesheet"/>
 <link href="https://cdn.datatables.net/buttons/3.2.2/css/buttons.dataTables.css" rel="stylesheet"/>
-<link href="${pageContext.request.contextPath}/css/adminGeneral.css" rel="stylesheet"/>
+<link href="https://cdn-web-servlet.vercel.app/css/adminGeneral.css" rel="stylesheet"/>

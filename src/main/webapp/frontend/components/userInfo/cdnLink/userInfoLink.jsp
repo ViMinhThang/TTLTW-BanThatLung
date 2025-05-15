@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link
         rel="icon"
-        href="${pageContext.request.contextPath}/assets/icons/favicon.svg"
+        href="https://cdn-web-servlet.vercel.app/images/favicon.svg"
         type="image/x-icon"
 />
 <link
