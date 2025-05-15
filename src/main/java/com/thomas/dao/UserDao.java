@@ -107,7 +107,7 @@ public class UserDao implements UsageInterface {
         });
     }
 
-    public User findUserEmail(String email, Integer userId) {
+        public User findUserEmail(String email, Integer userId) {
         return JDBIConnect.get().withHandle(h -> {
             String sql = "SELECT * FROM users WHERE 1=1";
 
@@ -125,16 +125,27 @@ public class UserDao implements UsageInterface {
                     .orElse(null);
         });
     }
-
+    public User findUserByOAuth(String oauthId, String provider) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "SELECT * FROM users WHERE oauthId = :oauthId AND oauthProvider = :provider";
+            return h.createQuery(sql)
+                    .bind("oauthId", oauthId)
+                    .bind("provider", provider)
+                    .mapToBean(User.class)
+                    .findFirst()
+                    .orElse(null);
+        });
+    }
 
     public boolean registerUser(User user) {
         return JDBIConnect.get().withHandle(h -> {
-            String insertedsql = "INSERT INTO users (name, email, dateOfBirth, password, createdAt,gender,phoneNumber, isDeleted, role,isActive) " +
-                    "VALUES (:name, :email, :dateOfBirth, :password, :createAt,:gender,:phoneNumber, :isDeleted, :role,:isActive)";
+            String insertedsql = "INSERT INTO users (name, email, dateOfBirth, password, createdAt, gender, phoneNumber, isDeleted, role, isActive, oauthProvider, oauthId) " +
+                    "VALUES (:name, :email, :dateOfBirth, :password, :createAt, :gender, :phoneNumber, :isDeleted, :role, :isActive, :oauthProvider, :oauthId)";
+
             return h.createUpdate(insertedsql)
                     .bind("name", user.getName())
                     .bind("email", user.getEmail())
-                    .bind("dateOfBirth", Timestamp.valueOf(user.getDateOfBirth().atStartOfDay()))
+                    .bind("dateOfBirth", user.getDateOfBirth() != null ? Timestamp.valueOf(user.getDateOfBirth().atStartOfDay()) : null)
                     .bind("password", user.getPassword())
                     .bind("createAt", user.getCreateAt())
                     .bind("isDeleted", user.getIsDeleted())
@@ -142,6 +153,8 @@ public class UserDao implements UsageInterface {
                     .bind("gender", user.getGender())
                     .bind("phoneNumber", user.getPhoneNumber())
                     .bind("isActive", user.getIsActive())
+                    .bind("oauthProvider", user.getOauthProvider())
+                    .bind("oauthId", user.getOauthId())
                     .execute() > 0;
         });
     }

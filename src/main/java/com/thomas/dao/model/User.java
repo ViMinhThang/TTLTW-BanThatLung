@@ -18,12 +18,13 @@ public class User implements Serializable {
     private int isDeleted;
     private int isActive;
     private LocalDateTime lastActivateAt;
+    private String oauthProvider; // New field for OAuth provider
+    private String oauthId;       // New field for OAuth ID
 
     public User() {
-
     }
 
-    public User(String password, String name, String email, long phoneNumber, LocalDate dateOfBirth, String gender, String image, int role, LocalDateTime createAt, int isDeleted, int isActive, LocalDateTime lastActivateAt) {
+    public User(String password, String name, String email, long phoneNumber, LocalDate dateOfBirth, String gender, String image, int role, LocalDateTime createAt, int isDeleted, int isActive, LocalDateTime lastActivateAt, String oauthProvider, String oauthId) {
         this.password = password;
         this.name = name;
         this.email = email;
@@ -33,8 +34,14 @@ public class User implements Serializable {
         this.image = image;
         this.role = role;
         this.createAt = createAt;
+        this.isDeleted = isDeleted;
+        this.isActive = isActive;
         this.lastActivateAt = lastActivateAt;
+        this.oauthProvider = oauthProvider;
+        this.oauthId = oauthId;
     }
+
+    // Getters and Setters for all fields including the new ones
 
     public int getId() {
         return id;
@@ -43,7 +50,6 @@ public class User implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-
 
     public String getPassword() {
         return password;
@@ -117,40 +123,20 @@ public class User implements Serializable {
         this.createAt = createAt;
     }
 
+    public int getIsDeleted() {
+        return isDeleted;
+    }
+
     public void setIsDeleted(int isDeleted) {
         this.isDeleted = isDeleted;
     }
 
-    public int getIsDeleted() {
-        return this.isDeleted;
+    public int getIsActive() {
+        return isActive;
     }
 
     public void setIsActive(int isActive) {
         this.isActive = isActive;
-    }
-
-    public int getIsActive() {
-        return this.isActive;
-    }
-
-    public String getFirstName() {
-        return this.name.substring(this.name.lastIndexOf(" ") + 1);
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", phone=" + phoneNumber +
-                ", dateOfBirth='" + dateOfBirth + '\'' +
-                ", gender='" + gender + '\'' +
-                ", image='" + image + '\'' +
-                ", role=" + role +
-                ", createAt='" + createAt + '\'' +
-                '}';
     }
 
     public LocalDateTime getLastActivateAt() {
@@ -161,4 +147,40 @@ public class User implements Serializable {
         this.lastActivateAt = lastActivateAt;
     }
 
+    public String getOauthProvider() {
+        return oauthProvider;
+    }
+
+    public void setOauthProvider(String oauthProvider) {
+        this.oauthProvider = oauthProvider;
+    }
+
+    public String getOauthId() {
+        return oauthId;
+    }
+
+    public void setOauthId(String oauthId) {
+        this.oauthId = oauthId;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber=" + phoneNumber +
+                ", dateOfBirth=" + dateOfBirth +
+                ", gender='" + gender + '\'' +
+                ", image='" + image + '\'' +
+                ", role=" + role +
+                ", createAt=" + createAt +
+                ", isDeleted=" + isDeleted +
+                ", isActive=" + isActive +
+                ", lastActivateAt=" + lastActivateAt +
+                ", oauthProvider='" + oauthProvider + '\'' +
+                ", oauthId='" + oauthId + '\'' +
+                '}';
+    }
 }

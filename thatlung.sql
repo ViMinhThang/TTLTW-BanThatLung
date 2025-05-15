@@ -14,7 +14,10 @@ CREATE TABLE collectionDetails
     description TEXT NOT NULL,
     createdAt   DATETIME DEFAULT CURRENT_TIMESTAMP
 );
-
+ALTER TABLE users
+    ADD COLUMN oauthProvider VARCHAR(50),
+ADD COLUMN oauthId       VARCHAR(255),
+MODIFY COLUMN password   VARCHAR(255) NULL;
 CREATE TABLE paymentMethods
 (
     id       INT AUTO_INCREMENT PRIMARY KEY,
