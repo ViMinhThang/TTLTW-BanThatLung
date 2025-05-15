@@ -47,53 +47,55 @@
         </ol>
     </nav>
 </div>
-<div class="container-lg mt-3">
-    <div
-            class="d-flex justify-content-between"
-            style="white-space: nowrap; margin-top: 150px"
-    >
-        <div class="d-inline-block fw-bold mb-4" style="padding: 12px">
-            <a
-                    class="text-dark text-decoration-none custom_size--19"
-                    href="${pageContext.request.contextPath}/userInfo"
-            >Tài khoản</a
-            >
+<div class="container my-3">
+    <div class="row">
+        <h2 class="mt-5 mb-3">Tài khoản của tôi</h2>
+        <div
+                class="d-flex col-12"
+                style="white-space: nowrap;"
+        >
+            <div class="d-inline-block fw-bold mb-4" style="padding: 12px">
+                <a
+                        class="custom_size--19"
+                        href="${pageContext.request.contextPath}/userInfo"
+                >Tài khoản</a
+                >
+            </div>
+            <div class="d-inline-block fw-bold" style="padding: 12px">
+                <a
+                        class="custom_size--19"
+                        href="${pageContext.request.contextPath}/userProfile"
+                >Hồ sơ</a
+                >
+            </div>
+            <div class="d-inline-block fw-bold custom_active" style="padding: 12px">
+                <a
+                        class="text-white custom_size--19"
+                        href="${pageContext.request.contextPath}/userAddress?userId=${sessionScope.auth.id}"
+                >Địa chỉ</a
+                >
+            </div>
+            <div class="d-inline-block fw-bold" style="padding: 12px">
+                <a
+                        class="custom_size--19"
+                        href="${pageContext.request.contextPath}/userPrivacy"
+                >Riêng tư</a
+                >
+            </div>
+            <div class="d-inline-block fw-bold" style="padding: 12px">
+                <a
+                        class="custom_size--19"
+                        href="${pageContext.request.contextPath}/viewOrders"
+                >Đơn hàng</a
+                >
+            </div>
         </div>
-        <div class="d-inline-block fw-bold" style="padding: 12px">
-            <a
-                    class="text-dark text-decoration-none custom_size--19"
-                    href="${pageContext.request.contextPath}/userProfile"
-            >Hồ sơ</a
-            >
-        </div>
-        <div class="d-inline-block fw-bold custom_active" style="padding: 12px">
-            <a
-                    class="text-dark text-decoration-none custom_size--19"
-                    href="${pageContext.request.contextPath}/userAddress?userId=${sessionScope.auth.id}"
-            >Địa chỉ</a
-            >
-        </div>
-        <div class="d-inline-block fw-bold" style="padding: 12px">
-            <a
-                    class="text-dark text-decoration-none custom_size--19"
-                    href="${pageContext.request.contextPath}/userPrivacy"
-            >Riêng tư</a
-            >
-        </div>
-        <div class="d-inline-block fw-bold" style="padding: 12px">
-            <a
-                    class="text-dark text-decoration-none custom_size--19"
-                    href="${pageContext.request.contextPath}/viewOrders"
-            >Đơn hàng</a
-            >
-        </div>
-    </div>
-</div>
 
-<div class="container-lg">
-    <div class="d-flex flex-column">
-        <p class="address-title">Địa chỉ giao hàng của bạn</p>
-        <div class="userInfo--address--display">
+    </div>
+
+    <p class="address-title">Địa chỉ giao hàng của bạn</p>
+    <div class="container container-sm border rounded col-12">
+        <div class="userInfo--address--display mb-3">
             <button
                     class="btn mt-4 border border-3 border-dark custom_add_address"
                     data-bs-toggle="modal"
@@ -211,215 +213,222 @@
                 </div>
             </div>
         </div>
-        <div class="d-flex flex-wrap mb-5">
+
+        <div class="d-flex">
             <jsp:useBean id="userAddressList" scope="request" type="java.util.List"/>
             <c:forEach var="address" items="${userAddressList}">
                 <div
-                        class="address__info_div d-flex flex-column me-5 custom_hover py-5 ps-2 pe-3 ${address.isUse == 1 ? "border-dark": ""}"
+                        class="address__info_div user-addresses d-flex flex-column mb-2 custom_hover p-3 rounded-0 ${address.isUse == 1 ? "border-dark bg-light": "border-light"}"
                 >
-                    <form class="defaultAddressForm" action="${pageContext.request.contextPath}/userAddress"
-                          method="POST">
-                        <input class="userAddressId" type="hidden" name="userAddressId" value="${address.id}">
-                        <input class="userInfo" type="hidden" name="userId" value="${sessionScope.auth.id}">
-                        <button
-                                type="submit"
-                                class="d-flex justify-content-center btn border-3 border-dark rounded-pill text-dark px-0 mb-4 w-50 custom_default"
-                        >
-                            <input type="hidden" name="message" value="setDefaultAddress"/>
-                            Mặc định
-                        </button>
-                    </form>
                     <p class="custom_name_display">${address.userName}</p>
                     <p class="custom_address_detail_display">${address.addressStreet}</p>
                     <p class="custom_address">${address.addressCity}</p>
                     <p class="custom_phoneNumber_display">${address.phoneNumber}</p>
-                    <div class="address__info__action mt-4">
-                        <button
-                                class="btn btn-light rounded-pill fw-bold custom_popup"
-                                data-bs-toggle="modal"
-                                data-bs-target="#editaddressModal"
-                        >
-                            <img src="${pageContext.request.contextPath}/assets/icons/edit.svg"/>Chỉnh sửa
-                        </button>
 
-                        <button
-                                type="button"
-                                class="btn btn-light text-dark rounded-pill fw-bold deleteAddress"
-                                data-bs-toggle="modal"
-                                data-bs-target="#deleteModal"
-                        >
-                            <img src="${pageContext.request.contextPath}/assets/icons/delete.svg"/>Xóa
-                        </button>
+                    <div class="d-flex justify-content-center">
+                        <form class="defaultAddressForm" action="${pageContext.request.contextPath}/userAddress"
+                              method="POST">
+                            <input class="userAddressId" type="hidden" name="userAddressId" value="${address.id}">
+                            <input class="userInfo" type="hidden" name="userId" value="${sessionScope.auth.id}">
+                            <button
+                                    type="submit"
+                                    class="address__info__action btn rounded border-dark text-dark custom_hover"
+                            >
+                                <input type="hidden" name="message" value="setDefaultAddress"/>
+                                Mặc định
+                            </button>
+                        </form>
+                        <div class="address__info__action">
+                            <button
+                                    class="btn btn-light fw-bold custom_popup"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editaddressModal"
+                            >
+                                <img src="${pageContext.request.contextPath}/assets/icons/edit.svg"/>Chỉnh sửa
+                            </button>
 
+                            <button
+                                    type="button"
+                                    class="btn btn-light text-dark fw-bold deleteAddress"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal"
+                            >
+                                <img src="${pageContext.request.contextPath}/assets/icons/delete.svg"/>Xóa
+                            </button>
+
+                        </div>
                     </div>
 
                 </div>
 
             </c:forEach>
-        </div>
-        <div
-                class="modal fade"
-                id="deleteModal"
-                tabindex="-1"
-                aria-labelledby="deleteModal"
-                aria-hidden="true"
-        >
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">
-                            Xác nhận
-                        </h5>
-                        <button
-                                type="button"
-                                class="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label=""
-                        ></button>
-                    </div>
-                    <div class="modal-body fs-4">
-                        Bạn có muốn xóa địa chỉ này ?
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                                type="button"
-                                class="btn btn-secondary"
-                                data-bs-dismiss="modal"
-                        >
-                            Hủy
-                        </button>
-                        <form class="custom_delete_address"
-                              action="${pageContext.request.contextPath}/userAddress"
-                              method="post">
+
+            <div
+                    class="modal fade"
+                    id="deleteModal"
+                    tabindex="-1"
+                    aria-labelledby="deleteModal"
+                    aria-hidden="true"
+            >
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">
+                                Xác nhận
+                            </h5>
                             <button
-                                    type="submit"
-                                    class="btn btn-dark rounded"
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label=""
+                            ></button>
+                        </div>
+                        <div class="modal-body fs-4">
+                            Bạn có muốn xóa địa chỉ này ?
+                        </div>
+                        <div class="modal-footer">
+                            <button
+                                    type="button"
+                                    class="btn btn-secondary"
                                     data-bs-dismiss="modal"
                             >
-                                Xóa
+                                Hủy
                             </button>
-                        </form>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div
-                class="modal fade"
-                id="editaddressModal"
-                tabindex="-1"
-                aria-labelledby="editaddressModal"
-                aria-hidden="true"
-        >
-            <div class="modal-dialog">
-                <div class="modal-content p-3" style="border-radius: 15px">
-                    <div class="modal-body">
-                        <form action="${pageContext.request.contextPath}/userAddress" method="post">
-                            <input type="hidden" name="message" value="updateAddress">
-                            <input type="hidden" name="userAddressId" value="${sessionScope.auth.id}">
-                            <input type="hidden" name="userId" value="${sessionScope.auth.id}">
-                            <div class="d-flex flex-column">
-                                <p class="mb-1">Địa chỉ cụ thể</p>
-                                <input
-                                        name="AddressStreet"
-                                        type="text"
-                                        class="form-control custom_design address_detail"
-                                />
-                            </div>
-                            <div class="d-flex flex-column">
-                                <p class="mt-3 mb-1 custom_province">Thành phố</p>
-                                <select
-                                        name="AddressCity"
-                                        id="province"
-                                        class="form-select custom_design"
-                                >
-                                    <option value="An Giang">An Giang</option>
-                                    <option value="Bà Rịa - Vũng Tàu">
-                                        Bà Rịa - Vũng Tàu
-                                    </option>
-                                    <option value="Bắc Giang">Bắc Giang</option>
-                                    <option value="Bắc Kạn">Bắc Kạn</option>
-                                    <option value="Bạc Liêu">Bạc Liêu</option>
-                                    <option value="Bắc Ninh">Bắc Ninh</option>
-                                    <option value="Bến Tre">Bến Tre</option>
-                                    <option value="Bình Định">Bình Định</option>
-                                    <option value="Bình Dương">Bình Dương</option>
-                                    <option value="Bình Phước">Bình Phước</option>
-                                    <option value="Bình Thuận">Bình Thuận</option>
-                                    <option value="Cà Mau">Cà Mau</option>
-                                    <option value="Cần Thơ">Cần Thơ</option>
-                                    <option value="Cao Bằng">Cao Bằng</option>
-                                    <option value="Đà Nẵng">Đà Nẵng</option>
-                                    <option value="Đắk Lắk">Đắk Lắk</option>
-                                    <option value="Đắk Nông">Đắk Nông</option>
-                                    <option value="Điện Biên">Điện Biên</option>
-                                    <option value="Đồng Nai">Đồng Nai</option>
-                                    <option value="Đồng Tháp">Đồng Tháp</option>
-                                    <option value="Gia Lai">Gia Lai</option>
-                                    <option value="Hà Giang">Hà Giang</option>
-                                    <option value="Hà Nam">Hà Nam</option>
-                                    <option value="Hà Nội">Hà Nội</option>
-                                    <option value="Hà Tĩnh">Hà Tĩnh</option>
-                                    <option value="Hải Dương">Hải Dương</option>
-                                    <option value="Hải Phòng">Hải Phòng</option>
-                                    <option value="Hậu Giang">Hậu Giang</option>
-                                    <option value="Hòa Bình">Hòa Bình</option>
-                                    <option value="Hưng Yên">Hưng Yên</option>
-                                    <option value="Khánh Hòa">Khánh Hòa</option>
-                                    <option value="Kiên Giang">Kiên Giang</option>
-                                    <option value="Kon Tum">Kon Tum</option>
-                                    <option value="Lai Châu">Lai Châu</option>
-                                    <option value="Lâm Đồng">Lâm Đồng</option>
-                                    <option value="Lạng Sơn">Lạng Sơn</option>
-                                    <option value="Lào Cai">Lào Cai</option>
-                                    <option value="Long An">Long An</option>
-                                    <option value="Nam Định">Nam Định</option>
-                                    <option value="Nghệ An">Nghệ An</option>
-                                    <option value="Ninh Bình">Ninh Bình</option>
-                                    <option value="Ninh Thuận">Ninh Thuận</option>
-                                    <option value="Phú Thọ">Phú Thọ</option>
-                                    <option value="Phú Yên">Phú Yên</option>
-                                    <option value="Quảng Bình">Quảng Bình</option>
-                                    <option value="Quảng Nam">Quảng Nam</option>
-                                    <option value="Quảng Ngãi">Quảng Ngãi</option>
-                                    <option value="Quảng Ninh">Quảng Ninh</option>
-                                    <option value="Quảng Trị">Quảng Trị</option>
-                                    <option value="Sóc Trăng">Sóc Trăng</option>
-                                    <option value="Sơn La">Sơn La</option>
-                                    <option value="Tây Ninh">Tây Ninh</option>
-                                    <option value="Thái Bình">Thái Bình</option>
-                                    <option value="Thái Nguyên">Thái Nguyên</option>
-                                    <option value="Thanh Hóa">Thanh Hóa</option>
-                                    <option value="Thừa Thiên Huế">
-                                        Thừa Thiên Huế
-                                    </option>
-                                    <option value="Tiền Giang">Tiền Giang</option>
-                                    <option value="TP Hồ Chí Minh">
-                                        TP Hồ Chí Minh
-                                    </option>
-                                    <option value="Trà Vinh">Trà Vinh</option>
-                                    <option value="Tuyên Quang">Tuyên Quang</option>
-                                    <option value="Vĩnh Long">Vĩnh Long</option>
-                                    <option value="Vĩnh Phúc">Vĩnh Phúc</option>
-                                    <option value="Yên Bái">Yên Bái</option>
-                                </select>
-                            </div>
-                            <div class="d-flex flex-column">
+                            <form class="custom_delete_address"
+                                  action="${pageContext.request.contextPath}/userAddress"
+                                  method="post">
                                 <button
-                                        class="btn btn-dark mt-3 custom_save custom_border"
+                                        type="submit"
+                                        class="btn btn-dark rounded"
+                                        data-bs-dismiss="modal"
                                 >
-                                    Lưu
+                                    Xóa
                                 </button>
+                            </form>
 
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <div
+                    class="modal fade"
+                    id="editaddressModal"
+                    tabindex="-1"
+                    aria-labelledby="editaddressModal"
+                    aria-hidden="true"
+            >
+                <div class="modal-dialog">
+                    <div class="modal-content p-3" style="border-radius: 15px">
+                        <div class="modal-body">
+                            <form action="${pageContext.request.contextPath}/userAddress" method="post">
+                                <input type="hidden" name="message" value="updateAddress">
+                                <input type="hidden" name="userAddressId" value="${sessionScope.auth.id}">
+                                <input type="hidden" name="userId" value="${sessionScope.auth.id}">
+                                <div class="d-flex flex-column">
+                                    <p class="mb-1">Địa chỉ cụ thể</p>
+                                    <input
+                                            name="AddressStreet"
+                                            type="text"
+                                            class="form-control custom_design address_detail"
+                                    />
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <p class="mt-3 mb-1 custom_province">Thành phố</p>
+                                    <select
+                                            name="AddressCity"
+                                            id="province"
+                                            class="form-select custom_design"
+                                    >
+                                        <option value="An Giang">An Giang</option>
+                                        <option value="Bà Rịa - Vũng Tàu">
+                                            Bà Rịa - Vũng Tàu
+                                        </option>
+                                        <option value="Bắc Giang">Bắc Giang</option>
+                                        <option value="Bắc Kạn">Bắc Kạn</option>
+                                        <option value="Bạc Liêu">Bạc Liêu</option>
+                                        <option value="Bắc Ninh">Bắc Ninh</option>
+                                        <option value="Bến Tre">Bến Tre</option>
+                                        <option value="Bình Định">Bình Định</option>
+                                        <option value="Bình Dương">Bình Dương</option>
+                                        <option value="Bình Phước">Bình Phước</option>
+                                        <option value="Bình Thuận">Bình Thuận</option>
+                                        <option value="Cà Mau">Cà Mau</option>
+                                        <option value="Cần Thơ">Cần Thơ</option>
+                                        <option value="Cao Bằng">Cao Bằng</option>
+                                        <option value="Đà Nẵng">Đà Nẵng</option>
+                                        <option value="Đắk Lắk">Đắk Lắk</option>
+                                        <option value="Đắk Nông">Đắk Nông</option>
+                                        <option value="Điện Biên">Điện Biên</option>
+                                        <option value="Đồng Nai">Đồng Nai</option>
+                                        <option value="Đồng Tháp">Đồng Tháp</option>
+                                        <option value="Gia Lai">Gia Lai</option>
+                                        <option value="Hà Giang">Hà Giang</option>
+                                        <option value="Hà Nam">Hà Nam</option>
+                                        <option value="Hà Nội">Hà Nội</option>
+                                        <option value="Hà Tĩnh">Hà Tĩnh</option>
+                                        <option value="Hải Dương">Hải Dương</option>
+                                        <option value="Hải Phòng">Hải Phòng</option>
+                                        <option value="Hậu Giang">Hậu Giang</option>
+                                        <option value="Hòa Bình">Hòa Bình</option>
+                                        <option value="Hưng Yên">Hưng Yên</option>
+                                        <option value="Khánh Hòa">Khánh Hòa</option>
+                                        <option value="Kiên Giang">Kiên Giang</option>
+                                        <option value="Kon Tum">Kon Tum</option>
+                                        <option value="Lai Châu">Lai Châu</option>
+                                        <option value="Lâm Đồng">Lâm Đồng</option>
+                                        <option value="Lạng Sơn">Lạng Sơn</option>
+                                        <option value="Lào Cai">Lào Cai</option>
+                                        <option value="Long An">Long An</option>
+                                        <option value="Nam Định">Nam Định</option>
+                                        <option value="Nghệ An">Nghệ An</option>
+                                        <option value="Ninh Bình">Ninh Bình</option>
+                                        <option value="Ninh Thuận">Ninh Thuận</option>
+                                        <option value="Phú Thọ">Phú Thọ</option>
+                                        <option value="Phú Yên">Phú Yên</option>
+                                        <option value="Quảng Bình">Quảng Bình</option>
+                                        <option value="Quảng Nam">Quảng Nam</option>
+                                        <option value="Quảng Ngãi">Quảng Ngãi</option>
+                                        <option value="Quảng Ninh">Quảng Ninh</option>
+                                        <option value="Quảng Trị">Quảng Trị</option>
+                                        <option value="Sóc Trăng">Sóc Trăng</option>
+                                        <option value="Sơn La">Sơn La</option>
+                                        <option value="Tây Ninh">Tây Ninh</option>
+                                        <option value="Thái Bình">Thái Bình</option>
+                                        <option value="Thái Nguyên">Thái Nguyên</option>
+                                        <option value="Thanh Hóa">Thanh Hóa</option>
+                                        <option value="Thừa Thiên Huế">
+                                            Thừa Thiên Huế
+                                        </option>
+                                        <option value="Tiền Giang">Tiền Giang</option>
+                                        <option value="TP Hồ Chí Minh">
+                                            TP Hồ Chí Minh
+                                        </option>
+                                        <option value="Trà Vinh">Trà Vinh</option>
+                                        <option value="Tuyên Quang">Tuyên Quang</option>
+                                        <option value="Vĩnh Long">Vĩnh Long</option>
+                                        <option value="Vĩnh Phúc">Vĩnh Phúc</option>
+                                        <option value="Yên Bái">Yên Bái</option>
+                                    </select>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <button
+                                            class="btn btn-dark mt-3 custom_save custom_border"
+                                    >
+                                        Lưu
+                                    </button>
 
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
+
+
 <jsp:include page="/frontend/header_footer/footer.jsp"/>
 </body>
 </html>

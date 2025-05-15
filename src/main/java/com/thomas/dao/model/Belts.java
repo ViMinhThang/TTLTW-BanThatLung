@@ -1,10 +1,11 @@
 package com.thomas.dao.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Belts implements Serializable {
     private int id;
@@ -12,51 +13,50 @@ public class Belts implements Serializable {
     private String description;
     private double price;
     private String gender;
-    private int stockQuantity;
-    private LocalDate releaseDate;
-    private LocalDate createdDate;
-    private LocalDate updatedDate;
+    private LocalDateTime releaseDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private int isDeleted;
-    private double discountPercent;
+    private double discountRate;
     private String materialBelt;
-    private List<String> image;
-    private int totalQuantity;
-    private List<Category> categories;
-    private String mainImage;
-    private LocalDate viewDate;
-    private int viewCount;
-    private String collectionOf;
+    private List<BeltVariant> beltVariants;
+    private int totalSold;
 
     public Belts() {
 
     }
 
-    public Belts(int id, String name, String description, double price, String gender, int stockQuantity, LocalDate releaseDate, LocalDate createdDate, LocalDate updatedDate, int isDeleted, double discountPercent, String materialBelt, String mainImage, LocalDate viewDate, int viewCount, String collectionOf) {
+    public Belts(Belts other) {
+        this.id = other.id;
+        this.name = other.name;
+        this.price = other.price;
+
+        // Sao chép danh sách beltVariants (nếu có)
+        if (other.beltVariants != null) {
+            this.beltVariants = other.beltVariants.stream()
+                    .map(BeltVariant::new)
+                    .collect(Collectors.toList());
+        } else {
+            this.beltVariants = new ArrayList<>();
+        }
+    }
+
+    public Belts(int id, String name, String description, double price, String gender, LocalDateTime releaseDate, LocalDateTime createdDate, LocalDateTime updatedDate, int isDeleted, double discountRate, String materialBelt, List<BeltVariant> beltVariants) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.gender = gender;
-        this.stockQuantity = stockQuantity;
         this.releaseDate = releaseDate;
-        this.createdDate = createdDate;
-        this.updatedDate = updatedDate;
+        this.createdAt = createdDate;
+        this.updatedAt = updatedDate;
         this.isDeleted = isDeleted;
-        this.discountPercent = discountPercent;
+        this.discountRate = discountRate;
         this.materialBelt = materialBelt;
-        this.mainImage = mainImage;
-        this.viewDate = viewDate;
-        this.viewCount = viewCount;
-        this.collectionOf = collectionOf;
+        this.beltVariants = beltVariants;
+
     }
 
-    public void setTag(List<Category> allCategoriesById) {
-        this.categories = allCategoriesById;
-    }
-
-    public List<Category> getCategories() {
-        return categories;
-    }
 
     public int getId() {
         return id;
@@ -98,36 +98,29 @@ public class Belts implements Serializable {
         this.gender = gender;
     }
 
-    public int getStockQuantity() {
-        return stockQuantity;
-    }
 
-    public void setStockQuantity(int stockQuantity) {
-        this.stockQuantity = stockQuantity;
-    }
-
-    public LocalDate getReleaseDate() {
+    public LocalDateTime getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(LocalDate releaseDate) {
+    public void setReleaseDate(LocalDateTime releaseDate) {
         this.releaseDate = releaseDate;
     }
 
-    public LocalDate getCreatedDate() {
-        return createdDate;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateDate(LocalDate createDate) {
-        this.createdDate = createDate;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public LocalDate getUpdatedDate() {
-        return updatedDate;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdatedDate(LocalDate updateDate) {
-        this.updatedDate = updateDate;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public int getIsDeleted() {
@@ -138,13 +131,6 @@ public class Belts implements Serializable {
         this.isDeleted = isDeleted;
     }
 
-    public double getDiscountPercent() {
-        return discountPercent;
-    }
-
-    public void setDiscountPercent(double discountPercent) {
-        this.discountPercent = discountPercent;
-    }
 
     public String getMaterialBelt() {
         return materialBelt;
@@ -155,7 +141,7 @@ public class Belts implements Serializable {
     }
 
     public String getFormattedCreateDate() {
-        return createdDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
     public String getFormattedReleaseDate() {
@@ -163,38 +149,30 @@ public class Belts implements Serializable {
     }
 
     public String getFormattedUpdateDate() {
-        return updatedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return updatedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
-    public List<String> getImage() {
-        return image;
+    public double getDiscountRate() {
+        return discountRate;
     }
 
-    public int getTotalQuantity() {
-        return totalQuantity;
+    public void setDiscountRate(double discountRate) {
+        this.discountRate = discountRate;
     }
 
-    public void setTotalQuantity(int totalQuantity) {
-        this.totalQuantity = totalQuantity;
+    public void setBeltVariants(List<BeltVariant> beltVariants) {
+        this.beltVariants = beltVariants;
     }
 
-    public void setImage(List<String> image) {
-        this.image = image;
+    public List<BeltVariant> getBeltVariants() {
+        return beltVariants;
     }
 
-    public String getMainImage() {return mainImage;}
+    public void setTotalSold(int totalSold) {
+        this.totalSold = totalSold;
+    }
 
-    public void setMainImage(String mainImage) {this.mainImage = mainImage;}
-
-    public LocalDate getViewDate() {return viewDate;}
-
-    public void setViewDate(LocalDate viewDate) {this.viewDate = viewDate;}
-
-    public int getViewCount() {return viewCount;}
-
-    public void setViewCount(int viewCount) {this.viewCount = viewCount;}
-
-    public String getCollectionOf() {return collectionOf;}
-
-    public void setCollectionOf(String collectionOf) {this.collectionOf = collectionOf;}
+    public int getTotalSold() {
+        return totalSold;
+    }
 }

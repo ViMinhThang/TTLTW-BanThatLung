@@ -1,7 +1,7 @@
 package com.thomas.controller;
 
 import com.thomas.dao.model.Belts;
-import com.thomas.services.UploadProductService;
+import com.thomas.services.ProductService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -14,12 +14,12 @@ import java.util.logging.Logger;
 
 @WebServlet(name = "newArrivalController", value = "/newArrival")
 public class newArrivalController extends HttpServlet {
-    UploadProductService uploadProductService = new UploadProductService();
+    ProductService productService = new ProductService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String descPrice = request.getParameter("descPrice");
-        List<Belts> newArrivalBelts = uploadProductService.getNewArrivalProducts();
+        List<Belts> newArrivalBelts = productService.find(null);
         String minPrice = request.getParameter("minPrice");
         String maxPrice = request.getParameter("maxPrice");
         if (descPrice != null && !descPrice.trim().isEmpty()) {
@@ -31,15 +31,12 @@ public class newArrivalController extends HttpServlet {
                     newArrivalBelts.sort(Comparator.comparing(Belts::getPrice).reversed());
                     break;
                 case "hotSelling":
-                    newArrivalBelts = uploadProductService.getNewArrivalProductsHotSeliing();
-                    for (Belts b : newArrivalBelts) {
-                        b.setImage(uploadProductService.getProductImages(b.getId()));
-                    }
+                    newArrivalBelts = productService.getNewArrivals();
                     break;
             }
         }
         if (minPrice != null && maxPrice != null) {
-            newArrivalBelts = uploadProductService.filterProduct(newArrivalBelts, Double.parseDouble(minPrice), Double.parseDouble(maxPrice));
+            newArrivalBelts = productService.filterProduct(newArrivalBelts, Double.parseDouble(minPrice), Double.parseDouble(maxPrice));
         }
         int currentPage = 1;
         String pageParam = request.getParameter("page");

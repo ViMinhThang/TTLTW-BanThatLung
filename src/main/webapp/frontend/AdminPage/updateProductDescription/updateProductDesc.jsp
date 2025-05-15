@@ -14,159 +14,17 @@
     <meta name="author" content=""/>
 
     <title>THOMAS - Admin</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/assets/icons/favicon.svg" type="image/x-icon"/>
-
-    <!-- Custom fonts for this template-->
-    <link
-            href="${pageContext.request.contextPath}/css/fontawesome-free-6.6.0-web/fontawesome-free-6.6.0-web/css/all.min.css"
-            rel="stylesheet"
-            type="text/css"
-    />
-    <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet"
-    />
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/44.0.0/ckeditor5.css">
 
     <!-- Custom styles for this template-->
-    <link href="${pageContext.request.contextPath}/css/sb-admin-2.min.css" rel="stylesheet"/>
     <script src="https://cdn.ckeditor.com/ckeditor5/44.0.0/ckeditor5.umd.js"></script>
-    <link href="${pageContext.request.contextPath}/css/adminGeneral.css" rel="stylesheet"/>
+    <jsp:include page="/frontend/components/Admin/sidebar/sidebar.jsp"/>
 
 </head>
 
 <body id="page-top">
 <div id="wrapper">
-    <ul
-            class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
-            id="accordionSidebar"
-    >
-        <a
-                class="sidebar-brand d-flex align-items-center justify-content-center"
-                href="${pageContext.request.contextPath}/"
-        >
-            <div class="sidebar-brand-icon rotate-n-15">
-            </div>
-            <div class="sidebar-brand-text mx-3">THOMAS Admin</div>
-        </a>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0"/>
-
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
-            <a class="nav-link" href="${pageContext.request.contextPath}/admin">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span></a
-            >
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider"/>
-
-        <!-- Heading -->
-        <div class="sidebar-heading">Interface</div>
-
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-            <a
-                    class="nav-link collapsed"
-                    href="#"
-                    data-toggle="collapse"
-                    data-target="#collapseTwo"
-                    aria-expanded="true"
-                    aria-controls="collapseTwo"
-            >
-                <i class="fas fa-fw fa-list-check"></i>
-                <span>Quản lý</span>
-            </a>
-            <div
-                    id="collapseTwo"
-                    class="collapse"
-                    aria-labelledby="headingTwo"
-                    data-parent="#accordionSidebar"
-            >
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Các đối tượng:</h6>
-                    <a
-                            class="collapse-item"
-                            href="${pageContext.request.contextPath}/frontend/AdminPage/userManagement/userManagement.jsp"
-                    >Người dùng</a
-                    >
-                    <a
-                            class="collapse-item"
-                            href="${pageContext.request.contextPath}/frontend/AdminPage/productManagement/productManagement.jsp"
-                    >Sản phẩm</a
-                    >
-                    <a
-                            class="collapse-item"
-                            href="${pageContext.request.contextPath}/frontend/AdminPage/reviewManagement/reviewManagement.jsp"
-                    >Đánh giá</a
-                    >
-                    <a
-                            class="collapse-itema"
-                            href="${pageContext.request.contextPath}/frontend/AdminPage/couponManagement/couponManagement.jsp"
-                    >Coupon</a
-                    >
-                    <a
-                            class="collapse-item"
-                            href="${pageContext.request.contextPath}/frontend/AdminPage/orderManagement/orderManagement.jsp"
-                    >Đơn hàng</a
-                    >
-                </div>
-            </div>
-        </li>
-
-        <!-- Nav Item - Utilities Collapse Menu -->
-        <li class="nav-item active">
-            <a
-                    class="nav-link collapsed"
-                    href="#"
-                    data-toggle="collapse"
-                    data-target="#collapseUtilities"
-                    aria-expanded="true"
-                    aria-controls="collapseUtilities"
-            >
-                <i class="fas fa-fw fa-table"></i>
-                <span>Bảng</span>
-            </a>
-            <div
-                    id="collapseUtilities"
-                    class="collapse"
-                    aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar"
-            >
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item"
-                       href="${pageContext.request.contextPath}/admin/table/users"
-                    >Người dùng</a
-                    >
-                    <a class="collapse-item active"
-                       href="${pageContext.request.contextPath}/admin/table/belts">Sản
-                        phẩm</a>
-                    <a class="collapse-item"
-                       href="${pageContext.request.contextPath}/admin/table/reviews"
-                    >Đánh giá</a
-                    >
-                    <a class="collapse-item"
-                       href="${pageContext.request.contextPath}/admin/table/coupons"
-                    >Coupon</a
-                    >
-                    <a class="collapse-item"
-                       href="${pageContext.request.contextPath}/admin/table/orders"
-                    >Đơn hàng</a
-                    >
-                </div>
-            </div>
-        </li>
-        <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block"/>
-
-        <!-- Sidebar Toggler (Sidebar) -->
-        <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" id="sidebarToggle"></button>
-        </div>
-    </ul>
+    <jsp:include page="/frontend/components/Admin/sidebar/sidebar.jsp"/>
 
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
@@ -211,6 +69,7 @@
     <c:otherwise>create</c:otherwise>
 </c:choose>"/>
                     <input type="hidden" name="beltId" value="${param.id}"/>
+                    <input type="hidden" name="variantId" value="${param.variantId}"/>
                     <div class="d-flex w-100">
                         <div class="col-12 bg-white">
                             <div
@@ -246,15 +105,8 @@
     </div>
 </div>
 
-<footer class="sticky-footer bg-white">
-    <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-            <span>Copyright &copy; THOMAS 2021</span>
-        </div>
-    </div>
-</footer>
-</div>
-</div>
+<jsp:include page="/frontend/components/Admin/adminFooter/adminFooter.jsp"/>
+
 
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
@@ -301,22 +153,8 @@
     </div>
 </div>
 
-<script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"
-></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
+<jsp:include page="/frontend/components/Admin/scripts/adminScripts/datatable.jsp"/>
 
-<!-- Core plugin JavaScript-->
-<script src="${pageContext.request.contextPath}/js/jquery.easing.min.js"></script>
-
-<!-- Custom scripts for all pages-->
-<script src="${pageContext.request.contextPath}/js/sb-admin-2.min.js"></script>
-<script>
-
-</script>
 <script>
     const {
         ClassicEditor,

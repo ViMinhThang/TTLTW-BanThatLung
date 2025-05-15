@@ -2,6 +2,7 @@ package com.thomas.dao.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class User implements Serializable {
     private int id;
@@ -13,15 +14,17 @@ public class User implements Serializable {
     private String gender;
     private String image;
     private int role;
-    private LocalDate createAt;
+    private LocalDateTime createAt;
     private int isDeleted;
     private int isActive;
+    private LocalDateTime lastActivateAt;
+    private String oauthProvider; // New field for OAuth provider
+    private String oauthId;       // New field for OAuth ID
 
     public User() {
-
     }
 
-    public User(String password, String name, String email, long phoneNumber, LocalDate dateOfBirth, String gender, String image, int role, LocalDate createAt, int isDeleted, int isActive) {
+    public User(String password, String name, String email, long phoneNumber, LocalDate dateOfBirth, String gender, String image, int role, LocalDateTime createAt, int isDeleted, int isActive, LocalDateTime lastActivateAt, String oauthProvider, String oauthId) {
         this.password = password;
         this.name = name;
         this.email = email;
@@ -31,7 +34,14 @@ public class User implements Serializable {
         this.image = image;
         this.role = role;
         this.createAt = createAt;
+        this.isDeleted = isDeleted;
+        this.isActive = isActive;
+        this.lastActivateAt = lastActivateAt;
+        this.oauthProvider = oauthProvider;
+        this.oauthId = oauthId;
     }
+
+    // Getters and Setters for all fields including the new ones
 
     public int getId() {
         return id;
@@ -40,7 +50,6 @@ public class User implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-
 
     public String getPassword() {
         return password;
@@ -106,32 +115,52 @@ public class User implements Serializable {
         this.role = role;
     }
 
-    public LocalDate getCreateAt() {
+    public LocalDateTime getCreateAt() {
         return createAt;
     }
 
-    public void setCreateAt(LocalDate createAt) {
+    public void setCreateAt(LocalDateTime createAt) {
         this.createAt = createAt;
+    }
+
+    public int getIsDeleted() {
+        return isDeleted;
     }
 
     public void setIsDeleted(int isDeleted) {
         this.isDeleted = isDeleted;
     }
 
-    public int getIsDeleted() {
-        return this.isDeleted;
+    public int getIsActive() {
+        return isActive;
     }
 
     public void setIsActive(int isActive) {
         this.isActive = isActive;
     }
 
-    public int getIsActive() {
-        return this.isActive;
+    public LocalDateTime getLastActivateAt() {
+        return lastActivateAt;
     }
 
-    public String getFirstName() {
-        return this.name.substring(this.name.lastIndexOf(" ") + 1);
+    public void setLastActivateAt(LocalDateTime lastActivateAt) {
+        this.lastActivateAt = lastActivateAt;
+    }
+
+    public String getOauthProvider() {
+        return oauthProvider;
+    }
+
+    public void setOauthProvider(String oauthProvider) {
+        this.oauthProvider = oauthProvider;
+    }
+
+    public String getOauthId() {
+        return oauthId;
+    }
+
+    public void setOauthId(String oauthId) {
+        this.oauthId = oauthId;
     }
 
     @Override
@@ -141,14 +170,17 @@ public class User implements Serializable {
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", phone=" + phoneNumber +
-                ", dateOfBirth='" + dateOfBirth + '\'' +
+                ", phoneNumber=" + phoneNumber +
+                ", dateOfBirth=" + dateOfBirth +
                 ", gender='" + gender + '\'' +
                 ", image='" + image + '\'' +
                 ", role=" + role +
-                ", createAt='" + createAt + '\'' +
+                ", createAt=" + createAt +
+                ", isDeleted=" + isDeleted +
+                ", isActive=" + isActive +
+                ", lastActivateAt=" + lastActivateAt +
+                ", oauthProvider='" + oauthProvider + '\'' +
+                ", oauthId='" + oauthId + '\'' +
                 '}';
     }
-
-
 }
