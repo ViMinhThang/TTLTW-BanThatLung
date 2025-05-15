@@ -73,4 +73,14 @@ public class FavoriteDao {
         );
     }
 
+    public boolean checkExistFavorite(int userId) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "SELECT 1 FROM favorites WHERE userId = :userId LIMIT 1";
+            return h.createQuery(sql)
+                    .bind("userId", userId)
+                    .mapTo(Integer.class)
+                    .findOne()
+                    .isPresent();
+        });
+    }
 }

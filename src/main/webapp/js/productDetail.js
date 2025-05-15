@@ -36,28 +36,38 @@ $(document).ready(function () {
         const price = fullText.replace('VNĐ', '').trim();
         const variantId = $("#variantIdReviews").val();
         $.ajax({
-            url: `/Cart?message=add&beltName=${beltName}`, type: 'POST', data: {
+            url: `/Cart?message=add&beltName=${beltName}`,
+            type: 'POST',
+            data: {
                 message: "add",
                 beltId: beltId,
                 beltName: beltName,
                 quantity: quantity,
                 variantId: variantId,
                 price: price,
-            }, success: function (response) {
-                $("#liveToast").removeClass("hide").addClass("show");
-                console.log(response)
-                let cartCount = parseInt($("#cart_received").text(), 10) + 1;
-                $("#cart_received").text(cartCount);
-
-                $button.html(originalContent).prop("disabled", false);
-            }, error: function (xhr) {
+            },
+            success: function (response) {
+                if (response.status === 'error') {
+                    $(".custom_toast_text").text(`${response.message}`);
+                    $("#liveToast").removeClass("hide").addClass("show");
+                } else {
+                    $("#liveToast").removeClass("hide").addClass("show");
+                    console.log(response);
+                    let cartCount = parseInt($("#cart_received").text(), 10) + 1;
+                    $("#cart_received").text(cartCount);
+                    $button.html(originalContent).prop("disabled", false);
+                }
+            },
+            error: function (xhr) {
                 $(".custom_toast_text").text("Thêm vào giỏ hàng thất bại");
                 $("#liveToast").removeClass("hide").addClass("show");
 
                 $button.html(originalContent).prop("disabled", false);
             }
         });
-    });
+
+    })
+    ;
 
     function updatePagination(totalPages, currentPage) {
         var paginationHtml = '';

@@ -23,7 +23,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link
             rel="stylesheet"
-            href="${pageContext.request.contextPath}/css/fontawesome-free-6.6.0-web/fontawesome-free-6.6.0-web/css/all.css"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css"/>
@@ -60,30 +60,26 @@
         </thead>
         <tbody>
         <c:forEach var="belt" items="${favoriteBelts}">
-            <c:forEach var="variant" items="${belt.beltVariants}">
-                <tr class="fs-5 fw-light tr-favorite">
-                    <input class="beltId" type="hidden" name="beltId" value="${belt.id}">
-                    <input class="variantId" type="hidden" name="variantId" value="${variant.id}">
-                    <input class="userId" type="hidden" name="userId" value="${sessionScope.auth.id}">
-
-                    <td>
-                        <span class="remove-btn">×</span>
-                    </td>
-                    <td class="text-start d-flex align-items-center">
-                        <!-- Ảnh đầu tiên của variant -->
-                        <c:if test="${not empty variant.images}">
-                            <img src="${pageContext.request.contextPath}${variant.images[0]}"
-                                 alt="Product Image"
-                                 class="belts-img img-fluid me-3" style="width: 80px; height: 80px; object-fit: cover;">
-                        </c:if>
-                        <div>
-                            <p class="mb-0">${belt.name} - ${variant.color} (${variant.size})</p>
-                        </div>
-                    </td>
-                    <td class="text-center">${belt.price} vnđ</td>
-                    <td class="text-center">${variant.stockQuantity != 0 ? "Còn hàng" : "Hết hàng"}</td>
-                </tr>
-            </c:forEach>
+            <tr class="fs-5 fw-light tr-favorite">
+                <input class="beltId" type="hidden" name="beltId" value="${belt.id}">
+                <input class="variantId" type="hidden" name="variantId" value="${belt.beltVariant.id}">
+                <input class="userId" type="hidden" name="userId" value="${sessionScope.auth.id}">
+                <td>
+                    <span class="remove-btn">×</span>
+                </td>
+                <td class="text-start d-flex align-items-center">
+                    <c:if test="${not empty belt.beltVariant.images}">
+                        <img src="${belt.beltVariant.images[0]}"
+                             alt="Product Image"
+                             class="belts-img img-fluid me-3" style="width: 80px; height: 80px; object-fit: cover;">
+                    </c:if>
+                    <div>
+                        <p class="mb-0">${belt.name} - ${belt.beltVariant.color} (${belt.beltVariant.size})</p>
+                    </div>
+                </td>
+                <td class="text-center">${belt.beltVariant.price} vnđ</td>
+                <td class="text-center">${belt.beltVariant.stockQuantity != 0 ? "Còn hàng" : "Hết hàng"}</td>
+            </tr>
         </c:forEach>
         </tbody>
     </table>

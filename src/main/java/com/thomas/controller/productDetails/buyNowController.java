@@ -1,5 +1,6 @@
 package com.thomas.controller.productDetails;
 
+import com.google.gson.Gson;
 import com.thomas.dao.BeltVariantDao;
 import com.thomas.dao.model.Belts;
 import com.thomas.dao.model.CartItem;
@@ -28,6 +29,7 @@ public class buyNowController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Gson gson = new Gson();
         int beltId = Integer.parseInt(request.getParameter("beltId"));
         int variantId = Integer.parseInt(request.getParameter("variantId"));
         String color = request.getParameter("color");
@@ -37,6 +39,11 @@ public class buyNowController extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("auth");
         cartService.deleteBuyNow(user.getId());
+        if (cartService.checkInventory(beltId, variantId) < 0) {
+            session.setAttribute("toastMessage", "Sản phẩm đã hết hàng");
+            response.sendRedirect("/productDetails?beltId=" + beltId + "&variantId=" + variantId);
+            return;
+        }
         CartItem newItem = new CartItem();
         newItem.setUserId(user.getId());
         newItem.setBeltId(beltId);

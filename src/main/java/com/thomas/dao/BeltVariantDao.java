@@ -33,10 +33,10 @@ public class BeltVariantDao implements UsageInterface {
         StringBuilder sql = new StringBuilder("SELECT * FROM beltVariants WHERE beltId = :beltId");
 
         if (color != null) {
-            sql.append(" AND colorId = :color");
+            sql.append(" AND colorId = :colorId");
         }
         if (size != null) {
-            sql.append(" AND sizeId = :size");
+            sql.append(" AND sizeId = :sizeId");
         }
         if (variantId != null) {
             sql.append(" AND id = :variantId");
@@ -62,16 +62,30 @@ public class BeltVariantDao implements UsageInterface {
     public boolean deleteVariant(Integer beltId, Integer variantId) {
         return JDBIConnect.get().withHandle(h -> {
             String sql;
-
-            if (variantId != null) {
+            if (beltId != null && variantId != null) {
                 sql = "DELETE FROM beltVariants WHERE id = :id AND beltId = :beltId";
-                return h.createUpdate(sql).bind("id", variantId).bind("beltId", beltId).execute() > 0;
-            } else {
+                return h.createUpdate(sql)
+                        .bind("id", variantId)
+                        .bind("beltId", beltId)
+                        .execute() > 0;
+
+            } else if (beltId != null) {
                 sql = "DELETE FROM belts WHERE id = :beltId";
-                return h.createUpdate(sql).bind("beltId", beltId).execute() > 0;
+                return h.createUpdate(sql)
+                        .bind("beltId", beltId)
+                        .execute() > 0;
+
+            } else if (variantId != null) {
+                sql = "DELETE FROM beltVariants WHERE id = :id";
+                return h.createUpdate(sql)
+                        .bind("id", variantId)
+                        .execute() > 0;
             }
+
+            return false;
         });
     }
+
 
     public boolean deleteVariantAndLog(Integer beltId, Integer variantId, int userId) {
         boolean result = deleteVariant(beltId, variantId);
@@ -136,6 +150,90 @@ public class BeltVariantDao implements UsageInterface {
         String sql = "SELECT name FROM colors";
         return JDBIConnect.get().withHandle(h -> {
             return h.createQuery(sql).mapTo(String.class).list();
+        });
+    }
+
+    public List<String> getAllSizesRelatedToBeltName(String beltName) {
+        String sql = "SELECT DISTINCT s.name FROM sizes s JOIN beltVariants v ON v.sizeId=s.id " +
+                "JOIN belts b ON b.id = v.beltId " +
+                "WHERE b.name=:beltName";
+        return JDBIConnect.get().withHandle(h -> {
+            return h.createQuery(sql).bind("beltName", beltName).mapTo(String.class).list();
+        });
+    }
+
+    public List<String> getAllColorRelatedToBeltName(String beltName) {
+        String sql = "SELECT DISTINCT c.name FROM colors c JOIN beltVariants v ON v.colorId=c.id " +
+                "JOIN belts b ON b.id = v.beltId " +
+                "WHERE b.name=:beltName";
+        return JDBIConnect.get().withHandle(h -> {
+            return h.createQuery(sql).bind("beltName", beltName).mapTo(String.class).list();
+        });
+    }
+
+    public List<String> getAllcolorsByNameBeltAndSize(String beltName, String size) {
+        String sql = "SELECT DISTINCT c.name FROM colors c JOIN beltVariants v ON v.colorId=c.id " +
+                "JOIN belts b ON b.id = v.beltId " +
+                "JOIN sizes s ON v.sizeId=s.id " +
+                "WHERE b.name=:beltName AND s.name=:size";
+        return JDBIConnect.get().withHandle(h -> {
+            return h.createQuery(sql).bind("beltName", beltName).bind("size", size).mapTo(String.class).list();
+        });
+    }
+
+    public List<String> getAllSizeByNameBeltAndColor(String beltName, String color) {
+        String sql = "SELECT DISTINCT s.name FROM sizes s JOIN beltVariants v ON v.sizeId=s.id " +
+                "JOIN belts b ON b.id = v.beltId " +
+                "JOIN colors c ON v.colorId=c.id " +
+                "WHERE b.name=:beltName AND c.name=:color";
+        return JDBIConnect.get().withHandle(h -> {
+            return h.createQuery(sql).bind("beltName", beltName).bind("color", color).mapTo(String.class).list();
+        });
+    }
+
+    public List<String> getBeltNameAlike(String keyword) {
+        String sql = "SELECT b.name FROM belts b WHERE b.name LIKE :keyword AND b.isDeleted = 0 LIMIT 10";
+        return JDBIConnect.get().withHandle(h ->
+                h.createQuery(sql)
+                        .bind("keyword", "%" + keyword + "%")
+                        .mapTo(String.class)
+                        .list()
+        );
+    }
+
+    public int getQuantity(String name, String color, String size) {
+        String sql = "SELECT i.stockQuantity " +
+                "FROM inventory i " +
+                "JOIN beltVariants v ON v.id = i.variantId " +
+                "JOIN colors c ON v.colorId = c.id " +
+                "JOIN sizes s ON v.sizeId = s.id " +
+                "JOIN belts b ON b.id = v.beltId " +
+                "WHERE b.name = :name AND c.name = :color AND s.name = :size";
+
+        return JDBIConnect.get().withHandle(h ->
+                h.createQuery(sql)
+                        .bind("name", name)
+                        .bind("color", color)
+                        .bind("size", size)
+                        .mapTo(Integer.class)
+                        .findFirst()
+                        .orElse(0)
+        );
+    }
+
+    public BeltVariant findLatestVariant() {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "SELECT * FROM beltVariants ORDER BY id DESC LIMIT 1 ";
+            return h.createQuery(sql).mapToBean(BeltVariant.class).findFirst().orElse(null);
+        });
+    }
+
+    public boolean addDescription(BeltVariant v, String description) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "UPDATE beltVariants SET description = :description WHERE id = :id";
+            return h.createUpdate(sql)
+                    .bind("description", description)
+                    .bind("id", v.getId()).execute() > 0;
         });
     }
 }

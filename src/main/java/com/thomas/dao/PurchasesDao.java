@@ -194,4 +194,14 @@ public class PurchasesDao {
             return h.createUpdate(sql).bind("id", inventory.getId()).bind("stockQuantity", inventory.getStockQuantity()).execute() > 0;
         });
     }
+
+    public int findIventoryId(int beltId, int id) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "SELECT id FROM inventory WHERE beltId=:beltId AND variantId=:variantId";
+            return h.createQuery(sql)
+                    .bind("beltId", beltId)
+                    .bind("variantId", id)
+                    .mapTo(Integer.class).findFirst().orElse(null);
+        });
+    }
 }

@@ -9,8 +9,11 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Product Detail</title>
-    <link rel="shortcut icon" href="${pageContext.request.contextPath}/assets/icons/favicon.svg" type="image/png"/>
+    <title>${belt.name} - MyStore</title>
+    <meta name="description" content="${belt.beltVariant.description}">
+    <meta property="og:title" content="${belt.name}">
+    <meta property="og:description" content="${belt.name}">
+    <link rel="shortcut icon" href="https://cdn-web-servlet.vercel.app/images/favicon.svg" type="image/png"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"/>
 
@@ -20,17 +23,18 @@
             crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
             rel="stylesheet"
-            href="${pageContext.request.contextPath}/css/fontawesome-free-6.6.0-web/fontawesome-free-6.6.0-web/css/all.css"
+            type="text/css"
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css"/>
-    <script src="${pageContext.request.contextPath}/js/productDetail.js"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
-    <script src="${pageContext.request.contextPath}/js/favorite.js"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/favorite.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/productDetail.css"/>
+    <link rel="stylesheet" href="https://cdn-web-servlet.vercel.app/css/general.css"/>
+    <link rel="stylesheet" href="https://cdn-web-servlet.vercel.app/css/header.css"/>
+    <link rel="stylesheet" href="https://cdn-web-servlet.vercel.app/css/footer.css"/>
+    <script src="https://cdn-web-servlet.vercel.app/js/productDetail.js"></script>
+    <script src="https://cdn-web-servlet.vercel.app/js/favorite.js"></script>
+    <link rel="stylesheet" href="https://cdn-web-servlet.vercel.app/css/favorite.css"/>
+    <link rel="stylesheet" href="https://cdn-web-servlet.vercel.app/css/productDetail.css"/>
 </head>
 
 <body>
@@ -405,7 +409,18 @@
             </div>
         </div>
     </div>
-    <
+    <c:if test="${not empty sessionScope.toastMessage}">
+    <script>
+        window.addEventListener("DOMContentLoaded", function () {
+            const toastBox = document.getElementById("liveToast");
+            const toastText = document.querySelector(".custom_toast_text");
+            toastText.innerText = "${sessionScope.toastMessage}";
+            toastBox.classList.remove("hide");
+            toastBox.classList.add("show");
+        });
+    </script>
+        <c:remove var="toastMessage" scope="session"/>
+    </c:if>
     <script>
         document.querySelectorAll('.star-rating:not(.readonly) label').forEach(star => {
             star.addEventListener('click', function () {

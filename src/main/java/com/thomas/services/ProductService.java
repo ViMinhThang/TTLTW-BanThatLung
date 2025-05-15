@@ -6,6 +6,7 @@ import com.thomas.dao.CategoryDao;
 import com.thomas.dao.ProductDao;
 import com.thomas.dao.db.JDBIConnect;
 import com.thomas.dao.model.*;
+import org.eclipse.tags.shaded.org.apache.xalan.templates.KeyDeclaration;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -52,7 +53,7 @@ public class ProductService {
         productDao.saveDesc(beltId, description, variantId, colorId, sizeId);
     }
 
-    public boolean deleteProductVariant(int productId, int variantId, int userId) {
+    public boolean deleteProductVariant(Integer productId, int variantId, int userId) {
         return beltVariantDao.deleteVariantAndLog(productId, variantId, userId);
     }
 
@@ -240,6 +241,9 @@ public class ProductService {
                 Belts b = new Belts(belt);
                 BeltVariant beltVariant = findVariant(belt.getId(), i, null, null);
                 beltVariant.setImages(getVariantImages(beltVariant.getId()));
+                beltVariant.setColor(beltVariantDao.findColorNameById(beltVariant.getColorId()));
+                beltVariant.setSize(beltVariantDao.findSizeNameById(beltVariant.getSizeId()));
+                beltVariant.setStockQuantity(productDao.getStockQuantity(b.getId(), i, null, null));
                 b.setBeltVariant(beltVariant);
                 b.setTotalSold(productDao.getTotalSold(belt.getId()));
                 display.add(b);
@@ -269,6 +273,10 @@ public class ProductService {
 
     public boolean deleteProduct(int beltId, Integer variantId, int userId) {
         return productDao.deleteProductAndLog(beltId, userId) && beltVariantDao.deleteVariantAndLog(beltId, null, userId);
+    }
+
+    public boolean deleteProduct(int beltId) {
+        return productDao.deleteProductById(beltId);
     }
 
     public List<Belts> searchProduct(String query) {
@@ -337,5 +345,29 @@ public class ProductService {
 
     public List<BeltVariant> similarVariants(int id) {
         return beltVariantDao.similarVariants(id);
+    }
+
+    public List<Belts> sort(String sort, List<Belts> listBelt) {
+        switch (sort) {
+            case "desc":
+                return listBelt.stream()
+                        .sorted(Comparator.comparing(b -> b.getBeltVariant().getPrice(), Comparator.reverseOrder()))
+                        .collect(Collectors.toList());
+
+            case "asc":
+                return listBelt.stream()
+                        .sorted(Comparator.comparing(b -> b.getBeltVariant().getPrice()))
+                        .collect(Collectors.toList());
+            default:
+                return listBelt;
+        }
+    }
+
+    public BeltVariant getLatestVariant() {
+        return beltVariantDao.findLatestVariant();
+    }
+
+    public boolean addDescription(BeltVariant v, String description) {
+        return beltVariantDao.addDescription(v, description);
     }
 }

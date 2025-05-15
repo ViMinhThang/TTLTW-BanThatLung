@@ -89,20 +89,22 @@ CREATE TABLE `Groups`
 -- 2. Bảng users
 CREATE TABLE users
 (
-    id          INT AUTO_INCREMENT PRIMARY KEY,
-    email       VARCHAR(255) UNIQUE NOT NULL,
-    password    VARCHAR(255)        NOT NULL,
-    name        VARCHAR(255),
-    dateOfBirth DATETIME,
-    image       VARCHAR(255),
-    gender      VARCHAR(50),
-    phoneNumber BIGINT,
-    role        INT,
-    token       VARCHAR(255),
-    isActive    INT,
-    is_verified BOOLEAN   DEFAULT FALSE,
-    isDeleted   INT       DEFAULT 0,
-    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id            INT AUTO_INCREMENT PRIMARY KEY,
+    email         VARCHAR(255) UNIQUE NOT NULL,
+    password      VARCHAR(255) NULL,
+    name          VARCHAR(255),
+    dateOfBirth   DATETIME,
+    image         VARCHAR(255),
+    gender        VARCHAR(50),
+    phoneNumber   BIGINT,
+    role          INT,
+    token         VARCHAR(255),
+    isActive      INT       DEFAULT 1,
+    oauthProvider VARCHAR(50),
+    oauthId       VARCHAR(255),
+    is_verified   BOOLEAN   DEFAULT FALSE,
+    isDeleted     INT       DEFAULT 0,
+    createdAt    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 -- 3. Bảng phụ liên quan đến users
 CREATE TABLE usersUsage

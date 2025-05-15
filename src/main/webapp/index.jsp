@@ -30,13 +30,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="js/HomePage.js"></script>
-    <link rel="stylesheet" href="css/HomePage.css"/>
+    <link rel="stylesheet" href="https://cdn-web-servlet.vercel.app/css/HomePage.css"/>
     <link
             rel="stylesheet"
-            href="css/fontawesome-free-6.6.0-web/fontawesome-free-6.6.0-web/css/all.css"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     />
-    <link rel="stylesheet" href="css/header.css"/>
-    <link rel="stylesheet" href="css/footer.css"/>
+    <link rel="stylesheet" href="https://cdn-web-servlet.vercel.app/css/header.css"/>
+    <link rel="stylesheet" href="https://cdn-web-servlet.vercel.app/css/footer.css"/>
     <script src="js/header.js"></script>
 </head>
 <body>
@@ -45,7 +45,7 @@
     <section id="section_slider">
         <div class="w-100 p-0">
             <div class="carousel-item active">
-                <img src="assets/images/homepage/z6088271163993_ca5603db38e0ae9d411375a3aeb3ef65.jpg"
+                <img src="https://cdn-web-servlet.vercel.app/images/Hero-Banner-Home-1.jpg"
                      class="d-block w-100 img-fluid"/>
             </div>
         </div>
@@ -106,7 +106,7 @@
 
     <section id="section_slider">
         <div class="w-100 p-0">
-            <img src="assets/images/homepage/Beige Gray Aesthetic Photo Collage Shop New Collection Promotion Banner.png"
+            <img src="https://cdn-web-servlet.vercel.app/images/Hero-Banner-Home-1.jpg"
                  class="d-block w-100 img-fluid"
                  alt="...">
         </div>

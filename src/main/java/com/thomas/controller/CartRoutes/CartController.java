@@ -24,14 +24,11 @@ import java.util.Map;
 @WebServlet(name = "CartController", value = "/Cart")
 public class CartController extends HttpServlet {
     ProductService productService = new ProductService();
-    DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-    DecimalFormat formatter = new DecimalFormat("#,###.000", symbols);
     CartService cartService = new CartService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        symbols.setGroupingSeparator(',');
-        symbols.setDecimalSeparator('.');
+
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("auth");
         List<CartItem> cartItemList = cartService.getCart(user.getId());
@@ -73,8 +70,6 @@ public class CartController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        symbols.setGroupingSeparator(',');
-        symbols.setDecimalSeparator('.');
         String message = request.getParameter("message");
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("auth");
@@ -94,6 +89,13 @@ public class CartController extends HttpServlet {
             String size = request.getParameter("size");
             int beltId = Integer.parseInt(request.getParameter("beltId"));
             int variantId = Integer.parseInt(request.getParameter("variantId"));
+            if (cartService.checkInventory(beltId, variantId) < 0) {
+                String json = gson.toJson("Sản phẩm đã hết số lượng bạn chọn");
+                response.setStatus(403);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(json);
+            }
             List<CartItem> cartItemList = cartService.getCart(userId);
             CartItem existingItem = null;
             for (CartItem item : cartItemList) {
