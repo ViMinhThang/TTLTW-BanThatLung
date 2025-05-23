@@ -54,10 +54,12 @@ public class TransactionsDao {
 
     public String findBeltName(int beltVariantId, String transactionType, LocalDateTime transactionDate, int beltId) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "SELECT CONCAT(b.name, ' ', v.color, ' ', v.size) " +
+            String sql = "SELECT CONCAT(b.name, ' ', c.name, ' ', s.name) " +
                     "FROM belts b " +
                     "JOIN beltVariants v ON v.beltId = b.id " +
                     "JOIN stockTransactions p ON p.beltVariantId = v.id " +
+                    "JOIN colors c ON v.colorId = c.id " +
+                    "JOIN sizes s ON v.sizeId = s.id " +
                     "WHERE p.beltVariantId = :beltVariantId " +
                     "AND p.transactionType = :transactionType " +
                     "AND p.transactionDate = :transactionDate " +
@@ -77,6 +79,7 @@ public class TransactionsDao {
             return h.createQuery(sql).bind("beltName", beltName).mapTo(Integer.class).findFirst().orElse(null);
         });
     }
+
     public int findVariantId(String beltName, String color, String size) {
         return JDBIConnect.get().withHandle(h -> {
             String sql = "SELECT v.id FROM beltVariants v " +

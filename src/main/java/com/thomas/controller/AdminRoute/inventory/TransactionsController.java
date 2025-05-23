@@ -57,7 +57,7 @@ public class TransactionsController extends HttpServlet {
             transactions.setId(Integer.parseInt(request.getParameter("transactionId")));
             boolean deleted = transactionService.deleteTransactions(transactions);
             if (deleted) {
-                response.sendRedirect("/admin/inventory/purchases");
+                response.sendRedirect("/admin/inventory/transactions");
             }
         }
     }

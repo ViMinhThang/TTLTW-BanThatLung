@@ -14,7 +14,30 @@
 
     <title>THOMAS - Admin</title>
     <jsp:include page="/frontend/components/Admin/adminLink/adminLink.jsp"/>
+    <style>
+        .autocomplete-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: white;
+            border: 1px solid #ccc;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
 
+        .autocomplete-list div {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .autocomplete-list div:hover {
+            background-color: #f0f0f0;
+        }
+
+    </style>
 </head>
 
 <body id="page-top">
@@ -301,7 +324,6 @@
                                         <td>${belt.isDeleted == 0 ? "Chưa xóa" : "Đã xóa"}</td>
                                         <td>${belt.discountRate}</td>
                                         <td>${belt.materialBelt}</td>
-
                                         <td class="text-center">
                                             <c:choose>
                                                 <c:when test="${permissionToExecute and permissionToWrite}">
@@ -450,7 +472,8 @@
                         <!-- Tên sản phẩm -->
                         <div class="mb-3">
                             <label class="form-label text-dark">Tên sản phẩm</label>
-                            <input type="text" class="form-control rounded-0" name="productName" required/>
+                            <input type="text" class="form-control custom_input--btn-group__input" name="productName"
+                                   required/>
                         </div>
 
                         <!-- Giới tính -->
@@ -464,7 +487,7 @@
                                     <label class="form-check-label text-dark" for="genderMale">Nam</label>
                                 </div>
                                 <div class="form-check me-4 align-items-center">
-                                    <input class="form-check-input" type="radio" name="gender" id="genderFemale"
+                                    <input class="form-check-input " type="radio" name="gender" id="genderFemale"
                                            value="Female"
                                            <c:if test="${belt.gender == 'Female'}">checked</c:if> />
                                     <label class="form-check-label text-dark" for="genderFemale">Nữ</label>
@@ -477,7 +500,7 @@
                             <label class="form-label text-dark m-0 mr-2">Xóa mềm</label>
 
                             <div class="d-flex justify-content-center align-items-center">
-                                <input type="checkbox" class="me-2 mr-2" id="isDeleted" name="showDeleted"
+                                <input type="checkbox" class="me-2 mr-2 " id="isDeleted" name="showDeleted"
                                        value="1"
                                 ${belt.isDeleted == 1 ? "checked" : ""} />
                                 <div class="text-dark">Đánh dấu đã xóa</div>
@@ -489,18 +512,26 @@
                         <!-- Giảm giá -->
                         <div class="mb-3">
                             <label class="form-label text-dark">Giảm giá (%)</label>
-                            <input type="number" name="discountRate" class="form-control rounded-0"
+                            <input type="number" name="discountRate" class="form-control custom_input--btn-group__input"
                                    value="${belt.discountRate}"/>
                         </div>
 
                         <!-- Chất liệu -->
                         <div class="mb-3">
                             <label class="form-label text-dark">Chất liệu</label>
-                            <select class="form-select form-control rounded-0" name="material">
+                            <select class="form-select form-control custom_input--btn-group__input" name="material">
                                 <option value="Da" ${belt.materialBelt == 'Da' ? 'selected' : ''}>Da</option>
                                 <option value="Canvas" ${belt.materialBelt == 'Canvas' ? 'selected' : ''}>Canvas
                                 </option>
                             </select>
+                        </div>
+                        <div class="mb-3 position-relative">
+                            <label class="form-label text-dark">Nhà sản xuất</label>
+                            <input class="form-control custom_input--btn-group__input" name="supplierName" type="text"
+                                   autocomplete="off"
+                                   required/>
+                            <div id="supplierSuggestions" class="autocomplete-list"></div>
+
                         </div>
                     </div>
 

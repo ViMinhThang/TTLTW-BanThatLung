@@ -135,6 +135,22 @@
                         </h6>
                     </div>
                     <div class="card-body">
+                        <div class="d-flex justify-content-end align-items-center gap-4 p-3 bg-light rounded shadow-sm">
+                            <h3 class="mb-0 text-primary fw-semibold">Import CSV</h3>
+
+                            <form method="post" enctype="multipart/form-data"
+                                  action="${pageContext.request.contextPath}/admin/inventory/inventories?message=import"
+                                  class="d-flex align-items-center gap-2">
+
+                                <div class="form-group mb-0">
+                                    <input type="file" name="file" class="form-control" accept=".csv">
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-upload"></i> Upload
+                                </button>
+                            </form>
+                        </div>
                         <div class="table-responsive">
                             <table class="table" id="dataTable" width="100%" cellspacing="0">
                                 <thead>

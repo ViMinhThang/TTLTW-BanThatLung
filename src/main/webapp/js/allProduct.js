@@ -26,4 +26,39 @@ $(document).ready(function () {
         $(".createOrUpdate").text("Tạo");
         $(".createOrUpdate input[name='beltId']").remove();
     });
+    $('input[name="supplierName"]').on('input', function () {
+        const keyword = $(this).val().trim();
+        $.ajax({
+            url: '/SearchSupplierNames', method: 'GET', data: {keyword}, success: function (response) {
+                const suggestionBox = $('#supplierSuggestions');
+                suggestionBox.empty();
+                if (response.names && response.names.length > 0) {
+                    response.names.forEach(name => {
+                        suggestionBox.append(`<div class="suggestion-item">${name}</div>`);
+                    });
+                    suggestionBox.show();
+                } else {
+                    suggestionBox.hide();
+                }
+            }
+        });
+    });
+    $(function () {
+        const $nameInput = $('input[name="supplierName"]');
+        const $supplierSuggestions = $('#supplierSuggestions');
+
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('input[name="supplierName"]').length) {
+                $supplierSuggestions.hide();
+            }
+        });
+
+        $supplierSuggestions.on('click', '.suggestion-item', function () {
+            const selected = $(this).text();
+            $nameInput.val(selected).trigger('blur');
+            $supplierSuggestions.hide();
+        });
+
+    });
+
 });

@@ -204,4 +204,36 @@ public class PurchasesDao {
                     .mapTo(Integer.class).findFirst().orElse(null);
         });
     }
+
+    public List<String> getSupplierNames(String keyword) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "SELECT name FROM suppliers WHERE name LIKE :keyword";
+            return h.createQuery(sql).bind("keyword", "%" + keyword + "%").mapTo(String.class).list();
+        });
+    }
+
+    public List<String> getSupplierProducts(String keyword) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "SELECT b.name FROM belts b JOIN suppliers s ON b.supplierId=s.id WHERE b.name LIKE :keyword";
+            return h.createQuery(sql).bind("keyword", "%" + keyword + "%").mapTo(String.class).list();
+        });
+    }
+
+    public Boolean deleteAllStock() {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "TRUNCATE TABLE inventory";
+            return h.createUpdate(sql).execute() > 0;
+        });
+    }
+
+    public Boolean insertOne(Inventory inventory) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "INSERT INTO inventory(beltId,variantId,stockQuantity) VALUES(:beltId, :variantId, :stockQuantity)";
+            return h.createUpdate(sql)
+                    .bind("beltId", inventory.getBeltId())
+                    .bind("variantId", inventory.getVariantId())
+                    .bind("stockQuantity", inventory.getStockQuantity())
+                    .execute() > 0;
+        });
+    }
 }

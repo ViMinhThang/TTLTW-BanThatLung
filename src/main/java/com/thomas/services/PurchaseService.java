@@ -114,4 +114,24 @@ public class PurchaseService {
         i.setId(dao.findIventoryId(beltId, v.getId()));
         return dao.updateInventory(i);
     }
+
+    public List<String> getSupplierName(String keyword) {
+        return dao.getSupplierNames(keyword);
+    }
+
+    public List<String> getSupplierProducts(String keyword) {
+        return dao.getSupplierProducts(keyword);
+    }
+
+    public int findSupplierId(String supplier) {
+        return dao.findSupplierId(supplier);
+    }
+
+    public void deleteAllStock() {
+        dao.deleteAllStock();
+    }
+
+    public boolean insertOne(Inventory inventory) {
+        return dao.insertOne(inventory);
+    }
 }

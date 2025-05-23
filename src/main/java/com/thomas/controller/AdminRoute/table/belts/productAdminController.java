@@ -5,6 +5,7 @@ import com.thomas.dao.model.Belts;
 import com.thomas.dao.model.User;
 import com.thomas.services.PermissionService;
 import com.thomas.services.ProductService;
+import com.thomas.services.PurchaseService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -24,6 +25,7 @@ public class productAdminController extends HttpServlet {
     private static final String ULOAD_DIR = "uploads";
     private static final ProductService PRODUCT_SERVICE = new ProductService();
     private static final PermissionService PERMISSION_SERVICE = new PermissionService();
+    private static final PurchaseService PURCHASE_SERVICE = new PurchaseService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -50,6 +52,8 @@ public class productAdminController extends HttpServlet {
             int isDeleted = Integer.parseInt(request.getParameter("isDeleted"));
             double discountRate = Double.parseDouble(request.getParameter("discountRate"));
             String material = request.getParameter("material");
+            String supplier = request.getParameter("supplierName");
+            int supplierId = PURCHASE_SERVICE.findSupplierId(supplier);
             Belts belt = new Belts();
             belt.setName(name);
             belt.setGender(gender);
@@ -60,6 +64,7 @@ public class productAdminController extends HttpServlet {
             belt.setReleaseDate(LocalDateTime.now());
             belt.setCreatedAt(LocalDateTime.now());
             belt.setUpdatedAt(LocalDateTime.now());
+            belt.setSupplierId(supplierId);
             PRODUCT_SERVICE.createBelt(belt);
         }
         if (message.equals("delete")) {
