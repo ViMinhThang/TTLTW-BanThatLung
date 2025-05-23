@@ -104,7 +104,7 @@ CREATE TABLE users
     oauthId       VARCHAR(255),
     is_verified   BOOLEAN   DEFAULT FALSE,
     isDeleted     INT       DEFAULT 0,
-    createdAt    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    createdAt     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 -- 3. Bảng phụ liên quan đến users
 CREATE TABLE usersUsage
@@ -154,7 +154,9 @@ CREATE TABLE belts
     updatedAt    DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     isDeleted    INT      DEFAULT 0,
     discountRate DOUBLE DEFAULT 0.0,
-    materialBelt VARCHAR(255)
+    materialBelt VARCHAR(255),
+    supplierId   INT NULL,
+    FOREIGN KEY (supplierId) REFERENCES suppliers (id) ON DELETE CASCADE
 );
 CREATE TABLE colors
 (

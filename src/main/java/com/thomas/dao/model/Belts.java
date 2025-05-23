@@ -19,6 +19,7 @@ public class Belts implements Serializable {
     private String materialBelt;
     private BeltVariant beltVariant;
     private int totalSold;
+    private int supplierId;
 
     public Belts() {
 
@@ -152,5 +153,13 @@ public class Belts implements Serializable {
 
     public int getTotalSold() {
         return totalSold;
+    }
+
+    public int getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(int supplierId) {
+        this.supplierId = supplierId;
     }
 }

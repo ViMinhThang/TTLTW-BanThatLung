@@ -234,7 +234,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">
-                        Bạn có muốn xóa nhà cung cấp này này?
+                        Bạn có muốn bản ghi giao dịch này ?
                     </h5>
                     <button
                             type="button"
@@ -255,7 +255,7 @@
                     >
                         Hủy
                     </button>
-                    <form class="deleteBtn" action="/admin/inventory/suppliers" method="POST">
+                    <form class="deleteBtn" action="/admin/inventory/transactions" method="POST">
                         <button
                                 id="removeUserBtn"
                                 type="submit"
@@ -363,7 +363,7 @@
             hiddenInput.value = this.checked ? 1 : 0;
         });
     </script>
-    <script src="${pageContext.request.contextPath}/js/allSupliers.js"></script>
+    <script src="${pageContext.request.contextPath}/js/allTransaction.js"></script>
 
 </div>
 </body>

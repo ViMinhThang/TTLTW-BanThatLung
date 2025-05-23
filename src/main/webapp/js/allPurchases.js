@@ -63,4 +63,117 @@ $(document).ready(function () {
         $(".createOrUpdate").text("Tạo");
         $(".createOrUpdate input[name='purchaseId']").remove();
     });
+    $('input[name="name"]').on('input', function () {
+        const keyword = $(this).val().trim();
+        if (keyword.length === 0) {
+            $('#beltSuggestions').hide();
+            return;
+        }
+
+        $.ajax({
+            url: '/SearchSupplierNames', method: 'GET', data: {keyword}, success: function (response) {
+                const suggestionBox = $('#supplierSuggestions');
+                suggestionBox.empty();
+                if (response.names && response.names.length > 0) {
+                    response.names.forEach(name => {
+                        suggestionBox.append(`<div class="suggestion-item">${name}</div>`);
+                    });
+                    suggestionBox.show();
+                } else {
+                    suggestionBox.hide();
+                }
+            }
+        });
+    });
+
+    $(function () {
+        const $nameInput = $('input[name="name"]');
+        const $productNameInput = $('input[name="productName"]');
+        const $colorSelect = $('select[name="colorSelect"]');
+        const $sizeSelect = $('select[name="sizeSelect"]');
+        const $supplierSuggestions = $('#supplierSuggestions');
+        const $beltSupplierSuggestions = $('#BeltSupplierSuggestions');
+
+        function populateSelect($select, items) {
+            $select.empty().append('<option value="">--Chọn--</option>');
+            items.forEach(item => {
+                $select.append(`<option value="${item}">${item}</option>`);
+            });
+        }
+
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('#supplierSuggestions, input[name="name"]').length) {
+                $supplierSuggestions.hide();
+            }
+            if (!$(e.target).closest('#BeltSupplierSuggestions, input[name="productName"]').length) {
+                $beltSupplierSuggestions.hide();
+            }
+        });
+
+        $supplierSuggestions.on('click', '.suggestion-item', function () {
+            const selected = $(this).text();
+            $nameInput.val(selected).trigger('blur');
+            $supplierSuggestions.hide();
+        });
+
+        $productNameInput.on('input', function () {
+            const keyword = $(this).val().trim();
+            if (!keyword) return $beltSupplierSuggestions.hide();
+
+            $.get('/SearchSupplierProducts', {keyword}, function (response) {
+                const names = response.names || [];
+                $beltSupplierSuggestions.empty();
+
+                if (names.length > 0) {
+                    names.forEach(name => {
+                        $beltSupplierSuggestions.append(`<div class="suggestion-item">${name}</div>`);
+                    });
+                    $beltSupplierSuggestions.show();
+                } else {
+                    $beltSupplierSuggestions.hide();
+                }
+            });
+        });
+
+        $beltSupplierSuggestions.on('click', '.suggestion-item', function () {
+            const selected = $(this).text();
+            $productNameInput.val(selected).trigger('blur');
+            $beltSupplierSuggestions.hide();
+        });
+
+        $productNameInput.on('blur', function () {
+            const name = $(this).val().trim();
+            if (!name) return;
+
+            $.get('/getColorsAndSizes', {name}, function (response) {
+                populateSelect($colorSelect, response.colors || []);
+                populateSelect($sizeSelect, response.sizes || []);
+            });
+        });
+
+        $colorSelect.on('change', function () {
+            const name = $productNameInput.val().trim();
+            const size = $sizeSelect.val();
+            const color = $(this).val();
+
+            if (!color && name && size) {
+                $.get('/getColorsByNameAndSize', {name, size}, function (response) {
+                    populateSelect($colorSelect, response.colors || []);
+                });
+            }
+        });
+
+        $sizeSelect.on('change', function () {
+            const name = $productNameInput.val().trim();
+            const color = $colorSelect.val();
+            const size = $(this).val();
+
+            if (!size && name && color) {
+                $.get('/getSizesByNameAndColor', {name, color}, function (response) {
+                    populateSelect($sizeSelect, response.sizes || []);
+                });
+            }
+        });
+    });
+
 });

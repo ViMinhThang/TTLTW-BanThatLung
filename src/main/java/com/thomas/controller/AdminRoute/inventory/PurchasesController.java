@@ -54,45 +54,28 @@ public class PurchasesController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String message = request.getParameter("message");
+        Purchases purchases = new Purchases();
         if (message.equals("create")) {
-            String name = request.getParameter("name").trim();
-            String productName = request.getParameter("productName").trim();
-            String[] parts = productName.split(" ");
-            String beltName = String.join(" ", Arrays.copyOfRange(parts, 0, parts.length - 2));
-            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            String name = request.getParameter("name");
+            String productName = request.getParameter("productName");
+            String color = request.getParameter("colorSelect");
+            String size = request.getParameter("sizeSelect");
             LocalDateTime purchaseDate = LocalDate.parse(request.getParameter("purchaseDate"), DateTimeFormatter.ISO_LOCAL_DATE).atStartOfDay();
-            int beltId = purchaseService.findBeltId(beltName);
-            int variantId = purchaseService.getVariantId(beltName, parts[parts.length - 1], parts[parts.length - 2]);
-            int supplierId = purchaseService.getSupplierId(name);
             LocalDateTime createdAt = LocalDate.parse(request.getParameter("createdDate"), DateTimeFormatter.ISO_LOCAL_DATE).atStartOfDay();
-            Purchases purchases = new Purchases(supplierId, variantId, quantity, purchaseDate, createdAt, beltId);
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            int beltId = purchaseService.findBeltId(productName);
+            int variantId = purchaseService.getVariantId(productName, size, color);
+            int supplierId = purchaseService.getSupplierId(name);
+            purchases = new Purchases(supplierId, variantId, quantity, purchaseDate, createdAt, beltId);
             purchases.setSupplierName(name);
             boolean created = purchaseService.createPurchase(purchases) && purchaseService.addInventory(beltId, variantId, quantity);
             if (created) {
                 response.sendRedirect("/admin/inventory/purchases");
             }
         } else if (message.equals("delete")) {
-            Purchases purchases = new Purchases();
             purchases.setId(Integer.parseInt(request.getParameter("purchaseId")));
             boolean deleted = purchaseService.deletePurchase(purchases);
             if (deleted) {
-                response.sendRedirect("/admin/inventory/purchases");
-            }
-        } else if (message.equals("update")) {
-            String name = request.getParameter("name").trim();
-            String productName = request.getParameter("productName").trim();
-            String[] parts = productName.split(" ");
-            String beltName = String.join(" ", Arrays.copyOfRange(parts, 0, parts.length - 2));
-            int quantity = Integer.parseInt(request.getParameter("quantity"));
-            LocalDateTime purchaseDate = LocalDate.parse(request.getParameter("purchaseDate"), DateTimeFormatter.ISO_LOCAL_DATE).atStartOfDay();
-            int beltId = purchaseService.findBeltId(beltName);
-            int variantId = purchaseService.getVariantId(beltName, parts[parts.length - 1], parts[parts.length - 2]);
-            int supplierId = purchaseService.getSupplierId(name);
-            LocalDateTime createdAt = LocalDate.parse(request.getParameter("createdDate"), DateTimeFormatter.ISO_LOCAL_DATE).atStartOfDay();
-            Purchases purchases = new Purchases(supplierId, variantId, quantity, purchaseDate, createdAt, beltId);
-            purchases.setId(Integer.parseInt(request.getParameter("purchaseId")));
-            boolean updated = purchaseService.updatePurchase(purchases) && purchaseService.addInventory(beltId, variantId, quantity);
-            if (updated) {
                 response.sendRedirect("/admin/inventory/purchases");
             }
         }

@@ -14,7 +14,30 @@
 
     <title>THOMAS - Admin</title>
     <jsp:include page="/frontend/components/Admin/adminLink/adminLink.jsp"/>
+    <style>
+        .autocomplete-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: white;
+            border: 1px solid #ccc;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
 
+        .autocomplete-list div {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .autocomplete-list div:hover {
+            background-color: #f0f0f0;
+        }
+
+    </style>
 </head>
 
 <body id="page-top">
@@ -301,39 +324,60 @@
                     </div>
                     <div class="modal-body">
                         <input class="messageCreateOrUpdate" type="hidden" name="message" value="create">
-                        <div class="d-flex flex-column mt-3">
+                        <div class="d-flex flex-column mt-3 position-relative">
                             <label
-                                    class="fomr-label"
-                                    for="name"
+                                    class="form-label "
                                     style="color: black"
                             >Tên nhà cung cấp</label
                             >
                             <input class="form-control custom_input--btn-group__input" name="name" type="text"
+                                   autocomplete="off"
                                    required/>
+                            <div id="supplierSuggestions" class="autocomplete-list"></div>
+
                         </div>
-                        <div class="d-flex flex-column mt-3">
-                            <label class="fomr-label" for="info" style="color: black"
+                        <div class="d-flex flex-column mt-3 position-relative">
+                            <label class="form-label" style="color: black"
                             >Tên sản phẩm</label
                             >
                             <input class="form-control custom_input--btn-group__input" name="productName"
                                    type="text" required/>
+                            <div id="BeltSupplierSuggestions" class="autocomplete-list"></div>
                         </div>
                         <div class="d-flex flex-column mt-3">
-                            <label class="fomr-label" for="info" style="color: black"
+                            <label class="fomr-label" style="color: black"
+                            >Màu sắc</label
+                            >
+                            <select class="form-control custom_input--btn-group__input" name="colorSelect"
+                                    required>
+
+                            </select>
+                        </div>
+                        <div class="d-flex flex-column mt-3">
+                            <label class="fomr-label" style="color: black"
+                            >Size</label
+                            >
+                            <select class="form-control custom_input--btn-group__input" name="sizeSelect"
+                                    required>
+
+                            </select>
+                        </div>
+                        <div class="d-flex flex-column mt-3">
+                            <label class="fomr-label" style="color: black"
                             >Ngày mua</label
                             >
                             <input class="form-control custom_input--btn-group__input" name="purchaseDate"
                                    type="date" required/>
                         </div>
                         <div class="d-flex flex-column mt-3">
-                            <label class="fomr-label" for="info" style="color: black"
+                            <label class="fomr-label" style="color: black"
                             >Ngày tạo phiếu</label
                             >
                             <input class="form-control custom_input--btn-group__input" name="createdDate"
                                    type="date" required/>
                         </div>
                         <div class="d-flex flex-column mt-3">
-                            <label class="fomr-label" for="info" style="color: black"
+                            <label class="fomr-label" style="color: black"
                             >Số lượng</label
                             >
                             <input class="form-control custom_input--btn-group__input" name="quantity"

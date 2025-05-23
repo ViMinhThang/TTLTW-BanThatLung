@@ -133,12 +133,23 @@ VALUES (3, 5, 1);
 INSERT INTO GroupPermissions (groupId, resourceId, permissionId)
 VALUES (3, 6, 1);
 
+
+INSERT INTO suppliers (name, contactInfo)
+VALUES ('BeltPro Vietnam', 'SĐT: 0909090909, Email: contact@beltpro.vn, Địa chỉ: 123 Nguyễn Trãi, Q.5, TP.HCM'),
+       ('Thắt Lưng Da Cao Cấp Hà Nội',
+        'SĐT: 0911223344, Email: info@thatlunghanoi.vn, Địa chỉ: 56 Lê Duẩn, Hoàn Kiếm, Hà Nội'),
+       ('CTY TNHH Dây Nịt Nam Quốc',
+        'SĐT: 0988123456, Email: sales@namquocbelts.com, Địa chỉ: 22 Lý Thường Kiệt, Đà Nẵng'),
+       ('LeatherStyle Co., Ltd', 'SĐT: 0977665544, Email: support@leatherstyle.com, Địa chỉ: 77 Pasteur, Q.1, TP.HCM'),
+       ('Phụ Kiện Thời Trang Belto', 'SĐT: 0966998877, Email: belto@fashion.vn, Địa chỉ: 88 Trần Hưng Đạo, Cần Thơ');
+
+
 INSERT INTO belts (name, gender, releaseDate, discountRate, materialBelt)
-VALUES ('Golf Braided Stretch Belt', 'Male', '2024-01-10', 10.0, 'Canvas'),
-       ('Golf Orange Stretch Belt', 'Female', '2024-02-15', 15.0, 'Da'),
-       ('3-Stripes Tour Belt', 'Male', '2024-03-05', 20.0, 'Canvas'),
-       ('Originals Golf Leather Belt', 'Unisex', '2024-01-25', 5.0, 'Da'),
-       ('Reversible Webbing Belt', 'Female', '2024-04-01', 20.0, 'Canvas');
+VALUES ('Golf Braided Stretch Belt', 'Male', '2024-01-10', 10.0, 'Canvas','BeltPro Vietnam'),
+       ('Golf Orange Stretch Belt', 'Female', '2024-02-15', 15.0, 'Da','BeltPro Vietnam'),
+       ('3-Stripes Tour Belt', 'Male', '2024-03-05', 20.0, 'Canvas','LeatherStyle Co., Ltd'),
+       ('Originals Golf Leather Belt', 'Unisex', '2024-01-25', 5.0, 'Da','LeatherStyle Co., Ltd'),
+       ('Reversible Webbing Belt', 'Female', '2024-04-01', 20.0, 'Canvas','BeltPro Vietnam');
 
 
 INSERT INTO beltVariants (beltId, sizeId, colorId, description, price)
@@ -234,14 +245,6 @@ VALUES ('COD', 1),
        ('VNPay', 1);
 
 
-INSERT INTO suppliers (name, contactInfo)
-VALUES ('BeltPro Vietnam', 'SĐT: 0909090909, Email: contact@beltpro.vn, Địa chỉ: 123 Nguyễn Trãi, Q.5, TP.HCM'),
-       ('Thắt Lưng Da Cao Cấp Hà Nội',
-        'SĐT: 0911223344, Email: info@thatlunghanoi.vn, Địa chỉ: 56 Lê Duẩn, Hoàn Kiếm, Hà Nội'),
-       ('CTY TNHH Dây Nịt Nam Quốc',
-        'SĐT: 0988123456, Email: sales@namquocbelts.com, Địa chỉ: 22 Lý Thường Kiệt, Đà Nẵng'),
-       ('LeatherStyle Co., Ltd', 'SĐT: 0977665544, Email: support@leatherstyle.com, Địa chỉ: 77 Pasteur, Q.1, TP.HCM'),
-       ('Phụ Kiện Thời Trang Belto', 'SĐT: 0966998877, Email: belto@fashion.vn, Địa chỉ: 88 Trần Hưng Đạo, Cần Thơ');
 
 
 INSERT INTO purchases (supplierId, beltId, beltVariantId, quantity, purchaseDate)

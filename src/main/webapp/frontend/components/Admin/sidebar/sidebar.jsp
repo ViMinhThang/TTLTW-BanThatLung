@@ -190,14 +190,7 @@
                    href="${pageContext.request.contextPath}/admin/inventory/inventories">
                     Kho hàng
                 </a>
-                <a class="collapse-item <%= request.getHeader("referer").endsWith("orders") ? "active" : "" %>"
-                   href="${pageContext.request.contextPath}/admin/monitors/orders">
-                    Đơn hàng
-                </a>
-                <a class="collapse-item <%= request.getHeader("referer").endsWith("collections") ? "active" : "" %>"
-                   href="${pageContext.request.contextPath}/admin/monitors/collections">
-                    Bộ sưu tập
-                </a>
+
 
             </div>
         </div>
