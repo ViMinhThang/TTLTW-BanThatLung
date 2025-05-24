@@ -36,14 +36,19 @@ public class checkoutController extends HttpServlet {
         grandTotal = totalPrice - discountAmount;
 
         List<Address> userAddresses = uploadAddressService.getAddressList(user.getId());
-
+        Address userAddress = null;
+        for (Address address : userAddresses) {
+            if (address.getIsUse() == 1) {
+                userAddress = address;
+            }
+        }
         List<PaymentMethod> paymentMethods = uploadPaymentMethod.getPaymentMethods();
 
         if (userAddresses.isEmpty()) {
             String message = "Vui lòng thêm địa chỉ ở phần thiết lập cá nhân";
             request.setAttribute("messageAddress", message);
         } else {
-            request.setAttribute("userAddresses", userAddresses);
+            request.setAttribute("userAddress", userAddress);
         }
 
 

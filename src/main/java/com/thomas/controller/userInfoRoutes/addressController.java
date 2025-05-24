@@ -20,23 +20,6 @@ public class addressController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String message = request.getParameter("message");
-        if (message.equals("setIsUse")) {
-            int userId = Integer.parseInt(request.getParameter("userId"));
-            int addressId = Integer.parseInt(request.getParameter("addressId"));
-            Address address = uploadAddressService.setIsUseAddressDisplay(addressId, userId);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            try (PrintWriter out = response.getWriter()) {
-                String json = String.format(
-                        "{\"addressCity\": \"%s\", \"addressStreet\": \"%s\"}",
-                        address.getAddressCity().replace("\"", "\\\""),
-                        address.getAddressStreet().replace("\"", "\\\"")
-                );
-                out.write(json);
-            }
-            response.setStatus(200);
-
-        }
     }
 }
 

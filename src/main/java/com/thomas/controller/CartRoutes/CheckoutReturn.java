@@ -87,33 +87,33 @@ public class CheckoutReturn extends HttpServlet {
     }
 
     private void createOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Map<String, CartItem> cart = (Map<String, CartItem>) session.getAttribute("cart");
-        System.out.println("Cart: " + cart);
-        Coupon cp = (Coupon) session.getAttribute("appliedCoupon");
-        User user = (User) session.getAttribute("auth");
-        int userId = user.getId();
-        String paymentMethod = request.getParameter("resultCode") != null ? "MoMo" : "VNPay";
-        Address address = uploadAddressService.getAddressByUserId(userId);
-        int paymentMethodId = uploadPaymentMethod.getPaymentMethodId(paymentMethod);
-        double totalPrice = 0, shippingCost = 0;
-        for (CartItem cartItem : cart.values()) {
-            totalPrice += cartItem.getPrice() * cartItem.getQuantity();
-            shippingCost = cartItem.getQuantity() * 15.000;
-        }
-        double discountRate = cp == null ? 0 : cp.getDiscountRate();
-        double discountAmount = totalPrice * (discountRate / 100);
-        double grandTotal = totalPrice + shippingCost + discountAmount;
-
-        if (uploadOrderService.createOrder(userId, paymentMethodId, address.getId(), LocalDate.now(), grandTotal, "Đang xử lý", 0, user.getId())) {
-            Order order = uploadOrderService.getLatestOrder();
-            for (CartItem cartItem : cart.values()) {
-                uploadOrderDetailService.createOrderDetail(order.getId(), cartItem.getPrice(), cartItem.getBelt().getId(), cartItem.getQuantity(), cartItem.getVariant().getId());
-            }
-        }
-        String subject = "Thông báo đơn hàng";
-        String content = "Đơn hàng của bạn đã được đặt thành công. Tổng giá trị đơn hàng là: " + totalPrice + " VNĐ.\n" +
-                "Chi tiết đơn hàng:\n" + cart.toString() + "\n" + "cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.\n";
-        emailService.sendEmail(user.getEmail(), subject, content);
+//        HttpSession session = request.getSession();
+//        Map<String, CartItem> cart = (Map<String, CartItem>) session.getAttribute("cart");
+//        System.out.println("Cart: " + cart);
+//        Coupon cp = (Coupon) session.getAttribute("appliedCoupon");
+//        User user = (User) session.getAttribute("auth");
+//        int userId = user.getId();
+//        String paymentMethod = request.getParameter("resultCode") != null ? "MoMo" : "VNPay";
+//        Address address = uploadAddressService.getAddressByUserId(userId);
+//        int paymentMethodId = uploadPaymentMethod.getPaymentMethodId(paymentMethod);
+//        double totalPrice = 0, shippingCost = 0;
+//        for (CartItem cartItem : cart.values()) {
+//            totalPrice += cartItem.getPrice() * cartItem.getQuantity();
+//            shippingCost = cartItem.getQuantity() * 15.000;
+//        }
+//        double discountRate = cp == null ? 0 : cp.getDiscountRate();
+//        double discountAmount = totalPrice * (discountRate / 100);
+//        double grandTotal = totalPrice + shippingCost + discountAmount;
+//
+//        if (uploadOrderService.createOrder(userId, paymentMethodId, address.getId(), LocalDate.now(), grandTotal, "Đang xử lý", 0, user.getId())) {
+//            Order order = uploadOrderService.getLatestOrder();
+//            for (CartItem cartItem : cart.values()) {
+//                uploadOrderDetailService.createOrderDetail(order.getId(), cartItem.getPrice(), cartItem.getBelt().getId(), cartItem.getQuantity(), cartItem.getVariant().getId());
+//            }
+//        }
+//        String subject = "Thông báo đơn hàng";
+//        String content = "Đơn hàng của bạn đã được đặt thành công. Tổng giá trị đơn hàng là: " + totalPrice + " VNĐ.\n" +
+//                "Chi tiết đơn hàng:\n" + cart.toString() + "\n" + "cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.\n";
+//        emailService.sendEmail(user.getEmail(), subject, content);
     }
 }

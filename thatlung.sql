@@ -124,17 +124,16 @@ CREATE TABLE usersUsage
 
 CREATE TABLE addresses
 (
-    id             INT AUTO_INCREMENT PRIMARY KEY,
-    userId         INT          NOT NULL,
-    provinceId     INT          NOT NULL,
-    districtId     INT          NOT NULL,
-    wardId         INT          NOT NULL,
-    address_detail VARCHAR(255) NOT NULL,
-    isUse          INT DEFAULT 0,
-    isDeleted      INT DEFAULT 0,
-    FOREIGN KEY (provinceId) REFERENCES provinces (id),
-    FOREIGN KEY (districtId) REFERENCES districts (id),
-    FOREIGN KEY (wardId) REFERENCES wards (id),
+    id            INT AUTO_INCREMENT PRIMARY KEY,
+    userId        INT          NOT NULL,
+    fullname      VARCHAR(255) NOT NULL,
+    provinceId    INT          NOT NULL,
+    districtId    INT          NOT NULL,
+    wardId        INT          NOT NULL,
+    addressDetail INT          NOT NULL,
+    phone         INT          NOT NULL,
+    isUse         INT DEFAULT 0,
+    isDeleted     INT DEFAULT 0,
     FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
 );
 CREATE TABLE sessions
