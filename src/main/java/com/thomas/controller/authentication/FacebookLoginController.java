@@ -5,14 +5,13 @@ import com.google.gson.JsonObject;
 import com.thomas.constant.Iconstant;
 import com.thomas.dao.model.User;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
 
 import java.io.IOException;
 
 public class FacebookLoginController {
     public static String getToken(String code) throws ClientProtocolException, IOException {
-        
+        // Sử dụng GET request thay vì POST cho Facebook
         String response = Request.Get(Iconstant.FACEBOOK_LINK_GET_TOKEN +
                         "?client_id=" + Iconstant.FACEBOOK_CLIENT_ID +
                         "&redirect_uri=" + Iconstant.FACEBOOK_REDIRECT_URI +
@@ -31,11 +30,17 @@ public class FacebookLoginController {
         JsonObject json = new Gson().fromJson(response, JsonObject.class);
         User user = new User();
         user.setOauthId(json.get("id").getAsString());
-        user.setEmail(json.get("email").getAsString());
+        user.setEmail(json.get("email") != null ? json.get("email").getAsString() : null);
         user.setName(json.get("name").getAsString());
-        user.setImage(json.get("picture").getAsJsonObject().get("data").getAsJsonObject().get("url").getAsString());
+
+        // Xử lý avatar từ Facebook
+        if (json.has("picture") && json.get("picture").getAsJsonObject().has("data")) {
+            user.setImage(json.get("picture").getAsJsonObject()
+                    .get("data").getAsJsonObject()
+                    .get("url").getAsString());
+        }
+
         user.setOauthProvider("facebook");
         return user;
     }
 }
-

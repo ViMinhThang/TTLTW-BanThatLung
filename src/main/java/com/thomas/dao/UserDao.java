@@ -107,9 +107,21 @@ public class UserDao implements UsageInterface {
         });
     }
 
-        public User findUserEmail(String email, Integer userId) {
+    public User findUserByOAuth(String oauthId, String provider) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "SELECT * FROM users WHERE 1=1";
+            String sql = "SELECT * FROM users WHERE oauthId = :oauthId AND oauthProvider = :provider AND isDeleted = 0";
+            return h.createQuery(sql)
+                    .bind("oauthId", oauthId)
+                    .bind("provider", provider)
+                    .mapToBean(User.class)
+                    .findFirst()
+                    .orElse(null);
+        });
+    }
+
+    public User findUserEmail(String email, Integer userId) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "SELECT * FROM users WHERE isDeleted = 0";
 
             if (email != null && !email.isEmpty()) {
                 sql += " AND email = :email";
@@ -125,18 +137,6 @@ public class UserDao implements UsageInterface {
                     .orElse(null);
         });
     }
-    public User findUserByOAuth(String oauthId, String provider) {
-        return JDBIConnect.get().withHandle(h -> {
-            String sql = "SELECT * FROM users WHERE oauthId = :oauthId AND oauthProvider = :provider";
-            return h.createQuery(sql)
-                    .bind("oauthId", oauthId)
-                    .bind("provider", provider)
-                    .mapToBean(User.class)
-                    .findFirst()
-                    .orElse(null);
-        });
-    }
-
     public boolean registerUser(User user) {
         return JDBIConnect.get().withHandle(h -> {
             String insertedsql = "INSERT INTO users (name, email, dateOfBirth, password, createdAt, gender, phoneNumber, isDeleted, role, isActive, oauthProvider, oauthId) " +

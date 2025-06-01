@@ -42,16 +42,67 @@
 <%-- khối hiển thị lỗi OAuth --%>
 <div class="container-lg">
     <c:if test="${not empty param.error}">
-        <div class="alert alert-danger mt-4">
+        <div class="alert alert-dismissible fade show mt-4" role="alert">
             <c:choose>
                 <c:when test="${param.error == 'email_exists'}">
-                    ⚠️ Email này đã được đăng ký bằng phương thức thủ công.
-                    Vui lòng đăng nhập bằng email/mật khẩu.
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Email đã tồn tại!</strong><br>
+                        Email này đã được đăng ký bằng phương thức thủ công.
+                        Vui lòng đăng nhập bằng email/mật khẩu.
+                    </div>
                 </c:when>
+
                 <c:when test="${param.error == 'google_error'}">
-                    ⚠️ Đăng nhập Google thất bại. Vui lòng thử lại.
+                    <div class="alert alert-danger">
+                        <i class="fab fa-google"></i>
+                        <strong>Lỗi đăng nhập Google!</strong><br>
+                        Đăng nhập Google thất bại. Vui lòng thử lại.
+                    </div>
                 </c:when>
+
+                <c:when test="${param.error == 'facebook_error'}">
+                    <div class="alert alert-danger">
+                        <i class="fab fa-facebook-f"></i>
+                        <strong>Lỗi đăng nhập Facebook!</strong><br>
+                        Đăng nhập Facebook thất bại. Vui lòng thử lại.
+                    </div>
+                </c:when>
+
+                <c:when test="${param.error == 'facebook_denied'}">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Đăng nhập bị hủy!</strong><br>
+                        Bạn đã từ chối quyền truy cập Facebook. Vui lòng thử lại nếu muốn đăng nhập.
+                    </div>
+                </c:when>
+
+                <c:when test="${param.error == 'facebook_failed'}">
+                    <div class="alert alert-danger">
+                        <i class="fas fa-times-circle"></i>
+                        <strong>Đăng nhập thất bại!</strong><br>
+                        Không nhận được mã xác thực từ Facebook. Vui lòng thử lại.
+                    </div>
+                </c:when>
+
+                <c:when test="${param.error == 'account_inactive'}">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-user-slash"></i>
+                        <strong>Tài khoản không hoạt động!</strong><br>
+                        Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ quản trị viên.
+                    </div>
+                </c:when>
+
+                <c:otherwise>
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <strong>Có lỗi xảy ra!</strong><br>
+                        Vui lòng thử lại sau.
+                    </div>
+                </c:otherwise>
             </c:choose>
+
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     </c:if>
 </div>
@@ -121,7 +172,7 @@
                         </a>
                     </div>
                     <div class="d-flex justify-content-center gap-3">
-                        <a href="https://www.facebook.com/v13.0/dialog/oauth?client_id=<%=Iconstant.FACEBOOK_CLIENT_ID%>&redirect_uri=<%=Iconstant.FACEBOOK_REDIRECT_URI%>&scope=email"
+                        <a href="https://www.facebook.com/v18.0/dialog/oauth?client_id=<%=Iconstant.FACEBOOK_CLIENT_ID%>&redirect_uri=<%=Iconstant.FACEBOOK_REDIRECT_URI%>"
                            class="btn btn-outline-primary btn-floating btn-lg">
                             <i class="fab fa-facebook-f"></i>
                         </a>
