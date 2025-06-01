@@ -30,7 +30,16 @@ public class userViewOrderController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("auth");
+        String orderId = request.getParameter("orderId");
         List<Order> orderList = uploadOrderService.getAllOrdersByUserId(user.getId());
+        if(orderId != null) {
+            List<OrderDetails> orderDetailsList = uploadOrderDetailService.getAllOrderDetails(Integer.parseInt(orderId));
+            Order order = uploadOrderService.getOrderById(Integer.parseInt(orderId));
+            request.setAttribute("listOrderDetail", orderDetailsList);
+            request.setAttribute("order", order);
+            request.getRequestDispatcher("/frontend/userInfoPage/orderView/orderDetails/orderDetails.jsp").forward(request, response);
+            return;
+        }
         for (Order order : orderList) {
             uploadOrderService.setUserName(order);
             uploadOrderService.setPaymentName(order);
