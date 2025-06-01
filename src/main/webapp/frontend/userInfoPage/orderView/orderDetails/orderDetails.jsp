@@ -84,7 +84,7 @@
                     </div>
                 </div>
                 <hr/>
-                <c:forEach var="item" items="${userOrder.orderDetails}">
+                <c:forEach var="item" items="${listOrderDetail}">
                     <div class="row text-start">
                         <div class="col-11">
                             <img
@@ -102,15 +102,7 @@
                         Tổng tiền:
                     </div>
                     <div class="col-4 text-end">
-                        ${userOrder.orderTotal}
-                    </div>
-                </div>
-                <div class="row py-3" style="font-size: 20px">
-                    <div class="col-8 text-end">
-                        Nhận hàng từ
-                    </div>
-                    <div class="col-4 text-end">
-                        ${userOrder.shippingDate}
+                        ${order.orderTotal}
                     </div>
                 </div>
             </div>

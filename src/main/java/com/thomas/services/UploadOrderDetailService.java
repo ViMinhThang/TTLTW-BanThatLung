@@ -1,6 +1,8 @@
 package com.thomas.services;
 
+import com.thomas.dao.BeltVariantDao;
 import com.thomas.dao.OrderDetailsDao;
+import com.thomas.dao.ProductDao;
 import com.thomas.dao.model.Order;
 import com.thomas.dao.model.OrderDetails;
 
@@ -9,13 +11,24 @@ import java.util.List;
 public class UploadOrderDetailService {
 
     OrderDetailsDao orderDetailsDao;
+    BeltVariantDao beltVariantDao;
+    ProductDao productDao;
 
     public UploadOrderDetailService() {
         orderDetailsDao = new OrderDetailsDao();
+        beltVariantDao = new BeltVariantDao();
+        productDao = new ProductDao();
     }
 
     public List<OrderDetails> getAllOrderDetails(int orderId) {
-        return orderDetailsDao.findByOrderId(orderId);
+        List<OrderDetails> list = orderDetailsDao.findByOrderId(orderId);
+
+        for (OrderDetails od : list) {
+            od.setBeltVariant(beltVariantDao.findVariants(od.getBeltId(), null, null, od.getVariantId()).get(0));
+            od.setBeltImages(productDao.getProductImages(od.getBeltId(), od.getVariantId()));
+            od.setBeltName(productDao.find(od.getBeltId()).get(0).getName());
+        }
+        return list;
     }
 
     public void setBeltName(OrderDetails od) {
