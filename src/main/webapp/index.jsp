@@ -3,13 +3,14 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Trang Chủ</title>
+    <f:setLocale value="${sessionScope.lang}" scope="session" />
+    <f:setBundle basename="messages" />
+    <title><f:message key="home.title"/></title>
     <link
             rel="shortcut icon"
             href="assets/icons/favicon.svg"
@@ -125,7 +126,7 @@
                         aria-controls="fill-tabpanel-0"
                         aria-selected="true"
                 >
-                    MỚI NHẤT
+                    <f:message key="home.new_arrivals"/>
                 </a>
             </li>
             <li class="mostpopular__tab nav-item" role="presentation">
@@ -138,7 +139,7 @@
                         aria-controls="fill-tabpanel-1"
                         aria-selected="false"
                 >
-                    PHỔ BIẾN NHẤT
+                    <f:message key="home.most_popular"/>
                 </a>
             </li>
         </ul>
@@ -164,7 +165,7 @@
                         </div>
                         <div class="text-center mt-4">
                             <form action="newArrival" method="get">
-                                <button name="seeMore" class="btn seeMore">Xem Thêm</button>
+                                <button name="seeMore" class="btn seeMore"><f:message key="home.see_more"/></button>
                             </form>
                         </div>
                     </div>
@@ -191,7 +192,7 @@
                             </div>
                             <div class="text-center mt-4">
                                 <form action="newArrival" method="get">
-                                    <button name="seeMore" class="btn seeMore">Xem Thêm</button>
+                                    <button name="seeMore" class="btn seeMore"><f:message key="home.see_more"/></button>
                                 </form>
                             </div>
                         </div>
@@ -210,21 +211,15 @@
 <div class="bg-black text-white d-flex flex-column justify-content-center align-items-center px-4">
     <div class="col-6">
         <div class="fs-3 fw-bold text-uppercase mb-3 text-center pt-5">
-            CÂU CHUYỆN, PHONG CÁCH VÀ THẮT LƯNG TẠI THOMAS, TỪ NĂM 1949
+            <f:message key="home.story_title"/>
         </div>
         <p class="fs-5 lh-lg">
-            Thể thao giúp chúng ta khỏe mạnh. Giữ cho tâm trí tỉnh táo. Kết nối mọi người lại với nhau. Thông qua thể
-            thao, chúng ta có sức mạnh để thay đổi cuộc sống.
-            Dù đó là những câu chuyện về các vận động viên truyền cảm hứng. Giúp bạn đứng dậy và vận động. Hay trang
-            phục thể thao với công nghệ tiên tiến nhất để nâng cao hiệu suất của bạn. Phá vỡ giới hạn bản thân.
+            <f:message key="home.story_paragraph1"/>
+            <f:message key="home.story_paragraph2"/>
             <br><br>
-            THOMAS là ngôi nhà của những người chạy bộ, cầu thủ bóng rổ, những đứa trẻ yêu bóng đá, những người đam mê
-            thể hình. Những người thích leo núi vào cuối tuần để thoát khỏi thành phố. Những giáo viên yoga lan tỏa từng
-            động tác. Biểu tượng 3 Sọc xuất hiện trong làng nhạc. Trên sân khấu, tại các lễ hội. Trang phục thể thao của
-            chúng tôi giúp bạn tập trung trước tiếng còi khai cuộc. Trong suốt cuộc đua. Và khi cán đích.
+            <f:message key="home.story_paragraph3"/>
             <br><br>
-            Chúng tôi ở đây để hỗ trợ những người sáng tạo. Cải thiện cuộc chơi của họ. Cuộc sống của họ. Và thay đổi
-            thế giới.
+            <f:message key="home.story_paragraph4"/>
         </p>
     </div>
     <div class="fs-2 fw-bold text-uppercase mt-3 letter-spacing pb-5">T H O M A S</div>
@@ -235,12 +230,12 @@
         <div class="d-flex justify-content-center align-items-center px-4 ">
             <!-- Nội dung text -->
             <span class="fs-3 fw-bold text-dark text-center me-5">
-                Trở thành thành viên 15% giảm giá
+                <f:message key="home.member_discount"/>
             </span>
 
             <!-- Nút đăng ký -->
             <a href="#" class="btn btn-dark fs-5 fw-bold px-4 py-3 d-flex align-items-center">
-                Đăng ký miễn phí <span class="ms-2">➝</span>
+                <f:message key="home.register_free"/> <span class="ms-2">➝</span>
             </a>
         </div>
     </div>

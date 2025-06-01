@@ -1,7 +1,17 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page import="java.util.*" %>
+<%
+    Locale locale = (Locale) session.getAttribute("lang");
+    if (locale == null) {
+        locale = request.getLocale();
+        session.setAttribute("lang", locale);
+    }
+%>
 <div id="dimmer" class="dimmer"></div>
+<f:setLocale value="${sessionScope.lang}" scope="session" />
+<f:setBundle basename="messages" />
 <nav class="p-12 bg-white rounded justify-content-center pb-0 d-flex mt-2 border-bottom" id="navbar">
     <a
             href="/"
@@ -40,22 +50,22 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
             >
-                Nam
+                <f:message key="nav.men"/>
             </a>
             <ul class="dropdown-menu">
                 <li>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=Male&page=1"
-                    >Tất cả thắt lưng nam</a
+                    ><f:message key="nav.all_men_belts"/></a
                     >
                 </li>
                 <li>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=Male-Leather&page=1"
-                    >Thắt Lưng Da Nam</a
+                    ><f:message key="nav.men_leather_belts"/></a
                     >
                 </li>
                 <li>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=Male-Canvas&page=1"
-                    >Thắt Lưng Vải Canvas Nam</a
+                    ><f:message key="nav.men_canvas_belts"/></a
                     >
                 </li>
             </ul>
@@ -68,31 +78,31 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
             >
-                Nữ
+                <f:message key="nav.women"/>
             </a>
             <ul class="dropdown-menu">
                 <li>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=Female&page=1"
-                    >Tất cả thắt lưng nữ</a
+                    ><f:message key="nav.all_women_belts"/>ữ</a
                     >
                 </li>
                 <li>
                     <a class="dropdown-item"
                        href="${pageContext.request.contextPath}/navigate?type=Female-Leather&page=1"
-                    >Thắt Lưng Da Nữ
+                    ><f:message key="nav.women_leather_belts"/>
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item"
                        href="${pageContext.request.contextPath}/navigate?type=Female-Canvas&page=1"
-                    >Thắt Lưng Vải Canvas Nữ</a
+                    ><f:message key="nav.women_canvas_belts"/></a
                     >
                 </li>
             </ul>
         </li>
         <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/navigate?type=all&page=1" class="nav-link">Sản
-                Phẩm</a>
+            <a href="${pageContext.request.contextPath}/navigate?type=all&page=1" class="nav-link">
+                <f:message key="nav.products"/></a>
         </li>
     </ul>
     <div class="header__icon__group col-4 d-flex justify-content-end align-items-end">
@@ -153,7 +163,7 @@
                         <c:if test="${sessionScope.auth.role == 1}">
                             <li>
                                 <a class="dropdown-item" href="${pageContext.request.contextPath}/admin"
-                                >Admin</a
+                                ><f:message key="nav.admin"/></a
                                 >
                             </li>
                         </c:if>
@@ -161,7 +171,7 @@
                         <li>
                             <form method="POST" action="${pageContext.request.contextPath}/logout">
                                 <button type="submit" class="dropdown-item"
-                                >Đăng xuất
+                                ><f:message key="nav.logout"/>
                                 </button>
                             </form>
 
@@ -189,12 +199,12 @@
 
                         <li>
                             <a href="${pageContext.request.contextPath}/login" class="dropdown-item"
-                            >Đăng nhập
+                            ><f:message key="nav.login"/>
                             </a>
                         </li>
                         <li>
                             <a href="/signup" class="dropdown-item"
-                            >Đăng ký
+                            ><f:message key="nav.register"/>
                             </a>
 
                         </li>
@@ -211,7 +221,12 @@
             />
             <span id="cart_received" class="nav-item favorite__count">${cartSize!=null ?cartSize:0}</span>
         </a>
-
+        <form action="changeLanguage" method="get">
+            <select name="lang" onchange="this.form.submit()">
+                <option value="en" <%= locale.getLanguage().equals("en") ? "selected" : "" %>>English</option>
+                <option value="vi" <%= locale.getLanguage().equals("vi") ? "selected" : "" %>>Tiếng Việt</option>
+            </select>
+        </form>
     </div>
 </nav>
 <div class="dropdown-menu search-dropdown w-100">
