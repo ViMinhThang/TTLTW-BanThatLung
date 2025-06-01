@@ -38,7 +38,6 @@ public class GoogleLoginController {
         user.setEmail(jsonObject.get("email").getAsString());
         user.setName(jsonObject.get("name").getAsString());
         user.setImage(jsonObject.get("picture").getAsString());
-        // Các trường khác có thể thêm tùy theo response từ Google
         return user;
     }
 

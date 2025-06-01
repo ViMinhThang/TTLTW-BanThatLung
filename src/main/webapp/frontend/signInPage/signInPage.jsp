@@ -52,7 +52,6 @@
                         Vui lòng đăng nhập bằng email/mật khẩu.
                     </div>
                 </c:when>
-
                 <c:when test="${param.error == 'google_error'}">
                     <div class="alert alert-danger">
                         <i class="fab fa-google"></i>
@@ -60,46 +59,21 @@
                         Đăng nhập Google thất bại. Vui lòng thử lại.
                     </div>
                 </c:when>
-
                 <c:when test="${param.error == 'facebook_error'}">
                     <div class="alert alert-danger">
-                        <i class="fab fa-facebook-f"></i>
+                        <i class="fab fa-facebook"></i>
                         <strong>Lỗi đăng nhập Facebook!</strong><br>
                         Đăng nhập Facebook thất bại. Vui lòng thử lại.
                     </div>
                 </c:when>
-
-                <c:when test="${param.error == 'facebook_denied'}">
-                    <div class="alert alert-info">
-                        <i class="fas fa-info-circle"></i>
-                        <strong>Đăng nhập bị hủy!</strong><br>
-                        Bạn đã từ chối quyền truy cập Facebook. Vui lòng thử lại nếu muốn đăng nhập.
-                    </div>
-                </c:when>
-
                 <c:when test="${param.error == 'facebook_failed'}">
                     <div class="alert alert-danger">
-                        <i class="fas fa-times-circle"></i>
-                        <strong>Đăng nhập thất bại!</strong><br>
-                        Không nhận được mã xác thực từ Facebook. Vui lòng thử lại.
+                        <i class="fab fa-facebook"></i>
+                        <strong>Đăng nhập Facebook thất bại!</strong><br>
+                        Tài khoản không hoạt động hoặc đã bị xóa.
                     </div>
                 </c:when>
 
-                <c:when test="${param.error == 'account_inactive'}">
-                    <div class="alert alert-warning">
-                        <i class="fas fa-user-slash"></i>
-                        <strong>Tài khoản không hoạt động!</strong><br>
-                        Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ quản trị viên.
-                    </div>
-                </c:when>
-
-                <c:otherwise>
-                    <div class="alert alert-danger">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <strong>Có lỗi xảy ra!</strong><br>
-                        Vui lòng thử lại sau.
-                    </div>
-                </c:otherwise>
             </c:choose>
 
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -171,12 +145,10 @@
                             <i class="fab fa-google"></i>
                         </a>
                     </div>
-                    <div class="d-flex justify-content-center gap-3">
-                        <a href="https://www.facebook.com/v18.0/dialog/oauth?client_id=<%=Iconstant.FACEBOOK_CLIENT_ID%>&redirect_uri=<%=Iconstant.FACEBOOK_REDIRECT_URI%>"
-                           class="btn btn-outline-primary btn-floating btn-lg">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                    </div>
+                    <a href="https://www.facebook.com/v18.0/dialog/oauth?client_id=<%=Iconstant.FACEBOOK_CLIENT_ID%>&redirect_uri=<%=Iconstant.FACEBOOK_REDIRECT_URI%>&scope=email"
+                       class="btn btn-floating btn-lg hover-lift custom-facebook-btn">
+                        <i class="fab fa-facebook"></i>
+                    </a>
                 </div>
             </div>
         </div>

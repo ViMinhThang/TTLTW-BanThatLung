@@ -1,7 +1,7 @@
 package com.thomas.controller.authentication;
 
-import com.thomas.dao.model.User;
 import com.thomas.dao.UserDao;
+import com.thomas.dao.model.User;
 import com.thomas.services.AuthService;
 import com.thomas.services.UsesUsageService;
 import jakarta.servlet.ServletException;
@@ -17,16 +17,8 @@ public class FacebookLoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String code = request.getParameter("code");
-        String error = request.getParameter("error");
-
-        // Xử lý trường hợp user từ chối quyền
-        if (error != null) {
-            response.sendRedirect("/login?error=facebook_denied");
-            return;
-        }
-
         if (code == null || code.isEmpty()) {
-            response.sendRedirect("/login?error=facebook_failed");
+            response.sendRedirect("/login");
             return;
         }
 
@@ -34,32 +26,22 @@ public class FacebookLoginServlet extends HttpServlet {
             String accessToken = FacebookLoginController.getToken(code);
             User facebookUser = FacebookLoginController.getUserInfo(accessToken);
 
+            facebookUser.setOauthProvider("facebook");
+            facebookUser.setOauthId(facebookUser.getOauthId());
+
             UserDao userDao = new UserDao();
             AuthService authService = new AuthService();
             UsesUsageService usageService = new UsesUsageService();
 
-            // Kiểm tra email đã tồn tại với provider khác
-            if (facebookUser.getEmail() != null) {
-                User existingLocalUser = userDao.findUserEmail(facebookUser.getEmail(), null);
-                if (existingLocalUser != null && existingLocalUser.getOauthProvider() == null) {
-                    response.sendRedirect("/login?error=email_exists");
-                    return;
-                }
-            }
-
-            // Tìm hoặc tạo user
             User existingUser = userDao.findUserByOAuth(facebookUser.getOauthId(), "facebook");
             if (existingUser == null) {
-                // Tạo user mới
                 facebookUser.setPassword(null);
                 facebookUser.setIsActive(1);
                 facebookUser.setIsDeleted(0);
-                facebookUser.setRole(2); // Set default role: 2 = USER
                 userDao.registerUser(facebookUser);
                 existingUser = userDao.findUserByOAuth(facebookUser.getOauthId(), "facebook");
             }
 
-            // Kiểm tra user có hoạt động không
             if (existingUser != null && existingUser.getIsActive() == 1 && existingUser.getIsDeleted() == 0) {
                 HttpSession session = request.getSession();
                 authService.saveSession(existingUser.getId(), session.getId());
@@ -67,7 +49,7 @@ public class FacebookLoginServlet extends HttpServlet {
                 session.setAttribute("auth", existingUser);
                 response.sendRedirect("/");
             } else {
-                response.sendRedirect("/login?error=account_inactive");
+                response.sendRedirect("/login?error=facebook_failed");
             }
         } catch (Exception e) {
             e.printStackTrace();
