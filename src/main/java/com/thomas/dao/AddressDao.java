@@ -70,4 +70,11 @@ public class AddressDao {
             return h.createQuery(sql).bind("wardId", wardId).mapTo(String.class).first();
         });
     }
+
+    public Address findOne(int addressId) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "SELECT * FROM addresses WHERE id = :addressId";
+            return h.createQuery(sql).bind("addressId", addressId).mapTo(Address.class).first();
+        });
+    }
 }

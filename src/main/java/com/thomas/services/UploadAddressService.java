@@ -28,7 +28,9 @@ public class UploadAddressService {
         }
         return listAddress;
     }
-
+    public Address getAddress(int addressId) {
+        return addressDao.findOne(addressId);
+    }
     public void setDefault(int addressId, int userId) {
         if (addressDao.setAllUnuse(userId)) {
             addressDao.setDefault(addressId, userId);
