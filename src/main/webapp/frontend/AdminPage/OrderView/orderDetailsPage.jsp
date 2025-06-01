@@ -88,21 +88,6 @@
                                                 </td>
                                             </tr>
                                         </c:forEach>
-                                        <tr>
-                                            <form id="addOrderForm">
-                                                <input type="hidden" name="orderId" id="orderId" value="${param.id}"/>
-                                                <td></td>
-                                                <td><input type="text" name="productName" id="productName"
-                                                           placeholder="Tên sản phẩm" required/></td>
-                                                <td><input type="number" name="quantity" id="quantity"
-                                                           placeholder="Số lượng" required min="1"/></td>
-                                                <td><input type="number" name="price" id="price" placeholder="Giá"
-                                                           required min="0" step="0.01"/></td>
-                                                <td>
-                                                    <button type="submit" class="btn btn-success">Thêm</button>
-                                                </td>
-                                            </form>
-                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>

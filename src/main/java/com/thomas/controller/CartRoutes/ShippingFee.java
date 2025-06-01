@@ -2,9 +2,12 @@ package com.thomas.controller.CartRoutes;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+
 import java.io.*;
 import java.net.*;
+
 import org.json.JSONObject;
+
 import java.util.stream.Collectors;
 
 @WebServlet("/shipping-fee")
@@ -43,8 +46,7 @@ public class ShippingFee extends HttpServlet {
         }
 
         String result = new BufferedReader(new InputStreamReader(conn.getInputStream())).lines().collect(Collectors.joining(" "));
-                response.setContentType("application/json");
+        response.setContentType("application/json");
         response.getWriter().write(result);
     }
 }
-

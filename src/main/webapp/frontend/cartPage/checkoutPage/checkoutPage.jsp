@@ -16,7 +16,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css/>
-    <script src="${pageContext.request.contextPath}/js/checkout.js"></script>
+    <script src="
+    ${pageContext.request.contextPath}/js/checkout.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css"/>
@@ -24,6 +25,7 @@
     <script>
         $(document).ready(function () {
             $('input[name="paymentMethod"]').change(function () {
+                console.log(1)
                 const selectedMethod = $(this).val();
                 $('.submitPaymentMethod').val(selectedMethod);
                 $('#openFormButtonPayment').text('Thanh toán với ' + selectedMethod);
@@ -38,56 +40,36 @@
         });
 
         $(document).ready(function () {
-            loadProvinces();
+            const provinceName = $("#province strong").text().trim();
+            const districtName = $("#district strong").text().trim();
+            const wardName = $("#ward strong").text().trim();
 
-            $('#province').change(function () {
-                const provinceId = $(this).val();
-                $('#district').prop('disabled', false);
-                $.getJSON('/location?action=district&province_id=' + provinceId, function (data) {
-                    const districts = data.data;
-                    $('#district').empty().append('<option value="">Chọn quận/huyện</option>');
-                    districts.forEach(d => {
-                        $('#district').append('<option value="' + d.DistrictID + '">' + d.DistrictName + '</option>');
+            $.getJSON('/location?action=province', function (provinceData) {
+                const province = provinceData.data.find(p => p.ProvinceName === provinceName);
+                if (!province) return console.error('Không tìm thấy tỉnh:', provinceName);
+
+                $.getJSON('/location?action=district&province_id=' + province.ProvinceID, function (districtData) {
+                    const district = districtData.data.find(d => d.DistrictName === districtName);
+                    if (!district) return console.error('Không tìm thấy quận/huyện:', districtName);
+
+                    $.getJSON('/location?action=ward&district_id=' + district.DistrictID, function (wardData) {
+                        const ward = wardData.data.find(w => w.WardName === wardName || w.WardCode === wardName);
+                        if (!ward) return console.error('Không tìm thấy phường/xã:', wardName);
+
+                        // Gọi API tính phí
+                        calculateShipping(district.DistrictID, ward.WardCode);
                     });
                 });
             });
 
-            $('#district').change(function () {
-                const districtId = $(this).val();
-                $('#ward').prop('disabled', false);
-                $.getJSON('/location?action=ward&district_id=' + districtId, function (data) {
-                    const wards = data.data;
-                    $('#ward').empty().append('<option value="">Chọn phường/xã</option>');
-                    wards.forEach(w => {
-                        $('#ward').append('<option value="' + w.WardCode + '">' + w.WardName + '</option>');
-                    });
-                });
-            });
-
-            $('#ward').change(function () {
-                const districtId = $('#district').val();
-                const wardCode = $(this).val();
-                calculateShipping(districtId, wardCode);
-            });
-
-            function loadProvinces() {
-                $.getJSON('/location?action=province', function (data) {
-                    const provinces = data.data;
-                    $('#province').empty().append('<option value="">Chọn tỉnh/thành phố</option>');
-                    provinces.forEach(p => {
-                        $('#province').append('<option value="' + p.ProvinceID + '">' + p.ProvinceName + '</option>');
-                    });
-                });
-            }
-
-            function calculateShipping(districtId, wardCode) {
+            function calculateShipping(districtId, wardId) {
                 $.ajax({
                     url: '/shipping-fee',
                     method: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({
                         to_district_id: districtId,
-                        to_ward_code: wardCode
+                        to_ward_code: wardId
                     }),
                     success: function (response) {
                         const fee = response.data.total;
@@ -111,34 +93,27 @@
             <h3 class="fw-bold py-2 bg-light">Thông tin giao hàng</h3>
             <div class="border-top border-bottom py-3">
                 <div class="d-flex flex-column justify-content-between">
-                    <p class="fs-4">Tên: ${sessionScope.auth.name}</p>
-                    <p class="fs-4">SĐT: ${sessionScope.auth.phoneNumber}</p>
+                    <p class="fs-4">Tên: ${userAddress.fullName}</p>
+                    <p class="fs-4">SĐT: ${userAddress.phone}</p>
                 </div>
             </div>
 
             <h3 class="fw-bold py-2 bg-light">Địa chỉ giao hàng</h3>
+
             <div class="row g-3 mb-3">
-                <div class="col-md-4">
-                    <label class="form-label">Tỉnh / Thành phố</label>
-                    <select id="province" class="form-select" required></select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Quận / Huyện</label>
-                    <select id="district" class="form-select" required disabled></select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Phường / Xã</label>
-                    <select id="ward" class="form-select" required disabled></select>
-                </div>
+                <p id="province" class="mb-2">Tỉnh / Thành phố: <strong>${userAddress.provinceName}</strong></p>
+                <p id="district" class="mb-2">Quận / Huyện: <strong>${userAddress.districtName}</strong></p>
+                <p id="ward" class="mb-2">Phường / Xã: <strong>${userAddress.wardName}</strong></p>
+                <p class="mb-0">Địa chỉ chi tiết: <strong>${userAddress.addressDetail}</strong></p>
             </div>
 
-            <select class="form-select" name="selectedAddress" id="selectedAddress">
-                <c:forEach var="address" items="${userAddresses}">
-                    <option value="${address}" ${address.isUse == 1 ? 'selected' : ''}>
-                            ${address.addressStreet}, ${address.addressCity} - SĐT: ${sessionScope.auth.phoneNumber}
-                    </option>
-                </c:forEach>
-            </select>
+            <%--            <select class="form-select" name="selectedAddress" id="selectedAddress">--%>
+            <%--                <c:forEach var="address" items="${userAddresses}">--%>
+            <%--                    <option value="${address}" ${address.isUse == 1 ? 'selected' : ''}>--%>
+            <%--                            ${address.addressStreet}, ${address.addressCity} - SĐT: ${sessionScope.auth.phoneNumber}--%>
+            <%--                    </option>--%>
+            <%--                </c:forEach>--%>
+            <%--            </select>--%>
 
             <h3 class="fw-bold py-2 bg-light mt-3">Phương thức thanh toán</h3>
             <div class="d-inline-flex flex-row" role="group">
@@ -184,7 +159,7 @@
                 <p class="text-muted small mb-0">(bao gồm cả thuế)</p>
             </div>
             <c:choose>
-                <c:when test="${userAddresses == null || paymentMethods == null || paymentMethods.isEmpty()||sessionScope.auth==null}">
+                <c:when test="${userAddress == null || paymentMethods == null || paymentMethods.isEmpty()||sessionScope.auth==null}">
                     <button class="btn btn-dark mt-4 fs-4 w-100" disabled id="openFormButtonPaymentDisabled">Thanh toán
                         với COD
                     </button>

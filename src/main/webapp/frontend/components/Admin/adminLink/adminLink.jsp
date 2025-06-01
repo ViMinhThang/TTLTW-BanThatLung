@@ -19,7 +19,8 @@
         rel="stylesheet"
 />
 <!-- Custom styles for this template-->
-<link href="https://cdn-web-servlet.vercel.app/css/favorite.css" rel="stylesheet"/>
 <link href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" rel="stylesheet"/>
 <link href="https://cdn.datatables.net/buttons/3.2.2/css/buttons.dataTables.css" rel="stylesheet"/>
-<link href="https://cdn-web-servlet.vercel.app/css/adminGeneral.css" rel="stylesheet"/>
+<link href="${pageContext.request.contextPath}/css/adminGeneral.css" rel="stylesheet"/>
+<link href="${pageContext.request.contextPath}/css/modal.css" rel="stylesheet"/>
+<link href="${pageContext.request.contextPath}/css/general.css" rel="stylesheet"/>

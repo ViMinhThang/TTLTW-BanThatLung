@@ -21,6 +21,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.util.Map;
@@ -75,7 +76,9 @@ public class OrderController extends HttpServlet {
     UploadOrderService uploadOrderService = new UploadOrderService();
     UploadPaymentMethod uploadPaymentMethod = new UploadPaymentMethod();
     UploadOrderDetailService uploadOrderDetailService = new UploadOrderDetailService();
+    CartService cartService = new CartService();
     EmailService emailService = new EmailService();
+    ProductService productService = new ProductService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -85,15 +88,21 @@ public class OrderController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Map<String, CartItem> cart = (Map<String, CartItem>) session.getAttribute("cart");
         Coupon cp = (Coupon) session.getAttribute("appliedCoupon");
         User user = (User) session.getAttribute("auth");
         int userId = user.getId();
+        List<CartItem> cartItemList = cartService.getCart(userId);
         String paymentMethod = request.getParameter("paymentMethod");
-        Address address = uploadAddressService.getAddressByUserId(userId);
+        List<Address> address = uploadAddressService.getAddressList(userId);
+        Address userAddress = null;
+        for (Address addr : address) {
+            if (addr.getIsUse() == 1) {
+                userAddress = addr;
+            }
+        }
         int paymentMethodId = uploadPaymentMethod.getPaymentMethodId(paymentMethod);
         double totalPrice = 0, shippingCost = 0;
-        for (CartItem cartItem : cart.values()) {
+        for (CartItem cartItem : cartItemList) {
             totalPrice += cartItem.getPrice() * cartItem.getQuantity();
             shippingCost = cartItem.getQuantity() * 15.000;
         }
@@ -106,7 +115,7 @@ public class OrderController extends HttpServlet {
             request.getRequestDispatcher("/frontend/checkoutPage/checkout.jsp").forward(request, response);
             return;
         } else if (paymentMethod.equals("COD")) {
-            createOrder(request, response);
+            createOrder(request, response, userId, user.getEmail());
             request.setAttribute("paymentMethod", "COD");
             request.setAttribute("orderId", uploadOrderService.getLatestOrder().getId());
             request.setAttribute("total", grandTotal);
@@ -127,17 +136,21 @@ public class OrderController extends HttpServlet {
         }
     }
 
-    private void createOrder(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void createOrder(HttpServletRequest request, HttpServletResponse response, int userId, String userEmail) throws IOException {
         HttpSession session = request.getSession();
-        Map<String, CartItem> cart = (Map<String, CartItem>) session.getAttribute("cart");
+        List<CartItem> cartItemList = cartService.getCart(userId);
         Coupon cp = (Coupon) session.getAttribute("appliedCoupon");
-        User user = (User) session.getAttribute("auth");
-        int userId = user.getId();
         String paymentMethod = request.getParameter("paymentMethod");
-        Address address = uploadAddressService.getAddressByUserId(userId);
+        List<Address> address = uploadAddressService.getAddressList(userId);
+        Address userAddress = null;
+        for (Address addr : address) {
+            if (addr.getIsUse() == 1) {
+                userAddress = addr;
+            }
+        }
         int paymentMethodId = uploadPaymentMethod.getPaymentMethodId(paymentMethod);
         double totalPrice = 0, shippingCost = 0;
-        for (CartItem cartItem : cart.values()) {
+        for (CartItem cartItem : cartItemList) {
             totalPrice += cartItem.getPrice() * cartItem.getQuantity();
             shippingCost = cartItem.getQuantity() * 15.000;
         }
@@ -145,16 +158,20 @@ public class OrderController extends HttpServlet {
         double discountAmount = totalPrice * (discountRate / 100);
         double grandTotal = totalPrice + shippingCost + discountAmount;
 
-        if (uploadOrderService.createOrder(userId, paymentMethodId, address.getId(), LocalDate.now(), grandTotal, "Đang xử lý", 0, user.getId())) {
+        if (uploadOrderService.createOrder(userId, paymentMethodId, userAddress.getId(), LocalDate.now(), grandTotal, "Đang xử lý", 0, userId)) {
             Order order = uploadOrderService.getLatestOrder();
-            for (CartItem cartItem : cart.values()) {
+            for (CartItem cartItem : cartItemList) {
+                for (CartItem item : cartItemList) {
+                    item.setBelt(productService.find(item.getBeltId()).get(0));
+                    item.setVariant(productService.findVariant(item.getBeltId(), item.getVariantId(), null, null));
+                }
                 uploadOrderDetailService.createOrderDetail(order.getId(), cartItem.getPrice(), cartItem.getBelt().getId(), cartItem.getQuantity(), cartItem.getVariant().getId());
             }
         }
         String subject = "Thông báo đơn hàng";
         String content = "Đơn hàng của bạn đã được đặt thành công. Tổng giá trị đơn hàng là: " + totalPrice + " VNĐ.\n" +
-                "Chi tiết đơn hàng:\n" + cart.toString() + "\n" + "cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.\n";
-        emailService.sendEmail(user.getEmail(), subject, content);
+                "Chi tiết đơn hàng:\n" + cartItemList.toString() + "\n" + "cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.\n";
+        emailService.sendEmail(userEmail, subject, content);
     }
 
     private void handleMomoPayment(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, NoSuchAlgorithmException, InvalidKeyException {
@@ -163,7 +180,8 @@ public class OrderController extends HttpServlet {
         String address = request.getParameter("address");
         String customerName = user.getName();
         DecimalFormat df = new DecimalFormat("#");
-        String amountStr = request.getParameter("grandTotal").replace(".", "");;
+        String amountStr = request.getParameter("grandTotal").replace(".", "");
+        ;
         String amount = df.format(Float.parseFloat(amountStr)); // Số tiền thanh toán
         String extraData = "Thanh toan don hang";
 
@@ -291,8 +309,9 @@ public class OrderController extends HttpServlet {
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
-        String amountStr = req.getParameter("grandTotal").replace(".", "");;
-        long amount = Integer.parseInt(amountStr)* 100L;
+        String amountStr = req.getParameter("grandTotal").replace(".", "");
+        ;
+        long amount = Integer.parseInt(amountStr) * 100L;
         String bankCode = req.getParameter("bankCode");
 
         String vnp_TxnRef = getRandomNumber(8);
@@ -418,7 +437,7 @@ public class OrderController extends HttpServlet {
                 sb.append("&");
             }
         }
-        return hmacSHA512(VNP_SECRET_KEY,sb.toString());
+        return hmacSHA512(VNP_SECRET_KEY, sb.toString());
     }
 
     public static String hmacSHA512(final String key, final String data) {
