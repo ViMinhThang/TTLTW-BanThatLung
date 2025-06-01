@@ -1,12 +1,4 @@
 $(document).ready(function () {
-    function formatCurrencyWithDecimals(value) {
-        return new Intl.NumberFormat('vi-VN', {
-            minimumFractionDigits: 3,
-            maximumFractionDigits: 3,
-            useGrouping: true
-        }).format(value).replace(/,/g, '.') + " VNĐ";
-    }
-
     const options = $.map(
         Array.from({length: 30}, (_, i) => i + 1),
         function (num) {
@@ -94,7 +86,7 @@ $(document).ready(function () {
             $("#popUpPayment").fadeOut();
         } else if (paymentMethod === "Thanh toán khi nhận hàng") {
             $("#openFormButtonPayment").text("Thanh toán khi nhận hàng");
-            $(".method-image-display").attr("src", "/assets/icons/Delivery.svg");
+            $(".method-image-display").attr("src", "/assets/icons/COD.svg");
             $(".submitPaymentMethod").val("Delivery")
             $("#popUpPayment").fadeOut();
         }
@@ -190,5 +182,4 @@ $(document).ready(function () {
             })
         }
     })
-
 });

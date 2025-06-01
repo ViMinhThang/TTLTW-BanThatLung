@@ -23,7 +23,6 @@ public class UploadCouponService {
     }
 
     public boolean createCoupon(LocalDate startDate, LocalDate endDate, String couponCode, double discountPercentage, int isActive, int userId) {
-        Coupon Coupon = new Coupon();
         if (couponDao.getCouponByCode(couponCode) != null) {
             return false;
         }

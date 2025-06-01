@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDao implements UsageInterface {
+
     public List<Order> getAllOrder() {
         return JDBIConnect.get().withHandle(h -> {
             String sql = "select * from orders";
@@ -46,7 +47,7 @@ public class OrderDao implements UsageInterface {
 
     public String getAddress(int id) {
         return JDBIConnect.get().withHandle(h -> {
-            String sql = "SELECT CONCAT(ad.addressCity, ' ', ad.addressStreet) AS fullAddress " + "FROM orders o " + "JOIN addresses ad ON ad.id = o.addressesId " + "WHERE o.id = :id";
+            String sql = "SELECT addressesId FROM orders WHERE id=:id";
             return h.createQuery(sql).bind("id", id).mapTo(String.class).findFirst().orElse(null);
         });
     }

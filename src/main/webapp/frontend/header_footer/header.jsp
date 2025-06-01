@@ -4,7 +4,7 @@
 <div id="dimmer" class="dimmer"></div>
 <nav class="p-12 bg-white rounded justify-content-center pb-0 d-flex mt-2 border-bottom" id="navbar">
     <a
-            href=""
+            href="/"
             class=" col-3 d-sm-none d-md-none d-lg-block"
             id="logo"
     >
@@ -32,11 +32,6 @@
     </a>
 
     <ul class="navbar-nav col-4 navitem__group d-sm-none d-md-none d-lg-flex justify-content-center align-items-end">
-        <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/navigate?type=collection" class="nav-link"
-            >Bộ Sưu Tập</a
-            >
-        </li>
         <li class="nav-item dropdown">
             <a
                     class="nav-link dropdown-toggle"
@@ -49,17 +44,17 @@
             </a>
             <ul class="dropdown-menu">
                 <li>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=men&page=1"
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=Male&page=1"
                     >Tất cả thắt lưng nam</a
                     >
                 </li>
                 <li>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=menLeather&page=1"
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=Male-Leather&page=1"
                     >Thắt Lưng Da Nam</a
                     >
                 </li>
                 <li>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=menCanvas&page=1"
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=Male-Canvas&page=1"
                     >Thắt Lưng Vải Canvas Nam</a
                     >
                 </li>
@@ -77,19 +72,19 @@
             </a>
             <ul class="dropdown-menu">
                 <li>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=women&page=1"
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=Female&page=1"
                     >Tất cả thắt lưng nữ</a
                     >
                 </li>
                 <li>
                     <a class="dropdown-item"
-                       href="${pageContext.request.contextPath}/navigate?type=womenLeather&page=1"
+                       href="${pageContext.request.contextPath}/navigate?type=Female-Leather&page=1"
                     >Thắt Lưng Da Nữ
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item"
-                       href="${pageContext.request.contextPath}/navigate?type=womenCanvas&page=1"
+                       href="${pageContext.request.contextPath}/navigate?type=Female-Canvas&page=1"
                     >Thắt Lưng Vải Canvas Nữ</a
                     >
                 </li>
@@ -135,7 +130,7 @@
                     >
                         <c:choose>
                             <c:when test="${sessionScope.auth.image == null}">
-                                <img src="${pageContext.request.contextPath}/assets/icons/default_profile.svg"
+                                <img src="https://cdn-web-servlet.vercel.app/images/default_profile.svg"
                                      alt="User Avatar"
                                      width="35"
                                      height="35"
@@ -180,7 +175,7 @@
                             id="dropdownUser"
                     >
                         <img
-                                src="${pageContext.request.contextPath}/assets/icons/user.svg"
+                                src="https://cdn-web-servlet.vercel.app/images/user.svg"
                                 alt="User Avatar"
                                 width="35"
                                 height="35"
@@ -211,7 +206,7 @@
             <input type="hidden" class="userId" value="${sessionScope.auth.id}">
             <img
                     class="nav-icon"
-                    src="${pageContext.request.contextPath}/assets/icons/cart.svg"
+                    src="https://cdn-web-servlet.vercel.app/images/cart.svg"
                     alt=""
             />
             <span id="cart_received" class="nav-item favorite__count">${cartSize!=null ?cartSize:0}</span>
@@ -236,6 +231,7 @@
 
     .dropdown-menu {
         border-radius: 0;
+        margin-left: 0px !important;
     }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>

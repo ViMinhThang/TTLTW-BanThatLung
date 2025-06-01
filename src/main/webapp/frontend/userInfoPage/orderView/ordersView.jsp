@@ -12,29 +12,9 @@
             href="${pageContext.request.contextPath}/assets/icons/favicon.svg"
             type="image/x-icon"
     />
-    <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-            crossorigin="anonymous"
-    />
-    <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"
-    ></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="../../header footer/header__footer.js"></script>
-    <link
-            rel="stylesheet"
-            href="${pageContext.request.contextPath}/css/fontawesome-free-6.6.0-web/fontawesome-free-6.6.0-web/css/all.css"
-    />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/ordersView.css"/>
+    <jsp:include page="/frontend/components/userInfo/cdnLink/userInfoLink.jsp"/>
+
+    <link rel="stylesheet" href="https://cdn-web-servlet.vercel.app/css/ordersView.css"/>
 </head>
 <body>
 <jsp:include page="/frontend/header_footer/header.jsp"/>
@@ -84,101 +64,36 @@
     </div>
 </div>
 <div class="container my-3">
-    <div class="row">
-        <h2 class="mt-5 mb-3">Tài khoản của tôi</h2>
-        <div
-                class="d-flex col-12"
-                style="white-space: nowrap;"
-        >
-            <div class="d-inline-block fw-bold mb-4" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userInfo"
-                >Tài khoản</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold " style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userProfile"
-                >Hồ sơ</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userAddress?userId=${sessionScope.auth.id}"
-                >Địa chỉ</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold " style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userPrivacy"
-                >Riêng tư</a
-                >
-            </div>
-            <div class="d-inline-block fw-bold custom_active" style="padding: 12px">
-                <a
-                        class="text-white custom_size--19"
-                        href="${pageContext.request.contextPath}/viewOrders"
-                >Đơn hàng</a
-                >
-            </div>
-        </div>
-    </div>
+    <jsp:include page="/frontend/components/userInfo/navigationBar/navBar.jsp"/>
 
-    <div class="container container-sm border rounded">
-        <div class="userInfo__content--middle mb-5">
-            <h2 class="mt-4 mb-4 fw-light">Các đơn hàng mà bạn đã đặt</h2>
+    <div class="container-fluid container-sm ps-0" style="width: 1900px">
+        <table class="table w-100">
+            <thead class="border-bottom">
+            <tr class="font-weight-light">
+                <th>Đơn hàng</th>
+                <th class="text-start">Ngày đặt</th>
+                <th>Trạng thái</th>
+                <th>Tổng</th>
+                <th class="text-end">Hành động</th>
+            </tr>
+            </thead>
+
+            <tbody class="p-2">
             <c:forEach var="order" items="${orders}">
-                <div class="border p-3 container-sm mb-2">
-                    <fmt:parseDate value="${order.orderDate}" pattern="yyyy-MM-dd" var="formattedDate"/>
-                    <h2 class="fw-light custom_size--19">
-                        Ngày đặt hàng: <fmt:formatDate value="${formattedDate}" pattern="dd-MM-yyyy"/>
-                    </h2>
-                    <h2 class="fw-light custom_size--19">Order#${order.id}</h2>
-
-                    <c:forEach var="item" items="${order.orderDetails}">
-                        <div class="container ps-sm-0 border rounded mb-3">
-                            <div class="row-sm">
-                                <div class="col-sm col-md-6 col-lg-12">
-                                    <div class="ps-0 row-sm d-lg-flex container-fluid pr-sm-0">
-                                        <div class="col-sm col-md-2 col-lg-2 ps-sm-0 d-flex justify-content-center me-2">
-                                            <!-- Hiển thị ảnh đầu tiên nếu có -->
-                                            <c:if test="${not empty item.beltImages}">
-                                                <img class="img-fluid"
-                                                     src="${pageContext.request.contextPath}${item.beltImages[0]}"
-                                                     alt="Belt Image" height="200px"/>
-                                            </c:if>
-                                        </div>
-                                        <div class="col-sm col-md-6 col-lg-10 border-dark ps-sm-0 pr-sm-0 mt-sm-4">
-                                            <div class="d-flex justify-content-between">
-                                                <h4 class="fw-bold">${item.beltName} - ${item.beltVariant.color}
-                                                    (${item.beltVariant.size})</h4>
-                                                <h4 class="fw-light">${item.price}₫</h4>
-                                            </div>
-
-                                            <p class="mt-3">Số lượng: ${item.quantity}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </c:forEach>
-
-                    <h2 class="fw-bold custom_size--19">
-                        Tổng tiền: ${order.orderTotal} vnđ
-                    </h2>
-                    <div class="py-2 w-100 d-flex justify-content-between mt-3">
-                        <p><strong>Vận chuyển: </strong>Nhận hàng từ ${order.shippingDate}</p>
-                        <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                            Gửi yêu cầu hủy đơn hàng
-                        </button>
-                    </div>
-                </div>
+                <fmt:parseDate value="${order.orderDate}" pattern="yyyy-MM-dd" var="formattedDate"/>
+                <tr>
+                    <td>#${order.id}</td>
+                    <td><fmt:formatDate value="${formattedDate}" pattern="dd-MM-yyyy"/></td>
+                    <td>${order.orderStatus}</td>
+                    <td>${order.orderTotal} VNĐ</td>
+                    <td class="text-end">
+                        <a class="bg-dark p-2 text-white text-decoration-none rounded-0"
+                           href="${pageContext.request.contextPath}/viewOrders?orderId=${order.id}">Xem</a>
+                    </td>
+                </tr>
             </c:forEach>
-        </div>
+            </tbody>
+        </table>
     </div>
 </div>
 

@@ -2,6 +2,7 @@ package com.thomas;
 
 import com.thomas.dao.model.Belts;
 import com.thomas.services.ProductService;
+import com.thomas.services.VariantService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,17 +11,29 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "IndexServlet", value = "/homePageController")
 public class IndexServlet extends HttpServlet {
+    ProductService productService = new ProductService();
+    VariantService variantService = new VariantService();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-        ProductService productService = new ProductService();
         List<Belts> newArrivalsList = productService.getNewArrivals();
         List<Belts> mostPopular = productService.mostPopular();
         List<Belts> discountProduct = productService.getDiscountBelts();
+        int chunkSize = 4;
+        List<List<Belts>> chunkedProductList = new ArrayList<>();
+
+        for (int i = 0; i < discountProduct.size(); i += chunkSize) {
+            chunkedProductList.add(discountProduct.subList(i, Math.min(i + chunkSize, discountProduct.size())));
+        }
+
+        List<String> colors = variantService.getAllColors();
+        request.setAttribute("colors", colors);
+        request.setAttribute("chunkedProductList", chunkedProductList);
         request.setAttribute("newArrivalsList", newArrivalsList);
         request.setAttribute("mostPopularList", mostPopular);
         request.setAttribute("discountProductList", discountProduct);

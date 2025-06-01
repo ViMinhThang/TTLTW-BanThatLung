@@ -5,25 +5,29 @@ import java.io.Serializable;
 public class Address implements Serializable {
     private int id;
     private int userId;
-    private String addressCity;
-    private String addressStreet;
+    private String fullName;
+    private int phone;
+    private int provinceId;
+    private int districtId;
+    private String wardId;
+    private String addressDetail;
     private int isUse;
-    private int isDeleted;
-    private String userName;
-    private long phoneNumber;
+    private String provinceName;
+    private String districtName;
+    private String wardName;
 
     public Address() {
 
     }
 
-    public Address(int id, int userId, String addressCity, String addressStreet, int isUse, int isDeleted) {
-        this.id = id;
+    public Address(int userId, int provinceId, int districtId, String wardId, String addressDetail, String fullName, int phone) {
         this.userId = userId;
-        this.addressCity = addressCity;
-        this.addressStreet = addressStreet;
-        this.isUse = isUse;
-        this.isDeleted = isDeleted;
-
+        this.provinceId = provinceId;
+        this.districtId = districtId;
+        this.wardId = wardId;
+        this.addressDetail = addressDetail;
+        this.fullName = fullName;
+        this.phone = phone;
     }
 
     public int getId() {
@@ -42,51 +46,83 @@ public class Address implements Serializable {
         this.userId = userId;
     }
 
-    public String getAddressCity() {
-        return addressCity;
+    public int getDistrictId() {
+        return districtId;
     }
 
-    public void setAddressCity(String addressCity) {
-        this.addressCity = addressCity;
+    public void setDistrictId(int districtId) {
+        this.districtId = districtId;
     }
 
-    public String getAddressStreet() {
-        return addressStreet;
+    public String getWardId() {
+        return wardId;
     }
 
-    public void setAddressStreet(String addressStreet) {
-        this.addressStreet = addressStreet;
+    public void setWardId(String wardId) {
+        this.wardId = wardId;
     }
 
-    public int getIsUse() {
-        return isUse;
+    public String getAddressDetail() {
+        return addressDetail;
+    }
+
+    public int getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(int provinceId) {
+        this.provinceId = provinceId;
+    }
+
+    public void setAddressDetail(String addressDetail) {
+        this.addressDetail = addressDetail;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setPhone(int phone) {
+        this.phone = phone;
+    }
+
+    public int getPhone() {
+        return phone;
     }
 
     public void setIsUse(int isUse) {
         this.isUse = isUse;
     }
 
-    public int getIsDeleted() {
-        return isDeleted;
+    public int getIsUse() {
+        return isUse;
     }
 
-    public void setIsDeleted(int isDeleted) {
-        this.isDeleted = isDeleted;
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public String getProvinceName() {
+        return provinceName;
     }
 
-    public String getUserName() {
-        return userName;
+    public void setDistrictName(String districtName) {
+        this.districtName = districtName;
     }
 
-    public void setPhoneNumber(long phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public String getDistrictName() {
+        return districtName;
     }
 
-    public long getPhoneNumber() {
-        return phoneNumber;
+    public void setWardName(String wardName) {
+        this.wardName = wardName;
+    }
+
+    public String getWardName() {
+        return wardName;
     }
 }

@@ -2,6 +2,8 @@ package com.thomas.controller.AdminRoute.table.belts;
 
 import com.thomas.dao.model.BeltVariant;
 import com.thomas.dao.model.Belts;
+import com.thomas.dao.model.User;
+import com.thomas.services.PermissionService;
 import com.thomas.services.ProductService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -12,6 +14,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,104 +27,71 @@ import java.util.stream.Collectors;
 )
 public class createProductController extends HttpServlet {
     private static final String ULOAD_DIR = "uploads";
-    private static final String UPLOAD_DIR_SERVER = "C:\\Users\\HP\\Desktop\\Web\\TTLTW-BanThatLung\\src\\main\\webapp\\assets\\uploads";
+    private static final String UPLOAD_DIR_SERVER = "D:\\University\\ttltw\\TTLTW-BanThatLung\\src\\main\\webapp\\assets\\images\\uploads";
     private static final ProductService PRODUCT_SERVICE = new ProductService();
+    private static final PermissionService PERMISSION_SERVICE = new PermissionService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String beltIdParam = request.getParameter("id");
-        String variantIdParam = request.getParameter("variantId");
-        if (beltIdParam != null && variantIdParam != null) {
-            int beltId = Integer.parseInt(beltIdParam);
-            Belts belts = PRODUCT_SERVICE.find(beltId).get(0);
-            List<BeltVariant> variants = PRODUCT_SERVICE.findVariants(beltId, null, null, null);
-            BeltVariant bv = variants.stream()
-                    .filter(v -> v.getId() == Integer.parseInt(variantIdParam))
-                    .findFirst()
-                    .orElse(null);
+        HttpSession session = request.getSession();
+        int beltId = Integer.parseInt(request.getParameter("beltId"));
+        User user = (User) session.getAttribute("auth");
+        boolean permissionToWrite = PERMISSION_SERVICE.checkPermission("ManageProducts", user.getId(), "write");
+        boolean permissionToExecute = PERMISSION_SERVICE.checkPermission("ManageProducts", user.getId(), "execute");
 
-            bv.setImages(PRODUCT_SERVICE.getVariantImages(bv.getId()));
-            String[] tagsArray = PRODUCT_SERVICE.getTags(beltId);
-            if (belts != null) {
-                request.setAttribute("product", belts);
-                request.setAttribute("variants", bv);
-                int count = 0;
-                for (String s : bv.getImages()) {
-                    request.setAttribute("image" + count, s);
-                    count++;
-                }
-                String tags = String.join(" ", tagsArray);
-                request.setAttribute("tags", tags);
-            } else {
-                response.sendRedirect(request.getContextPath() + "/admin/table/belts");
-                return;
+        List<Belts> beltsList = PRODUCT_SERVICE.find(beltId);
+        List<Belts> display = new ArrayList<>();
+        for (Belts belt : beltsList) {
+            Integer[] variantId = PRODUCT_SERVICE.getAllVariantId(belt.getId());
+            for (int i : variantId) {
+                Belts b = new Belts(belt);
+                BeltVariant beltVariant = PRODUCT_SERVICE.findVariant(belt.getId(), i, null, null);
+                beltVariant.setImages(PRODUCT_SERVICE.getVariantImages(beltVariant.getId()));
+                beltVariant.setColor(PRODUCT_SERVICE.findColorNameById(beltVariant.getColorId()));
+                beltVariant.setSize(PRODUCT_SERVICE.findSizeNameById(beltVariant.getSizeId()));
+                b.setBeltVariant(beltVariant);
+                display.add(b);
             }
         }
+        request.setAttribute("variants", display);
+        request.setAttribute("permissionToWrite", permissionToWrite);
+        request.setAttribute("permissionToExecute", permissionToExecute);
         request.getRequestDispatcher("/frontend/AdminPage/createProductPage/createProductPage.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
-        int productId = 0;
-        int variantId = 0;
-        if (request.getParameter("beltId") != null && !request.getParameter("beltId").isEmpty()) {
-            productId = Integer.parseInt(request.getParameter("beltId"));
-        }
-        if (request.getParameter("variantId") != null && !request.getParameter("variantId").isEmpty()) {
-            variantId = Integer.parseInt(request.getParameter("variantId"));
-        }
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        String message = request.getParameter("message").trim();
-        String productName = request.getParameter("beltName");
-        String color = request.getParameter("color");
-        String size = request.getParameter("size");
-        int stockQuantity = Integer.parseInt(request.getParameter("quantity"));
-        String[] tags = null;
-        LocalDateTime releaseDate = null;
-        String gender = null;
-        double price = 0;
-        double discountRate = 0;
-        int isDeleted = 0;
-        String material = null;
-        if (!message.equals("createVariant")) {
-            tags = request.getParameter("tags").split(" ");
-            releaseDate = LocalDate.parse(request.getParameter("releaseDate"), formatter).atStartOfDay();
-            gender = request.getParameter("gender");
-            price = Double.parseDouble(request.getParameter("price"));
-            discountRate = Double.parseDouble(request.getParameter("discountRate"));
-            isDeleted = Integer.parseInt(request.getParameter("isDeleted"));
-            material = request.getParameter("material");
-        }
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("auth");
+        int beltId = Integer.parseInt(request.getParameter("beltId"));
+        String message = request.getParameter("message");
         if (message.equals("create")) {
-            PRODUCT_SERVICE.saveProduct(productName, tags, discountRate, releaseDate, gender, price, stockQuantity, material, isDeleted, color, size, userId);
-        } else if (message.equals("update")) {
-            productId = Integer.parseInt(request.getParameter("beltId"));
-            PRODUCT_SERVICE.updateProduct(productId, productName, tags, discountRate, releaseDate, gender, price, stockQuantity, material, isDeleted, color, size, variantId, userId);
-        } else if (message.equals("createVariant")) {
-            BeltVariant bv = new BeltVariant();
-            bv.setBeltId(productId);
-            bv.setColor(color);
-            bv.setSize(size);
-            bv.setStockQuantity(stockQuantity);
-            bv.setCreatedAt(LocalDateTime.now());
-            bv.setUpdatedAt(LocalDateTime.now());
-            PRODUCT_SERVICE.createVariant(bv);
+            int color = Integer.parseInt(request.getParameter("color"));
+            int size = Integer.parseInt(request.getParameter("size"));
+            String description = request.getParameter("description");
+            long price = Long.parseLong(request.getParameter("price"));
+            PRODUCT_SERVICE.createVariant(new BeltVariant(beltId, size, color, price, LocalDateTime.now(), LocalDateTime.now()));
+            String uploadPath = request.getServletContext().getRealPath("") + File.separator + ULOAD_DIR;
+            File uploadDir = new File(uploadPath);
+            String beltName = PRODUCT_SERVICE.find(beltId).get(0).getName() + "_" + PRODUCT_SERVICE.findColorNameById(color) + "_" + PRODUCT_SERVICE.findSizeNameById(size);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+            BeltVariant v = PRODUCT_SERVICE.getLatestVariant();
+            PRODUCT_SERVICE.addDescription(v, description);
+            handleFileUpload(request, beltName, uploadPath, beltId, v.getId());
+        } else if (message.equals("delete")) {
+            int variantId = Integer.parseInt(request.getParameter("variantId"));
+            PRODUCT_SERVICE.deleteProductVariant(null, variantId, user.getId());
         }
-        String uploadPath = request.getServletContext().getRealPath("") + File.separator + ULOAD_DIR;
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs();
-        }
-        handleFileUpload(request, productName, uploadPath, message, PRODUCT_SERVICE, productId, variantId);
-        response.sendRedirect(request.getContextPath() + "/admin/table/belts");
+        response.sendRedirect("/admin/table/belts/createProduct?beltId=" + beltId);
+
     }
 
-    private void handleFileUpload(HttpServletRequest request, String productName, String uploadPath, String message, ProductService productService, int productId, int variantId) throws ServletException, IOException {
+    private void handleFileUpload(HttpServletRequest request, String productName, String uploadPath, int productId, int variantId) throws ServletException, IOException {
         try {
             int count = 0;
             List<String> extraImages = new ArrayList<>();
-            List<String> descImages = new ArrayList<>();
             String mainImage = null;
 
             File productDirectory = new File(uploadPath + File.separator + productName);
@@ -133,7 +103,6 @@ public class createProductController extends HttpServlet {
                 serverDirectory.mkdirs();
             }
             for (Part part : request.getParts()) {
-                String fieldName = part.getName();
                 String fileName = extractedFile(part);
 
                 if (fileName != null && !fileName.isEmpty() && part.getSize() > 0) {
@@ -150,22 +119,7 @@ public class createProductController extends HttpServlet {
                     }
                 }
             }
-
-            if (mainImage != null) {
-                if ("create".equals(message)) {
-                    int beltId = productService.getLatestProductId();
-                    int varId = productService.getLatestVariantId();
-                    productService.saveOrUpdateImagePath(beltId, mainImage, extraImages, varId, false);
-                } else if ("update".equals(message)) {
-                    productService.saveOrUpdateImagePath(productId, mainImage, extraImages, variantId, true);
-                } else if ("createVariant".equals(message)) {
-                    if (variantId == 0) {
-                        variantId = productService.getLatestVariantId();
-                    }
-                    productService.saveOrUpdateImagePath(productId, mainImage, extraImages, variantId, true);
-
-                }
-            }
+            PRODUCT_SERVICE.saveImagePath(productId, mainImage, extraImages, variantId);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServletException("Error handling file upload", e);

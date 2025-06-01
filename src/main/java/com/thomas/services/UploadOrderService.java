@@ -1,16 +1,23 @@
 package com.thomas.services;
 
+import com.thomas.dao.AddressDao;
 import com.thomas.dao.OrderDao;
+import com.thomas.dao.model.Address;
 import com.thomas.dao.model.Order;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
 public class UploadOrderService {
     OrderDao orderDao;
+    LocationService locationService;
+    AddressDao addressDao;
 
     public UploadOrderService() {
         orderDao = new OrderDao();
+        addressDao = new AddressDao();
+        locationService = new LocationService();
     }
 
     public List<Order> getAllOrders() {
@@ -31,11 +38,27 @@ public class UploadOrderService {
         }
     }
 
-    public void setAddressName(Order order) {
+    public void setAddressName(Order order) throws IOException {
         if (order != null) {
-            String addressName = orderDao.getAddress(order.getId());
-            order.setAddresse(addressName);
+            String addressId = orderDao.getAddress(order.getId());
+            Address address = addressDao.findOne(Integer.parseInt(addressId));
+            address.setProvinceName(getProvinceName(address.getProvinceId()));
+            address.setDistrictName(getDistrictName(address.getProvinceId(), address.getDistrictId()));
+            address.setWardName(getWardName(address.getDistrictId(), address.getWardId()));
+            order.setAddresse(address.getProvinceName() + " " + address.getDistrictName() + " " + address.getWardName());
         }
+    }
+
+    public String getProvinceName(int provinceId) throws IOException {
+        return locationService.findProvinceName(provinceId);
+    }
+
+    public String getDistrictName(int provinceId, int districtId) throws IOException {
+        return locationService.findDistrictName(provinceId, districtId);
+    }
+
+    public String getWardName(int districtId, String wardCode) throws IOException {
+        return locationService.findWardName(districtId, wardCode);
     }
 
     public Order getOrderById(int id) {

@@ -167,9 +167,12 @@ header {
     text-decoration: none;
 }
 
+.hover--black {
+    border: 2px solid white !important; /* Khi hover vào sẽ có viền đen */
+}
+
 .hover--black:hover {
     border: 2px solid black !important; /* Khi hover vào sẽ có viền đen */
-    border-radius: 8px; /* Giữ bo góc đẹp */
 }
 
 .favorite__count {

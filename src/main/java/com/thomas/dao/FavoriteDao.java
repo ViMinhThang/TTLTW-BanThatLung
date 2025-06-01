@@ -1,11 +1,11 @@
 package com.thomas.dao;
 
+import java.util.List;
+
 import com.thomas.dao.db.JDBIConnect;
 import com.thomas.dao.model.BeltVariant;
-import com.thomas.dao.model.Favorite;
 import com.thomas.dao.model.Belts;
-
-import java.util.List;
+import com.thomas.dao.model.Favorite;
 
 public class FavoriteDao {
 
@@ -73,4 +73,14 @@ public class FavoriteDao {
         );
     }
 
+    public boolean checkExistFavorite(int userId) {
+        return JDBIConnect.get().withHandle(h -> {
+            String sql = "SELECT 1 FROM favorites WHERE userId = :userId LIMIT 1";
+            return h.createQuery(sql)
+                    .bind("userId", userId)
+                    .mapTo(Integer.class)
+                    .findOne()
+                    .isPresent();
+        });
+    }
 }

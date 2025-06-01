@@ -1,7 +1,5 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +15,6 @@
     <title>THOMAS - Admin</title>
     <jsp:include page="/frontend/components/Admin/adminLink/adminLink.jsp"/>
 
-
 </head>
 
 <body id="page-top">
@@ -26,563 +23,521 @@
 
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
+            <nav
+                    class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+            >
+                <button
+                        class="btn btn-white border border-dark custom_input--btn-group__input"
+                        style="color: black"
+                        data-bs-toggle="modal"
+                        data-bs-target="#createModal"
+                >
+                    Tạo 1 biến thể
+                </button>
 
-            <div class="container-fluid px-0">
-                <h1 class="title-create-edit mb-2 mt-5 ml-3">
-                    <c:choose>
-                        <c:when test="${param.id!=null}">
-                            Chỉnh sửa sản phẩm
-                        </c:when>
-                        <c:otherwise>
-                            Tạo Sản phẩm
-                        </c:otherwise>
-                    </c:choose>
-
-
-                </h1>
-                <div class="d-flex w-100">
-                    <div class="col-12 bg-light">
-                        <c:if test="${param.id!=null}">
-                            <div
-                                    class="overflow-auto d-flex justify-content-center fs-3 mt-5"
-                                    style="white-space: nowrap;color:black"
-                            >
-                                <div class="d-inline-block p-3">
-                                    <a
-                                            class="text-decoration-none fs-4 custom_active"
-                                            href="${pageContext.request.contextPath}/admin/table/belts/createProduct?id=${param.id}&message=update"
-                                            style="font-size: 32px"
-                                    >Tổng quan</a
-                                    >
-                                </div>
-                                <div class="d-inline-block p-3 ms-0">
-                                    <a
-                                            class="text-decoration-none"
-                                            href="${pageContext.request.contextPath}/admin/table/belts/createProductDescription?id=${param.id}&message=update"
-                                            style="font-size: 32px"
-                                    >Mô tả</a>
-
-                                </div>
-
-                            </div>
-                        </c:if>
-
-                    </div>
-                </div>
-                <form id="productForm" method="POST"
-                      class="d-flex flex-column justify-content-between" enctype="multipart/form-data">
-                    <input type="hidden" name="userId" value="${sessionScope.auth.id}"/>
-                    <input type="hidden" name="beltId" value="${param.id}"/>
-                    <input type="hidden" name="message" value="
-<c:choose>
-    <c:when test='${param.message == "update"}'>update</c:when>
-    <c:when test='${param.message == "createVariant"}'>createVariant</c:when>
-    <c:otherwise>create</c:otherwise>
-</c:choose>"/>
-                    <input type="hidden" name="productId" class="custom_input--btn-group__input"/>
-                    <div class="d-flex w-100">
-                        <div class="col-12 " style="background-color: #edf3f9">
-                            <div class="d-flex flex-column mt-5">
-                                <div class="mt-5 ms-5">
-                                    <h1 class="fw-bold">
-                                        <c:choose>
-                                            <c:when test="${param.id != null}">
-                                                Chỉnh sửa sản phẩm # ${param.id}
-                                            </c:when>
-                                            <c:otherwise>
-                                                Tạo sản phẩm
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </h1>
-                                </div>
-                            </div>
-                            <div
-                                    class="d-flex flex justify-content-left align-items-left px-5"
-                            >
-                                <div class="d-flex flex-column mt-5 w-50">
-                                    <div class="row mb-3">
-                                        <p
-                                                class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                        >
-                                            Ảnh bìa
-
-                                        </p>
-                                        <input
-                                                name="coverImage"
-                                                type="file"
-                                                class="col p-0 form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                        />
-
-                                    </div>
-                                    <c:choose>
-                                        <c:when test="${image1 != null}">
-                                            <div class="row mb-3">
-                                                <p
-                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                                >
-                                                    Ảnh gốc
-
-                                                </p>
-                                                <input
-                                                        type="text"
-                                                        disabled
-                                                        class="col p-0 form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                        value="${image1}"/>
-                                            </div>
-                                        </c:when>
-                                    </c:choose>
-
-                                    <div class="row mb-3">
-                                        <p
-                                                class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                        >
-                                            Ảnh 2
-
-                                        </p>
-                                        <input
-                                                name="coverImage"
-                                                type="file"
-                                                class="col p-0 form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                        />
-                                    </div>
-                                    <c:choose>
-                                        <c:when test="${image2 != null}">
-                                            <div class="row mb-3">
-                                                <p
-                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                                >
-                                                    Ảnh gốc
-
-                                                </p>
-                                                <input
-                                                        type="text"
-                                                        disabled
-                                                        class="col p-0 form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                        value="${image2}"
-                                                />
-                                            </div>
-                                        </c:when>
-                                    </c:choose>
-                                    <div class="row mb-3">
-                                        <p
-                                                class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                        >
-                                            Ảnh 3
-                                        </p>
-                                        <input
-                                                name="coverImage"
-                                                type="file"
-                                                class="col p-0 form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                        />
-                                    </div>
-                                    <c:choose>
-                                        <c:when test="${image3 != null}">
-                                            <div class="row mb-3">
-                                                <p
-                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                                >
-                                                    Ảnh gốc
-
-                                                </p>
-                                                <input
-                                                        type="text"
-                                                        disabled
-                                                        class="col p-0 form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                        value="${image3}"
-                                                />
-                                            </div>
-                                        </c:when>
-                                    </c:choose>
-                                    <div class="row mb-3">
-                                        <p
-                                                class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                        >
-                                            Ảnh 4
-                                        </p>
-                                        <input
-                                                name="coverImage"
-                                                type="file"
-                                                class="col p-0 form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                        />
-                                    </div>
-                                    <c:choose>
-                                        <c:when test="${image4 != null}">
-                                            <div class="row mb-3">
-                                                <p
-                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                                >
-                                                    Ảnh gốc
-
-                                                </p>
-                                                <input
-                                                        type="text"
-                                                        disabled
-                                                        class="col p-0 form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                        value="${image4}"
-                                                />
-                                            </div>
-                                        </c:when>
-                                    </c:choose>
-                                    <div class="row mb-3">
-                                        <p
-                                                class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                        >
-                                            Ảnh 5
-                                        </p>
-                                        <input
-                                                name="coverImage"
-                                                type="file"
-                                                class="col p-0 form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                        />
-                                    </div>
-                                    <c:choose>
-                                        <c:when test="${image4 != null}">
-                                            <div class="row mb-3">
-                                                <p
-                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                                >
-                                                    Ảnh gốc
-
-                                                </p>
-                                                <input
-                                                        type="text"
-                                                        disabled
-                                                        class="col p-0 form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                        value="${image4}"
-                                                />
-                                            </div>
-                                        </c:when>
-                                    </c:choose>
-                                </div>
-                                <div class="d-flex flex-column mt-5 w-50">
-                                    <c:choose>
-                                        <c:when test="${param.message == 'createVariant'}">
-                                            <!-- Chỉ hiện các trường liên quan đến biến thể -->
-                                            <div class="row mb-3">
-                                                <p class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5">
-                                                    Nhập màu</p>
-                                                <input
-                                                        name="color"
-                                                        type="text"
-                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                        placeholder="Nhập màu"
-                                                        value="${variants.color}"
-                                                        required
-                                                />
-                                            </div>
-                                            <div class="row mb-3">
-                                                <p class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5">
-                                                    Nhập size</p>
-                                                <input
-                                                        name="size"
-                                                        type="text"
-                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                        placeholder="Nhập size"
-                                                        value="${variants.size}"
-                                                        required
-                                                />
-                                            </div>
-                                            <div class="row mb-3">
-                                                <p class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5">
-                                                    Số lượng</p>
-                                                <input
-                                                        name="quantity"
-                                                        type="number"
-                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                        placeholder="Nhập số lượng khách hàng có thể chọn"
-                                                        value="${variants.stockQuantity}"
-                                                        required
-                                                />
-                                            </div>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div class="row mb-3">
-                                                <p
-                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                                >
-                                                    Tên sản phẩm
-                                                </p>
-                                                <input
-                                                        name="beltName"
-                                                        type="text"
-                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                        placeholder="Nhập tên sản phẩm"
-                                                        value="${product.name}"
-                                                        required
-
-                                                />
-                                            </div>
-                                            <div class="row mb-3">
-                                                <p
-                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                                >
-                                                    Nhập tags
-                                                </p>
-                                                <input
-                                                        placeholder="các tag cách nhau bởi dấu cách"
-                                                        name="tags"
-                                                        type="text"
-                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                        value="${tags}"
-                                                        required
-                                                />
-                                            </div>
-                                            <div class="row mb-3">
-                                                <p
-                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                                >
-                                                    Chất liệu
-                                                </p>
-                                                <select
-                                                        style="color: black"
-                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                        name="material"
-                                                        aria-label="Default select example"
-                                                >
-                                                    <option value="Da">Da</option>
-                                                    <option value="Canvas">Canvas</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="row mb-3">
-                                                <p
-                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                                >
-                                                    Ngày ra mắt
-                                                </p>
-                                                <input name="releaseDate" type="date"
-                                                       class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                       value="${product.releaseDate}"
-                                                       required
-                                                />
-                                            </div>
-
-                                            <div class="row mb-3">
-                                                <p
-                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                                >
-                                                    Giá
-                                                </p>
-                                                <input
-                                                        id="price-input"
-                                                        name="price"
-                                                        type="text"
-                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                        placeholder="Nhập giá sản phẩm"
-                                                    <%--                                                oninput="formatNumber(this)"--%>
-                                                        value="${product.price}"
-                                                        required
-                                                />
-                                            </div>
-                                            <div class="row mb-3">
-                                                <p
-                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                                >
-                                                    Số lượng
-                                                </p>
-                                                <input
-                                                        name="quantity"
-                                                        type="number"
-                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                        placeholder="Nhập số lượng khách hàng có thể chọn"
-                                                        value="${variants.stockQuantity}"
-                                                        required
-                                                />
-                                            </div>
-                                            <div class="row mb-3">
-                                                <p
-                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                                >
-                                                    Nhập màu
-                                                </p>
-                                                <input
-                                                        name="color"
-                                                        type="text"
-                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                        placeholder="Nhập màu"
-                                                        value="${variants.color}"
-                                                        required
-                                                />
-                                            </div>
-                                            <div class="row mb-3">
-                                                <p
-                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                                >
-                                                    Nhập size
-                                                </p>
-                                                <input
-                                                        name="size"
-                                                        type="text"
-                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                        placeholder="Nhập size"
-                                                        value="${variants.size}"
-                                                        required
-                                                />
-                                            </div>
-                                            <div class="row mb-3">
-                                                <p
-                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                                >
-                                                    Giới tính
-                                                </p>
-                                                <div class="col d-flex align-items-center">
-                                                    <div class="form-check me-4 d-flex align-items-center">
-                                                        <input
-                                                                class=" me-3 mb-1 "
-                                                                type="radio"
-                                                                name="gender"
-                                                                id="exampleRadios1"
-                                                                value="M"
-                                                            ${product.gender == 'M' ? 'checked' : ''}
-                                                        />
-                                                        <label class="form-check-label mb-1 p-sm-1 fs-5"
-                                                               for="exampleRadios1">
-                                                            Nam
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check me-4 d-flex align-items-center">
-                                                        <input
-                                                                class="me-3 mb-1"
-                                                                type="radio"
-                                                                name="gender"
-                                                                id="exampleRadios2"
-                                                                value="N"
-                                                            ${product.gender == 'N' ? 'checked' : ''}
-                                                        />
-                                                        <label class="form-check-label mb-1 p-sm-1 fs-5"
-                                                               for="exampleRadios2">
-                                                            Nữ
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row mb-3">
-                                                <p class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5">
-                                                    Xóa mềm
-                                                </p>
-                                                <input
-                                                        type="checkbox"
-                                                        id="isDeleted"
-                                                        name="isDeleted"
-                                                        value="1"
-                                                    ${product.isDeleted == 1 ? "checked" : ""}
-                                                />
-                                                <input type="hidden" name="isDeleted" value="0"/>
-                                            </div>
-                                            <div class="row mb-3">
-                                                <p
-                                                        class="col-3 mb-0 d-flex justify-content-end align-items-center fs-5"
-                                                >
-                                                    Giảm giá
-                                                </p>
-                                                <input
-                                                        type="number"
-                                                        name="discountRate"
-                                                        class="col form-control form-control-lg custom_design custom__border custom_input--btn-group__input"
-                                                        value="${product.discountRate}"
-                                                />
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>
-
-                                    <div class="row d-flex justify-content-end mb-3 ps-sm-5">
-                                        <button type="submit" class="btn btn-dark custom_btn_style"
-                                                style="width: 30%; height: 47px">
-                                            <c:choose>
-                                                <c:when test="${param.id != null}">
-                                                    Chỉnh sửa sản phẩm # ${param.id}
-                                                </c:when>
-                                                <c:otherwise>
-                                                    Tạo sản phẩm
-                                                </c:otherwise>
-                                            </c:choose>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown no-arrow d-sm-none">
+                        <div
+                                class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown"
+                        >
+                            <form class="form-inline mr-auto w-100 navbar-search">
+                                <div class="input-group">
+                                    <input
+                                            type="text"
+                                            class="form-control bg-light border-0 small"
+                                            placeholder="Search for..."
+                                            aria-label="Search"
+                                            aria-describedby="basic-addon2"
+                                    />
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button">
+                                            <i class="fas fa-search fa-sm"></i>
                                         </button>
                                     </div>
                                 </div>
+                            </form>
+                        </div>
+                    </li>
 
-                            </div>
+                    <!-- Nav Item - Alerts -->
+                    <li class="nav-item dropdown no-arrow mx-1">
+                        <div
+                                class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="alertsDropdown"
+                        >
+                            <h6 class="dropdown-header">Alerts Center</h6>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="mr-3">
+                                    <div class="icon-circle bg-primary">
+                                        <i class="fas fa-file-alt text-white"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="small text-gray-500">December 12, 2019</div>
+                                    <span class="font-weight-bold"
+                                    >A new monthly report is ready to download!</span
+                                    >
+                                </div>
+                            </a>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="mr-3">
+                                    <div class="icon-circle bg-success">
+                                        <i class="fas fa-donate text-white"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="small text-gray-500">December 7, 2019</div>
+                                    $290.29 has been deposited into your account!
+                                </div>
+                            </a>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="mr-3">
+                                    <div class="icon-circle bg-warning">
+                                        <i class="fas fa-exclamation-triangle text-white"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="small text-gray-500">December 2, 2019</div>
+                                    Spending Alert: We've noticed unusually high spending for
+                                    your account.
+                                </div>
+                            </a>
+                            <a
+                                    class="dropdown-item text-center small text-gray-500"
+                                    href="#"
+                            >Show All Alerts</a
+                            >
+                        </div>
+                    </li>
+
+                    <!-- Nav Item - Messages -->
+                    <li class="nav-item dropdown no-arrow mx-1">
+                        <!-- Dropdown - Messages -->
+                        <div
+                                class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="messagesDropdown"
+                        >
+                            <h6 class="dropdown-header">Message Center</h6>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="dropdown-list-image mr-3">
+                                    <img
+                                            class="rounded-circle"
+                                            src="img/undraw_profile_1.svg"
+                                            alt="..."
+                                    />
+                                    <div class="status-indicator bg-success"></div>
+                                </div>
+                                <div class="font-weight-bold">
+                                    <div class="text-truncate">
+                                        Hi there! I am wondering if you can help me with a
+                                        problem I've been having.
+                                    </div>
+                                    <div class="small text-gray-500">Emily Fowler · 58m</div>
+                                </div>
+                            </a>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="dropdown-list-image mr-3">
+                                    <img
+                                            class="rounded-circle"
+                                            src="img/undraw_profile_2.svg"
+                                            alt="..."
+                                    />
+                                    <div class="status-indicator"></div>
+                                </div>
+                                <div>
+                                    <div class="text-truncate">
+                                        I have the photos that you ordered last month, how would
+                                        you like them sent to you?
+                                    </div>
+                                    <div class="small text-gray-500">Jae Chun · 1d</div>
+                                </div>
+                            </a>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="dropdown-list-image mr-3">
+                                    <img
+                                            class="rounded-circle"
+                                            src="img/undraw_profile_3.svg"
+                                            alt="..."
+                                    />
+                                    <div class="status-indicator bg-warning"></div>
+                                </div>
+                                <div>
+                                    <div class="text-truncate">
+                                        Last month's report looks great, I am very happy with
+                                        the progress so far, keep up the good work!
+                                    </div>
+                                    <div class="small text-gray-500">Morgan Alvarez · 2d</div>
+                                </div>
+                            </a>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="dropdown-list-image mr-3">
+                                    <img
+                                            class="rounded-circle"
+                                            src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
+                                            alt="..."
+                                    />
+                                    <div class="status-indicator bg-success"></div>
+                                </div>
+                                <div>
+                                    <div class="text-truncate">
+                                        Am I a good boy? The reason I ask is because someone
+                                        told me that people say this to all dogs, even if they
+                                        aren't good...
+                                    </div>
+                                    <div class="small text-gray-500">
+                                        Chicken the Dog · 2w
+                                    </div>
+                                </div>
+                            </a>
+                            <a
+                                    class="dropdown-item text-center small text-gray-500"
+                                    href="#"
+                            >Read More Messages</a
+                            >
+                        </div>
+                    </li>
+
+                    <div class="topbar-divider d-none d-sm-block"></div>
+
+                    <!-- Nav Item - User Information -->
+                    <li class="nav-item dropdown no-arrow">
+                        <a
+                                class="nav-link dropdown-toggle"
+                                href="#"
+                                id="userDropdown"
+                                role="button"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                        >
+                  <span class="mr-2 d-none d-lg-inline text-gray-600 small"
+                  >${sessionScope.auth.name}</span
+                  >
+                            <c:choose>
+                                <c:when test="${sessionScope.auth.image!=null}">
+                                    <img
+                                            src="${pageContext.request.contextPath}${sessionScope.auth.image}"
+                                            alt=" User Avatar"
+                                            width="35"
+                                            height="35"
+                                            class="rounded-circle me-2"
+                                    />
+                                </c:when>
+                                <c:otherwise>
+                                    <img
+                                            src="${pageContext.request.contextPath}/assets/icons/user.svg"
+                                            alt=" User Avatar"
+                                            width="35"
+                                            height="35"
+                                            class="rounded-circle me-2"
+                                    />
+                                </c:otherwise>
+                            </c:choose>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="container-fluid">
+                <h1 class="h3 mb-2 text-gray-800">Sản phẩm</h1>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Tất cả Sản phẩm</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-end align-items-center">
+                            <h3 class="mr-5">Import CSV</h3>
+                            <form method="post" enctype="multipart/form-data"
+                                  action="${pageContext.request.contextPath}/admin/table/coupons?message=import">
+                                <input type="file" name="file">
+                                <button type="submit">Upload</button>
+                            </form>
+                        </div>
+                        <div class="table-responsive">
+                            <table
+                                    class="table"
+                                    id="dataTable"
+                                    width="100%"
+                                    cellspacing="0"
+                            >
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Màu</th>
+                                    <th>Size</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Ngày cập nhập</th>
+                                    <th>Giá</th>
+                                    <th>Hành động</th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Màu</th>
+                                    <th>Size</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Ngày cập nhập</th>
+                                    <th>Giá</th>
+                                    <th>Hành động</th>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                <c:forEach var="belt" items="${variants}">
+                                    <tr>
+                                        <td class="variantId">${belt.beltVariant.id}</td>
+                                        <td>${belt.beltVariant.color}</td>
+                                        <td>${belt.beltVariant.size}</td>
+                                        <td>${belt.beltVariant.createdAt}</td>
+                                        <td>${belt.beltVariant.updatedAt}</td>
+                                        <td>${belt.beltVariant.price}</td>
+
+                                        <td class="text-center">
+                                            <c:choose>
+                                                <c:when test="${permissionToExecute and permissionToWrite}">
+                                                    <button
+                                                            class="btn btn-dark fa-solid fa-pen-to-square"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#createModal"
+                                                    ></button>
+                                                    <button
+                                                            class="btn btn-danger fa-solid fa-trash-can"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#removeModal"
+                                                    ></button>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    -
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
+                </div>
+            </div>
 
+            <jsp:include page="/frontend/components/Admin/adminFooter/adminFooter.jsp"/>
+
+        </div>
+    </div>
+
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <div
+            class="modal fade"
+            id="logoutModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+    >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Ready to Leave?
+                    </h5>
+                    <button
+                            class="close"
+                            type="button"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    >
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Select "Logout" below if you are ready to end your current
+                    session.
+                </div>
+                <div class="modal-footer">
+                    <button
+                            class="btn btn-secondary"
+                            type="button"
+                            data-dismiss="modal"
+                    >
+                        Cancel
+                    </button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div
+            class="modal fade"
+            id="removeModal"
+            tabindex="-1"
+            aria-labelledby="removeModal"
+            aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Bạn có muốn xóa sản phẩm này?
+                    </h5>
+                    <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                    ></button>
+                </div>
+                <div class="modal-body removeModalBody">
+
+                </div>
+                <div class="modal-footer">
+                    <button
+                            type="button"
+                            class="btn btn-white border border-dark custom_btn_style"
+                            data-bs-dismiss="modal"
+                            style="color: black"
+                    >
+                        Hủy
+                    </button>
+                    <form class="deleteBtn" action="/admin/table/belts/createProduct?beltId=${param.beltId}"
+                          method="POST">
+                        <button
+                                id="removeUserBtn"
+                                type="submit"
+                                class="btn btn-dark custom_btn_style"
+                                style="color: white; background-color: black"
+                        >
+                            Xóa
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div
+            class="modal fade"
+            id="createModal"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="createProduct"
+                      action="${pageContext.request.contextPath}/admin/table/belts/createProduct?beltId=${param.beltId}"
+                      method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="message" value="create">
+
+                    <div class="modal-header">
+                        <h3 class="modal-title text-dark" id="exampleModalLabel">
+                            Tạo biến thể mới
+                        </h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="d-flex justify-content-start align-items-center">
+                            <div class="mb-3">
+                                <label class="form-label">Ảnh 1</label>
+                                <input type="file" name="image1" class="form-control-file" accept="image/*"
+                                       onchange="previewImage(this, 'preview1')"/>
+                                <img id="preview1" src="#" alt="Preview 1" style="max-width: 200px; display: none;"/>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Ảnh 2</label>
+                                <input type="file" name="image2" class="form-control-file" accept="image/*"
+                                       onchange="previewImage(this, 'preview2')"/>
+                                <img id="preview2" src="#" alt="Preview 2" style="max-width: 200px; display: none;"/>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Ảnh 3</label>
+                                <input type="file" name="image3" class="form-control-file" accept="image/*"
+                                       onchange="previewImage(this, 'preview3')"/>
+                                <img id="preview3" src="#" alt="Preview 3" style="max-width: 200px; display: none;"/>
+                            </div>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label class="form-label text-dark">Màu sắc</label>
+                            <select class="form-select form-control rounded-0" name="color">
+                                <option value="1">Black</option>
+                                <option value="2">Brown</option>
+                                <option value="3">Tan</option>
+                                <option value="4">White</option>
+                                <option value="5">Navy</option>
+                                <option value="6">Gray</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-dark">Size</label>
+                            <select class="form-select form-control rounded-0" name="size">
+                                <option value="1">S</option>
+                                <option value="2">M</option>
+                                <option value="3">L</option>
+                                <option value="4">XL</option>
+                                <option value="5">XXL</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-dark">Mô tả sản phẩm</label>
+                            <textarea class="form-control rounded-0" name="description"
+                                      rows="3">${belt.description}</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-dark">Giá sản phẩm</label>
+                            <input type="number" name="price" class="form-control rounded-0" value="${belt.price}"
+                                   step="0.01" min="0"/>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-dark rounded-0">Tạo</button>
+                    </div>
                 </form>
 
             </div>
         </div>
-
-        <jsp:include page="/frontend/components/Admin/adminFooter/adminFooter.jsp"/>
-
     </div>
-</div>
+    <!-- Bootstrap core JavaScript-->
 
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
+    <jsp:include page="/frontend/components/Admin/scripts/adminScripts/datatable.jsp"/>
 
-</div>
+    <script>
+        const checkbox = document.getElementById('showDeleted');
+        const hiddenInput = document.getElementById('isDeleted');
 
-<jsp:include page="/frontend/components/Admin/scripts/adminScripts/datatable.jsp"/>
-
-<script>
-    const {
-        ClassicEditor,
-        Essentials,
-        Paragraph,
-        Bold,
-        Italic,
-        Font,
-        DecoupledEditor, SimpleUploadAdapter, Image, ImageUpload
-    } = CKEDITOR;
-
-    ClassicEditor
-        .create(document.querySelector('.document-editor__editing'), {
-            licenseKey: 'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NjU2NzAzOTksImp0aSI6IjU3ZjA1MWMwLTIyZmMtNDNjYy1hYTM4LTY5NjIyODQ1OGYzOCIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiXSwiZmVhdHVyZXMiOlsiRFJVUCIsIkJPWCJdLCJ2YyI6IjIxMzg3ZTM2In0.2zYk8hnu1hlPu3OCtlLbUqaXqpzQEJVr0vCU_cihJ6f7lsKvqtTMNXiYUwxN9_HlskEP8jb-U3mGF_e-PHnS3w',
-            plugins: [Essentials, Paragraph, Bold, Italic, Font, SimpleUploadAdapter, Image, ImageUpload],
-            toolbar: {
-                items: [
-                    'undo', 'redo', '|', 'bold', 'italic', 'link', '|',
-                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor',
-                    'bulletedList', 'numberedList', '|',
-                    'imageUpload', '|',
-                    'undo', 'redo'
-                ]
-            },
-            simpleUpload: {
-                uploadUrl: '/upload',
-                withCredentials: false,
-
-            },
-            image: {
-                toolbar: [
-                    'imageTextAlternative',
-                    'imageStyle:full',
-                    'imageStyle:side'
-                ]
-            }
-        })
-        .then(editor => {
-            const toolbarContainer = document.querySelector('.document-editor__toolbar');
-            toolbarContainer.appendChild(editor.ui.view.toolbar.element);
-            window.editor = editor;
-        })
-        .catch(error => {
-            console.error('Error initializing CKEditor:', error);
+        checkbox.addEventListener('change', function () {
+            hiddenInput.value = this.checked ? 1 : 0;
         });
-</script>
-<script>
-    const checkbox = document.getElementById('isDeleted');
-    const hiddenInput = document.getElementById('hiddenIsDeleted');
 
-    checkbox.addEventListener('change', function () {
-        hiddenInput.value = this.checked ? 1 : 0;
-    });
-</script>
+        function previewImage(input, previewId) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = document.getElementById(previewId);
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+    <script src="${pageContext.request.contextPath}/js/createProduct.js"></script>
 
-<script>
-    function formatNumber(input) {
-        let value = input.value.replace(/\D/g, '');
-
-        input.value = new Intl.NumberFormat('vi-VN').format(value);
-    }
-</script>
+</div>
 </body>
 </html>

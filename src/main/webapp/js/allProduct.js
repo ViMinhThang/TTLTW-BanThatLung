@@ -1,34 +1,64 @@
 $(document).ready(function () {
-    $(document).on("click", ".fa-trash-can", function () {
-        const variantRow = $(this).closest("tr");
-        console.log("🗑️ Clicked on variant row:", variantRow);
+    $(".fa-trash-can").on("click", function () {
+        const beltId = $(this).closest("tr").find(".beltId").text();
+        console.log(beltId);
+        $(".removeModalBody").text(`Xóa sản phẩm #${beltId}`);
+        // Xóa các input cũ trước khi thêm mới
+        // Xóa các input cũ (nếu có) nhưng giữ lại nút "Xóa"
+        $(".deleteBtn input[name='beltId']").remove();
+        $(".deleteBtn input[name='message']").remove();
 
-        // Find the corresponding product row by getting the closest 'belt-row' parent
-        const productRow = variantRow.closest("tbody").find("tr.belt-row").first();
-        console.log("🛍️ Found product row:", productRow);
-
-        // Get the productId from the product row by targeting the .productId cell
-        const productId = productRow.find(".productId").text().trim();  // Fixed here
-        const variantId = variantRow.find(".variantId").text().trim();
-
-        console.log("📦 Extracted Product ID:", productId);
-        console.log("🎨 Extracted Variant ID:", variantId);
-
-        const messageValue = variantId ? "delete" : "deleteRealVariant";
-
-        $(".removeModalBody").text(`Xóa sản phẩm này #${productId}`);
-        $(".deleteBtn input").remove(); // Clear previous inputs
-
+        // Thêm input ẩn vào form nút delete
         $(".deleteBtn").prepend(`
-        <input type="hidden" name="productId" value="${productId}">
-        ${variantId ? `<input type="hidden" name="variantId" value="${variantId}">` : ""}
-        <input type="hidden" name="message" value="${messageValue}">
-    `);
+            <input type="hidden" name="beltId" value="${beltId}">
+            <input type="hidden" name="message" value="delete">
+        `);
     });
 
     $('#removeModal').on('hidden.bs.modal', function () {
-        $(".deleteBtn input[name='variantId']").remove();
-        $(".deleteBtn input[name='productId']").remove();
+        $(".deleteBtn input[name='couponId']").remove();
         $(".deleteBtn input[name='message']").remove();
     });
+    $('#createModal').on('hidden.bs.modal', function () {
+        $("#createCouponForm")[0].reset();
+        $(".messageCreateOrUpdate").val("create");
+        $(".modal-title").text("Tạo Sản phẩm");
+        $(".createOrUpdate").text("Tạo");
+        $(".createOrUpdate input[name='beltId']").remove();
+    });
+    $('input[name="supplierName"]').on('input', function () {
+        const keyword = $(this).val().trim();
+        $.ajax({
+            url: '/SearchSupplierNames', method: 'GET', data: {keyword}, success: function (response) {
+                const suggestionBox = $('#supplierSuggestions');
+                suggestionBox.empty();
+                if (response.names && response.names.length > 0) {
+                    response.names.forEach(name => {
+                        suggestionBox.append(`<div class="suggestion-item">${name}</div>`);
+                    });
+                    suggestionBox.show();
+                } else {
+                    suggestionBox.hide();
+                }
+            }
+        });
+    });
+    $(function () {
+        const $nameInput = $('input[name="supplierName"]');
+        const $supplierSuggestions = $('#supplierSuggestions');
+
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('input[name="supplierName"]').length) {
+                $supplierSuggestions.hide();
+            }
+        });
+
+        $supplierSuggestions.on('click', '.suggestion-item', function () {
+            const selected = $(this).text();
+            $nameInput.val(selected).trigger('blur');
+            $supplierSuggestions.hide();
+        });
+
+    });
+
 });

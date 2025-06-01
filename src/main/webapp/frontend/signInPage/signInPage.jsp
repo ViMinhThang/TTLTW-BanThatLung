@@ -7,7 +7,7 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>THOMAS - Đăng nhập</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/assets/icons/favicon.svg" type="image/x-icon"/>
+    <link rel="icon" href="https://cdn-web-servlet.vercel.app/images/favicon.svg" type="image/x-icon"/>
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
             rel="stylesheet"
@@ -16,14 +16,14 @@
     />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/signInPage.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css"/>
+    <link rel="stylesheet" href="https://cdn-web-servlet.vercel.app/css/general.css"/>
+    <link rel="stylesheet" href="https://cdn-web-servlet.vercel.app/css/signInPage.css"/>
+    <link rel="stylesheet" href="https://cdn-web-servlet.vercel.app/css/footer.css"/>
     <!-- Thêm script reCAPTCHA v3 -->
     <script src="https://www.google.com/recaptcha/api.js?render=6Ld-QAgrAAAAAJTKPkDgBUW7_qoOrzAMiDOocwfR"></script>
     <script>
-        grecaptcha.ready(function() {
-            grecaptcha.execute('6Ld-QAgrAAAAAJTKPkDgBUW7_qoOrzAMiDOocwfR', {action: 'login'}).then(function(token) {
+        grecaptcha.ready(function () {
+            grecaptcha.execute('6Ld-QAgrAAAAAJTKPkDgBUW7_qoOrzAMiDOocwfR', {action: 'login'}).then(function (token) {
                 document.getElementById('g-recaptcha-response').value = token;
             });
         });
@@ -126,7 +126,7 @@
                 <!-- Nút Đăng nhập (không bo viền) -->
                 <div class="d-flex justify-content-end">
                     <button type="submit"
-                            class="btn btn-dark py-3 px-5 custom__btn custom-login-btn w-100 w-lg-50">
+                            class="btn-dark py-3 px-5 custom__btn custom-login-btn w-100 w-lg-50">
                         Đăng nhập
                     </button>
                 </div>
@@ -138,7 +138,6 @@
                         <span class="px-3 custom_size--14 text-muted">Hoặc đăng nhập bằng</span>
                         <hr class="flex-grow-1">
                     </div>
-
                     <div class="d-flex justify-content-center gap-3">
                         <a href="https://accounts.google.com/o/oauth2/auth?client_id=<%=Iconstant.GOOGLE_CLIENT_ID%>&redirect_uri=<%=Iconstant.GOOGLE_REDIRECT_URI%>&response_type=code&scope=email profile"
                            class="btn btn-floating btn-lg hover-lift custom-google-btn">

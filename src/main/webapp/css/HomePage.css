@@ -120,12 +120,10 @@ a {
 
 .hover--black {
     border: 2px solid transparent; /* Mặc định không có viền */
-    transition: border 0.3s ease-in-out; /* Hiệu ứng mượt khi hover */
 }
 
 .hover--black:hover {
     border: 2px solid black !important; /* Khi hover vào sẽ có viền đen */
-    border-radius: 8px; /* Giữ bo góc đẹp */
 }
 
 
@@ -432,44 +430,62 @@ a {
     filter: brightness(0.7) saturate(1.5);
 }
 
-/* ----------------------------------------------------------------- */
-.carousel-control-prev-icon {
-    background-color: rgb(255, 255, 255);
-    width: 50px;
-    height: 257px;
+.border-tag {
+    border: 2px solid black;
+    padding: 2px 5px;
+}
+
+.carousel-indicators-line {
+    height: 6px;
+    background-color: #fff;
+    border-radius: 0;
+    overflow: hidden;
+    max-width: 1681px;
+    margin: 0 auto;
+}
+
+.carousel-indicators-line .indicator-segment {
+    flex: 1;
+    background-color: #efefef;
+    cursor: pointer;
+    height: 100%;
+}
+
+.carousel-indicators-line .indicator-segment.active {
+    background-color: #000000;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: white;
+    border: 1px solid #000;
+    border-radius: 0;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="00000"><path d="M640-80 240-480l400-400 71 71-329 329 329 329-71 71Z"/></svg>');
-
     background-size: 60%;
     background-position: center;
     background-repeat: no-repeat;
+}
+
+.carousel-control-prev-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 16 16'%3E%3Cpath d='M11 1L3 8l8 7V1z'/%3E%3C/svg%3E");
 }
 
 .carousel-control-next-icon {
-    background-color: rgb(255, 255, 255);
-    width: 50px;
-    height: 257px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 16 16'%3E%3Cpath d='M5 1l8 7-8 7V1z'/%3E%3C/svg%3E");
+}
+
+.circle-banner {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background-color: black;
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="%23000000"><path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"/></svg>');
-
-
-    background-size: 60%;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
-.carousel-control-prev {
-    left: 6rem !important;
-    opacity: 1;
-}
-
-.carousel-control-next {
-    right: 6rem !important;
-    opacity: 1;
+    font-weight: bold;
 }

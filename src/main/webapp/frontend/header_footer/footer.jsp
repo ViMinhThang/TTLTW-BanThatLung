@@ -39,13 +39,13 @@
                 <p>thomas@contact.tm.com</p>
                 <div class="d-flex social-icons">
                     <span class="icon me-2">
-                        <img src="${pageContext.request.contextPath}/assets/icons/Facebook.svg" alt="Facebook" />
+                        <img src="$https://cdn-web-servlet.vercel.app/images/Facebook.svg" alt="Facebook" />
                     </span>
                     <span class="icon me-2">
-                        <img src="${pageContext.request.contextPath}/assets/icons/Instagram.svg" alt="Instagram" />
+                        <img src="https://cdn-web-servlet.vercel.app/images/Instagram.svg" alt="Instagram" />
                     </span>
                     <span class="icon">
-                        <img src="${pageContext.request.contextPath}/assets/icons/TwitterX.svg" alt="TwitterX" />
+                        <img src="https://cdn-web-servlet.vercel.app/images/TwitterX.svg" alt="TwitterX" />
                     </span>
                 </div>
             </div>

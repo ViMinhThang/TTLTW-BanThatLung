@@ -6,20 +6,13 @@ $(document).ready(function () {
         var beltId = $("#beltIdReviews").val();
         var variantId = $("#variantIdReviews").val()
         $.ajax({
-            url: '/getReviews',
-            type: 'GET',
-            data: {
-                beltId: beltId,
-                variantId: variantId,
-                page: page,
-                size: reviewsPerPage
-            },
-            success: function (response) {
+            url: '/getReviews', type: 'GET', data: {
+                beltId: beltId, variantId: variantId, page: page, size: reviewsPerPage
+            }, success: function (response) {
                 $('#reviewsContainer').html(response.reviewsHTML);
 
                 updatePagination(response.totalPages, page);
-            },
-            error: function () {
+            }, error: function () {
                 alert('Error loading reviews.');
             }
         });
@@ -54,12 +47,16 @@ $(document).ready(function () {
                 price: price,
             },
             success: function (response) {
-                $("#liveToast").removeClass("hide").addClass("show");
-
-                let cartCount = parseInt($("#cart_received").text(), 10) + 1;
-                $("#cart_received").text(cartCount);
-
-                $button.html(originalContent).prop("disabled", false);
+                if (response.status === 'error') {
+                    $(".custom_toast_text").text(`${response.message}`);
+                    $("#liveToast").removeClass("hide").addClass("show");
+                } else {
+                    $("#liveToast").removeClass("hide").addClass("show");
+                    console.log(response);
+                    let cartCount = parseInt($("#cart_received").text(), 10) + 1;
+                    $("#cart_received").text(cartCount);
+                    $button.html(originalContent).prop("disabled", false);
+                }
             },
             error: function (xhr) {
                 $(".custom_toast_text").text("Thêm vào giỏ hàng thất bại");
@@ -68,7 +65,9 @@ $(document).ready(function () {
                 $button.html(originalContent).prop("disabled", false);
             }
         });
-    });
+
+    })
+    ;
 
     function updatePagination(totalPages, currentPage) {
         var paginationHtml = '';
@@ -92,6 +91,23 @@ $(document).ready(function () {
         $('#pagination__bar .pagination').html(paginationHtml);
     }
 
+    window.toggleImage = function (index) {
+        const wrapper = $(`.image-wrapper[data-index='2']`);
+
+
+        const button = $(`.see-more-btn[data-index='${index}']`);
+
+
+        const expanded = wrapper.toggleClass("expanded").hasClass("expanded");
+        wrapper.css("max-height", expanded ? "1000px" : "300px");
+
+        button.text(expanded ? "See Less" : "See More");
+    };
+
+    $(".see-more-btn").on("click", function () {
+        const index = $(this).data("index");
+        window.toggleImage(index);
+    });
     loadReviews(currentPage)
 
 });

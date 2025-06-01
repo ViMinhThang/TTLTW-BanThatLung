@@ -38,29 +38,29 @@ public class orderAdminController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("auth");
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
-        String message = request.getParameter("message");
-        if (message.equals("delete")) {
-            int orderId = Integer.parseInt(request.getParameter("orderId"));
-            uploadOrderService.deteleOrder(orderId);
-        } else if (message.equals("create")) {
-            int userId = Integer.parseInt(request.getParameter("userId"));
-            String paymentName = request.getParameter("paymentMethod");
-            String orderDateString = request.getParameter("orderDate");
-            LocalDate orderDate = LocalDate.parse(orderDateString, formatter);
-            String addressStreet = request.getParameter("addressStreet");
-            String addressCity = request.getParameter("addressCity");
-            String orderState = request.getParameter("orderState");
-            int isDeleted = Integer.parseInt(request.getParameter("isDeleted"));
-            int paymentMethodId = uploadPaymentMethod.getPaymentMethodId(paymentName);
-            uploadAddressService.createAddress(userId, addressCity, addressStreet);
-            Address ad = uploadAddressService.getLatestAddress(userId, addressCity, addressStreet);
-            uploadAddressService.setIsUseAddress(ad.getId(), userId);
-            uploadOrderService.createOrder(userId, paymentMethodId, ad.getId(), orderDate, 1, orderState, isDeleted, user.getId());
-        }
-        response.sendRedirect("/admin/table/orders");
+//        HttpSession session = request.getSession();
+//        User user = (User) session.getAttribute("auth");
+//        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
+//        String message = request.getParameter("message");
+//        if (message.equals("delete")) {
+//            int orderId = Integer.parseInt(request.getParameter("orderId"));
+//            uploadOrderService.deteleOrder(orderId);
+//        } else if (message.equals("create")) {
+//            int userId = Integer.parseInt(request.getParameter("userId"));
+//            String paymentName = request.getParameter("paymentMethod");
+//            String orderDateString = request.getParameter("orderDate");
+//            LocalDate orderDate = LocalDate.parse(orderDateString, formatter);
+//            String addressStreet = request.getParameter("addressStreet");
+//            String addressCity = request.getParameter("addressCity");
+//            String orderState = request.getParameter("orderState");
+//            int isDeleted = Integer.parseInt(request.getParameter("isDeleted"));
+//            int paymentMethodId = uploadPaymentMethod.getPaymentMethodId(paymentName);
+//            uploadAddressService.createAddress(userId, addressCity, addressStreet);
+//            Address ad = uploadAddressService.getLatestAddress(userId, addressCity, addressStreet);
+//            uploadAddressService.setIsUseAddress(ad.getId(), userId);
+//            uploadOrderService.createOrder(userId, paymentMethodId, ad.getId(), orderDate, 1, orderState, isDeleted, user.getId());
+//        }
+//        response.sendRedirect("/admin/table/orders");
 
     }
 }

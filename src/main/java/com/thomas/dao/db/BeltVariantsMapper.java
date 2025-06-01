@@ -13,11 +13,12 @@ public class BeltVariantsMapper implements RowMapper<BeltVariant> {
         BeltVariant beltVariant = new BeltVariant();
         beltVariant.setId(rs.getInt("id"));
         beltVariant.setBeltId(rs.getInt("beltId"));
-        beltVariant.setColor(rs.getString("color"));
-        beltVariant.setSize(rs.getString("size"));
-        beltVariant.setStockQuantity(rs.getInt("stockQuantity"));
+        beltVariant.setColorId(rs.getInt("colorId"));
+        beltVariant.setSizeId(rs.getInt("sizeId"));
+        beltVariant.setPrice(rs.getLong("price"));
+        beltVariant.setDescription(rs.getString("description"));
         beltVariant.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
-        beltVariant.setCreatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
+        beltVariant.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
         return beltVariant;
     }
 }

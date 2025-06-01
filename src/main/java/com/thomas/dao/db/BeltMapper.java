@@ -13,8 +13,6 @@ public class BeltMapper implements RowMapper<Belts> {
         Belts belts = new Belts();
         belts.setId(rs.getInt("id"));
         belts.setName(rs.getString("name"));
-        belts.setDescription(rs.getString("description"));
-        belts.setPrice(rs.getDouble("price"));
         belts.setGender(rs.getString("gender"));
         belts.setReleaseDate(rs.getTimestamp("releaseDate").toLocalDateTime());
         belts.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());

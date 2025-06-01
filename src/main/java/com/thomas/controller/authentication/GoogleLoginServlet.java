@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 
 @WebServlet("/login-google")
@@ -49,6 +50,7 @@ public class GoogleLoginServlet extends HttpServlet {
 
             if (existingUser != null && existingUser.getIsActive() == 1 && existingUser.getIsDeleted() == 0) {
                 HttpSession session = request.getSession();
+                session.setAttribute("auth", existingUser);
                 authService.saveSession(existingUser.getId(), session.getId());
                 usageService.trackUserActivity(existingUser.getId(), request.getRemoteAddr());
                 session.setAttribute("auth", existingUser);

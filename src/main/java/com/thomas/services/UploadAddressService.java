@@ -4,76 +4,48 @@ import com.thomas.dao.AddressDao;
 import com.thomas.dao.model.Address;
 import com.thomas.dao.model.OrderDetails;
 
+import java.io.IOException;
 import java.util.List;
 
 public class UploadAddressService {
     AddressDao addressDao;
+    LocationService locationService = new LocationService();
 
     public UploadAddressService() {
         this.addressDao = new AddressDao();
     }
 
-    public List<Address> getAddressList(int userId) {
-        return addressDao.getAllAddressByUserId(userId);
-    }
-
-    public boolean deleteAddress(int addressId) {
-        return addressDao.deleteAddress(addressId);
-    }
-
     public boolean addAddress(Address address) {
-        return addressDao.addAddress(address);
+        return addressDao.insertOne(address);
     }
 
-    public boolean updateAddress(int addressId, String addressStreet, String addressCity) {
-        Address address = addressDao.getAddress(addressId);
-        address.setAddressStreet(addressStreet);
-        address.setAddressCity(addressCity);
-        return addressDao.updateAddress(address);
+    public List<Address> getAddressList(int userId) throws IOException {
+        List<Address> listAddress = addressDao.findAddressByUserId(userId);
+        for (Address address : listAddress) {
+            address.setProvinceName(getProvinceName(address.getProvinceId()));
+            address.setDistrictName(getDistrictName(address.getProvinceId(), address.getDistrictId()));
+            address.setWardName(getWardName(address.getDistrictId(),address.getWardId()));
+        }
+        return listAddress;
     }
-
-    public boolean setIsUseAddress(int addressId, int userId) {
-        Address address = addressDao.getAddress(addressId);
-        boolean setUnUse = addressDao.setAllunUse(userId);
-        return addressDao.setIsUse(addressId, userId) && setUnUse;
+    public Address getAddress(int addressId) {
+        return addressDao.findOne(addressId);
     }
-
-    public Address setIsUseAddressDisplay(int addressId, int userId) {
-        boolean setUnUse = addressDao.setAllunUse(userId);
-        addressDao.setIsUse(addressId, userId);
-        return addressDao.getAddress(addressId);
-    }
-
-    public void setUserName(Address ad) {
-        if (ad != null) {
-            String userName = addressDao.getUserName(ad.getId(), ad.getUserId());
-            ad.setUserName(userName);
+    public void setDefault(int addressId, int userId) {
+        if (addressDao.setAllUnuse(userId)) {
+            addressDao.setDefault(addressId, userId);
         }
     }
 
-    public void setPhoneNumber(Address ad) {
-        if (ad != null) {
-            long phoneNumber = addressDao.getPhoneNumber(ad.getId(), ad.getUserId());
-            ad.setPhoneNumber(phoneNumber);
-        }
+    public String getProvinceName(int provinceId) throws IOException {
+        return locationService.findProvinceName(provinceId);
     }
 
-    public void createAddress(int userId, String addressCity, String addressStreet) {
-        Address address = new Address();
-        address.setUserId(userId);
-        address.setAddressCity(addressCity);
-        address.setAddressStreet(addressStreet);
-        address.setIsUse(0);
-        if (!addressDao.checkAddress(address)) {
-            addressDao.addAddress(address);
-        }
+    public String getDistrictName(int provinceId, int districtId) throws IOException {
+        return locationService.findDistrictName(provinceId, districtId);
     }
 
-    public Address getLatestAddress(int userId, String addressCity, String addressStreet) {
-        return addressDao.getLatestAddress(userId, addressCity, addressStreet);
-    }
-
-    public Address getAddressByUserId(int userId) {
-        return addressDao.getAddressByUserId(userId);
+    public String getWardName(int districtId, String wardCode) throws IOException {
+        return locationService.findWardName(districtId, wardCode);
     }
 }
