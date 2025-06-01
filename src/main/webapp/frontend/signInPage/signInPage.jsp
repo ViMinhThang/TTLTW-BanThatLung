@@ -42,16 +42,41 @@
 <%-- khối hiển thị lỗi OAuth --%>
 <div class="container-lg">
     <c:if test="${not empty param.error}">
-        <div class="alert alert-danger mt-4">
+        <div class="alert alert-dismissible fade show mt-4" role="alert">
             <c:choose>
                 <c:when test="${param.error == 'email_exists'}">
-                    ⚠️ Email này đã được đăng ký bằng phương thức thủ công.
-                    Vui lòng đăng nhập bằng email/mật khẩu.
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Email đã tồn tại!</strong><br>
+                        Email này đã được đăng ký bằng phương thức thủ công.
+                        Vui lòng đăng nhập bằng email/mật khẩu.
+                    </div>
                 </c:when>
                 <c:when test="${param.error == 'google_error'}">
-                    ⚠️ Đăng nhập Google thất bại. Vui lòng thử lại.
+                    <div class="alert alert-danger">
+                        <i class="fab fa-google"></i>
+                        <strong>Lỗi đăng nhập Google!</strong><br>
+                        Đăng nhập Google thất bại. Vui lòng thử lại.
+                    </div>
                 </c:when>
+                <c:when test="${param.error == 'facebook_error'}">
+                    <div class="alert alert-danger">
+                        <i class="fab fa-facebook"></i>
+                        <strong>Lỗi đăng nhập Facebook!</strong><br>
+                        Đăng nhập Facebook thất bại. Vui lòng thử lại.
+                    </div>
+                </c:when>
+                <c:when test="${param.error == 'facebook_failed'}">
+                    <div class="alert alert-danger">
+                        <i class="fab fa-facebook"></i>
+                        <strong>Đăng nhập Facebook thất bại!</strong><br>
+                        Tài khoản không hoạt động hoặc đã bị xóa.
+                    </div>
+                </c:when>
+
             </c:choose>
+
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     </c:if>
 </div>
@@ -113,24 +138,16 @@
                         <span class="px-3 custom_size--14 text-muted">Hoặc đăng nhập bằng</span>
                         <hr class="flex-grow-1">
                     </div>
-                    <div class="d-flex justify-content-end gap-3">
-                        <div class="d-flex justify-content-center gap-3 ">
-                            <%
-                                String redirectURI = java.net.URLEncoder.encode(Iconstant.GOOGLE_REDIRECT_URI, "UTF-8");
-                            %>
-                            <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=<%=Iconstant.GOOGLE_CLIENT_ID%>&redirect_uri=<%=redirectURI%>&response_type=code&scope=email%20profile"
-                               class="btn-floating btn-lg hover-lift custom-google-btn border border-dark rounded-0">
-                                <i class="fab fa-google"></i>
-                            </a>
-                        </div>
-                        <div class="d-flex justify-content-center gap-3">
-                            <a href="https://www.facebook.com/v13.0/dialog/oauth?client_id=<%=Iconstant.FACEBOOK_CLIENT_ID%>&redirect_uri=<%=Iconstant.FACEBOOK_REDIRECT_URI%>&scope=email"
-                               class="btn btn-outline-primary btn-floating btn-lg border border-dark rounded-0">
-                                <i class="fab fa-facebook-f"></i>
-                            </a>
-                        </div>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="https://accounts.google.com/o/oauth2/auth?client_id=<%=Iconstant.GOOGLE_CLIENT_ID%>&redirect_uri=<%=Iconstant.GOOGLE_REDIRECT_URI%>&response_type=code&scope=email profile"
+                           class="btn btn-floating btn-lg hover-lift custom-google-btn">
+                            <i class="fab fa-google"></i>
+                        </a>
                     </div>
-
+                    <a href="https://www.facebook.com/v18.0/dialog/oauth?client_id=<%=Iconstant.FACEBOOK_CLIENT_ID%>&redirect_uri=<%=Iconstant.FACEBOOK_REDIRECT_URI%>&scope=email"
+                       class="btn btn-floating btn-lg hover-lift custom-facebook-btn">
+                        <i class="fab fa-facebook"></i>
+                    </a>
                 </div>
             </div>
         </div>
