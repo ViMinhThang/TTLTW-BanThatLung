@@ -231,6 +231,7 @@
 
     .dropdown-menu {
         border-radius: 0;
+        margin-left: 0px !important;
     }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>

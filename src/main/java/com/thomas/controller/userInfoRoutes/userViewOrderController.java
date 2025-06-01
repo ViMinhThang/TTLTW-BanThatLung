@@ -21,7 +21,6 @@ import java.util.List;
 @WebServlet(name = "userViewOrderController", value = "/viewOrders")
 public class userViewOrderController extends HttpServlet {
     ProductService productService = new ProductService();
-    ProductService productService2 = new ProductService();
     UploadOrderService uploadOrderService = new UploadOrderService();
     UploadOrderDetailService uploadOrderDetailService = new UploadOrderDetailService();
     DecimalFormatSymbols symbols = new DecimalFormatSymbols();
@@ -31,55 +30,12 @@ public class userViewOrderController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("auth");
-        String orderId = request.getParameter("orderId");
-        if (orderId != null) {
-            Order order = uploadOrderService.getOrderById(Integer.parseInt(orderId));
-            uploadOrderDetailService.setOrderDetails(order);
-            for (OrderDetails od : order.getOrderDetails()) {
-                BeltVariant beltVariants = productService.findVariant(od.getBeltId(), null, null, od.getVariantId());
-
-                if (beltVariants != null) {
-                    BeltVariant selectedVariant = beltVariants;
-                    od.setBeltVariant(selectedVariant);
-                    od.setBeltImages(productService.getVariantImages(selectedVariant.getId()));
-                    od.setCategories(productService.findCategory(od.getBeltId(), selectedVariant.getId()));
-                    uploadOrderDetailService.setBeltName(od);
-                }
-            }
-            order.setShippingDate();
-            request.setAttribute("userOrder", order);
-            request.getRequestDispatcher("/frontend/userInfoPage/orderView/orderDetails/orderDetails.jsp").forward(request, response);
-        } else {
-
+        List<Order> orderList = uploadOrderService.getAllOrdersByUserId(user.getId());
+        for (Order order : orderList) {
+            uploadOrderService.setUserName(order);
+            uploadOrderService.setPaymentName(order);
         }
-        if (user == null) {
-            response.sendRedirect("/");
-            return;
-        }
-
-        List<Order> userOrders = uploadOrderService.getAllOrdersByUserId(user.getId());
-
-        for (Order order : userOrders) {
-            uploadOrderDetailService.setOrderDetails(order);
-
-            for (OrderDetails od : order.getOrderDetails()) {
-                BeltVariant beltVariants = productService.findVariant(od.getBeltId(), null, null, od.getVariantId());
-
-                if (beltVariants != null) {
-                    BeltVariant selectedVariant = beltVariants;
-                    od.setBeltVariant(selectedVariant);
-                    od.setBeltImages(productService.getVariantImages(selectedVariant.getId()));
-                    od.setCategories(productService.findCategory(od.getBeltId(), selectedVariant.getId()));
-                    uploadOrderDetailService.setBeltName(od);
-                }
-            }
-
-            order.setShippingDate();
-        }
-
-        userOrders.sort((o1, o2) -> o2.getOrderDate().compareTo(o1.getOrderDate()));
-
-        request.setAttribute("orders", userOrders);
+        request.setAttribute("orders", orderList);
         request.getRequestDispatcher("/frontend/userInfoPage/orderView/ordersView.jsp").forward(request, response);
 
     }

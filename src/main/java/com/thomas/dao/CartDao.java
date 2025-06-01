@@ -64,10 +64,15 @@ public class CartDao {
     }
 
     public int checkCartQuantity(int beltId, int variantId) {
-        String sql = "SELECT quantity from cartItems WHERE beltId=:beltId AND variantId=:variantId";
-        return JDBIConnect.get().withHandle(h -> {
-            return h.createQuery(sql).bind("beltId", beltId).bind("variantId", variantId).mapTo(Integer.class).findFirst().orElse(0);
-        });
+        String sql = "SELECT SUM(quantity) FROM cartItems WHERE beltId=:beltId AND variantId=:variantId";
+        return JDBIConnect.get().withHandle(h ->
+                h.createQuery(sql)
+                        .bind("beltId", beltId)
+                        .bind("variantId", variantId)
+                        .mapTo(Integer.class)
+                        .findFirst()
+                        .orElse(0)
+        );
     }
 
     public int checkInventoryQuantity(int beltId, int variantId) {

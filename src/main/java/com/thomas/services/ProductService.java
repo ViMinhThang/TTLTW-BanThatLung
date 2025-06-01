@@ -299,7 +299,7 @@ public class ProductService {
                 return o2.getReleaseDate().compareTo(o1.getReleaseDate());
             }
         });
-        return beltsList;
+        return display;
     }
 
     public Integer[] getAllVariantId(int id) {
