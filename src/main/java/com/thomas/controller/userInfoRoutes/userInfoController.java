@@ -2,7 +2,7 @@ package com.thomas.controller.userInfoRoutes;
 
 import com.thomas.dao.model.User;
 import com.thomas.services.EmailService;
-import com.thomas.services.MD5Service;
+import com.thomas.services.BCryptService;
 import com.thomas.services.UploadUserService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -29,7 +29,7 @@ public class userInfoController extends HttpServlet {
 
         if (message.equals("updatePassword")) {
             String password = request.getParameter("currentPassword");
-            if (uploadUserService.getUser(userId).getPassword().equals(MD5Service.hashPassword(password))) {
+            if (BCryptService.checkPassword(password, uploadUserService.getUser(userId).getPassword())) {
                 handlePasswordUpdate(request, response, userId);
                 response.sendRedirect("/userInfo");
             } else {
@@ -71,7 +71,7 @@ public class userInfoController extends HttpServlet {
         String newPassword = request.getParameter("updatePassword");
 
         // cập nhật database
-        boolean success = uploadUserService.updateUserPassword(MD5Service.hashPassword(newPassword), userId);
+        boolean success = uploadUserService.updateUserPassword(BCryptService.hashPassword(newPassword), userId);
         String userEmail = user.getEmail();
         if (success) {
 

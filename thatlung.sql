@@ -130,7 +130,7 @@ CREATE TABLE addresses
     provinceId    INT          NOT NULL,
     districtId    INT          NOT NULL,
     wardId        INT          NOT NULL,
-    addressDetail INT          NOT NULL,
+    addressDetail VARCHAR(255) NOT NULL,
     phone         INT          NOT NULL,
     isUse         INT DEFAULT 0,
     isDeleted     INT DEFAULT 0,

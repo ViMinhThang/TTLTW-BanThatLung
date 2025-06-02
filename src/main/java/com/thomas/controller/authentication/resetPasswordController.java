@@ -1,6 +1,6 @@
 package com.thomas.controller.authentication;
 
-import com.thomas.services.MD5Service;
+import com.thomas.services.BCryptService;
 import com.thomas.services.TokenService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -34,7 +34,7 @@ public class resetPasswordController extends HttpServlet {
             response.getWriter().println("Mật khẩu không khớp.");
         }
         TokenService tokenService = new TokenService();
-        if (tokenService.updatePasswordByToken(token, MD5Service.hashPassword(password))) {
+        if (tokenService.updatePasswordByToken(token, BCryptService.hashPassword(password))) {
             response.sendRedirect("/");
         }
     }

@@ -70,7 +70,7 @@ public class UploadUserService {
 
     public boolean updateEmail(HttpServletRequest request, String email, int userId, String password, int editorId) {
         User user = userDao.findUserById(userId);
-        if (MD5Service.hashPassword(password).equals(user.getPassword())) {
+        if (BCryptService.hashPassword(password).equals(user.getPassword())) {
             user.setEmail(email);
             HttpSession session = request.getSession();
             session.setAttribute("auth", user);
