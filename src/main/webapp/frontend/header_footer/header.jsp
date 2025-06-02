@@ -1,7 +1,47 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page import="java.util.*" %>
+<%
+    Locale locale = (Locale) session.getAttribute("lang");
+    if (locale == null) {
+        locale = request.getLocale();
+        session.setAttribute("lang", locale);
+    }
+%>
 <div id="dimmer" class="dimmer"></div>
+<f:setLocale value="${sessionScope.lang}" scope="session" />
+<f:setBundle basename="messages" />
+<style>
+    .language-toggle {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        border: none;
+        border-radius: 20px;
+        color: white;
+        padding: 8px 16px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+    }
+
+    .language-toggle:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .language-toggle:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+    }
+
+    .language-toggle:active {
+        transform: translateY(0);
+    }
+</style>
 <nav class="p-12 bg-white rounded justify-content-center pb-0 d-flex mt-2 border-bottom" id="navbar">
     <a
             href="/"
@@ -40,22 +80,22 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
             >
-                Nam
+                <f:message key="nav.men"/>
             </a>
             <ul class="dropdown-menu">
                 <li>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=Male&page=1"
-                    >Tất cả thắt lưng nam</a
+                    ><f:message key="nav.all_men_belts"/></a
                     >
                 </li>
                 <li>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=Male-Leather&page=1"
-                    >Thắt Lưng Da Nam</a
+                    ><f:message key="nav.men_leather_belts"/></a
                     >
                 </li>
                 <li>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=Male-Canvas&page=1"
-                    >Thắt Lưng Vải Canvas Nam</a
+                    ><f:message key="nav.men_canvas_belts"/></a
                     >
                 </li>
             </ul>
@@ -68,31 +108,31 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
             >
-                Nữ
+                <f:message key="nav.women"/>
             </a>
             <ul class="dropdown-menu">
                 <li>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=Female&page=1"
-                    >Tất cả thắt lưng nữ</a
+                    ><f:message key="nav.all_women_belts"/></a
                     >
                 </li>
                 <li>
                     <a class="dropdown-item"
                        href="${pageContext.request.contextPath}/navigate?type=Female-Leather&page=1"
-                    >Thắt Lưng Da Nữ
+                    ><f:message key="nav.women_leather_belts"/>
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item"
                        href="${pageContext.request.contextPath}/navigate?type=Female-Canvas&page=1"
-                    >Thắt Lưng Vải Canvas Nữ</a
+                    ><f:message key="nav.women_canvas_belts"/></a
                     >
                 </li>
             </ul>
         </li>
         <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/navigate?type=all&page=1" class="nav-link">Sản
-                Phẩm</a>
+            <a href="${pageContext.request.contextPath}/navigate?type=all&page=1" class="nav-link">
+                <f:message key="nav.products"/></a>
         </li>
     </ul>
     <div class="header__icon__group col-4 d-flex justify-content-end align-items-end">
@@ -153,7 +193,7 @@
                         <c:if test="${sessionScope.auth.role == 1}">
                             <li>
                                 <a class="dropdown-item" href="${pageContext.request.contextPath}/admin"
-                                >Admin</a
+                                ><f:message key="nav.admin"/></a
                                 >
                             </li>
                         </c:if>
@@ -161,7 +201,7 @@
                         <li>
                             <form method="POST" action="${pageContext.request.contextPath}/logout">
                                 <button type="submit" class="dropdown-item"
-                                >Đăng xuất
+                                ><f:message key="nav.logout"/>
                                 </button>
                             </form>
 
@@ -189,12 +229,12 @@
 
                         <li>
                             <a href="${pageContext.request.contextPath}/login" class="dropdown-item"
-                            >Đăng nhập
+                            ><f:message key="nav.login"/>
                             </a>
                         </li>
                         <li>
                             <a href="/signup" class="dropdown-item"
-                            >Đăng ký
+                            ><f:message key="nav.register"/>
                             </a>
 
                         </li>
@@ -211,7 +251,14 @@
             />
             <span id="cart_received" class="nav-item favorite__count">${cartSize!=null ?cartSize:0}</span>
         </a>
-
+        <form action="changeLanguage" method="get" id="langForm">
+            <input type="hidden" name="lang" id="langInput" value="<%= locale.getLanguage() %>">
+            <button type="button" class="language-toggle" onclick="toggleLanguage()">
+        <span id="langText">
+            <%= locale.getLanguage().equals("en") ? "🇺🇸 EN" : "🇻🇳 VI" %>
+        </span>
+            </button>
+        </form>
     </div>
 </nav>
 <div class="dropdown-menu search-dropdown w-100">
@@ -234,6 +281,23 @@
         margin-left: 0px !important;
     }
 </style>
+<script>
+    function toggleLanguage() {
+        const langInput = document.getElementById('langInput');
+        const langText = document.getElementById('langText');
+        const form = document.getElementById('langForm');
+
+        if (langInput.value === 'vi') {
+            langInput.value = 'en';
+            langText.textContent = '🇺🇸 EN';
+        } else {
+            langInput.value = 'vi';
+            langText.textContent = '🇻🇳 VI';
+        }
+
+        form.submit();
+    }
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/header.js"></script>

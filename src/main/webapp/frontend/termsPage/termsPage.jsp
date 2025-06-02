@@ -1,4 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,99 +14,76 @@
     <link rel="stylesheet" href="https://cdn-web-servlet.vercel.app/css/termsPage.css"/>
 </head>
 <body>
+<f:setLocale value="${sessionScope.lang}" scope="session" />
+<f:setBundle basename="messages" />
 <jsp:include page="/frontend/header_footer/header.jsp"/>
 <header id="header"></header>
 <div class="breadcumb__container">
     <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/index.jsp">Trang chủ</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Điều khoản</li>
+            <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/index.jsp"><f:message key="breadcrumb.home"/></a></li>
+            <li class="breadcrumb-item active" aria-current="page"><f:message key="breadcrumb.terms"/></li>
         </ol>
     </nav>
 </div>
 <div class="row justify-content-center" style="margin-top: 118px">
     <div class="d-flex flex-column col-3 border-end">
-        <a class="custom_ref border-bottom " href="#temrs_use">Điều khoản sử dụng.</a>
-        <a class="custom_ref border-bottom " href="#terms_rule">1.Quy định chung.</a>
-        <a class="custom_ref border-bottom " href="#terms_product">2.Sản phẩm và dịch vụ.</a>
-        <a class="custom_ref border-bottom " href="#terms_cart">3.Đơn hàng và giá cả.</a>
-        <a class="custom_ref border-bottom " href="#term_intel">4.Quyền sở hữu trí tuệ.</a>
-        <a class="custom_ref border-bottom " href="#term_response">5.Giới hạn trách nhiệm.</a>
-        <a class="custom_ref border-bottom " href="#term_condition">6.Thay đổi điều kiện.</a>
-        <a class="custom_ref border-bottom " href="#term_tel">7.Liên hệ</a>
+        <a class="custom_ref border-bottom " href="#temrs_use"><f:message key="terms.nav.usage"/></a>
+        <a class="custom_ref border-bottom " href="#terms_rule"><f:message key="terms.nav.general_rules"/></a>
+        <a class="custom_ref border-bottom " href="#terms_product"><f:message key="terms.nav.products_services"/></a>
+        <a class="custom_ref border-bottom " href="#terms_cart"><f:message key="terms.nav.orders_pricing"/></a>
+        <a class="custom_ref border-bottom " href="#term_intel"><f:message key="terms.nav.intellectual_property"/></a>
+        <a class="custom_ref border-bottom " href="#term_response"><f:message key="terms.nav.liability_limitation"/></a>
+        <a class="custom_ref border-bottom " href="#term_condition"><f:message key="terms.nav.terms_changes"/></a>
+        <a class="custom_ref border-bottom " href="#term_tel"><f:message key="terms.nav.contact"/></a>
     </div>
     <div class="col-5 ps-5 mt-5">
         <div class="custom_section" id="temrs_use">
-            <h3 class="fs-1 pb-4">Điều Khoản Sử Dụng</h3>
+            <h3 class="fs-1 pb-4"><f:message key="terms.title.usage"/></h3>
             <p class="content">
-                Chào mừng bạn đến với website của chúng tôi. Khi truy cập và sử dụng
-                dịch vụ tại trang web này, bạn đồng ý tuân thủ các điều khoản và
-                điều kiện được quy định dưới đây. Vui lòng đọc kỹ các điều khoản này
-                trước khi sử dụng dịch vụ của chúng tôi.
+                <f:message key="terms.content.usage"/>
             </p>
         </div>
         <div class="custom_section" id="terms_rule">
-            <h2 class="pb-4">1. Quy Định Chung</h2>
+            <h2 class="pb-4"><f:message key="terms.title.general_rules"/></h2>
             <p class="content">
-                Khi sử dụng website của chúng tôi, bạn đồng ý không sử dụng website
-                cho các mục đích bất hợp pháp hoặc bị cấm theo các điều khoản này.
-                Bạn sẽ không thực hiện các hành động có thể gây ảnh hưởng hoặc làm
-                gián đoạn website hoặc dịch vụ của chúng tôi.
+                <f:message key="terms.content.general_rules"/>
             </p>
         </div>
         <div class="custom_section" id="terms_product">
-            <h2 class="pb-4">2. Sản Phẩm và Dịch Vụ</h2>
+            <h2 class="pb-4"><f:message key="terms.title.products_services"/></h2>
             <p class="content">
-                Chúng tôi cam kết cung cấp thông tin chính xác nhất có thể về sản
-                phẩm, tuy nhiên không tránh khỏi những sai sót. Tất cả các sản phẩm
-                trên website đều có thể thay đổi mà không cần báo trước. Chúng tôi
-                không chịu trách nhiệm cho bất kỳ thông tin nào về sản phẩm không
-                chính xác hoặc chưa cập nhật.
+                <f:message key="terms.content.products_services"/>
             </p>
         </div>
         <div class="custom_section" id="terms_cart">
-            <h2 class="pb-4">3. Đơn Hàng và Giá Cả</h2>
+            <h2 class="pb-4"><f:message key="terms.title.orders_pricing"/></h2>
             <p class="content">
-                Khi đặt hàng tại trang web, bạn đồng ý cung cấp thông tin đầy đủ,
-                chính xác và cam kết thực hiện thanh toán đúng thời hạn. Giá cả và
-                khuyến mãi có thể thay đổi mà không cần thông báo trước. Chúng tôi
-                bảo lưu quyền từ chối hoặc hủy bỏ đơn hàng nếu có sai sót trong giá
-                cả hoặc khi vi phạm chính sách của chúng tôi.
+                <f:message key="terms.content.orders_pricing"/>
             </p>
         </div>
         <div class="custom_section" id="term_intel">
-            <h2 class="pb-4">4. Quyền Sở Hữu Trí Tuệ</h2>
+            <h2 class="pb-4"><f:message key="terms.title.intellectual_property"/></h2>
             <p class="content">
-                Toàn bộ nội dung, hình ảnh, video và các yếu tố đồ họa trên website
-                thuộc quyền sở hữu của chúng tôi hoặc đối tác. Bạn không được phép
-                sao chép, tái sử dụng hoặc chỉnh sửa nội dung từ trang web mà không
-                có sự cho phép bằng văn bản từ chúng tôi.
+                <f:message key="terms.content.intellectual_property"/>
             </p>
         </div>
         <div class="custom_section" id="term_response">
-            <h2 class="pb-4">5. Giới Hạn Trách Nhiệm</h2>
+            <h2 class="pb-4"><f:message key="terms.title.liability_limitation"/></h2>
             <p class="content">
-                Chúng tôi không chịu trách nhiệm với bất kỳ tổn thất hoặc thiệt hại
-                nào phát sinh từ việc sử dụng website của chúng tôi. Điều này bao
-                gồm cả việc không truy cập được website, hoặc bất kỳ lỗi nào trong
-                việc hiển thị thông tin.
+                <f:message key="terms.content.liability_limitation"/>
             </p>
         </div>
         <div class="custom_section" id="term_condition">
-            <h2>6. Thay Đổi Điều Khoản</h2>
+            <h2><f:message key="terms.title.terms_changes"/></h2>
             <p class="content">
-                Chúng tôi bảo lưu quyền thay đổi, bổ sung hoặc cập nhật điều khoản
-                này vào bất kỳ thời điểm nào mà không cần thông báo trước. Bạn có
-                trách nhiệm xem lại các điều khoản thường xuyên để đảm bảo bạn đã
-                nắm rõ và tuân thủ.
+                <f:message key="terms.content.terms_changes"/>
             </p>
         </div>
         <div class="custom_section" id="term_tel">
-            <h2>7. Liên Hệ</h2>
+            <h2><f:message key="terms.title.contact"/></h2>
             <p class="content">
-                Nếu bạn có bất kỳ câu hỏi nào về Điều Khoản Sử Dụng, vui lòng liên
-                hệ với chúng tôi qua email [Thomas@contact.tm.com] hoặc số điện
-                thoại [0123456789].
+                <f:message key="terms.content.contact"/>
             </p>
         </div>
     </div>

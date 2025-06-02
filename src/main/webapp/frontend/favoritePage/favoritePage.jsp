@@ -1,11 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>THOMAS - Yêu thích</title>
+    <title>THOMAS - <f:message key="favorite.title"/></title>
     <link rel="icon" href="${pageContext.request.contextPath}/assets/icons/favicon.svg" type="image/x-icon"/>
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -33,6 +34,9 @@
 </head>
 
 <body>
+<f:setLocale value="${sessionScope.lang}" scope="session" />
+<f:setBundle basename="messages" />
+
 <jsp:include page="/frontend/header_footer/header.jsp"/>
 <div id="dimmer2" class="dimmer2"></div>
 <header id="header"></header>
@@ -40,21 +44,21 @@
     <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="${pageContext.request.contextPath}/index.jsp">Trang chủ</a>
+                <a href="${pageContext.request.contextPath}/index.jsp"><f:message key="favorite.home"/></a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">Yêu thích</li>
         </ol>
     </nav>
 </div>
-<h1 class="text-center" style="margin-top: 208px">Mục yêu thích của bạn</h1>
+<h1 class="text-center" style="margin-top: 208px"><f:message key="favorite.my_favorites"/></h1>
 <div class="wishlist-container">
     <table class="table">
         <thead>
         <tr>
             <th scope="col"></th>
-            <th scope="col" class="text-start fw-light">Tên sản phẩm</th>
-            <th scope="col" class="text-center fw-light">Giá</th>
-            <th scope="col" class="text-center fw-light">Tình trạng</th>
+            <th scope="col" class="text-start fw-light"><f:message key="favorite.product_name"/></th>
+            <th scope="col" class="text-center fw-light"><f:message key="favorite.price"/></th>
+            <th scope="col" class="text-center fw-light"><f:message key="favorite.status"/></th>
             <th scope="col" class="text-center fw-light"></th>
         </tr>
         </thead>
@@ -78,13 +82,22 @@
                     </div>
                 </td>
                 <td class="text-center">${belt.beltVariant.price} vnđ</td>
-                <td class="text-center">${belt.beltVariant.stockQuantity != 0 ? "Còn hàng" : "Hết hàng"}</td>
+                <td class="text-center">
+                    <c:choose>
+                        <c:when test="${belt.beltVariant.stockQuantity != 0}">
+                            <f:message key="favorite.in_stock"/>
+                        </c:when>
+                        <c:otherwise>
+                            <f:message key="favorite.out_of_stock"/>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
     <div class="wishlist-footer d-flex justify-content-end" style="margin-right: 30px;">
-        <a href="/Cart" class="btn btn-dark text-white">Xem giỏ hàng</a>
+        <a href="/Cart" class="btn btn-dark text-white"><f:message key="favorite.view_cart"/></a>
     </div>
 </div>
 

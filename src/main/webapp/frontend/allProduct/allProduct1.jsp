@@ -6,7 +6,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,6 +42,9 @@
 </head>
 
 <body>
+<f:setLocale value="${sessionScope.lang}" scope="session" />
+<f:setBundle basename="messages" />
+
 <jsp:include page="/frontend/header_footer/header.jsp"/>
 <div id="dimmer3" class="dimmer2"></div>
 <div id="overlay3" class="d-sm-flex overlay border" style="width: 20%">
@@ -59,7 +61,7 @@
                 <c:if test="${param.descPrice != null}">
                     <c:set var="filterUrlBase" value="${filterUrlBase}&descPrice=${param.descPrice}"/>
                 </c:if>
-                `
+
                 <div class="apply__container mt-3 d-flex flex-column">
                     <!-- Các liên kết áp dụng -->
                     <c:forEach var="priceRange" items="${['100000-500000', '500000-900000']}">
@@ -67,12 +69,11 @@
                         <c:set var="maxPrice" value="${fn:split(priceRange, '-')[1]}"/>
                         <a href="${filterUrlBase}&minPrice=${minPrice}&maxPrice=${maxPrice}"
                            class="apply__button text-decoration-none d-block mt-2 p-2">
-                            Giá từ ${minPrice} VNĐ đến ${maxPrice} VNĐ
+                            <f:message key="filter.price_from"/> ${minPrice} <f:message key="filter.currency"/> <f:message key="filter.to"/> ${maxPrice} <f:message key="filter.currency"/>
                         </a>
                     </c:forEach>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
@@ -96,7 +97,7 @@
             <div class="col-3 filter__column">
                 <div class="filter__container d-flex align-items-center">
                     <i class="fa-solid fa-filter me-2" style="color: #171717;"></i>
-                    <span class="filter__title" id="filterToggle">Bộ lọc</span>
+                    <span class="filter__title" id="filterToggle"><f:message key="filter.title"/></span>
                 </div>
             </div>
 
@@ -104,8 +105,8 @@
             <div class="col-3 quantity__column justify-content-center">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item "><a href="#">Trang chủ</a></li>
-                        <li class="breadcrumb-item active " aria-current="page">Sản phẩm</li>
+                        <li class="breadcrumb-item "><a href="#"><f:message key="breadcrumb.home"/></a></li>
+                        <li class="breadcrumb-item active " aria-current="page"><f:message key="breadcrumb.products"/></li>
                     </ol>
                 </nav>
             </div>
@@ -118,20 +119,19 @@
                     <div class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">
-                            Sắp Xếp
+                            <f:message key="sort.title"/>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item active"
-                                   href="/navigate?type=${param.type}&page=${page}&descPrice=default">Mặc Định</a></li>
+                                   href="/navigate?type=${param.type}&page=${page}&descPrice=default"><f:message key="sort.default"/></a></li>
                             <li><a class="dropdown-item"
-                                   href="/navigate?type=${param.type}&page=${page}&descPrice=asc">Giá Tăng Dần</a>
+                                   href="/navigate?type=${param.type}&page=${page}&descPrice=asc"><f:message key="sort.price_asc"/></a>
                             </li>
                             <li><a class="dropdown-item"
-                                   href="/navigate?type=${param.type}&page=${page}&descPrice=desc">Giá Giảm Dần</a>
+                                   href="/navigate?type=${param.type}&page=${page}&descPrice=desc"><f:message key="sort.price_desc"/></a>
                             </li>
                             <li><a class="dropdown-item"
-                                   href="/navigate?type=${param.type}&page=${page}&descPrice=hotSelling">Bán Chạy
-                                Nhất</a></li>
+                                   href="/navigate?type=${param.type}&page=${page}&descPrice=hotSelling"><f:message key="sort.best_selling"/></a></li>
                         </ul>
                     </div>
                 </div>
