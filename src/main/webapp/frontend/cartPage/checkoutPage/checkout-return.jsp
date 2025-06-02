@@ -35,39 +35,48 @@
 <body>
 <jsp:include page="/frontend/header_footer/header.jsp"/>
 
-    <div class="container mt-5">
-        <div class="row my-3">
-            <div class="col-12 col-md-8 col-lg-6">
-                <form id="redirectForm" action="/checkout-return" method="POST">
-                    <h2>Kết quả giao dịch</h2>
-                    <hr>
-                    <h3>Thông tin đơn hàng</h3>
-                    <ul>
-                        <li><strong>Tên:</strong> ${userName}</li>
-                        <li><strong>Mã đơn hàng:</strong> ${orderId}</li>
-                    </ul>
-                    <p><strong>Số tiền thanh toán:</strong> ${total}</p>
-                    <p>Trạng thái: ${status}</p>
+<div class="container my-5">
+    <h2 class="fw-bold text-center">Kết quả giao dịch</h2>
+    <div class="row my-5">
+        <div class="col-lg-12 p-3">
+            <h3 class="fw-bold py-2 bg-light">Thông tin đơn hàng</h3>
+            <div class="border-top border-bottom py-3">
+                <div class="d-flex flex-column justify-content-between">
+                    <p class="fs-4">Tên: ${userAddress.fullName}</p>
+                    <p class="fs-4">SĐT: ${userAddress.phone}</p>
+                </div>
+            </div>
+            <h3 class="fw-bold py-2 bg-light">Địa chỉ giao hàng</h3>
+            <div class="row g-3 mb-3">
+                <p id="province" class="mb-2">Tỉnh / Thành phố: <strong>${userAddress.provinceName}</strong></p>
+                <p id="district" class="mb-2">Quận / Huyện: <strong>${userAddress.districtName}</strong></p>
+                <p id="ward" class="mb-2">Phường / Xã: <strong>${userAddress.wardName}</strong></p>
+                <p class="mb-0">Địa chỉ chi tiết: <strong>${userAddress.addressDetail}</strong></p>
+            </div>
 
+            <ul>
+                <li><strong>Tên:</strong> ${userName}</li>
+                <li><strong>Mã đơn hàng:</strong> ${orderId}</li>
+            </ul>
+            <p><strong>Số tiền thanh toán:</strong> ${total}</p>
+            <p>Trạng thái: ${status}</p>
 
-                    <c:if test="${message == 'success'}">
-                        <p>✅ Cảm ơn bạn đã mua hàng!</p>
-                    </c:if>
-                    <c:if test="${message == 'failed'}">
-                        <p>❌ Vui lòng thử lại hoặc chọn phương thức khác.</p>
-                    </c:if>
+            <c:if test="${message == 'success'}">
+                <p>✅ Cảm ơn bạn đã mua hàng!</p>
+            </c:if>
+            <c:if test="${message == 'failed'}">
+                <p>❌ Vui lòng thử lại hoặc chọn phương thức khác.</p>
+            </c:if>
 
-                    <div class="mb-md-5 mt-md-4 pb-5">
-                        <a href="${pageContext.request.contextPath}/"
-                           class="btn border-dark btn-lg px-5 text-dark"
-                        >Quay về trang chủ
-                        </a>
-                    </div>
-                </form>
-
+            <div class="mb-md-5 mt-md-4 pb-5">
+                <a href="${pageContext.request.contextPath}/"
+                   class="btn border-dark btn-lg px-5 text-dark"
+                >Quay về trang chủ
+                </a>
             </div>
         </div>
     </div>
+</div>
 
 <jsp:include page="/frontend/header_footer/footer.jsp"/>
 </body>
