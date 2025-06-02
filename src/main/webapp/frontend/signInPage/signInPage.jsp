@@ -20,10 +20,10 @@
     <link rel="stylesheet" href="https://cdn-web-servlet.vercel.app/css/signInPage.css"/>
     <link rel="stylesheet" href="https://cdn-web-servlet.vercel.app/css/footer.css"/>
     <!-- Thêm script reCAPTCHA v3 -->
-    <script src="https://www.google.com/recaptcha/api.js?render=6Ld-QAgrAAAAAJTKPkDgBUW7_qoOrzAMiDOocwfR"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LcuG1MrAAAAALnu3MVjj3RJNVzL7gX0G35oqLab"></script>
     <script>
         grecaptcha.ready(function () {
-            grecaptcha.execute('6Ld-QAgrAAAAAJTKPkDgBUW7_qoOrzAMiDOocwfR', {action: 'login'}).then(function (token) {
+            grecaptcha.execute('6LcuG1MrAAAAALnu3MVjj3RJNVzL7gX0G35oqLab', {action: 'login'}).then(function (token) {
                 document.getElementById('g-recaptcha-response').value = token;
             });
         });

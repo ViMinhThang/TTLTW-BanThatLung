@@ -21,7 +21,7 @@ import java.util.Scanner;
 
 @WebServlet(name = "loginController", value = "/login")
 public class loginController extends HttpServlet {
-    private static final String SECRET_KEY = "6Ld-QAgrAAAAAAJrDp50efjXGmaIMCrr5dBK-clG";
+    private static final String SECRET_KEY = "6LcuG1MrAAAAANiqY_3oWr9yr6zddXpt9ul9pE5q";
     UsesUsageService usesUsageService = new UsesUsageService();
     PermissionService permissionService = new PermissionService();
 

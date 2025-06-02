@@ -144,12 +144,12 @@ VALUES ('BeltPro Vietnam', 'SĐT: 0909090909, Email: contact@beltpro.vn, Địa 
        ('Phụ Kiện Thời Trang Belto', 'SĐT: 0966998877, Email: belto@fashion.vn, Địa chỉ: 88 Trần Hưng Đạo, Cần Thơ');
 
 
-INSERT INTO belts (name, gender, releaseDate, discountRate, materialBelt)
-VALUES ('Golf Braided Stretch Belt', 'Male', '2024-01-10', 10.0, 'Canvas','BeltPro Vietnam'),
-       ('Golf Orange Stretch Belt', 'Female', '2024-02-15', 15.0, 'Da','BeltPro Vietnam'),
-       ('3-Stripes Tour Belt', 'Male', '2024-03-05', 20.0, 'Canvas','LeatherStyle Co., Ltd'),
-       ('Originals Golf Leather Belt', 'Unisex', '2024-01-25', 5.0, 'Da','LeatherStyle Co., Ltd'),
-       ('Reversible Webbing Belt', 'Female', '2024-04-01', 20.0, 'Canvas','BeltPro Vietnam');
+INSERT INTO belts (name, gender, releaseDate, discountRate, materialBelt,supplierId)
+VALUES ('Golf Braided Stretch Belt', 'Male', '2024-01-10', 10.0, 'Canvas',1),
+       ('Golf Orange Stretch Belt', 'Female', '2024-02-15', 15.0, 'Da',1),
+       ('3-Stripes Tour Belt', 'Male', '2024-03-05', 20.0, 'Canvas',2),
+       ('Originals Golf Leather Belt', 'Unisex', '2024-01-25', 5.0, 'Da',1),
+       ('Reversible Webbing Belt', 'Female', '2024-04-01', 20.0, 'Canvas',1);
 
 
 INSERT INTO beltVariants (beltId, sizeId, colorId, description, price)

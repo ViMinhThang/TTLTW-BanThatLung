@@ -14,7 +14,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "IndexServlet", value = "/homePageController")
+@WebServlet(name = "IndexServlet", value = "/home")
 public class IndexServlet extends HttpServlet {
     ProductService productService = new ProductService();
     VariantService variantService = new VariantService();
