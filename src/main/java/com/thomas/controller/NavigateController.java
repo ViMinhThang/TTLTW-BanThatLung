@@ -37,40 +37,40 @@ public class NavigateController extends HttpServlet {
         if (type.equals("Male")) {
             String title = "Nam";
             String bigTitle = "Thắt Lưng Nam";
-            String mainImage = "https://cdn-web-servlet.vercel.app/images/Hero-Banner-Male-1.jpg";
+            String mainImage = "/assets/images/banner/Hero-Banner-Male-1.jpg";
             handleRoute(type, title, bigTitle, mainImage, minPrice, maxPrice, request, response, session, sort, sortedList);
 
         }
         if (type.equals("Female")) {
             String title = "Nữ";
             String bigTitle = "Thắt Lưng Nữ";
-            String mainImage = "https://cdn-web-servlet.vercel.app/images/Hero-Banner-Female-1.png";
+            String mainImage = "/assets/images/banner/Hero-Banner-Female-1.png";
             handleRoute(type, title, bigTitle, mainImage, minPrice, maxPrice, request, response, session, sort, sortedList);
         }
         if (type.equals("Male-Leather")) {
             String title = "Nam";
             String bigTitle = "Thắt Lưng Da Nam";
-            String mainImage = "https://cdn-web-servlet.vercel.app/images/Hero-Banner-Male-1.jpg";
+            String mainImage = "/assets/images/banner/Hero-Banner-Male-1.jpg";
             handleRoute(type, title, bigTitle, mainImage, minPrice, maxPrice, request, response, session, sort, sortedList);
         }
         if (type.equals("Male-Canvas")) {
             String title = "Nam Canvas";
             String bigTitle = "Thắt lưng Canvas Nam";
-            String mainImage = "https://cdn-web-servlet.vercel.app/images/Hero-Banner-Male-1.jpg";
+            String mainImage = "/assets/images/banner/Hero-Banner-Male-1.jpg";
             handleRoute(type, title, bigTitle, mainImage, minPrice, maxPrice, request, response, session, sort, sortedList);
 
         }
         if (type.equals("Female-Leather")) {
             String title = "Nữ Leather";
             String bigTitle = "Thắt lưng Da Nữ";
-            String mainImage = "https://cdn-web-servlet.vercel.app/images/Hero-Banner-Female-1.png";
+            String mainImage = "/assets/images/banner/Hero-Banner-Female-1.png";
             handleRoute(type, title, bigTitle, mainImage, minPrice, maxPrice, request, response, session, sort, sortedList);
 
         }
         if (type.equals("Female-Canvas")) {
             String title = "Nữ Canvas";
             String bigTitle = "Thắt lưng Canvas Nữ";
-            String mainImage = "https://cdn-web-servlet.vercel.app/images/Hero-Banner-Female-1.png";
+            String mainImage = "/assets/images/banner/Hero-Banner-Female-1.jpg";
             handleRoute(type, title, bigTitle, mainImage, minPrice, maxPrice, request, response, session, sort, sortedList);
 
         }

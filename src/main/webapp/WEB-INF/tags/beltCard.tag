@@ -28,6 +28,7 @@
             </div>
 
             <img src="${belt.beltVariant.images[0]}"
+                 loading="lazy"
                  class="img-fluid w-100 shadow-sm" alt="${belt.name}"
                  style="height:${height != null ? height : '403.25px'}; width:${width != null ? width : '403.25px'} !important; object-fit: cover; opacity: 0.3;">
 
@@ -44,6 +45,7 @@
         <a href="${pageContext.request.contextPath}/belt/${belt.id}/variant/${belt.beltVariant.id}"
            class="text-center hover--black text-decoration-none ${padding!=null? padding:""}">
             <img src="${belt.beltVariant.images[0]}"
+                 loading="lazy"
                  class="img-fluid w-100 shadow-sm" alt="${belt.name}"
                  style="height:${height != null ? height : '403.25px'}; width:${width != null ? width : '403.25px'} !important; object-fit: cover;">
             <div class="mt-2 text-start ps-1">

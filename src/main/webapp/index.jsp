@@ -46,7 +46,8 @@
     <section id="section_slider">
         <div class="w-100 p-0">
             <div class="carousel-item active">
-                <img src="https://cdn-web-servlet.vercel.app/images/Hero-Banner-Home-1.jpg"
+                <img src="/assets/images/banner/Hero-Banner-Home-1.jpg"
+                     loading="lazy"
                      class="d-block w-100 img-fluid"/>
             </div>
         </div>
@@ -107,8 +108,9 @@
 
     <section id="section_slider">
         <div class="w-100 p-0">
-            <img src="https://cdn-web-servlet.vercel.app/images/Hero-Banner-Home-1.jpg"
+            <img src="/assets/images/banner/Hero-Banner-Home-2.png"
                  class="d-block w-100 img-fluid"
+                 loading="lazy"
                  alt="...">
         </div>
 
