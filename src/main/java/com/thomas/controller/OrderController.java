@@ -45,8 +45,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 //MoMo test account
-//NGUYEN VAN A
 //9704 0000 0000 0018
+//NGUYEN VAN A
 //03/07
 //OTP
 
@@ -120,19 +120,21 @@ public class OrderController extends HttpServlet {
             request.setAttribute("orderId", uploadOrderService.getLatestOrder().getId());
             request.setAttribute("total", grandTotal);
             request.setAttribute("userName", user.getName());
+            request.setAttribute("phoneNumber", user.getPhoneNumber());
+            request.setAttribute("userAddress", userAddress);
             request.setAttribute("status", "Đang xử lý");
             request.setAttribute("message", "success");
             request.getRequestDispatcher("/frontend/cartPage/checkoutPage/checkout-return.jsp").forward(request, response);
         } else if (paymentMethod.equals("MoMo")) {
             try {
+//                request.setAttribute("paymentMethod", "MoMo");
                 handleMomoPayment(request, response);
-                request.setAttribute("paymentMethod", "MoMo");
             } catch (NoSuchAlgorithmException | InvalidKeyException e) {
                 throw new RuntimeException(e);
             }
         } else if (paymentMethod.equals("VNPay")) {
+//            request.setAttribute("paymentMethod", "VNPay");
             handleVNPayPayment(request, response);
-            request.setAttribute("paymentMethod", "VNPay");
         }
     }
 

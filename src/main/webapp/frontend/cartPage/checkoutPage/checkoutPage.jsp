@@ -14,74 +14,13 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css/>
-    <script src="
-    ${pageContext.request.contextPath}/js/checkout.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+    <script src="${pageContext.request.contextPath}/js/checkout.js"></script>
+    <script src="${pageContext.request.contextPath}/js/calculateShipPrice.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/checkoutPage.css"/>
-    <script>
-        $(document).ready(function () {
-            $('input[name="paymentMethod"]').change(function () {
-                console.log(1)
-                const selectedMethod = $(this).val();
-                $('.submitPaymentMethod').val(selectedMethod);
-                $('#openFormButtonPayment').text('Thanh toán với ' + selectedMethod);
-            });
-        });
-
-        $(document).ready(function () {
-            $('select[name="selectedAddress"]').change(function () {
-                const selectedAddress = $(this).val();
-                $('.submitDeliveryAddress').val(selectedAddress);
-            });
-        });
-
-        $(document).ready(function () {
-            const provinceName = $("#province strong").text().trim();
-            const districtName = $("#district strong").text().trim();
-            const wardName = $("#ward strong").text().trim();
-
-            $.getJSON('/location?action=province', function (provinceData) {
-                const province = provinceData.data.find(p => p.ProvinceName === provinceName);
-                if (!province) return console.error('Không tìm thấy tỉnh:', provinceName);
-
-                $.getJSON('/location?action=district&province_id=' + province.ProvinceID, function (districtData) {
-                    const district = districtData.data.find(d => d.DistrictName === districtName);
-                    if (!district) return console.error('Không tìm thấy quận/huyện:', districtName);
-
-                    $.getJSON('/location?action=ward&district_id=' + district.DistrictID, function (wardData) {
-                        const ward = wardData.data.find(w => w.WardName === wardName || w.WardCode === wardName);
-                        if (!ward) return console.error('Không tìm thấy phường/xã:', wardName);
-
-                        // Gọi API tính phí
-                        calculateShipping(district.DistrictID, ward.WardCode);
-                    });
-                });
-            });
-
-            function calculateShipping(districtId, wardId) {
-                $.ajax({
-                    url: '/shipping-fee',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        to_district_id: districtId,
-                        to_ward_code: wardId
-                    }),
-                    success: function (response) {
-                        const fee = response.data.total;
-                        $('.shipmentPrice').text(fee.toLocaleString("vi-VN") + ' VNĐ');
-                        const productTotal = parseInt('${totalPrice}');
-                        const grandTotal = productTotal + fee;
-                        $('.grandTotal').text(grandTotal.toLocaleString("vi-VN") + ' VNĐ');
-                    }
-                });
-            }
-        });
-    </script>
 </head>
 <body>
 <jsp:include page="/frontend/header_footer/header.jsp"/>
