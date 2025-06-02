@@ -13,28 +13,7 @@
             href="${pageContext.request.contextPath}/assets/icons/favicon.svg"
             type="image/x-icon"
     />
-    <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-            crossorigin="anonymous"
-    />
-    <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"
-    ></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link
-            rel="stylesheet"
-            href="${pageContext.request.contextPath}/css/fontawesome-free-6.6.0-web/fontawesome-free-6.6.0-web/css/all.css"
-    />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/userInfo.css"/>
+    <jsp:include page="/frontend/components/userInfo/cdnLink/userInfoLink.jsp"/>
 </head>
 <body>
 <f:setLocale value="${sessionScope.lang}" scope="session" />
@@ -54,50 +33,8 @@
 
 
 <div class="container my-3">
-    <div class="row">
-        <h2 class="mt-5 mb-3"><f:message key="userinfo.my_account"/></h2>
-        <div
-                class="d-flex col-12"
-                style="white-space: nowrap;"
-        >
-            <div class="d-inline-block fw-bold custom_active mb-4" style="padding: 12px">
-                <a
-                        class="text-white custom_size--19"
-                        href="${pageContext.request.contextPath}/userInfo"
-                ><f:message key="userinfo.nav.account"/></a
-                >
-            </div>
-            <div class="d-inline-block fw-bold" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userProfile"
-                ><f:message key="userinfo.nav.profile"/></a
-                >
-            </div>
-            <div class="d-inline-block fw-bold" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userAddress?userId=${sessionScope.auth.id}"
-                ><f:message key="userinfo.nav.address"/></a
-                >
-            </div>
-            <div class="d-inline-block fw-bold" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/userPrivacy"
-                ><f:message key="userinfo.nav.privacy"/></a
-                >
-            </div>
-            <div class="d-inline-block fw-bold" style="padding: 12px">
-                <a
-                        class="custom_size--19"
-                        href="${pageContext.request.contextPath}/viewOrders"
-                ><f:message key="userinfo.nav.orders"/></a
-                >
-            </div>
-        </div>
+    <jsp:include page="/frontend/components/userInfo/navigationBar/navBar.jsp"/>
 
-    </div>
     <div class="container container-sm border rounded">
         <div class="d-flex flex-column mt-4 mb-2 ms-2">
             <h5 class="custom_size--16"><f:message key="userinfo.full_name"/></h5>
