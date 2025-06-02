@@ -1,11 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -38,15 +37,18 @@
 </head>
 
 <body>
+<f:setLocale value="${sessionScope.lang}" scope="session" />
+<f:setBundle basename="messages" />
+
 <jsp:include page="/frontend/header_footer/header.jsp"/>
 
 <div class="breadcumb__container">
     <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="${pageContext.request.contextPath}/index.jsp">Trang chủ</a>
+                <a href="${pageContext.request.contextPath}/index.jsp"><f:message key="breadcrumb.home" /></a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">Sản phẩm</li>
+            <li class="breadcrumb-item active" aria-current="page"><f:message key="breadcrumb.product" /></li>
         </ol>
     </nav>
 </div>
@@ -63,7 +65,7 @@
                                 <!-- First two images take up one column (default) -->
                                 <div class="col mb-3">
                                     <img src="${pageContext.request.contextPath}${image}"
-                                         style="width: 100%; height: auto;" alt="Product Image ${thumbIndex}"/>
+                                         style="width: 100%; height: auto;" alt="<f:message key='product.image.alt' /> ${thumbIndex}"/>
                                 </div>
                             </c:when>
                             <c:otherwise>
@@ -71,7 +73,7 @@
                                 <div class="col-12 mb-3 image-wrapper" data-index="${thumbIndex}"
                                      style="max-height: 300px; overflow: hidden; position: relative; transition: max-height 0.5s ease;">
                                     <img src="${pageContext.request.contextPath}${image}"
-                                         style="width: 100%; height: auto;" alt="Product Image ${thumbIndex}"/>
+                                         style="width: 100%; height: auto;" alt="<f:message key='product.image.alt' /> ${thumbIndex}"/>
                                     <div class="fade-overlay"
                                          style="position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: linear-gradient(to top, white, transparent);"></div>
                                 </div>
@@ -80,7 +82,7 @@
                                     <button class="see-more-btn btn border border-dark bg-white mt-2"
                                             style="border-radius: 0; height: 87px; width: 240px"
                                             data-index="${thumbIndex}">
-                                        See More
+                                        <f:message key="see.more" />
                                     </button>
                                 </div>
                             </c:otherwise>
@@ -95,7 +97,7 @@
                     <div data-testid="accordion" class="accordion">
                         <button class="accordion__header">
                             <div class="accordion__header-text">
-                                <h2 class="accordion-title fs-5">Mô tả</h2>
+                                <h2 class="accordion-title fs-5"><f:message key="description.title" /></h2>
                             </div>
                             <div class="accordion__header-icon">
                     <span data-testid="dropdown" class="icon-wrapper" role="img">
@@ -121,7 +123,7 @@
                     <div data-testid="accordion" class="accordion">
                         <button class="accordion__header">
                             <div class="accordion__header-text">
-                                <h2 class="accordion-title fs-5">Đánh giá</h2>
+                                <h2 class="accordion-title fs-5"><f:message key="reviews.title" /></h2>
                             </div>
                             <div class="accordion__header-icon">
                     <span data-testid="dropdown" class="icon-wrapper" role="img">
@@ -137,9 +139,9 @@
                                     <input id="variantIdReviews" type="hidden" name="variantId"
                                            value="${belt.beltVariant.id}">
                                     <div class="d-flex justify-content-center flex-column">
-                                        <p class="fs-3">${totalReview} đánh giá</p>
+                                        <p class="fs-3">${totalReview} <f:message key="reviews.count" /></p>
                                         <div class="d-flex border-bottom mb-3">
-                                            <p class="mb-0 fs-4">Đánh giá cho sản phẩm này</p>
+                                            <p class="mb-0 fs-4"><f:message key="reviews.for.product" /></p>
                                             <span class="ps-3 pe-3 pb-1 pt-1 ms-2 bg-light rounded-pill mb-2">${totalReview}</span>
                                         </div>
                                         <div id="reviewsContainer">
@@ -163,7 +165,7 @@
                                                 <input type="hidden" name="message" value="postComment">
                                                 <input type="hidden" name="beltId" value="${belt.id}">
                                                 <input type="hidden" name="variantId" value="${belt.beltVariant.id}">
-                                                <h2>Viết đánh giá</h2>
+                                                <h2><f:message key="write.review" /></h2>
                                                 <div class="row mt-2">
                                                     <div class="d-flex align-item-center">
                                                         <img src="${pageContext.request.contextPath}${belt.beltVariant.images[0]}"
@@ -214,22 +216,19 @@
                                                                  class="mt-3" width="50px" height="50px">
                                                         </c:otherwise>
                                                     </c:choose>
-                                                    <p class="mt-4 ms-3">Đánh giá bởi ${sessionScope.auth.name}</p>
+                                                    <p class="mt-4 ms-3"><f:message key="rating.by" /> ${sessionScope.auth.name}</p>
                                                 </div>
                                                 <div class="d-flex justify-content-end">
                                                     <c:choose>
                                                         <c:when test="${sessionScope.auth != null}">
                                                             <button type="submit"
                                                                     class="btn btn-dark me-4 p-2 px-3 mt-3">
-                                                                Gửi
-                                                                đánh
-                                                                giá
+                                                                <f:message key="submit.review" />
                                                             </button>
                                                         </c:when>
                                                         <c:otherwise>
                                                             <a href="${pageContext.request.contextPath}/login"
-                                                               class="btn btn-dark me-4 p-2 px-3 mt-3">Gửi
-                                                                đánh giá</a>
+                                                               class="btn btn-dark me-4 p-2 px-3 mt-3"><f:message key="submit.review" /></a>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </div>
@@ -248,7 +247,7 @@
             </section>
             <div class="viewed__component ps-5 pt-3 youmightlike__component mb-5 pe-5 pb-5"
                  style="margin-top: 200px">
-                <p class="viewed__title ms-0 fs-2">Bạn có thể thích</p>
+                <p class="viewed__title ms-0 fs-2"><f:message key="you.might.like" /></p>
                 <div class="d-flex justify-content-between">
                     <div class="card-wrapper cardWrapper">
                         <c:forEach var="belt" items="${randomBelts}">
@@ -259,7 +258,7 @@
             </div>
 
             <div class="viewed__component ps-5 pt-3 youmightlike__component mb-5 pe-5 pb-5">
-                <p class="viewed__title ms-0 fs-2">Sản phẩm xem nhiều nhất</p>
+                <p class="viewed__title ms-0 fs-2"><f:message key="most.viewed" /></p>
                 <div class="d-flex justify-content-center gap-3">
                     <c:forEach var="belt" items="${beltViewCount}">
                         <t:beltCard belt="${belt}" height="234.25px"/>
@@ -278,17 +277,16 @@
             <c:choose>
                 <c:when test="${belt.discountRate > 0}">
                     <p class="belts-price text-danger" style="font-size: 32px;">
-                        <fmt:formatNumber
+                        <f:formatNumber
                                 value="${belt.beltVariant.price - (belt.beltVariant.price * belt.discountRate / 100)}"
-                                type="number" maxFractionDigits="3"/>
-                        VNĐ
+                                type="currency" currencyCode="VND"/>
                         <span class="belts-old-price text-muted text-decoration-line-through">
-                    ${belt.beltVariant.price} VNĐ
+                    <f:formatNumber value="${belt.beltVariant.price}" type="currency" currencyCode="VND"/>
                 </span>
                     </p>
                 </c:when>
                 <c:otherwise>
-                    <p class="belts-price">${belt.beltVariant.price} VNĐ</p>
+                    <p class="belts-price"><f:formatNumber value="${belt.beltVariant.price}" type="currency" currencyCode="VND"/></p>
                 </c:otherwise>
             </c:choose>
 
@@ -301,7 +299,7 @@
 
             <!-- Quantity -->
             <div class="mb-1 mt-3">
-                <label for="quantity" class="form-label fw-5"><strong>Số Lượng:</strong></label>
+                <label for="quantity" class="form-label fw-5"><strong><f:message key="quantity.label" /></strong></label>
                 <div class="quantity__control input-group quantity-controls">
                     <button class="btn btn-outline-secondary rounded-0 p-4 border-end-0 py-2 px-3" type="button"
                             id="decrement"
@@ -313,12 +311,12 @@
                             id="increment"
                             style="border-bottom-width: 2px;border-top-width: 2px;border-right-width: 2px">+
                     </button>
-                    <strong class="mt-2 font-weight-bold">Còn lại: ${belt.beltVariant.stockQuantity}</strong>
+                    <strong class="mt-2 font-weight-bold"><f:message key="stock.remaining" /> ${belt.beltVariant.stockQuantity}</strong>
                 </div>
             </div>
 
             <div class="mb-3">
-                <label class="form-label fw-5"><strong>Màu sắc:</strong></label>
+                <label class="form-label fw-5"><strong><f:message key="color.label" /></strong></label>
                 <div class="d-flex flex-wrap gap-2">
                     <c:forEach var="variant" items="${similarVariants}">
                         <a href="${pageContext.request.contextPath}/productDetails?beltId=${param.beltId}&variantId=${variant.id}"
@@ -333,7 +331,7 @@
 
             <!-- Size -->
             <div class="mb-3 mt-2">
-                <label class="form-label fw-5"><strong>Size:</strong></label>
+                <label class="form-label fw-5"><strong><f:message key="size.label" /></strong></label>
                 <div class="d-flex gap-2">
                     <c:set var="sizes" value="XS,S,M,L,XL"/>
                     <c:forEach var="size" items="${fn:split(sizes, ',')}">
@@ -370,18 +368,18 @@
 
                     <c:choose>
                         <c:when test="${sessionScope.auth == null}">
-                            <button type="submit" class="buyNow__button btn btn-dark w-100 mb-4" disabled>Mua Ngay
+                            <button type="submit" class="buyNow__button btn btn-dark w-100 mb-4" disabled><f:message key="buy.now" />
                             </button>
-                            <p class="p-0">Đăng nhập để mua sản phẩm</p>
+                            <p class="p-0"><f:message key="login.to.purchase" /></p>
                         </c:when>
                         <c:otherwise>
-                            <button type="submit" class="buyNow__button btn btn-dark w-100 mb-4">Mua Ngay</button>
+                            <button type="submit" class="buyNow__button btn btn-dark w-100 mb-4"><f:message key="buy.now" /></button>
                         </c:otherwise>
                     </c:choose>
                 </form>
                 <div class="d-flex gap-1">
                     <button class="addToCart__button btn-white me-2 w-100 mb-3 flex-70" id="addToCartBtn" type="button">
-                        Thêm vào giỏ hàng
+                        <f:message key="add.to.cart" />
                     </button>
                     <button type="button" class="favorite_button btn me-2 w-100 mb-3 flex-30"
                             id="addToFavoriteBtn"
@@ -393,18 +391,16 @@
                     </button>
                 </div>
 
-
             </div>
         </div>
 
     </div>
 
-
     <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
         <div id="liveToast" class="toast hide bg-white" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-body fs-5 p-3 d-flex justify-content-between border-end border-dark border-5 align-items-center">
                 <i class="bi bi-info-circle"></i>
-                <p class="fs-5 m-0 custom_toast_text">Thêm vào thành công</p>
+                <p class="fs-5 m-0 custom_toast_text"><f:message key="add.to.cart.success" /></p>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>

@@ -1,13 +1,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Giỏ hàng</title>
+    <f:setLocale value="${sessionScope.lang}" scope="session" />
+    <f:setBundle basename="messages" />
+    <title><f:message key="cart.title"/></title>
     <link rel="icon" href="${pageContext.request.contextPath}/assets/icons/favicon.svg" type="image/x-icon"/>
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -45,9 +49,9 @@
     <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="${pageContext.request.contextPath}/index.jsp">Trang chủ</a>
+                <a href="${pageContext.request.contextPath}/index.jsp"><f:message key="favorite.home"/></a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">Giỏ hàng</li>
+            <li class="breadcrumb-item active" aria-current="page"><f:message key="cart.title"/></li>
         </ol>
     </nav>
 </div>
@@ -55,9 +59,11 @@
     <div class="row">
         <div class="col-6 mb-5 pe-5" style="margin-left: 196.25px">
             <div class="row">
-                <h1 class="ps-0">Giỏ hàng của bạn</h1>
+                <h1 class="ps-0"><f:message key="cart.your_cart"/></h1>
                 <h3 class="ps-0 fw-light fs-5 totalOrdersCountDisplay">
-                    Tổng [${cartItemList.size()} đơn hàng]
+                    <f:message key="cart.total_orders">
+                        <f:param value="${cartItemList.size()}"/>
+                    </f:message>
                 </h3>
             </div>
             <div class="cart-list-wrapper">
@@ -76,7 +82,7 @@
                         <div class="d-flex flex-column flex-grow-1 p-2">
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="fw-bold fs-5 beltName mb-1">${cartItem.belt.name}</p>
-                                <p class="fw-bold fs-5">${cartItem.price} VNĐ</p>
+                                <p class="fw-bold fs-5">${cartItem.price} <f:message key="cart.currency"/></p>
                                 <div class="asd">
                                     <p class="remove_button fs-5">&times;</p>
                                 </div>
@@ -92,7 +98,7 @@
                             </div>
 
                             <div class="mt-2">
-                                <label for="quantity-${cartItem.variant.id}" class="fw-bold">Số lượng:</label>
+                                <label for="quantity-${cartItem.variant.id}" class="fw-bold"><f:message key="cart.quantity"/>:</label>
                                 <select id="quantity-${cartItem.variant.id}"
                                         class="form-select option_select quantitySelectCart"
                                         onchange="updateCart(${cartItem.variant.id}, this.value)"
@@ -115,14 +121,14 @@
                 <c:choose>
                     <c:when test="${empty sessionScope.auth==null}">
                         <c:if test="${sessionScope.auth==null}">
-                            <p class="ps-0">Vui lòng đăng nhập để thanh toán</p>
+                            <p class="ps-0"><f:message key="cart.login_required"/></p>
                         </c:if>
                         <a
                                 href="#"
                                 class="btn btn-dark px-3 py-2 fs-5 custom_button checkoutPage disabled fw-bold"
                                 style="pointer-events: none; padding-top: 12px;
                                 padding-bottom: 12px;"
-                        >Tiến hành thanh toán
+                        ><f:message key="cart.proceed_checkout"/>
                             <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     height="24px"
@@ -141,7 +147,7 @@
                                 href="${pageContext.request.contextPath}/checkout"
                                 class="btn btn-dark px-3 py-2 fs-5 custom_button checkoutPage fw-bold"
                                 style="padding-top: 12px;padding-bottom: 12px;"
-                        >Tiến hành thanh toán
+                        ><f:message key="cart.proceed_checkout"/>
                             <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     height="24px"
@@ -159,24 +165,28 @@
 
                 <div class="mt-4 ps-0">
                     <div class="pb-2 mb-3">
-                        <h5 class="fw-bold fs-3">Tóm tắt đơn hàng</h5>
+                        <h5 class="fw-bold fs-3"><f:message key="cart.order_summary"/></h5>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
-                        <p class="mb-0 totalOrdersDisplayBelts fs-5">${cartItemList.size()} sản phẩm</p>
+                        <p class="mb-0 totalOrdersDisplayBelts fs-5">
+                            <f:message key="cart.products_count">
+                                <f:param value="${cartItemList.size()}"/>
+                            </f:message>
+                        </p>
                         <c:set var="totalPrice" value="0"/>
                         <c:forEach var="cartItem" items="${cartItemList}">
                             <c:set var="totalPrice" value="${totalPrice + cartItem.price}"/>
                         </c:forEach>
-                        <p class="mb-0 totalPriceDisplay fs-5">${totalPrice} VNĐ</p>
+                        <p class="mb-0 totalPriceDisplay fs-5">${totalPrice} <f:message key="cart.currency"/></p>
                     </div>
                     <div class="pt-2">
                         <div class="d-flex justify-content-between fw-bold mb-2">
-                            <p class="mb-0 fw-bold">Tổng cộng</p>
+                            <p class="mb-0 fw-bold"><f:message key="cart.total"/></p>
                             <p class="mb-0 totalCostDisplay fs-5">
-                                ${totalPrice} VNĐ
+                                ${totalPrice} <f:message key="cart.currency"/>
                             </p>
                         </div>
-                        <p class="text-muted small mb-0 fs-6">(bao gồm cả thuế)</p>
+                        <p class="text-muted small mb-0 fs-6"><f:message key="cart.tax_included"/></p>
                     </div>
                     <div
                             class="input-group custom_input_group custom_input--btn mt-4"
@@ -184,19 +194,19 @@
                         <input
                                 type="text"
                                 class="form-control custom_input--btn-group__input rounded-pill-start fs-5 couponValue"
-                                placeholder="Nhập coupon"
+                                placeholder="<f:message key="cart.coupon_placeholder"/>"
                         />
                         <button
                                 class="btn btn-dark input-group-text custom_button_design custom_input--btn-group__btn rounded-pill-end"
                         >
-                            Áp dụng
+                            <f:message key="cart.apply"/>
                         </button>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-14">
-            <h2 class="my-5" style="margin-left: 190px">Gợi ý cho bạn</h2>
+            <h2 class="my-5" style="margin-left: 190px"><f:message key="cart.suggestions"/></h2>
             <div
                     class="row mb-5"
                     id="list__product__row"

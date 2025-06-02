@@ -1,5 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,24 +14,26 @@
             type="image/x-icon"
     />
     <jsp:include page="/frontend/components/userInfo/cdnLink/userInfoLink.jsp"/>
-
 </head>
 <body>
+<f:setLocale value="${sessionScope.lang}" scope="session" />
+<f:setBundle basename="messages" />
+
 <jsp:include page="/frontend/header_footer/header.jsp"/>
 <div class="breadcumb__container">
     <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="${pageContext.request.contextPath}/index.jsp">Trang chủ</a>
+                <a href="${pageContext.request.contextPath}/index.jsp"><f:message key="favorite.home"/></a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">Địa chỉ</li>
+            <li class="breadcrumb-item active" aria-current="page"><f:message key="address.title"/></li>
         </ol>
     </nav>
 </div>
 <div class="container my-3">
     <jsp:include page="/frontend/components/userInfo/navigationBar/navBar.jsp"/>
 
-    <p class="address-title">Địa chỉ giao hàng của bạn</p>
+    <p class="address-title"><f:message key="address.delivery_title"/></p>
     <div class="container container-sm border border-dark col-12">
         <div class="userInfo--address--display mb-3">
             <button
@@ -37,7 +41,7 @@
                     data-bs-toggle="modal"
                     data-bs-target="#createAddressModal"
             >
-                Thêm địa chỉ mới
+                <f:message key="address.add_new"/>
             </button>
             <div
                     class="modal fade"
@@ -62,44 +66,44 @@
                                 <input type="hidden" name="userId" value="${sessionScope.auth.id}"/>
                                 <div class="d-flex justify-content-start gap-3">
                                     <div class="col">
-                                        <label class="form-label">Họ và tên</label>
+                                        <label class="form-label"><f:message key="address.fullname"/></label>
                                         <input type="text" class="form-control custom_input--btn-group__input"
                                                name="fullname"/>
                                     </div>
                                     <div class="col">
-                                        <label class="form-label">Số điện thoại</label>
+                                        <label class="form-label"><f:message key="address.phone"/></label>
                                         <input type="number" class="form-control custom_input--btn-group__input"
                                                name="phoneNumber"/>
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-start gap-3">
                                     <div class="col">
-                                        <label class="form-label">Tỉnh / Thành phố</label>
+                                        <label class="form-label"><f:message key="address.province"/></label>
                                         <select id="province"
                                                 class="form-select form-control custom_input--btn-group__input"
                                                 required name="province"></select>
                                     </div>
                                     <div class="col">
-                                        <label class="form-label">Quận / Huyện</label>
+                                        <label class="form-label"><f:message key="address.district"/></label>
                                         <select id="district"
                                                 class="form-select form-control custom_input--btn-group__input" required
                                                 disabled name="district"></select>
                                     </div>
                                     <div class="col">
-                                        <label class="form-label">Phường / Xã</label>
+                                        <label class="form-label"><f:message key="address.ward"/></label>
                                         <select id="ward"
                                                 class="form-select form-control custom_input--btn-group__input"
                                                 required disabled name="ward"></select>
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <label class="form-label">Địa chỉ cụ thể</label>
+                                    <label class="form-label"><f:message key="address.detail"/></label>
                                     <input type="text" class="form-control custom_input--btn-group__input"
                                            name="addressDetail"/>
                                 </div>
                                 <div class="d-flex flex-column">
                                     <button class="btn btn-dark mt-3 custom_save" type="submit">
-                                        Thêm
+                                        <f:message key="address.add"/>
                                     </button>
                                 </div>
                             </form>
@@ -133,7 +137,7 @@
                                     class="address__info__action btn rounded border-dark text-dark custom_hover"
                             >
                                 <input type="hidden" name="message" value="setDefaultAddress"/>
-                                Mặc định
+                                <f:message key="address.default"/>
                             </button>
                         </form>
                         <div class="address__info__action">
@@ -142,7 +146,7 @@
                                     data-bs-toggle="modal"
                                     data-bs-target="#editaddressModal"
                             >
-                                <img src="${pageContext.request.contextPath}/assets/icons/edit.svg"/>Chỉnh sửa
+                                <img src="${pageContext.request.contextPath}/assets/icons/edit.svg"/><f:message key="address.edit"/>
                             </button>
 
                             <button
@@ -151,7 +155,7 @@
                                     data-bs-toggle="modal"
                                     data-bs-target="#deleteModal"
                             >
-                                <img src="${pageContext.request.contextPath}/assets/icons/delete.svg"/>Xóa
+                                <img src="${pageContext.request.contextPath}/assets/icons/delete.svg"/><f:message key="address.delete"/>
                             </button>
 
                         </div>
@@ -172,7 +176,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">
-                                Xác nhận
+                                <f:message key="address.confirm"/>
                             </h5>
                             <button
                                     type="button"
@@ -182,7 +186,7 @@
                             ></button>
                         </div>
                         <div class="modal-body fs-4">
-                            Bạn có muốn xóa địa chỉ này ?
+                            <f:message key="address.delete_confirm"/>
                         </div>
                         <div class="modal-footer">
                             <button
@@ -190,7 +194,7 @@
                                     class="btn btn-secondary"
                                     data-bs-dismiss="modal"
                             >
-                                Hủy
+                                <f:message key="address.cancel"/>
                             </button>
                             <form class="custom_delete_address"
                                   action="${pageContext.request.contextPath}/userAddress"
@@ -200,7 +204,7 @@
                                         class="btn btn-dark rounded"
                                         data-bs-dismiss="modal"
                                 >
-                                    Xóa
+                                    <f:message key="address.delete"/>
                                 </button>
                             </form>
 
@@ -224,18 +228,17 @@
                                 <input type="hidden" name="userAddressId" value="${sessionScope.auth.id}">
                                 <input type="hidden" name="userId" value="${sessionScope.auth.id}">
 
-
                                 <div class="col-md-4">
-                                    <label class="form-label">Tỉnh / Thành phố</label>
+                                    <label class="form-label"><f:message key="address.province"/></label>
                                     <select id="province" name="province" class="form-select" required></select>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label">Quận / Huyện</label>
+                                    <label class="form-label"><f:message key="address.district"/></label>
                                     <select id="district" name="district" class="form-select" required
                                             disabled></select>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label">Phường / Xã</label>
+                                    <label class="form-label"><f:message key="address.ward"/></label>
                                     <select id="ward" name="ward" class="form-select" required disabled></select>
                                 </div>
                                 <div class="d-flex flex-column">
@@ -245,7 +248,7 @@
                                     <button
                                             class="btn btn-dark mt-3 custom_save custom_border"
                                     >
-                                        Lưu
+                                        <f:message key="address.save"/>
                                     </button>
 
                                 </div>

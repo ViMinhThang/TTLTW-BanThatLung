@@ -1,10 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>THOMAS - Tài khoản</title>
+    <title>THOMAS - Tài khoản </title>
     <link
             rel="icon"
             href="${pageContext.request.contextPath}/assets/icons/favicon.svg"
@@ -34,14 +37,17 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/userInfo.css"/>
 </head>
 <body>
+<f:setLocale value="${sessionScope.lang}" scope="session" />
+<f:setBundle basename="messages" />
+
 <jsp:include page="/frontend/header_footer/header.jsp"/>
 <div class="breadcumb__container">
     <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="${pageContext.request.contextPath}/index.jsp">Trang chủ</a>
+                <a href="${pageContext.request.contextPath}/index.jsp"><f:message key="breadcrumb.home"/></a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">Người dùng</li>
+            <li class="breadcrumb-item active" aria-current="page"><f:message key="breadcrumb.user"/></li>
         </ol>
     </nav>
 </div>
@@ -49,7 +55,7 @@
 
 <div class="container my-3">
     <div class="row">
-        <h2 class="mt-5 mb-3">Tài khoản của tôi</h2>
+        <h2 class="mt-5 mb-3"><f:message key="userinfo.my_account"/></h2>
         <div
                 class="d-flex col-12"
                 style="white-space: nowrap;"
@@ -58,35 +64,35 @@
                 <a
                         class="text-white custom_size--19"
                         href="${pageContext.request.contextPath}/userInfo"
-                >Tài khoản</a
+                ><f:message key="userinfo.nav.account"/></a
                 >
             </div>
             <div class="d-inline-block fw-bold" style="padding: 12px">
                 <a
                         class="custom_size--19"
                         href="${pageContext.request.contextPath}/userProfile"
-                >Hồ sơ</a
+                ><f:message key="userinfo.nav.profile"/></a
                 >
             </div>
             <div class="d-inline-block fw-bold" style="padding: 12px">
                 <a
                         class="custom_size--19"
                         href="${pageContext.request.contextPath}/userAddress?userId=${sessionScope.auth.id}"
-                >Địa chỉ</a
+                ><f:message key="userinfo.nav.address"/></a
                 >
             </div>
             <div class="d-inline-block fw-bold" style="padding: 12px">
                 <a
                         class="custom_size--19"
                         href="${pageContext.request.contextPath}/userPrivacy"
-                >Riêng tư</a
+                ><f:message key="userinfo.nav.privacy"/></a
                 >
             </div>
             <div class="d-inline-block fw-bold" style="padding: 12px">
                 <a
                         class="custom_size--19"
                         href="${pageContext.request.contextPath}/viewOrders"
-                >Đơn hàng</a
+                ><f:message key="userinfo.nav.orders"/></a
                 >
             </div>
         </div>
@@ -94,9 +100,9 @@
     </div>
     <div class="container container-sm border rounded">
         <div class="d-flex flex-column mt-4 mb-2 ms-2">
-            <h5 class="custom_size--16">Họ tên</h5>
+            <h5 class="custom_size--16"><f:message key="userinfo.full_name"/></h5>
             <p class="custom_size--16">${sessionScope.auth.name}</p>
-            <h5 class="font-weight-bold custom_size--19">Gia nhập từ</h5>
+            <h5 class="font-weight-bold custom_size--19"><f:message key="userinfo.member_since"/></h5>
             <p class="custom_size--16">${sessionScope.auth.createAt}</p>
         </div>
     </div>
@@ -106,33 +112,33 @@
         <input id="newEmail" type="hidden" name="newEmail" value="">
         <div class="container container-sm border rounded mt-4">
             <div class="d-flex flex-column mt-4 mb-2 ms-2 border-bottom ms-2">
-                <h3 class="font-weight-bold custom_size--19">Email</h3>
-                <h6 class="custom_size--16">Email hiện tại</h6>
+                <h3 class="font-weight-bold custom_size--19"><f:message key="userinfo.email"/></h3>
+                <h6 class="custom_size--16"><f:message key="userinfo.current_email"/></h6>
                 <p class="custom_size--16">${sessionScope.auth.email}</p>
             </div>
             <div class="d-flex flex-column m-2" style="width: 90%">
                 <p class="font-weight-bold mb-1 fs-4 ps-0 mt-4 custom_size--19">
-                    Thay đổi email
+                    <f:message key="userinfo.change_email"/>
                 </p>
-                <p class="mb-1 mt-2 custom_size--16">Email mới</p>
+                <p class="mb-1 mt-2 custom_size--16"><f:message key="userinfo.new_email"/></p>
                 <input
                         id="currentEmail"
                         type="email"
                         class="form-control form-control-md border custom-lg-input custom_size--16 custom_design"
-                        placeholder="Nhập email mới"
+                        placeholder="<f:message key="userinfo.enter_new_email"/>"
                 />
             </div>
             <div class="d-flex flex-column m-2" style="width: 90%">
-                <p class="mb-1 mt-2 custom_size--16">Mật khẩu</p>
+                <p class="mb-1 mt-2 custom_size--16"><f:message key="userinfo.password"/></p>
                 <input
                         name="password"
                         type="password"
                         class="form-control form-control-md border custom custom-lg-input custom_size--16 custom_design currentPassword"
-                        placeholder="Nhập mật khẩu"
+                        placeholder="<f:message key="userinfo.enter_password"/>"
                 />
             </div>
             <div class="d-flex flex-column m-2 retypePasswordCurrent" style="width: 90%">
-                <p class="mb-1 mt-2 custom_size--16">Nhập lại mật khẩu</p>
+                <p class="mb-1 mt-2 custom_size--16"><f:message key="userinfo.retype_password"/></p>
                 <input
                         type="password"
                         class="form-control form-control-md border custom-lg-input custom_size--16 custom_design currentPasswordRetype"
@@ -143,7 +149,7 @@
             </div>
             <div class="d-flex mt-3 mb-5 ms-2">
                 <button class="btn btn-dark px-3 py-2 custom__btn ms-2">
-                    Thay đổi email
+                    <f:message key="userinfo.change_email"/>
                 </button>
             </div>
         </div>
@@ -159,15 +165,15 @@
                     class="d-flex flex-column mt-4 mb-2 ml-2 border-bottom"
                     style="width: 70%"
             >
-                <h3 class="font-weight-bold ms-3 custom_size--19">Mật khẩu</h3>
-                <h5 class="ms-3 custom_size--16">Thay đổi mật khẩu của bạn</h5>
+                <h3 class="font-weight-bold ms-3 custom_size--19"><f:message key="userinfo.password"/></h3>
+                <h5 class="ms-3 custom_size--16"><f:message key="userinfo.change_password_desc"/></h5>
             </div>
             <div class="d-flex flex-column m-2 currentPasswordContainer" style="width: 90%">
-                <p class="mb-1 mt-2 ms-2 custom_size--16">Mật khẩu hiện tại</p>
+                <p class="mb-1 mt-2 ms-2 custom_size--16"><f:message key="userinfo.current_password"/></p>
                 <input
                         type="password"
                         class="form-control form-control-md border custom-lg-input ms-2 custom_design custom_size--16 currentPass"
-                        placeholder="Mật khẩu hiện tại"
+                        placeholder="<f:message key="userinfo.current_password"/>"
                         required
                 />
                 <c:if test="${not empty errorMessage}">
@@ -175,28 +181,28 @@
                 </c:if>
             </div>
             <div class="d-flex flex-column ms-2" style="width: 90%">
-                <p class="mb-1 mt-2 ms-2 custom_size--16">Mật khẩu mới</p>
+                <p class="mb-1 mt-2 ms-2 custom_size--16"><f:message key="userinfo.new_password"/></p>
                 <input
                         id="newPassword"
                         type="password"
                         class="form-control form-control-md border custom-lg-input ms-2 custom_design custom_size--16 newPassword"
-                        placeholder="Nhập mật khẩu mới"
+                        placeholder="<f:message key="userinfo.enter_new_password"/>"
                         required
                 />
             </div>
             <div class="d-flex flex-column ms-2 retypePassword" style="width: 90%">
-                <p class="mb-1 mt-2 ms-2 custom_size--16">Nhập lại mật khẩu</p>
+                <p class="mb-1 mt-2 ms-2 custom_size--16"><f:message key="userinfo.retype_password"/></p>
                 <input
                         type="password"
                         class="form-control form-control-md border custom-lg-input ms-2 custom_design custom_size--16 newPasswordRetype"
-                        placeholder="Nhập lại mật khẩu"
+                        placeholder="<f:message key="userinfo.retype_password"/>"
                         required
                 />
             </div>
             <div class="d-flex mt-3 mb-5 ms-2">
 
                 <button type="submit" class="btn btn-dark px-3 py-2 custom__btn ms-2 submitUpdatePassword">
-                    Thay đổi mật khẩu
+                    <f:message key="userinfo.change_password"/>
                 </button>
             </div>
         </form>
@@ -225,7 +231,7 @@
                 if (!document.querySelector(".password-mismatch")) {
                     const errorMessage = document.createElement("p");
                     errorMessage.className = "password-mismatch text-danger mt-2 ms-2 custom_size--16 mb-0";
-                    errorMessage.textContent = "Mật khẩu không khớp!";
+                    errorMessage.textContent = "<f:message key="userinfo.password_mismatch"/>";
                     document.querySelector(".retypePassword").appendChild(errorMessage);
                     e.preventDefault();
                 }
@@ -239,7 +245,7 @@
                 if (!document.querySelector(".password-mismatch")) {
                     const errorMessage = document.createElement("p");
                     errorMessage.className = "password-mismatch text-danger mt-2 ms-2 custom_size--16 mb-0";
-                    errorMessage.textContent = "Mật khẩu không khớp!";
+                    errorMessage.textContent = "<f:message key="userinfo.password_mismatch"/>";
                     document.querySelector(".retypePasswordCurrent").appendChild(errorMessage);
                     e.preventDefault();
                 }

@@ -83,7 +83,7 @@
             <ul class="dropdown-menu">
                 <li>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/navigate?type=Female&page=1"
-                    ><f:message key="nav.all_women_belts"/>ữ</a
+                    ><f:message key="nav.all_women_belts"/></a
                     >
                 </li>
                 <li>
