@@ -15,7 +15,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>THOMAS - <f:message key="signin.title"/></title>
+    <title>THOMAS - Sign in</title>
     <link rel="icon" href="https://cdn-web-servlet.vercel.app/images/favicon.svg" type="image/x-icon"/>
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
@@ -142,21 +142,27 @@
 
                 <!-- Phần đăng nhập bằng Google (có viền) -->
                 <div class="d-flex flex-column align-items-center gap-3 mt-4">
+                    <!-- Divider with text -->
                     <div class="d-flex align-items-center w-100">
                         <hr class="flex-grow-1">
                         <span class="px-3 custom_size--14 text-muted"><f:message key="signin.or_signin_with"/></span>
                         <hr class="flex-grow-1">
                     </div>
+
+                    <!-- Social login buttons - nằm ngang -->
                     <div class="d-flex justify-content-center gap-3">
                         <a href="https://accounts.google.com/o/oauth2/auth?client_id=<%=Iconstant.GOOGLE_CLIENT_ID%>&redirect_uri=<%=Iconstant.GOOGLE_REDIRECT_URI%>&response_type=code&scope=email profile"
-                           class="btn btn-floating btn-lg hover-lift custom-google-btn">
-                            <i class="fab fa-google"></i>
+                           class="btn btn-outline-danger btn-lg d-flex align-items-center justify-content-center"
+                           style="width: 60px; height: 60px; border-radius: 12px; border-width: 2px;">
+                            <i class="fab fa-google" style="font-size: 24px;"></i>
+                        </a>
+
+                        <a href="https://www.facebook.com/v18.0/dialog/oauth?client_id=<%=Iconstant.FACEBOOK_CLIENT_ID%>&redirect_uri=<%=Iconstant.FACEBOOK_REDIRECT_URI%>&scope=email"
+                           class="btn btn-outline-primary btn-lg d-flex align-items-center justify-content-center"
+                           style="width: 60px; height: 60px; border-radius: 12px; border-width: 2px;">
+                            <i class="fab fa-facebook-f" style="font-size: 24px;"></i>
                         </a>
                     </div>
-                    <a href="https://www.facebook.com/v18.0/dialog/oauth?client_id=<%=Iconstant.FACEBOOK_CLIENT_ID%>&redirect_uri=<%=Iconstant.FACEBOOK_REDIRECT_URI%>&scope=email"
-                       class="btn btn-floating btn-lg hover-lift custom-facebook-btn">
-                        <i class="fab fa-facebook"></i>
-                    </a>
                 </div>
             </div>
         </div>

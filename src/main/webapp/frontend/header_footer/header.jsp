@@ -12,6 +12,36 @@
 <div id="dimmer" class="dimmer"></div>
 <f:setLocale value="${sessionScope.lang}" scope="session" />
 <f:setBundle basename="messages" />
+<style>
+    .language-toggle {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        border: none;
+        border-radius: 20px;
+        color: white;
+        padding: 8px 16px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+    }
+
+    .language-toggle:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .language-toggle:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+    }
+
+    .language-toggle:active {
+        transform: translateY(0);
+    }
+</style>
 <nav class="p-12 bg-white rounded justify-content-center pb-0 d-flex mt-2 border-bottom" id="navbar">
     <a
             href="/"
@@ -221,11 +251,13 @@
             />
             <span id="cart_received" class="nav-item favorite__count">${cartSize!=null ?cartSize:0}</span>
         </a>
-        <form action="changeLanguage" method="get">
-            <select name="lang" onchange="this.form.submit()">
-                <option value="en" <%= locale.getLanguage().equals("en") ? "selected" : "" %>>English</option>
-                <option value="vi" <%= locale.getLanguage().equals("vi") ? "selected" : "" %>>Tiếng Việt</option>
-            </select>
+        <form action="changeLanguage" method="get" id="langForm">
+            <input type="hidden" name="lang" id="langInput" value="<%= locale.getLanguage() %>">
+            <button type="button" class="language-toggle" onclick="toggleLanguage()">
+        <span id="langText">
+            <%= locale.getLanguage().equals("en") ? "🇺🇸 EN" : "🇻🇳 VI" %>
+        </span>
+            </button>
         </form>
     </div>
 </nav>
@@ -249,6 +281,23 @@
         margin-left: 0px !important;
     }
 </style>
+<script>
+    function toggleLanguage() {
+        const langInput = document.getElementById('langInput');
+        const langText = document.getElementById('langText');
+        const form = document.getElementById('langForm');
+
+        if (langInput.value === 'vi') {
+            langInput.value = 'en';
+            langText.textContent = '🇺🇸 EN';
+        } else {
+            langInput.value = 'vi';
+            langText.textContent = '🇻🇳 VI';
+        }
+
+        form.submit();
+    }
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/header.js"></script>
