@@ -15,7 +15,7 @@ public class SignUpService {
             return false;
         }
         u.setEmail(email);
-        u.setPassword(MD5Service.hashPassword(password));
+        u.setPassword(BCryptService.hashPassword(password));
         u.setName(middleName + " " + name);
         u.setIsDeleted(0);
         u.setDateOfBirth(birthDate);

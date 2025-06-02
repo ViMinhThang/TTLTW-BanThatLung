@@ -1,14 +1,10 @@
 INSERT INTO users (name, email, dateOfBirth, password, image, isDeleted, gender, phoneNumber, role, token, isActive)
-VALUES ('John Doe', 'john.doe@example.com', '1990-05-15', '202cb962ac59075b964b07152d234b70', '/images/users/john.jpg',
-        0, 'Male', 1234567890, 1, NULL, 1),
-       ('Jane Smith', 'jane.smith@example.com', '1995-08-22', '202cb962ac59075b964b07152d234b70',
-        '/images/users/jane.jpg', 0, 'Female', 9876543210, 2, NULL, 1),
-       ('Alice Brown', 'alice.brown@example.com', '1988-12-10', '202cb962ac59075b964b07152d234b70', NULL, 0, 'Female',
-        1122334455, 1, NULL, 1),
-       ('Bob Johnson', 'bob.johnson@example.com', '1992-07-03', '202cb962ac59075b964b07152d234b70',
-        '/images/users/bob.jpg', 0, 'Male', 5566778899, 2, NULL, 1),
-       ('Test', 'titphong012@gmail.com', '2004-01-01', '098f6bcd4621d373cade4e832627b4f6', '/images/users/john.jpg', 0,
-        'Male', 0123456789, 1, NULL, 1);
+VALUES
+    ('John Doe', 'john.doe@example.com', '1990-05-15', '$2a$10$ixfkxAx6DT43ZI1Q9Y8a/OzqwxRfbplt1gEUIS/TsL0F5IrHJh6jS', '/images/users/john.jpg', 0, 'Male', 1234567890, 1, NULL, 1),
+    ('Jane Smith', 'jane.smith@example.com', '1995-08-22', '$2a$10$ixfkxAx6DT43ZI1Q9Y8a/OzqwxRfbplt1gEUIS/TsL0F5IrHJh6jS', '/images/users/jane.jpg', 0, 'Female', 9876543210, 2, NULL, 1),
+    ('Alice Brown', 'alice.brown@example.com', '1988-12-10', '$2a$10$ixfkxAx6DT43ZI1Q9Y8a/OzqwxRfbplt1gEUIS/TsL0F5IrHJh6jS', NULL, 0, 'Female', 1122334455, 1, NULL, 1),
+    ('Bob Johnson', 'bob.johnson@example.com', '1992-07-03', '$2a$10$ixfkxAx6DT43ZI1Q9Y8a/OzqwxRfbplt1gEUIS/TsL0F5IrHJh6jS', '/images/users/bob.jpg', 0, 'Male', 5566778899, 2, NULL, 1),
+    ('Test', 'titphong012@gmail.com', '2004-01-01', '$2a$10$ixfkxAx6DT43ZI1Q9Y8a/OzqwxRfbplt1gEUIS/TsL0F5IrHJh6jS', '/images/users/john.jpg', 0, 'Male', 0123456789, 1, NULL, 1);
 
 INSERT INTO `Groups` (groupName)
 VALUES ('admin');
