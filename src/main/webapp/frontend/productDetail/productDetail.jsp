@@ -63,7 +63,9 @@
                                 <!-- First two images take up one column (default) -->
                                 <div class="col mb-3">
                                     <img src="${pageContext.request.contextPath}${image}"
-                                         style="width: 100%; height: auto;" alt="Product Image ${thumbIndex}"/>
+                                         style="width: 100%; height: auto;" alt="Product Image ${thumbIndex}"
+                                         loading="lazy"
+                                    />
                                 </div>
                             </c:when>
                             <c:otherwise>
@@ -71,7 +73,9 @@
                                 <div class="col-12 mb-3 image-wrapper" data-index="${thumbIndex}"
                                      style="max-height: 300px; overflow: hidden; position: relative; transition: max-height 0.5s ease;">
                                     <img src="${pageContext.request.contextPath}${image}"
-                                         style="width: 100%; height: auto;" alt="Product Image ${thumbIndex}"/>
+                                         style="width: 100%; height: auto;" alt="Product Image ${thumbIndex}"
+                                         loading="lazy"
+                                    />
                                     <div class="fade-overlay"
                                          style="position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: linear-gradient(to top, white, transparent);"></div>
                                 </div>
